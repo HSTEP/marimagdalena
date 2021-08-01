@@ -3505,8 +3505,9 @@ input, select, textarea {
 		-webkit-user-select: none;
 		-ms-user-select: none;
 		user-select: none;
-		height: 20rem;
-		padding-bottom: 8rem;
+		height: fit-content !important;
+		height: -moz-fit-content !important;
+		padding-bottom: 0rem !important;
 		position: relative;
 		text-align: center;
 		z-index: 2;
@@ -3567,6 +3568,11 @@ input, select, textarea {
 			display: block;
 			margin-left: auto;
 			margin-right: auto;
+
+			margin-bottom: 0px !important;
+
+			width: 70%;
+			max-width: 600px;
 		}
 
 			#header .logo:hover {
@@ -3577,8 +3583,8 @@ input, select, textarea {
 		@media screen and (max-width: 980px) {
 
 			#header {
-				height: 14rem;
-				padding-bottom: 4rem;
+				/* height: 14rem; */
+				margin-bottom: 0px !important;
 			}
 
 		}

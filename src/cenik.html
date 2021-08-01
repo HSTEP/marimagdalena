@@ -1,201 +1,96 @@
-<!DOCTYPE HTML>
-<!--
-	Massively by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
+{% extends "src/container.html"%}
+{% set active_page = 1 %}
+{% block content %}
 
-<head>
-
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-JWQK0C4N5N"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag() { dataLayer.push(arguments); }
-		gtag('js', new Date());
-		gtag('config', 'G-JWQK0C4N5N');
-	</script>
-
-	<title>Maří Magdalena</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-	<link rel="stylesheet" href="assets/css/main.css" />
-	<noscript>
-		<link rel="stylesheet" href="assets/css/noscript.css" />
-	</noscript>
-</head>
-
-<body class="is-preload">
-
-	<!-- Wrapper -->
-	<div id="wrapper">
-
-		<!-- Header -->
-		<header id="header"">
-			<a href="index.html" class="logo"><img src="images/logo_w.png" alt="" width="30%" /></span></a>
+	<!-- Post -->
+	<section class="post">
+		<header class="major">
+			<h1>Ceník</h1>
 		</header>
 
-		<!-- Nav -->
-		<nav id="nav">
-			<ul class="links">
-				<li><a href="index.html">O salónu</a></li>
-				<li class="active"><a href="cenik.html">Ceník</a></li>
-				<li><a href="projekty.html">Projekty</a></li>
-				<li><a href="galerie.html">Galerie</a></li>
-				<li><a href="partneri.html">Partneři</a></li>
-			</ul>
-			<ul class="icons">
-				<!-- <li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li> -->
-				<li><a href="https://www.instagram.com/marimagdalenakadernickysalon/"
-						class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-				<li><a href="#telefon" class="fas fa-phone" style="border-bottom-color: transparent;"><span
-							class="label"></span></a></li>
-			</ul>
-		</nav>
-
-		<!-- Main -->
-		<div id="main">
-
-			<!-- Post -->
-			<section class="post">
-				<header class="major">
-					<h1>Ceník</h1>
-				</header>
-
-				<!-- Table -->
-				<div class="table-wrapper">
-					<table>
-						<tbody>
-							<tr>
-								<td>Dámský střih, mytí, foukání</td>
-								<td>750 Kč</td>
-							</tr>
-							<tr>
-								<td>Pánský střih suchý</td>
-								<td>350 Kč</td>
-							</tr>
-							<tr>
-								<td>Pánský střih s mytím</td>
-								<td>450 Kč</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-
-				<div class="table-wrapper">
-					<table>
-						<thead>
-							<tr>
-								<th></th>
-								<th>Krátké</th>
-								<th>Polodlouhé</th>
-								<th>dlouhé</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Barva + střih</td>
-								<td>1 350 Kč</td>
-								<td>1 450 Kč</td>
-								<td>1 650 Kč</td>
-							</tr>
-							<tr>
-								<td>Melír + barva + střih</td>
-								<td>1 550 Kč</td>
-								<td>1 650 Kč</td>
-								<td>1 750 Kč</td>
-							<tr>
-								<td>Wellaplex</td>
-								<td>300 Kč</td>
-								<td>500 Kč</td>
-								<td>700 Kč</td>
-							</tr>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-
-				<div class="table-wrapper">
-					<table>
-						<tbody>
-							<tr>
-								<td>Večerní líčení</td>
-								<td>550 Kč</td>
-							</tr>
-							<tr>
-								<td>Společenský účes</td>
-								<td>550 Kč</td>
-							</tr>
-							<tr>
-								<td>Fotoportrét</td>
-								<td>1 150 Kč</td>
-							</tr>
-							<tr>
-								<td>Svatební líčení</td>
-								<td>750 Kč</td>
-							</tr>
-							<tr>
-								<td>Svatební účes</td>
-								<td>1 550 Kč</td>
-							</tr>
-						</tbody>
-					</table>
-					<span class="image fit"><img src="images/cenik_loga.png" alt="" /></span>
-					<p>Podle zákona o evidenci tržeb je prodávající povinen vystavit kupujícímu účtenku. Zároveň je
-						povinen zaevidovat přijatou tržbu u správce daně online, v případě technického výpadku pak
-						nejpozději do 48 hodin.</p>
-				</div>
-			</section>
+		<!-- Table -->
+		<div class="table-wrapper">
+			<table>
+				<tbody>
+					<tr>
+						<td>Dámský střih, mytí, foukání</td>
+						<td>750 Kč</td>
+					</tr>
+					<tr>
+						<td>Pánský střih suchý</td>
+						<td>350 Kč</td>
+					</tr>
+					<tr>
+						<td>Pánský střih s mytím</td>
+						<td>450 Kč</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 
-		<!-- Footer -->
-		<footer id="footer">
-			<section>
-				<span class="image fit"><img src="images/ff.jpg" alt="" /></span>
-			</section>
-			<section class="split contact">
-				<section class="alt">
-					<h3>Adresa</h3>
-					<p>Hair & Art Salon Maří Magdalena<br />
-						Marie Baštařová<br />
-						Císaře Karla 1139<br />
-						33441, Dobřany</p>
-				</section>
-				<iframe width="100%" height="345" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
-					id="gmap_canvas"
-					src="https://maps.google.com/maps?width=350&amp;height=400&amp;hl=en&amp;q=C%C3%ADsa%C5%99e%20Karla%201139%20Dobrany+(Kade%C5%99nictv%C3%AD%20Ma%C5%99%C3%AD%20Magdalena)&amp;t=&amp;z=13&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
-				<section style="flex-direction: column;">
-					<div style="display: block; width: 100%;">
-						<h3 style="display: inline-block; width: 96px;">Telefon</h3>
-						<a href="tel:+420607067778" name="telefon">+420 607 067 778</a>
-					</div>
-					<div style="display: block; width: 100%;">
-						<h3 style="display: inline-block;width: 96px">Email</h3>
-						<a href="mailto:marie@marimagdalena.cz">marie@marimagdalena.cz</a>
-					</div>
-				</section>
-
-			</section>
-		</footer>
-
-		<!-- Copyright -->
-		<div id="copyright">
-			<ul>
-				<li><a href="https://github.com/HSTEP/marimagdalena">Štěpán Havlovic</a></li>
-				<li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
-			</ul>
+		<div class="table-wrapper">
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Krátké</th>
+						<th>Polodlouhé</th>
+						<th>dlouhé</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Barva + střih</td>
+						<td>1 350 Kč</td>
+						<td>1 450 Kč</td>
+						<td>1 650 Kč</td>
+					</tr>
+					<tr>
+						<td>Melír + barva + střih</td>
+						<td>1 550 Kč</td>
+						<td>1 650 Kč</td>
+						<td>1 750 Kč</td>
+					<tr>
+						<td>Wellaplex</td>
+						<td>300 Kč</td>
+						<td>500 Kč</td>
+						<td>700 Kč</td>
+					</tr>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 
-		<!-- Scripts -->
-		<script src="assets/js/jquery.min.js"></script>
-		<script src="assets/js/jquery.scrollex.min.js"></script>
-		<script src="assets/js/jquery.scrolly.min.js"></script>
-		<script src="assets/js/browser.min.js"></script>
-		<script src="assets/js/breakpoints.min.js"></script>
-		<script src="assets/js/util.js"></script>
-		<script src="assets/js/main.js"></script>
+		<div class="table-wrapper">
+			<table>
+				<tbody>
+					<tr>
+						<td>Večerní líčení</td>
+						<td>550 Kč</td>
+					</tr>
+					<tr>
+						<td>Společenský účes</td>
+						<td>550 Kč</td>
+					</tr>
+					<tr>
+						<td>Fotoportrét</td>
+						<td>1 150 Kč</td>
+					</tr>
+					<tr>
+						<td>Svatební líčení</td>
+						<td>750 Kč</td>
+					</tr>
+					<tr>
+						<td>Svatební účes</td>
+						<td>1 550 Kč</td>
+					</tr>
+				</tbody>
+			</table>
+			<span class="image fit"><img src="images/cenik_loga.png" alt="" /></span>
+			<p>Podle zákona o evidenci tržeb je prodávající povinen vystavit kupujícímu účtenku. Zároveň je
+				povinen zaevidovat přijatou tržbu u správce daně online, v případě technického výpadku pak
+				nejpozději do 48 hodin.</p>
+		</div>
+	</section>
 
-</body>
-
-</html>
+{% endblock %}

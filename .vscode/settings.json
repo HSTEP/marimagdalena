@@ -1,4 +1,5 @@
 {
-    "workbench.colorTheme": "Default Light+",
-    "workbench.editor.decorations.colors": false
+    "workbench.colorTheme": "Monokai",
+    "workbench.editor.decorations.colors": false,
+    "python.pythonPath": "/usr/bin/python3"
 }

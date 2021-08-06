@@ -2,29 +2,21 @@
 import jinja2, os, shutil
 
 from jinja2 import Environment, FileSystemLoader
+import time
 
 env = Environment(loader=FileSystemLoader('.'))
 
 if __name__ == "__main__":
-    try:
-        shutil.rmtree("./_site")
-    except FileNotFoundError:
-        print("_site not found")
-
-    os.mkdir("./_site")
-    shutil.copytree("assets", "./_site/assets")
-    shutil.copytree("images", "./_site/images")
-
     for filename in os.listdir("src"):
         template = env.get_template(f"src/{filename}")
 
-        with open(f"_site/{filename}", "w+") as f:
+        with open(f"{filename}", "w+") as f:
             if filename == "galerie.html":
                 html = template.render(
-                    images = [f"images/galerie/{name}" for name in os.listdir("images/galerie/") 
-                        if ".jpg" in name or ".png" in name]
+                    images=[f"images/galerie/{name}" for name in os.listdir("images/galerie/")
+                            if ".jpg" in name or ".png" in name]
                 )
-                print(os.listdir("images/galerie/"))
+                print(f"Compilation time: {time.time()}")
 
             else:
                 html = template.render()

@@ -16,7 +16,12 @@ if __name__ == "__main__":
                     images=[f"images/galerie/{name}" for name in os.listdir("images/galerie/")
                             if ".jpg" in name or ".png" in name]
                 )
-                print(f"Compilation time: {time.time()}")
+
+            elif filename == "obrazy.html":
+                html = template.render(
+                    images=[f"images/obrazy/{name}" for name in os.listdir("images/obrazy/")
+                            if ".jpg" in name or ".png" in name]
+                )
 
             else:
                 html = template.render()

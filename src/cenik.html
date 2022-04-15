@@ -1,102 +1,132 @@
-{% extends "src/container.html"%}
+{% extends "src/container.html" %}
 {% set active_page = 1 %}
 {% block content %}
 
-	<!-- Post -->
-	<section class="post">
-		<header class="major">
-			<h1>Ceník</h1>
-		</header>
+    <!-- Post -->
+    <section class="post">
+        <header class="major">
+            <h1>Ceník</h1>
+        </header>
 
-		<!-- Table -->
-		<div class="table-wrapper">
-			<table>
-				<tbody>
-					<tr>
-						<td>Dámský střih, mytí, foukání</td>
-						<td>890 Kč</td>
-					</tr>
-					<tr>
-						<td>Pánský střih bez mytí</td>
-						<td>390 Kč</td>
-					</tr>
-					<tr>
-						<td>Pánský střih s mytím</td>
-						<td>490 Kč</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+        <!-- Table -->
+        <div class="table-wrapper">
+            <table>
+                <tbody>
+                <tr>
+                    <td>Dámský střih, péče, mytí, foukání</td>
+                    <td>1190 Kč</td>
+                </tr>
+                <tr>
+                    <td>Pánský střih bez mytí</td>
+                    <td>390 Kč</td>
+                </tr>
+                <tr>
+                    <td>Pánský střih s mytím</td>
+                    <td>490 Kč</td>
+                </tr>
 
-		<div class="table-wrapper">
-			<table>
-				<thead>
-					<tr>
-						<th></th>
-						<th>Krátké</th>
-						<th>Polodlouhé</th>
-						<th>dlouhé</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>Barva + střih</td>
-						<td>1 590 Kč</td>
-						<td>1 790 Kč</td>
-						<td>1 990 Kč</td>
-					</tr>
-					<tr>
-						<td>Melír + barva + střih</td>
-						<td>1 690 Kč</td>
-						<td>1 990 Kč</td>
-						<td>2 190 Kč</td>
-					</tr>
-					<tr>
-						<td>Speciální techniky barvení</td>
-						<td>1 990 Kč</td>
-						<td>2 490 Kč</td>
-						<td>2 990 Kč</td>
-					<tr>
-						<td>Čištění vlasů</td>
-						<td>390 Kč</td>
-						<td>590 Kč</td>
-						<td>790 Kč</td>
-					</tr>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+                </tbody>
+            </table>
+        </div>
 
-		<div class="table-wrapper">
-			<table>
-				<tbody>
-					<tr>
-						<td>Večerní líčení</td>
-						<td>690 Kč</td>
-					</tr>
-					<tr>
-						<td>Společenský účes</td>
-						<td>790 Kč</td>
-					</tr>
-					<tr>
-						<td>Fotoportrét</td>
-						<td>1 590 Kč</td>
-					</tr>
-					<tr>
-						<td>Svatební líčení</td>
-						<td>990 Kč</td>
-					</tr>
-					<tr>
-						<td>Svatební účes</td>
-						<td>1 990 Kč</td>
-					</tr>
-				</tbody>
-			</table>
-			<span class="image fit"><img src="images/cenik_loga.png" alt="" /></span>
-			<p>Podle zákona o evidenci tržeb je prodávající povinen vystavit kupujícímu účtenku. Zároveň je
-				povinen zaevidovat přijatou tržbu u správce daně online, v případě technického výpadku pak
-				nejpozději do 48 hodin.</p>
-		</div>
-	</section>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Krátké</th>
+                    <th>Polodlouhé</th>
+                    <th>dlouhé</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Barva (odrost) + střih</td>
+                    <td>1 690 Kč</td>
+                    <td>1 790 Kč</td>
+                    <td>1 890 Kč</td>
+                </tr>
+                <tr>
+                    <td>Barva (celá) + střih</td>
+                    <td>1 790 Kč</td>
+                    <td>1 990 Kč</td>
+                    <td>2 490 Kč</td>
+                </tr>
+                <tr>
+                    <td>Melír + tónování + střih</td>
+                    <td>2 390 Kč</td>
+                    <td>2 490 Kč</td>
+                    <td>2 990 Kč</td>
+                </tr>
+                <tr>
+                    <td>Stahování barvy + střih</td>
+                    <td>2 190 Kč</td>
+                    <td>3 290 Kč</td>
+                    <td>4 390 Kč</td>
+                </tr>
+                <tr>
+                    <td>Malibu C - čištění vlasů</td>
+                    <td>1 690 Kč</td>
+                    <td>1 890 Kč</td>
+                    <td>2 490 Kč</td>
+                </tr>
+                <tr>
+                    <td>Kolagen</td>
+                    <td>1 690 Kč</td>
+                    <td>1 790 Kč</td>
+                    <td>1 890 Kč</td>
+                <tr>
+                    <td>Keratin</td>
+                    <td>1 690 Kč</td>
+                    <td>2 190 Kč</td>
+                    <td>2 990 Kč</td>
+                </tr>
+                <tr><td></td></tr>
+                <tr>
+                    <td>Metal detox</td>
+                    <td>+200 Kč</td>
+                    <td>+250 Kč</td>
+                    <td>+300 Kč</td>
+                </tr>
+                <tr>
+                    <td>Wella plex</td>
+                    <td>+200 Kč</td>
+                    <td>+250 Kč</td>
+                    <td>+300 Kč</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <tbody>
+                <tr>
+                    <td>Večerní líčení</td>
+                    <td>990 Kč</td>
+                </tr>
+                <tr>
+                    <td>Společenský účes</td>
+                    <td>990 Kč</td>
+                </tr>
+                <tr>
+                    <td>Fotoportrét</td>
+                    <td>2 990 Kč</td>
+                </tr>
+                <tr>
+                    <td>Svatební líčení</td>
+                    <td>1 990 Kč</td>
+                </tr>
+                <tr>
+                    <td>Svatební účes</td>
+                    <td>2 990 Kč</td>
+                </tr>
+                </tbody>
+            </table>
+            <span class="image fit"><img src="images/cenik_loga.png" alt=""/></span>
+
+        </div>
+    </section>
 
 {% endblock %}

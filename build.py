@@ -4,7 +4,7 @@ import jinja2, os, shutil
 from jinja2 import Environment, FileSystemLoader
 import time
 
-env = Environment(loader=FileSystemLoader('.'))
+env = Environment(loader=FileSystemLoader("."))
 
 if __name__ == "__main__":
     for filename in os.listdir("src"):
@@ -13,18 +13,26 @@ if __name__ == "__main__":
         with open(f"{filename}", "w+") as f:
             if filename == "galerie.html":
                 html = template.render(
-                    images=[f"images/galerie/{name}" for name in os.listdir("images/galerie/")
-                            if ".jpg" in name or ".png" in name]
+                    images=reversed(
+                        [
+                            f"images/galerie/{name}"
+                            for name in os.listdir("images/galerie/")
+                            if ".jpg" in name or ".png" in name
+                        ]
+                    )
                 )
 
             elif filename == "obrazy.html":
                 html = template.render(
-                    images=[f"images/obrazy/{name}" for name in os.listdir("images/obrazy/")
-                            if ".jpg" in name or ".png" in name]
+                    images=reversed(
+                        [
+                            f"images/obrazy/{name}"
+                            for name in os.listdir("images/obrazy/")
+                            if ".jpg" in name or ".png" in name
+                        ]
+                    )
                 )
 
             else:
                 html = template.render()
             f.write(html)
-
-

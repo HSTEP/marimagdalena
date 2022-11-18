@@ -2,15 +2,45 @@
 {% set active_page = 5 %}
 {% macro painting_display(image_url) %}
     <div class="painting">
+        {% if "_sold" in image_url %}
+            <div style="
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: black;
+                transform: rotate(15deg);
+                color: white;
+                font-family: Pacifico, cursive;
+                font-size: 15px;
+                z-index: 20;
+                margin-left: calc(100% - 60px);
+                border-radius: 50px;
+                width: 50px;
+                height: 50px;
+                top: 60px;"
+            >
+                <div style="">Sold</div>
+
+            </div>
+        {% endif %}
         <img src="{{ image_url }}" alt="...">
+
         <div class="img-footer">
-            <div class="painting-title"><div>{{ image_url.split("/")[-1].split(".")[0]}}</div></div>
+            <div class="painting-title">
+
+                {% if "_sold" in image_url %}
+                    <div>{{ image_url.split("/")[-1].split(".")[0].split("|")[1].split("_")[0] }}</div>
+                {% else %}
+                    <div>{{ image_url.split("/")[-1].split(".")[0].split("|")[1] }}</div>
+                {% endif %}
+            </div>
         </div>
     </div>
 {% endmacro %}
 
 {% block content %}
-   <section class="post">
+    <section class="post">
         <header class="major">
             <h1>Obrazy</h1>
         </header>

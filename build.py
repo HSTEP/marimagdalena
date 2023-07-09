@@ -16,8 +16,9 @@ if __name__ == "__main__":
                     images=reversed(
                         [
                             f"images/galerie/{name}"
-                            for name in os.listdir("images/galerie/")
-                            if ".jpg" in name or ".png" in name
+                            for name in sorted(os.listdir("images/galerie/"), key=lambda x: float(x.split("_")[0]), reverse=True)
+                            if ".jpg" in name.lower() or ".png" in name.lower()
+
                         ]
                     )
                 )

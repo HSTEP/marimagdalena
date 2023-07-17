@@ -1,9 +1,11 @@
 {% extends "src/container.html" %}
 {% set active_page = 5 %}
+
 {% macro painting_display(image_url) %}
-    <div class="painting">
-        {% if "_sold" in image_url %}
-            <div style="
+    <a href="{{ image_url }}" class="painting-link">
+        <div class="painting">
+            {% if "_sold" in image_url %}
+                <div style="
                 position: relative;
                 display: flex;
                 justify-content: center;
@@ -19,27 +21,30 @@
                 width: 50px;
                 height: 50px;
                 top: 60px;"
-            >
-                <div style="">Sold</div>
+                >
+                    <div style="">Sold</div>
 
-            </div>
-        {% endif %}
-        <img src="{{ image_url }}" alt="...">
+                </div>
+            {% endif %}
+            <img src="{{ image_url }}" alt="...">
 
-        <div class="img-footer">
-            <div class="painting-title">
+            <div class="img-footer">
+                <div class="painting-title">
 
-                {% if "_sold" in image_url %}
-                    <div>{{ image_url.split("/")[-1].split(".")[0].split("|")[1].split("_")[0] }}</div>
-                {% else %}
-                    <div>{{ image_url.split("/")[-1].split(".")[0].split("|")[1] }}</div>
-                {% endif %}
+                    {% if "_sold" in image_url %}
+                        <div>{{ image_url.split("/")[-1].split(".")[0].split("|")[1].split("_")[0] }}</div>
+                    {% else %}
+                        <div>{{ image_url.split("/")[-1].split(".")[0].split("|")[1] }}</div>
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </div>
+    </a>
 {% endmacro %}
 
 {% block content %}
+    <link rel="stylesheet" href="/assets/css/simple-lightbox.min.css">
+    <script src="/assets/js/simple-lightbox.min.js"></script>
     <section class="post">
         <header class="major">
             <h1>Obrazy</h1>
@@ -50,5 +55,8 @@
             {{ painting_display(image) }}
         {% endfor %}
     </section>
-
+    <script defer>
+        var lightbox = new SimpleLightbox('.painting-link', { /* options */});
+        console.log("Ahoj")
+    </script>
 {% endblock %}

@@ -3,10 +3,15 @@ import jinja2, os, shutil
 
 from jinja2 import Environment, FileSystemLoader
 import time
+import re
 
 env = Environment(loader=FileSystemLoader("."))
 
 if __name__ == "__main__":
+    for filename in os.listdir("images/obrazy"):
+        if "|" in filename:
+            new_name = filename.replace("|", "_")
+            os.rename(f"images/obrazy/{filename}", f"images/obrazy/{new_name}")
     for filename in os.listdir("src"):
         template = env.get_template(f"src/{filename}")
 
@@ -28,7 +33,7 @@ if __name__ == "__main__":
                     images=reversed(
                         [
                             f"images/obrazy/{name}"
-                            for name in sorted(os.listdir("images/obrazy/"), key=lambda x: int(x.split("|")[0]),
+                            for name in sorted(os.listdir("images/obrazy/"), key=lambda x: int(re.split(r"[|_]", x)[0]),
                                                )
                             if ".jpg" in name or ".png" in name
                         ]

@@ -32,9 +32,9 @@
                 <div class="painting-title">
 
                     {% if "_sold" in image_url %}
-                        <div>{{ image_url.split("/")[-1].split(".")[0].split("|")[1].split("_")[0] }}</div>
+                        <div>{{ image_url.split("/")[-1].split(".")[0].split("_")[1].split("_")[0] }}</div>
                     {% else %}
-                        <div>{{ image_url.split("/")[-1].split(".")[0].split("|")[1] }}</div>
+                        <div>{{ image_url.split("/")[-1].split(".")[0].split("_")[1] }}</div>
                     {% endif %}
                 </div>
             </div>
@@ -43,11 +43,13 @@
 {% endmacro %}
 
 {% block content %}
-    <link rel="stylesheet" href="/assets/css/simple-lightbox.min.css">
-    <script src="/assets/js/simple-lightbox.min.js"></script>
     <section class="post">
         <header class="major">
-            <h1>Obrazy</h1>
+            <h1>Galerie</h1>
+            <p>
+                V prostorách salonu si můžete prohlédnout autorské obrazy Marie Baštařové
+            </p>
+
         </header>
 
         <!-- Image -->

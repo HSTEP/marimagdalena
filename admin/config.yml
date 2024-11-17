@@ -1,0 +1,13 @@
+backend:
+    name: git-gateway
+
+media_folder: "images/cms"
+collections:
+    - name: "obraz"
+      label: "Obraz"
+      folder: "src/obraz"
+      create: true
+      fields:
+          - {label: "Title", name: "Název", widget: "string" }
+          - {label: "Image", name: "Obraz", widget: "image" }
+          - {label: "sold", name: "Prodáno?", widget: "bool" }

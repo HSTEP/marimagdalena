@@ -1,9 +1,8 @@
 #! python3
-import jinja2, os, shutil
-
-from jinja2 import Environment, FileSystemLoader
+import os
 import time
 import re
+from jinja2 import Environment, FileSystemLoader
 
 env = Environment(loader=FileSystemLoader("."))
 

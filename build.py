@@ -2,14 +2,19 @@
 import os
 import time
 import re
+import json # Import the json library
 from jinja2 import Environment, FileSystemLoader
+from pathlib import Path # Use pathlib for consistency
 
 # --- Configuration ---
-IMAGES_DIR_OBRAZY = "images/obrazy"
-IMAGES_DIR_GALERIE = "images/galerie" # Assuming this exists
-SRC_DIR = "src"
-OUTPUT_DIR = "." # Output HTML files to the root directory
-TEMPLATES_DIR = "src" # Templates are in the src directory
+# Use Path objects for directories
+BASE_DIR = Path(__file__).resolve().parent
+IMAGES_DIR_OBRAZY = BASE_DIR / "images/obrazy"
+IMAGES_DIR_GALERIE = BASE_DIR / "images/galerie"
+SRC_DIR = BASE_DIR / "src"
+OUTPUT_DIR = BASE_DIR # Output HTML files to the root directory
+TEMPLATES_DIR = SRC_DIR # Templates are in the src directory
+DATA_DIR = SRC_DIR / "data" # Directory for JSON data files
 
 # --- Setup Jinja2 Environment ---
 env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
@@ -48,76 +53,104 @@ def get_galerie_sort_key(filename):
         print(f"Warning: Could not parse sort key from galerie filename: {filename}")
         return float('inf') # Put invalid filenames at the end
 
+# --- Function to load JSON data ---
+def load_json_data(filename: Path):
+    """Loads JSON data from a file."""
+    if not filename.is_file():
+        print(f"Warning: Data file not found: {filename}")
+        return [] # Return empty list if file doesn't exist
+    try:
+        with open(filename, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            if not isinstance(data, list):
+                print(f"Warning: JSON data in {filename} is not a list.")
+                return []
+            return data
+    except json.JSONDecodeError:
+        print(f"Error: Could not decode JSON from file: {filename}")
+        return []
+    except Exception as e:
+        print(f"Error loading data from {filename}: {e}")
+        return []
+
 # --- Main Build Logic ---
 if __name__ == "__main__":
     print("Starting build process...")
+    start_time = time.time()
 
-    # --- Pre-processing/Cleanup (Optional) ---
-    # Example: Rename files with invalid characters if needed (though API should prevent this now)
-    # for filename in os.listdir(IMAGES_DIR_OBRAZY):
-    #     if "|" in filename: # Example cleanup
-    #         new_name = filename.replace("|", "_")
-    #         try:
-    #             os.rename(os.path.join(IMAGES_DIR_OBRAZY, filename), os.path.join(IMAGES_DIR_OBRAZY, new_name))
-    #             print(f"Renamed: {filename} -> {new_name}")
-    #         except OSError as e:
-    #             print(f"Error renaming {filename}: {e}")
+    # Create output and data directories if they don't exist
+    OUTPUT_DIR.mkdir(exist_ok=True)
+    DATA_DIR.mkdir(exist_ok=True) # Ensure data directory exists
 
     # --- Get Image Lists ---
     obrazy_images = []
-    if os.path.isdir(IMAGES_DIR_OBRAZY):
+    if IMAGES_DIR_OBRAZY.is_dir():
         obrazy_files = [
             f for f in os.listdir(IMAGES_DIR_OBRAZY)
-            if f.lower().endswith(('.jpg', '.jpeg', '.png', '.gif')) and os.path.isfile(os.path.join(IMAGES_DIR_OBRAZY, f))
+            if f.lower().endswith(('.jpg', '.jpeg', '.png', '.gif')) and (IMAGES_DIR_OBRAZY / f).is_file()
         ]
         # Sort obrazy images based on the extracted order number
         obrazy_files.sort(key=get_obrazy_sort_key, reverse=True)
-        obrazy_images = [f"{IMAGES_DIR_OBRAZY}/{name}" for name in obrazy_files]
+        # Use relative paths suitable for HTML
+        obrazy_images = [f"{IMAGES_DIR_OBRAZY.name}/{name}" for name in obrazy_files]
         print(f"Found {len(obrazy_images)} obrazy images.")
     else:
         print(f"Warning: Obrazy directory not found: {IMAGES_DIR_OBRAZY}")
 
     galerie_images = []
-    if os.path.isdir(IMAGES_DIR_GALERIE):
+    if IMAGES_DIR_GALERIE.is_dir():
         galerie_files = [
             f for f in os.listdir(IMAGES_DIR_GALERIE)
-            if f.lower().endswith(('.jpg', '.jpeg', '.png', '.gif')) and os.path.isfile(os.path.join(IMAGES_DIR_GALERIE, f))
+            if f.lower().endswith(('.jpg', '.jpeg', '.png', '.gif')) and (IMAGES_DIR_GALERIE / f).is_file()
         ]
          # Sort galerie images based on the extracted key (descending as per original logic)
         galerie_files.sort(key=get_galerie_sort_key, reverse=True)
-
-        galerie_images = [f"{IMAGES_DIR_GALERIE}/{name}" for name in galerie_files]
+        # Use relative paths suitable for HTML
+        galerie_images = [f"{IMAGES_DIR_GALERIE.name}/{name}" for name in galerie_files]
         print(f"Found {len(galerie_images)} galerie images.")
     else:
         print(f"Warning: Galerie directory not found: {IMAGES_DIR_GALERIE}")
 
+    # --- Load Data from JSON ---
+    projekty_data = load_json_data(DATA_DIR / "projekty.json")
+    vystavy_data = load_json_data(DATA_DIR / "vystavy.json")
+    print(f"Loaded {len(projekty_data)} projects from JSON.")
+    print(f"Loaded {len(vystavy_data)} exhibitions from JSON.")
 
     # --- Render Templates ---
-    if not os.path.isdir(SRC_DIR):
+    if not SRC_DIR.is_dir():
         print(f"Error: Source directory not found: {SRC_DIR}")
         exit(1)
 
     print(f"Rendering templates from '{SRC_DIR}' to '{OUTPUT_DIR}'...")
+    rendered_files = 0
     for filename in os.listdir(SRC_DIR):
-        if filename.endswith(".html"): # Process only HTML files as templates
-            template_path = filename # Relative to TEMPLATES_DIR (which is SRC_DIR)
-            output_path = os.path.join(OUTPUT_DIR, filename)
+        template_source_path = SRC_DIR / filename
+        if template_source_path.is_file() and filename.endswith(".html"): # Process only HTML files as templates
+            template_name = filename # Relative to TEMPLATES_DIR (which is SRC_DIR)
+            output_path = OUTPUT_DIR / filename
 
             try:
-                template = env.get_template(template_path)
+                template = env.get_template(template_name)
                 context = {} # Default empty context
 
                 # Add specific context for known templates
                 if filename == "galerie.html":
-                    # Pass the pre-sorted list
                     context['images'] = galerie_images
                     print(f"  - Rendering {filename} with {len(galerie_images)} galerie images...")
                 elif filename == "obrazy.html":
-                     # Pass the pre-sorted list
                     context['images'] = obrazy_images
                     print(f"  - Rendering {filename} with {len(obrazy_images)} obrazy images...")
+                elif filename == "projekty.html":
+                    # Pass the loaded projects data to the template
+                    context['projekty'] = projekty_data
+                    print(f"  - Rendering {filename} with {len(projekty_data)} projects...")
+                elif filename == "vystavy.html":
+                    # Pass the loaded exhibitions data to the template
+                    context['vystavy'] = vystavy_data
+                    print(f"  - Rendering {filename} with {len(vystavy_data)} exhibitions...")
                 else:
-                    # Render other HTML files with no specific image context
+                    # Render other HTML files with no specific context (or add generic context if needed)
                     print(f"  - Rendering {filename}...")
 
                 html_content = template.render(context)
@@ -125,8 +158,10 @@ if __name__ == "__main__":
                 # Write the rendered HTML to the output directory
                 with open(output_path, "w", encoding="utf-8") as f:
                     f.write(html_content)
+                rendered_files += 1
 
             except Exception as e:
                 print(f"Error rendering template {filename}: {e}")
 
-    print("Build process finished.")
+    end_time = time.time()
+    print(f"Build process finished in {end_time - start_time:.2f} seconds. Rendered {rendered_files} files.")

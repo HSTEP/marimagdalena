@@ -1,0 +1,106 @@
+[
+  {
+    "date": "Leden až Prosinec 2024",
+    "title": "Módní Salon Michaeli Naušové",
+    "image": "images/vystavy/nausova.jpg",
+    "links": [
+      {
+        "url": "https://www.facebook.com/michaelanausovamodninavrharka/",
+        "text": "Michaela Naušová"
+      }
+    ],
+    "id": 1
+  },
+  {
+    "date": "22. Listopadu, 2024",
+    "title": "SCHOVANÁ KAVÁRNA",
+    "image": "images/vystavy/kavarna.png",
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/p/1NeZmXnRs6/?mibextid=wwXIfr",
+        "text": "Reportáž z Výstavy"
+      },
+      {
+        "url": "https://www.facebook.com/share/v/16N888bEaT/?mibextid=wwXIfr",
+        "text": "Video"
+      }
+    ],
+    "id": 3
+  },
+  {
+    "date": "3. Srpna, 2024",
+    "title": "Večer pro klášter chotěšov",
+    "image": "images/vystavy/chotesov.jpg",
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/v/wUqXZGHvoeMqvPgT/",
+        "text": "Video"
+      }
+    ],
+    "id": 4
+  },
+  {
+    "date": "1. Červen, 2024",
+    "title": "Parkhotel, Plzeň",
+    "image": "images/vystavy/parkhotel.jpg",
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/v/vMUjo4WAsZ47iNNP/?mibextid=WC7FNe",
+        "text": "Video"
+      }
+    ],
+    "id": 5
+  },
+  {
+    "date": "Červen - Srpen, 2024",
+    "title": "Galerie U andělíčka, Plzeň",
+    "image": "images/vystavy/andelicek.jpeg",
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/v/YLjTsN68kAsKwypy/?mibextid=WC7FNe",
+        "text": "Video"
+      }
+    ],
+    "id": 6
+  },
+  {
+    "date": "7. června, 2024",
+    "title": "Noc kostelů, Dnešice",
+    "image": "images/vystavy/dnesice.jpeg",
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/v/PKQ35FQ4xNQ1hyVT/?mibextid=WC7FNe",
+        "text": "Video"
+      }
+    ],
+    "id": 7
+  },
+  {
+    "date": "8. Května, 2024",
+    "title": "Kostel Sv. Víta, Dobřany",
+    "image": "images/vystavy/vit.jpg",
+    "links": [
+      {
+        "url": "https://www.facebook.com/story.php?story_fbid=451137117288807&id=100071775664125&mibextid=WC7FNe&rdid=FwJzHiGtYXOjFTZL",
+        "text": "Reportáž z Výstavy"
+      },
+      {
+        "url": "https://www.facebook.com/share/v/2KZ5Qywsvq99cWE8/?mibextid=WC7FNe",
+        "text": "Video"
+      }
+    ],
+    "id": 8
+  },
+  {
+    "date": "Duben - Květen, 2024",
+    "title": "Le Consulat Plzeň",
+    "image": "images/vystavy/leconsulat.jpg",
+    "links": [
+      {
+        "url": "https://www.facebook.com/marie.bastarova.1/posts/pfbid02pJDRQBLmaK3cten5vzRGMMQ6aFVf7Q2SVhvsREUoBDkHmKrTH1xdmKjS8V8ALqhXl",
+        "text": "Reportáž z Výstavy"
+      }
+    ],
+    "id": 9
+  }
+]

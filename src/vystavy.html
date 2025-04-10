@@ -1,160 +1,58 @@
 {% extends "container.html" %} {% set active_page = 7 %} {% block content %}
-<!-- Posts -->
 <section class="posts">
+    {% for vystava in vystavy %}
     <article>
         <header>
-            <span class="date">Připravuje se</span>
-            <h2>Módní Salon Michaeli Naušové</h2>
-            <a class="image fit"
-                ><img src="images/vystavy/nausova.jpg" alt=""
-            /></a>
-            <ul class="actions special">
-                <li>
-                    <a
-                        href="https://www.facebook.com/michaelanausovamodninavrharka/"
-                        class="button"
-                        >Michaela Naušová</a
-                    >
-                </li>
-            </ul>
+            {% if vystava.date %}
+            <span class="date">{{ vystava.date }}</span>
+            {% endif %} {# Title remains in the header #}
+            <h2>{{ vystava.title | safe }}</h2>
         </header>
-    </article>
-    <article>
-        <header>
-            <span class="date">Připravuje se</span>
-            <h2>Fit dance art</h2>
-            <a class="image fit"
-                ><img src="images/obrazy/47_Andalusa.jpg" alt=""
-            /></a>
-        </header>
-    </article>
-    <article>
-        <header>
-            <h2>SCHOVANÁ KAVÁRNA</h2>
-            <a class="image fit"
-                ><img src="images/vystavy/kavarna.png" alt=""
-            /></a>
-        </header>
-    </article>
-    <article>
-        <header>
-            <span class="date">3. Srpna, 2024</span>
-            <h2>Večer pro klášter chotěšov</h2>
-            <a class="image fit"
-                ><img src="images/vystavy/chotesov.jpg" alt=""
-            /></a>
-            <ul class="actions special">
-                <!--<li><a href="https://www.facebook.com/KytkyOdKoksina/posts/pfbid0ixAZ2jMY5moxt11gYNVGetvxAtzeBTEZaPqPhRrymzz14Csyw1jiobEGz4bxsskZl" class="button">Reportáž z Výstavy</a></li>-->
-                <!--https://www.facebook.com/share/v/vMUjo4WAsZ47iNNP/?mibextid=WC7FNe-->
-                <li>
-                    <a
-                        href="https://www.facebook.com/share/v/wUqXZGHvoeMqvPgT/"
-                        class="button"
-                        >Video</a
-                    >
-                </li>
-            </ul>
-        </header>
-    </article>
-    <article>
-        <header>
-            <span class="date">1. Červen, 2024</span>
-            <h2>Parkhotel, Plzeň</h2>
-            <a class="image fit"
-                ><img src="images/vystavy/parkhotel.jpg" alt=""
-            /></a>
-            <ul class="actions special">
-                <!--<li><a href="https://www.facebook.com/KytkyOdKoksina/posts/pfbid0ixAZ2jMY5moxt11gYNVGetvxAtzeBTEZaPqPhRrymzz14Csyw1jiobEGz4bxsskZl" class="button">Reportáž z Výstavy</a></li>-->
-                <!--https://www.facebook.com/share/v/vMUjo4WAsZ47iNNP/?mibextid=WC7FNe-->
-                <li>
-                    <a
-                        href="https://www.facebook.com/share/v/vMUjo4WAsZ47iNNP/?mibextid=WC7FNe"
-                        class="button"
-                        >Video</a
-                    >
-                </li>
-            </ul>
-        </header>
-    </article>
-    <article>
-        <header>
-            <span class="date">Červen - Srpen, 2024</span>
-            <h2>Galerie U andělíčka, Plzeň</h2>
-            <a class="image fit"
-                ><img src="images/vystavy/andelicek.jpeg" alt=""
-            /></a>
-            <ul class="actions special">
-                <!--<li><a href="https://www.facebook.com/KytkyOdKoksina/posts/pfbid0ixAZ2jMY5moxt11gYNVGetvxAtzeBTEZaPqPhRrymzz14Csyw1jiobEGz4bxsskZl" class="button">Reportáž z Výstavy</a></li>-->
-                <li>
-                    <a
-                        href="https://www.facebook.com/share/v/YLjTsN68kAsKwypy/?mibextid=WC7FNe"
-                        class="button"
-                        >Video</a
-                    >
-                </li>
-            </ul>
-        </header>
-    </article>
 
-    <article>
-        <header>
-            <span class="date">7. června, 2024</span>
-            <h2>Noc kostelů, Dnešice</h2>
-            <a class="image fit"
-                ><img src="images/vystavy/dnesice.jpeg" alt=""
-            /></a>
-            <ul class="actions special">
-                <li>
-                    <a
-                        href="https://www.facebook.com/share/v/PKQ35FQ4xNQ1hyVT/?mibextid=WC7FNe"
-                        class="button"
-                        >Video</a
-                    >
-                </li>
-            </ul>
-        </header>
+        {# Image moved outside the header, link points to image itself #} {% if
+        vystava.image %}
+        <a href="{{ vystava.image }}" class="image fit">
+            <img
+                src="{{ vystava.image }}"
+                alt="{{ vystava.title | striptags | safe }}"
+                {#
+                Keep
+                striptags
+                for
+                safety
+                #}
+                onerror="this.onerror=null; this.parentElement.innerHTML = '<div style=\'color: #a0aec0; text-align: center; padding: 2rem; border: 1px dashed #cbd5e0;\'>Obrázek nelze načíst</div>';"
+                {#
+                Basic
+                inline
+                style
+                for
+                placeholder
+                #}
+            />
+        </a>
+        {% endif %} {# Links moved outside the header #} {% if vystava.links %}
+        <ul class="actions special">
+            {% for link in vystava.links %}
+            <li>
+                {# Added target and rel attributes for external links #}
+                <a
+                    href="{{ link.url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="button"
+                    >{{ link.text }}</a
+                >
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </article>
-    <article>
-        <header>
-            <span class="date">8. Května, 2024</span>
-            <h2>Kostel Sv. Víta, Dobřany</h2>
-            <a class="image fit"><img src="images/vystavy/vit.jpg" alt="" /></a>
-            <ul class="actions special">
-                <li>
-                    <a
-                        href="https://www.facebook.com/story.php?story_fbid=451137117288807&id=100071775664125&mibextid=WC7FNe&rdid=FwJzHiGtYXOjFTZL"
-                        class="button"
-                        >Reportáž z Výstavy</a
-                    >
-                </li>
-
-                <li>
-                    <a
-                        href="https://www.facebook.com/share/v/2KZ5Qywsvq99cWE8/?mibextid=WC7FNe"
-                        class="button"
-                        >Video</a
-                    >
-                </li>
-            </ul>
-        </header>
-    </article>
-    <article>
-        <header>
-            <span class="date">Duben - Květen, 2024</span>
-            <h2>Le Consulat Plzeň</h2>
-            <a class="image fit"
-                ><img src="images/vystavy/leconsulat.jpg" alt=""
-            /></a>
-            <ul class="actions special">
-                <li>
-                    <a
-                        href="https://www.facebook.com/marie.bastarova.1/posts/pfbid02pJDRQBLmaK3cten5vzRGMMQ6aFVf7Q2SVhvsREUoBDkHmKrTH1xdmKjS8V8ALqhXl"
-                        class="button"
-                        >Reportáž z Výstavy</a
-                    >
-                </li>
-            </ul>
-        </header>
-    </article>
+    {% else %} {# Message if vystavy list is empty #}
+    <p style="padding: 4rem; text-align: center">Žádné výstavy k zobrazení.</p>
+    {% endfor %}
 </section>
-{% endblock content %}
+{% endblock content %} ``` You can replace the content of your existing
+`src/vystavy.html` file with this updated code. After replacing it, run your
+`build.py` script again to generate the final `vystavy.html` output file with
+the new structure and styling inherited from `container.html` and `main.cs

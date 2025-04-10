@@ -1,11 +1,10 @@
-{% extends "src/container.html" %}
-{% set active_page = 5 %}
-
-{% macro painting_display(image_url) %}
-    <a href="{{ image_url }}" class="painting-link">
-        <div class="painting">
-            {% if "_sold" in image_url %}
-                <div style="
+{% extends "container.html" %} {% set active_page = 5 %} {% macro
+painting_display(image_url) %}
+<a href="{{ image_url }}" class="painting-link">
+    <div class="painting">
+        {% if "_sold" in image_url %}
+        <div
+            style="
                 position: relative;
                 display: flex;
                 justify-content: center;
@@ -20,45 +19,56 @@
                 border-radius: 50px;
                 width: 50px;
                 height: 50px;
-                top: 60px;"
-                >
-                    <div style="">Sold</div>
+                top: 60px;
+            "
+        >
+            <div style="">Sold</div>
+        </div>
+        {% endif %}
+        <img src="{{ image_url }}" alt="..." />
 
-                </div>
-            {% endif %}
-            <img src="{{ image_url }}" alt="...">
-
-            <div class="img-footer">
-                <div class="painting-title">
-
-                    {% if "_sold" in image_url %}
-                        <div>{{ image_url.split("/")[-1].split(".")[0].split("_")[1].split("_")[0] }}</div>
-                    {% else %}
-                        <div>{{ image_url.split("/")[-1].split(".")[0].split("_")[1] }}</div>
-                    {% endif %}
+        <div class="img-footer">
+            <div class="painting-title">
+                <div>
+                    {% set filename = image_url.split('/')[-1] %} {# Get
+                    filename: SOLD_1_2_My_Painting_Title.jpg #} {% set base_name
+                    = filename.rsplit('.', 1)[0] %} {# Remove extension:
+                    SOLD_1_2_My_Painting_Title #} {# Remove SOLD_ prefix if it
+                    exists #} {% set name_part = base_name[5:] if
+                    base_name.upper().startswith('SOLD_') else base_name %} {#
+                    -> 1_2_My_Painting_Title #} {# Split into ID, Order, and the
+                    rest (Title) #} {% set parts = name_part.split('_', 2) %} {#
+                    -> ['1', '2', 'My_Painting_Title'] #} {# Check if split
+                    produced 3 parts (ID, Order, Title) #} {% if parts|length ==
+                    3 %} {% set title = parts[2] %} {# Extract the title part #}
+                    {# Optional: Replace underscores with spaces if needed for
+                    display #} {# {% set display_title = title.replace('_', ' ')
+                    %} #} {{ title }} {# Display the title (e.g.,
+                    My_Painting_Title) #} {% else %} {# Fallback if the filename
+                    format is unexpected #} {{ name_part }} {# Display the name
+                    part after removing potential SOLD_ #} {% endif %}
                 </div>
             </div>
         </div>
-    </a>
-{% endmacro %}
+    </div>
+</a>
+{% endmacro %} {% block content %}
+<section class="post">
+    <header class="major">
+        <h1>Galerie</h1>
+        <p>
+            V prostorách salonu si můžete prohlédnout autorské obrazy Marie
+            Baštařové
+        </p>
+    </header>
 
-{% block content %}
-    <section class="post">
-        <header class="major">
-            <h1>Galerie</h1>
-            <p>
-                V prostorách salonu si můžete prohlédnout autorské obrazy Marie Baštařové
-            </p>
-
-        </header>
-
-        <!-- Image -->
-        {% for image in images %}
-            {{ painting_display(image) }}
-        {% endfor %}
-    </section>
-    <script defer>
-        var lightbox = new SimpleLightbox('.painting-link', { /* options */});
-        console.log("Ahoj")
-    </script>
+    <!-- Image -->
+    {% for image in images %} {{ painting_display(image) }} {% endfor %}
+</section>
+<script defer>
+    var lightbox = new SimpleLightbox(".painting-link", {
+        /* options */
+    });
+    console.log("Ahoj");
+</script>
 {% endblock %}

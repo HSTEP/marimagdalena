@@ -71,7 +71,7 @@ if __name__ == "__main__":
             if f.lower().endswith(('.jpg', '.jpeg', '.png', '.gif')) and os.path.isfile(os.path.join(IMAGES_DIR_OBRAZY, f))
         ]
         # Sort obrazy images based on the extracted order number
-        obrazy_files.sort(key=get_obrazy_sort_key)
+        obrazy_files.sort(key=get_obrazy_sort_key, reverse=True)
         obrazy_images = [f"{IMAGES_DIR_OBRAZY}/{name}" for name in obrazy_files]
         print(f"Found {len(obrazy_images)} obrazy images.")
     else:
@@ -85,6 +85,7 @@ if __name__ == "__main__":
         ]
          # Sort galerie images based on the extracted key (descending as per original logic)
         galerie_files.sort(key=get_galerie_sort_key, reverse=True)
+
         galerie_images = [f"{IMAGES_DIR_GALERIE}/{name}" for name in galerie_files]
         print(f"Found {len(galerie_images)} galerie images.")
     else:

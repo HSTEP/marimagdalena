@@ -46,9 +46,9 @@ def sanitize_filename(name: str) -> str:
     """Removes characters potentially problematic in filenames."""
     name = name.strip()
     # Replace spaces and problematic characters with underscores
-    name = re.sub(r'[\\/*?:"<>|\s]+', '_', name)
+    # name = re.sub(r'[\\/*?:"<>|\s]+', '_', name)
     # Remove any remaining non-alphanumeric characters except underscore and hyphen
-    name = re.sub(r'[^a-zA-Z0-9_-]', '', name)
+    # name = re.sub(r'[^a-zA-Z0-9_-]', '', name)
     # Prevent excessively long filenames (optional)
     return name[:100] # Limit title part length
 

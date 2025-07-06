@@ -6,6 +6,7 @@ import asyncio
 import json # Import json
 from pathlib import Path
 from typing import List, Optional, Dict, Any
+from datetime import datetime
 
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks, Path as FastApiPath, Response, Body
 from pydantic import BaseModel, Field, HttpUrl
@@ -290,6 +291,53 @@ app.add_middleware(
 )
 
 # --- API Endpoints ---
+
+@app.post("/upload/{resource_type}", summary="Upload an image for a resource")
+async def upload_image_for_resource(
+        resource_type: str = FastApiPath(..., description="The type of resource (e.g., 'projekty', 'vystavy')"),
+        image: UploadFile = File(...)
+):
+    """
+    Uploads an image to a subdirectory based on the resource type
+    and returns the relative path.
+    """
+    allowed_resource_types = {
+        "projekty": BASE_DIR / "images/projekty",
+        "vystavy": BASE_DIR / "images/vystavy",
+    }
+
+    if resource_type not in allowed_resource_types:
+        raise HTTPException(status_code=400, detail="Invalid resource type for upload.")
+
+    upload_dir = allowed_resource_types[resource_type]
+    upload_dir.mkdir(parents=True, exist_ok=True)  # Ensure directory exists
+
+    # Sanitize filename to prevent directory traversal and other issues
+    sanitized_filename = Path(sanitize_filename(image.filename)).name
+    file_location = upload_dir / sanitized_filename
+
+    # Basic check to avoid overwriting, can be made more robust
+    if file_location.exists():
+        # Add a simple timestamp or counter to make it unique
+        base, ext = os.path.splitext(sanitized_filename)
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        sanitized_filename = f"{base}_{timestamp}{ext}"
+        file_location = upload_dir / sanitized_filename
+
+    try:
+        with open(file_location, "wb+") as file_object:
+            shutil.copyfileobj(image.file, file_object)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save image file: {e}")
+    finally:
+        await image.close()
+
+    # Return the relative path that should be stored in the main JSON data
+    relative_path = os.path.join("images", resource_type, sanitized_filename)
+
+    # We use forward slashes for URLs
+    return {"path": relative_path.replace("\\", "/")}
+
 
 # == Painting Endpoints (Existing - Filename Based) ==
 # NOTE: These endpoints manage paintings based on filenames in the images/obrazy directory.

@@ -316,5 +316,252 @@
     "video_url": null,
     "id": 21,
     "order": 20
+  },
+  {
+    "links": [],
+    "title": "Promo focení Londa",
+    "date": "leden, 2021",
+    "image": "images/projekty/WhatsApp Image 2025-04-04 at 5.03.47 PM.jpeg",
+    "id": 22,
+    "order": 21
+  },
+  {
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/p/19oGue6KB7/?mibextid=wwXIfr",
+        "text": "Galerie #1"
+      },
+      {
+        "url": "https://www.facebook.com/share/p/18QoJuqdRe/?mibextid=wwXIfr",
+        "text": "Galerie #2"
+      }
+    ],
+    "date": "Březen, 2021",
+    "title": "Tvorba autorské háčkované kolekce",
+    "image": "images/projekty/WhatsApp Image 2025-04-04 at 5.08.08 PM(1).jpeg",
+    "id": 23,
+    "order": 22
+  },
+  {
+    "links": [],
+    "title": "Spolupráce s Michaelou Naušovou na autorské kolekci",
+    "date": "Květen, 2021",
+    "image": "images/projekty/WhatsApp Image 2025-04-04 at 5.30.54 PM.jpeg",
+    "id": 24,
+    "order": 23
+  },
+  {
+    "links": [
+      {
+        "url": "https://janaponcarova.cz/",
+        "text": "Jana Poncarová"
+      },
+      {
+        "url": "https://www.facebook.com/share/p/1VTbiMcHH8/?mibextid=wwXIfr",
+        "text": "fotoreportáž"
+      }
+    ],
+    "title": "Writer on the road",
+    "date": "Září 2021, Dobřany",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 1.17.22 PM.jpeg",
+    "id": 25,
+    "order": 24
+  },
+  {
+    "links": [],
+    "title": "Svatební styling",
+    "date": "Září 2021",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 1.33.17 PM.jpeg",
+    "id": 26,
+    "order": 25
+  },
+  {
+    "links": [
+      {
+        "url": "https://www.lbdesign.cz/",
+        "text": "LB Design"
+      }
+    ],
+    "title": "Workshop pro zákaznice",
+    "date": "Listopad, 2021",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 1.40.53 PM.jpeg",
+    "id": 27,
+    "order": 26
+  },
+  {
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/p/1938mcKxnA/?mibextid=wwXIfr",
+        "text": "Galerie #1"
+      },
+      {
+        "url": "https://www.facebook.com/share/p/1Gs5Gg9rV4/?mibextid=wwXIfr",
+        "text": "Galerie #2"
+      },
+      {
+        "url": "https://www.facebook.com/share/p/15xQwGusQK/?mibextid=wwXIfr",
+        "text": "Galerie #3"
+      }
+    ],
+    "title": "Spolupráce s Kytky od Kokšína",
+    "date": "Prosinec, 2021",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 1.48.54 PM.jpeg",
+    "id": 28,
+    "order": 27
+  },
+  {
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/v/152F54q4xG/?mibextid=wwXIfr",
+        "text": "video"
+      }
+    ],
+    "date": "Duben, 2022",
+    "title": "Pracovní stáž v Berlíně ",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 1.57.11 PM.jpeg",
+    "id": 29,
+    "order": 28
+  },
+  {
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/1Avjms5bPT/?mibextid=wwXIfr",
+        "text": "video"
+      }
+    ],
+    "title": "Interview z Berlína",
+    "date": "Duben, 2022",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 2.01.14 PM.jpeg",
+    "id": 30,
+    "order": 29
+  },
+  {
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/p/16f1Ww5Zta/?mibextid=wwXIfr",
+        "text": "Galerie"
+      }
+    ],
+    "title": "Focení v klášterní zahradě",
+    "date": "Červen, 2022",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 2.19.38 PM.jpeg",
+    "id": 31,
+    "order": 30
+  },
+  {
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/p/1DmY5ixyC9/?mibextid=wwXIfr",
+        "text": "Galerie"
+      }
+    ],
+    "title": "Style & Colour Trophy",
+    "date": "Červenec, 2022",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 2.27.54 PM.jpeg",
+    "id": 32,
+    "order": 31
+  },
+  {
+    "links": [
+      {
+        "url": "https://linktr.ee/luciesefrnova",
+        "text": "Lucie Šefrnová"
+      }
+    ],
+    "title": "Spolupráce s Lucií Šefrnovou",
+    "date": "ŘÍjen, 2022",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 2.31.37 PM.jpeg",
+    "id": 33,
+    "order": 32
+  },
+  {
+    "links": [
+      {
+        "url": "Studio Wella Praha",
+        "text": "https://www.instagram.com/studiowellapraha/?hl=cs"
+      }
+    ],
+    "title": "Pracovní stáž Studio Wella Praha",
+    "date": "Řijen, 2022",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 2.37.32 PM.jpeg",
+    "id": 34,
+    "order": 33
+  },
+  {
+    "links": [],
+    "title": "Vystoupení v Maximus Resort Brno",
+    "date": "Říjen, 2022",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 2.41.20 PM.jpeg",
+    "id": 35,
+    "order": 34
+  },
+  {
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/p/1EAcK6uXrV/?mibextid=wwXIfr",
+        "text": "Galerie"
+      }
+    ],
+    "title": "Promo focení ",
+    "date": "Leden, 2023",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 2.43.52 PM.jpeg",
+    "video_url": null,
+    "id": 36,
+    "order": 35
+  },
+  {
+    "links": [],
+    "title": "Focení s Iryna Bidašová",
+    "date": "Květen, 2023",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 2.50.42 PM.jpeg",
+    "id": 37,
+    "order": 36
+  },
+  {
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/p/1BLWPy29S4/?mibextid=wwXIfr",
+        "text": "Galerie"
+      }
+    ],
+    "title": "Premiéra s divadelním souborem Rozmarýn",
+    "date": "Květen, 2023",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 2.53.32 PM.jpeg",
+    "id": 38,
+    "order": 37
+  },
+  {
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/p/18v66mQdN9/?mibextid=wwXIfr",
+        "text": "Galerie"
+      }
+    ],
+    "title": " Cosmopolitan Flower Day - styling",
+    "date": "Červen, 2024",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 2.57.01 PM.jpeg",
+    "id": 39,
+    "order": 38
+  },
+  {
+    "links": [
+      {
+        "url": "https://www.facebook.com/share/v/18rPvS3TZs/?mibextid=wwXIfr",
+        "text": "video"
+      }
+    ],
+    "title": "Víkend otevřených ateliérů",
+    "date": "Září, 2024",
+    "image": "images/projekty/WhatsApp Image 2025-04-05 at 3.10.50 PM.jpeg",
+    "id": 40,
+    "order": 39
+  },
+  {
+    "links": [],
+    "title": "Společný projekt s Jirkou Krejčíkem",
+    "date": "Červen, 2024",
+    "video_url": "https://www.facebook.com/share/v/17dSWpKigu/",
+    "id": 41,
+    "order": 40
   }
 ]

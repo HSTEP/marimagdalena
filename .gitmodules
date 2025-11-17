@@ -1,0 +1,3 @@
+[submodule "mariadmin"]
+	path = mariadmin
+	url = git@github.com:basta/mariadmin.git

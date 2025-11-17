@@ -1,58 +1,7 @@
-{% extends "container.html" %} {% set active_page = 5 %} {% macro
-painting_display(image_url) %}
-<a href="{{ image_url }}" class="painting-link">
-    <div class="painting">
-        {% if "_sold" in image_url %}
-        <div
-            style="
-                position: relative;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                background-color: black;
-                transform: rotate(15deg);
-                color: white;
-                font-family: Pacifico, cursive;
-                font-size: 15px;
-                z-index: 20;
-                margin-left: calc(100% - 60px);
-                border-radius: 50px;
-                width: 50px;
-                height: 50px;
-                top: 60px;
-            "
-        >
-            <div style="">Sold</div>
-        </div>
-        {% endif %}
-        <img src="/images/{{ image_url }}" alt="..." />
+{% extends "container.html" %}
+{% set active_page = 5 %}
 
-        <div class="img-footer">
-            <div class="painting-title">
-                <div>
-                    {% set filename = image_url.split('/')[-1] %} {# Get
-                    filename: SOLD_1_2_My_Painting_Title.jpg #} {% set base_name
-                    = filename.rsplit('.', 1)[0] %} {# Remove extension:
-                    SOLD_1_2_My_Painting_Title #} {# Remove SOLD_ prefix if it
-                    exists #} {% set name_part = base_name[5:] if
-                    base_name.upper().startswith('SOLD_') else base_name %} {#
-                    -> 1_2_My_Painting_Title #} {# Split into ID, Order, and the
-                    rest (Title) #} {% set parts = name_part.split('_', 2) %} {#
-                    -> ['1', '2', 'My_Painting_Title'] #} {# Check if split
-                    produced 3 parts (ID, Order, Title) #} {% if parts|length ==
-                    3 %} {% set title = parts[2] %} {# Extract the title part #}
-                    {# Optional: Replace underscores with spaces if needed for
-                    display #} {# {% set display_title = title.replace('_', ' ')
-                    %} #} {{ title }} {# Display the title (e.g.,
-                    My_Painting_Title) #} {% else %} {# Fallback if the filename
-                    format is unexpected #} {{ name_part }} {# Display the name
-                    part after removing potential SOLD_ #} {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-</a>
-{% endmacro %} {% block content %}
+{% block content %}
 <section class="post">
     <header class="major">
         <h1>Galerie</h1>
@@ -62,13 +11,57 @@ painting_display(image_url) %}
         </p>
     </header>
 
-    <!-- Image -->
-    {% for image in images %} {{ painting_display(image) }} {% endfor %}
+    <!-- The main container for the paintings -->
+    <div class="paintings-container">
+        {# Loop through the list of painting objects passed from the build script #}
+        {% for painting in paintings %}
+        <a href="{{ painting.url }}" class="painting-link">
+            <div class="painting">
+
+                {# Conditionally display the "Sold" badge if painting.sold is true #}
+                {% if painting.sold %}
+                <div
+                    style="
+                        position: relative;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: black;
+                        transform: rotate(15deg);
+                        color: white;
+                        font-family: Pacifico, cursive;
+                        font-size: 15px;
+                        z-index: 20;
+                        margin-left: calc(100% - 60px);
+                        border-radius: 50px;
+                        width: 50px;
+                        height: 50px;
+                        top: 60px;
+                    "
+                >
+                    <div>Sold</div>
+                </div>
+                {% endif %}
+
+                {# Display the image using the URL from the painting object #}
+                <img src="{{ painting.url }}" alt="{{ painting.title }}" />
+
+                <div class="img-footer">
+                    <div class="painting-title">
+                        {# Display the title directly from the painting object #}
+                        <div>{{ painting.title }}</div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
 </section>
+
 <script defer>
+    // This script remains the same
     var lightbox = new SimpleLightbox(".painting-link", {
         /* options */
     });
-    console.log("Ahoj");
 </script>
 {% endblock %}

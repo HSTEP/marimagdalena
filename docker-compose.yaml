@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  mariadmin:
+    # Build the Docker image from the current directory (where the Dockerfile is located)
+    build: .
+    # Assign a specific container name for easy identification
+    container_name: mariadmin
+    # Ensure the container restarts automatically unless it's explicitly stopped
+    restart: unless-stopped
+    volumes:
+      # Mount the 'images' directory from the host into the container at /app/images
+      # This persists your images even if the container is removed or rebuilt.
+      - ./images:/app/images
+      # Mount the 'src/data' directory from the host into the container at /app/src/data
+      # This allows for persistent storage of data JSON files.
+      - ./src/data:/app/src/data
+    labels:
+      # --- Traefik Configuration for the Python API (Port 8000) ---
+      # Enable Traefik for this service
+      - "traefik.enable=true"
+
+      # Define the HTTP router for the Python API
+      # It will match requests for 'mari.basta.one'
+      - "traefik.http.routers.mari-http.rule=Host(`mari.basta.one`)"
+      # Route HTTP traffic through the 'web' entrypoint (typically port 80)
+      - "traefik.http.routers.mari-http.entrypoints=web"
+      # Apply the 'https-redirect' middleware to automatically redirect HTTP to HTTPS
+      - "traefik.http.routers.mari-http.middlewares=https-redirect@docker"
+      # Explicitly link this router to the 'mari' service
+      - "traefik.http.routers.mari-http.service=mari"
+
+      # Define the HTTPS router for the Python API
+      # It will match requests for 'mari.basta.one'
+      - "traefik.http.routers.mari-https.rule=Host(`mari.basta.one`)"
+      # Route HTTPS traffic through the 'websecure' entrypoint (typically port 443)
+      - "traefik.http.routers.mari-https.entrypoints=websecure"
+      # Enable TLS (SSL/HTTPS) for this router
+      - "traefik.http.routers.mari-https.tls=true"
+      # CHANGED: Specify the correct certificate resolver name 'lets-encrypt'
+      - "traefik.http.routers.mari-https.tls.certresolver=teeresolver"
+      # Explicitly link this router to the 'mari' service
+      - "traefik.http.routers.mari-https.service=mari"
+
+      # Define the service for the Python API
+      # This tells Traefik that the actual application is listening on port 8000 inside the container
+      - "traefik.http.services.mari.loadbalancer.server.port=8000"
+
+      # --- Traefik Configuration for the Static Website (Port 3000) ---
+      # Define the HTTP router for the static website
+      # It will match requests for 'mariweb.basta.one'
+      - "traefik.http.routers.mariweb-http.rule=Host(`mariweb.basta.one`)"
+      # Route HTTP traffic through the 'web' entrypoint
+      - "traefik.http.routers.mariweb-http.entrypoints=web"
+      # Apply the 'https-redirect' middleware
+      - "traefik.http.routers.mariweb-http.middlewares=https-redirect@docker"
+      # Explicitly link this router to the 'mariweb' service
+      - "traefik.http.routers.mariweb-http.service=mariweb"
+
+      # Define the HTTPS router for the static website
+      # It will match requests for 'mariweb.basta.one'
+      - "traefik.http.routers.mariweb-https.rule=Host(`mariweb.basta.one`)"
+      # Route HTTPS traffic through the 'websecure' entrypoint
+      - "traefik.http.routers.mariweb-https.entrypoints=websecure"
+      # Enable TLS
+      - "traefik.http.routers.mariweb-https.tls=true"
+      # CHANGED: Specify the correct certificate resolver name 'lets-encrypt'
+      - "traefik.http.routers.mariweb-https.tls.certresolver=teeresolver"
+      # Explicitly link this router to the 'mariweb' service
+      - "traefik.http.routers.mariweb-https.service=mariweb"
+
+      # Define the service for the static website
+      # This tells Traefik that the static website is listening on port 3000 inside the container
+      - "traefik.http.services.mariweb.loadbalancer.server.port=3000"
+
+      # --- Common Traefik Middleware ---
+      # Define a middleware to redirect all HTTP traffic to HTTPS
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.https-redirect.redirectscheme.permanent=true"
+

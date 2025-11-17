@@ -9,7 +9,8 @@
         "text": "Michaela Naušová"
       }
     ],
-    "id": 1
+    "id": 1,
+    "order": 0
   },
   {
     "date": "22. Listopadu, 2024",
@@ -25,7 +26,8 @@
         "text": "Video"
       }
     ],
-    "id": 3
+    "id": 3,
+    "order": 1
   },
   {
     "date": "3. Srpna, 2024",
@@ -37,7 +39,8 @@
         "text": "Video"
       }
     ],
-    "id": 4
+    "id": 4,
+    "order": 2
   },
   {
     "date": "1. Červen, 2024",
@@ -49,7 +52,8 @@
         "text": "Video"
       }
     ],
-    "id": 5
+    "id": 5,
+    "order": 3
   },
   {
     "date": "Červen - Srpen, 2024",
@@ -61,7 +65,8 @@
         "text": "Video"
       }
     ],
-    "id": 6
+    "id": 6,
+    "order": 4
   },
   {
     "date": "7. června, 2024",
@@ -73,7 +78,8 @@
         "text": "Video"
       }
     ],
-    "id": 7
+    "id": 7,
+    "order": 5
   },
   {
     "date": "8. Května, 2024",
@@ -89,7 +95,8 @@
         "text": "Video"
       }
     ],
-    "id": 8
+    "id": 8,
+    "order": 6
   },
   {
     "date": "Duben - Květen, 2024",
@@ -101,6 +108,7 @@
         "text": "Reportáž z Výstavy"
       }
     ],
-    "id": 9
+    "id": 9,
+    "order": 7
   }
 ]

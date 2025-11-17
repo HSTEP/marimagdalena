@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  mariadmin:
+    # Use a different container name to avoid conflicts with production
+    container_name: mariadmin-dev
+
+    # Overwrite the command to enable auto-reloading
+    command: uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+
+    volumes:
+      # Mount local source code into the container for live-reloading
+      - ./api.py:/app/api.py
+      - ./build.py:/app/build.py
+      - ./pyproject.toml:/app/pyproject.toml
+
+    ports:
+      # Map port 8001 on your machine to port 8000 in the container
+      - "8001:8000"
+      - "3001:3000"
+
+    labels:
+      # Disable Traefik for this development container
+      - "traefik.enable=false"

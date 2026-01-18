@@ -261,7 +261,7 @@
   {
     "id": 39,
     "title": "Ľ Ode à la Nature",
-    "sold": false,
+    "sold": true,
     "order": 37,
     "filename": "39.jpg"
   },
@@ -386,7 +386,7 @@
   },
   {
     "id": 56,
-    "title": "Lilie pro Máří Magdalenu",
+    "title": "Lilie pro Maří Magdalenu",
     "sold": false,
     "order": 55,
     "filename": "56.jpg"
@@ -488,5 +488,110 @@
     "sold": true,
     "order": 69,
     "filename": "70.jpeg"
+  },
+  {
+    "id": 71,
+    "title": "Agnes",
+    "sold": false,
+    "order": 70,
+    "filename": "71.jpeg"
+  },
+  {
+    "id": 72,
+    "title": "Květ který se neptá",
+    "sold": false,
+    "order": 71,
+    "filename": "72.jpeg"
+  },
+  {
+    "id": 73,
+    "title": "V hlubinách",
+    "sold": false,
+    "order": 72,
+    "filename": "73.jpeg"
+  },
+  {
+    "id": 74,
+    "title": "Šest tisíc tři sta sedmdesát osm",
+    "sold": false,
+    "order": 73,
+    "filename": "74.jpeg"
+  },
+  {
+    "id": 75,
+    "title": "Pupes de maïs",
+    "sold": false,
+    "order": 74,
+    "filename": "75.jpeg"
+  },
+  {
+    "id": 76,
+    "title": "Fialky pro Rozárku",
+    "sold": false,
+    "order": 75,
+    "filename": "76.jpeg"
+  },
+  {
+    "id": 77,
+    "title": "Požehnané vody Jordánu",
+    "sold": false,
+    "order": 76,
+    "filename": "77.jpeg"
+  },
+  {
+    "id": 78,
+    "title": "Ze země jde srdce zpívá",
+    "sold": false,
+    "order": 77,
+    "filename": "78.jpeg"
+  },
+  {
+    "id": 79,
+    "title": "Katedrála",
+    "sold": false,
+    "order": 78,
+    "filename": "79.jpeg"
+  },
+  {
+    "id": 80,
+    "title": "Růže ze Šáronu",
+    "sold": false,
+    "order": 79,
+    "filename": "80.jpeg"
+  },
+  {
+    "id": 81,
+    "title": "Vlčí máky",
+    "sold": false,
+    "order": 80,
+    "filename": "81.jpeg"
+  },
+  {
+    "id": 82,
+    "title": "Augustiánská volba",
+    "sold": false,
+    "order": 81,
+    "filename": "82.jpeg"
+  },
+  {
+    "id": 84,
+    "title": "The of Flowers",
+    "sold": false,
+    "order": 83,
+    "filename": "84.jpeg"
+  },
+  {
+    "id": 85,
+    "title": "Time",
+    "sold": false,
+    "order": 84,
+    "filename": "85.jpeg"
+  },
+  {
+    "id": 86,
+    "title": "Imagine Dragons",
+    "sold": false,
+    "order": 84,
+    "filename": "86.png"
   }
 ]

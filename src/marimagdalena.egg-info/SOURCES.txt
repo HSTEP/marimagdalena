@@ -1,0 +1,8 @@
+LICENSE.txt
+README.md
+pyproject.toml
+src/marimagdalena.egg-info/PKG-INFO
+src/marimagdalena.egg-info/SOURCES.txt
+src/marimagdalena.egg-info/dependency_links.txt
+src/marimagdalena.egg-info/requires.txt
+src/marimagdalena.egg-info/top_level.txt

@@ -6,18 +6,28 @@ services:
     container_name: mariadmin-dev
 
     # Overwrite the command to enable auto-reloading
-    command: uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+    # Combined command to run both React Dev Server and Uvicorn
+    # Note: We cd into mariadmin for npm run dev
+    command: sh -c "cd mariadmin && npm run dev & uvicorn api:app --host 0.0.0.0 --port 8000 --reload"
 
     volumes:
       # Mount local source code into the container for live-reloading
       - ./api.py:/app/api.py
       - ./build.py:/app/build.py
       - ./pyproject.toml:/app/pyproject.toml
+      # Mount the mariadmin directory to enable React live editing
+      - ./mariadmin:/app/mariadmin
+      # Use an anonymous volume for node_modules to prevent host interference
+      # and ensure the container uses its own installed dependencies.
+      - /app/mariadmin/node_modules
 
     ports:
-      # Map port 8001 on your machine to port 8000 in the container
+      # Map API port
       - "8001:8000"
+      # Map Nginx port
       - "3001:3000"
+      # Map Vite Dev Server port
+      - "5173:5173"
 
     labels:
       # Disable Traefik for this development container

@@ -21,13 +21,15 @@ RUN npm run build
 FROM python:3.11-slim
 WORKDIR /app
 
-# Install Nginx and other necessary packages for serving static files
+# Install Nginx, Node.js, npm, and other necessary packages
 # `apt-get update` refreshes the package list.
-# `apt-get install -y nginx curl` installs Nginx and curl (useful for debugging/health checks).
-# `rm -rf /var/lib/apt/lists/*` cleans up apt cache to reduce image size.
+# `apt-get install -y nginx curl` installs Nginx and curl.
+# Node.js and npm are needed to run the React Admin dev server.
 RUN apt-get update && apt-get install -y \
     nginx \
     curl \
+    nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies using uv
@@ -44,23 +46,26 @@ COPY build.py .
 COPY src ./src
 COPY images ./images
 
-# Copy the built static files from the 'builder' stage to Nginx's default serving directory.
+# Copy mariadmin source code for the dev server
+COPY mariadmin/ ./mariadmin/
+# Install mariadmin dependencies for the dev server
+RUN cd mariadmin && npm install
+
+# Copy the built static files from the 'builder' stage
 # This is where Nginx will look for your index.html and other static assets.
 COPY --from=builder /app/dist ./dist
 
-# Copy the custom Nginx configuration file into the Docker image.
+# Copy the custom Nginx configuration file.
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy the entrypoint script and make it executable.
-# This script will be responsible for starting both Nginx and Uvicorn.
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Expose both ports that the services will listen on.
-# Port 8000 for the Python API (Uvicorn).
-# Port 3000 for the static HTML website (Nginx).
+# Expose ports: 8000 (API), 3000 (Static), 5173 (Dev)
 EXPOSE 8000
 EXPOSE 3000
+EXPOSE 5173
 
 # Set the custom entrypoint script as the default command to run when the container starts.
 CMD ["/usr/local/bin/entrypoint.sh"]

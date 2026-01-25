@@ -2,6 +2,10 @@
 
 # This script starts both Nginx and Uvicorn.
 
+# Start the mariadmin dev server in the background
+# Navigate to the mariadmin directory first
+cd mariadmin && npm run dev &
+
 # Start Nginx in the background.
 # The `&` symbol runs the command in a subshell in the background,
 # allowing the script to continue to the next command.

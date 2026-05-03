@@ -85,7 +85,7 @@
   },
   {
     "id": 13,
-    "title": "l'Étrange vue",
+    "title": "L'Étrange vue",
     "sold": true,
     "order": 12,
     "filename": "13.jpg"
@@ -490,101 +490,101 @@
     "filename": "70.jpeg"
   },
   {
-    "id": 71,
-    "title": "Agnes",
-    "sold": true,
-    "order": 70,
-    "filename": "71.jpeg"
-  },
-  {
     "id": 72,
     "title": "Květ který se neptá",
     "sold": false,
-    "order": 71,
+    "order": 70,
     "filename": "72.jpeg"
   },
   {
     "id": 73,
     "title": "V hlubinách",
     "sold": false,
-    "order": 72,
+    "order": 71,
     "filename": "73.jpeg"
   },
   {
     "id": 74,
     "title": "6378",
     "sold": false,
-    "order": 73,
+    "order": 72,
     "filename": "74.jpeg"
   },
   {
     "id": 75,
     "title": "Pupes de maïs",
     "sold": false,
-    "order": 74,
+    "order": 73,
     "filename": "75.jpeg"
   },
   {
     "id": 76,
     "title": "Fialky pro Rozárku",
     "sold": false,
-    "order": 75,
+    "order": 74,
     "filename": "76.jpeg"
   },
   {
     "id": 77,
     "title": "Požehnané vody Jordánu",
     "sold": false,
-    "order": 76,
+    "order": 75,
     "filename": "77.jpeg"
   },
   {
     "id": 78,
     "title": "Ze země kde srdce zpívá",
     "sold": false,
-    "order": 77,
+    "order": 76,
     "filename": "78.jpeg"
   },
   {
     "id": 79,
     "title": "Katedrála",
     "sold": false,
-    "order": 78,
+    "order": 77,
     "filename": "79.jpeg"
   },
   {
     "id": 80,
     "title": "Růže ze Šáronu",
     "sold": false,
-    "order": 79,
+    "order": 78,
     "filename": "80.jpeg"
   },
   {
     "id": 81,
     "title": "Vlčí máky",
     "sold": false,
-    "order": 80,
+    "order": 79,
     "filename": "81.jpeg"
   },
   {
     "id": 82,
     "title": "Augustiánská volba",
     "sold": false,
-    "order": 81,
+    "order": 80,
     "filename": "82.jpeg"
+  },
+  {
+    "id": 87,
+    "title": "Agnes",
+    "sold": true,
+    "order": 81,
+    "filename": "87.jpeg"
   },
   {
     "id": 84,
     "title": "The Queen of Flowers",
     "sold": false,
-    "order": 83,
+    "order": 82,
     "filename": "84.jpeg"
   },
   {
     "id": 85,
     "title": "Time",
     "sold": false,
-    "order": 84,
+    "order": 83,
     "filename": "85.jpeg"
   },
   {
@@ -593,5 +593,19 @@
     "sold": false,
     "order": 84,
     "filename": "86.png"
+  },
+  {
+    "id": 88,
+    "title": "Cognition",
+    "sold": false,
+    "order": 85,
+    "filename": "88.jpeg"
+  },
+  {
+    "id": 89,
+    "title": "Filip",
+    "sold": false,
+    "order": 86,
+    "filename": "89.jpeg"
   }
 ]

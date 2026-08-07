@@ -98,7 +98,6 @@
   <div class="svc rv">
     {% for name, desc, price in services %}
     <div class="svc__row">
-      <span class="num">{{ '%02d'|format(loop.index) }}</span>
       <span class="svc__name">{{ name }}</span>
       <span class="svc__desc">{{ desc }}</span>
       <span class="svc__price">{{ price }}</span>
@@ -186,14 +185,13 @@
   {# Newest record with an image big enough to run at this size — see
      feature() in build.py for why the resolution floor is there. #}
   {% set teasers = feature(vystavy) + feature(projekty) %}
-  {# Bottom-aligned: the two records have different native proportions and
-     neither may be cropped, so their captions share a baseline instead of
-     their tops sharing one and leaving a hole under the shorter plate. #}
-  <div class="grid" style="align-items: end">
+  {# One shared 4:3 plate. Run at their own proportions the two records were
+     different heights on desktop and two full-screen cards on a phone. #}
+  <div class="grid">
     {% for rec in teasers %}
     <a class="rv" href="{% if loop.first %}vystavy.html{% else %}projekty.html{% endif %}"
        style="grid-column: {{ '1 / span 6' if loop.first else '7 / span 6' }}; --d:{{ loop.index0 * 120 }}ms">
-      <figure class="plate plate--zoom" style="aspect-ratio:{{ ratio(rec.image) }}">
+      <figure class="plate plate--zoom" style="aspect-ratio:4/3">
         {{ img(rec.image, alt=rec.title|striptags, sizes='(max-width:960px) 100vw, 46vw', cover=true) }}
       </figure>
       <div class="cap">

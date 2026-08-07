@@ -325,16 +325,20 @@ h4 {
   max-width: var(--wide);
 }
 
-.bay {
-  padding-block: var(--bay);
-}
-
-.bay--sm {
-  padding-block: var(--bay-sm);
-}
-
+/* One rhythm. These used to set padding on both edges at two different
+   scales, so the gap between any two sections was the sum of one section's
+   bottom padding and the next one's top — 192px, 272px or 352px for the same
+   job, depending on which pair happened to meet. Top padding only means the
+   gap is always exactly --bay, and the last section on a page carries the
+   space down to the footer. */
+.bay,
+.bay--sm,
 .bay--top {
   padding-block: var(--bay) 0;
+}
+
+main > section:last-of-type {
+  padding-bottom: var(--bay);
 }
 
 .grid {
@@ -994,7 +998,7 @@ a.plate:hover > img,
 
 .svc__row {
   display: grid;
-  grid-template-columns: 3.5rem minmax(0, 0.58fr) minmax(0, 1.5fr) 7.5rem;
+  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.5fr) 7.5rem;
   gap: var(--gap);
   align-items: center;
   padding: clamp(1.1rem, 2.4vw, 1.7rem) 0;
@@ -2672,24 +2676,24 @@ body.is-lb .progress {
      read as detached from the row above it. */
   .svc__row,
   .svc__row:hover {
-    grid-template-columns: 2rem minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     row-gap: 0.3rem;
     padding-left: 0;
     align-items: baseline;
   }
 
   .svc__name {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 1;
   }
 
   .svc__price {
-    grid-column: 3;
+    grid-column: 2;
     grid-row: 1;
   }
 
   .svc__desc {
-    grid-column: 2 / -1;
+    grid-column: 1 / -1;
     grid-row: 2;
   }
 

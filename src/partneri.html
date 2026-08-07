@@ -25,7 +25,7 @@
   <div class="people">
     {% for p in partners %}
     <a class="person rv" href="{{ p.url }}" target="_blank" rel="noopener noreferrer"
-       style="--d:{{ (loop.index0 % 4) * 90 }}ms">
+       style="--d:{{ (loop.index0 % 12) * 25 }}ms">
       <div class="person__art">
         {{ img(p.photo, alt=p.name, sizes='(max-width:620px) 92vw, (max-width:1180px) 44vw, 30vw', cover=true) }}
         {% if p.logo %}
@@ -46,7 +46,7 @@
        167px phone card, and a hyphenated Bodoni display line is a worse
        answer than a shorter sentence. #}
     <a class="person person--call rv" href="mailto:{{ site.email }}"
-       style="--d:{{ (partners|length % 4) * 90 }}ms">
+       style="--d:{{ (partners|length % 12) * 25 }}ms">
       <div class="person__art person__art--call">
         <span class="person__ask">Chcete se přidat?</span>
       </div>

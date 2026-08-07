@@ -130,8 +130,9 @@
        the body rung and lands on it exactly, at 1097. Below that the site has
        eight rungs, not nine, and says so.
 
-     Swept the same 360 → 1680: minimum same-face gap 2.20px in Jost and a
-     clean merge in Bodoni, against 0.20 and 0.60. The two ladders still cross
+     Swept the same 360 → 1680: minimum same-face gap 2.00px in Jost — at and
+     below 620, where --t-body drops to 1rem and the Jost ladder reads
+     19.2 / 16 / 14 / 11 — and a clean merge in Bodoni, against 0.20 and 0.60. The two ladders still cross
      each other mid-range — --t-h5 passes --t-lede around 1240 — and that is
      the overlap argued above: different faces on different errands. */
   --t-h1: clamp(2.3rem, 5.6vw, 5rem);
@@ -540,14 +541,22 @@ h4 {
   color: var(--fg-3);
 }
 
-.prose a {
+/* :not(.qlink), because `.prose a` is (0,1,1) and `.qlink` is (0,1,0), so a
+   quiet link that happens to sit in a paragraph was silently promoted to a
+   gold-ruled prose link — same accident, same shape, as the .person__art img
+   that outranked .person__logo. It matched two nodes: a real email link on
+   /projekty, which this rule is for, and the "Hair & Styling" qlink at the
+   foot of the index's first column, which came out #efeae1 on a gold-deep
+   rule with 1.1px of drop against every other qlink's #b7afa2 on hair-strong
+   with 8px. */
+.prose a:not(.qlink) {
   color: var(--fg);
   border-bottom: 1px solid var(--gold-deep);
   padding-bottom: 0.1em;
   transition: color 0.3s, border-color 0.3s;
 }
 
-.prose a:hover {
+.prose a:not(.qlink):hover {
   color: var(--gold);
   border-color: var(--gold);
 }
@@ -1268,6 +1277,14 @@ a.plate:hover > img,
   gap: clamp(1.5rem, 3vw, 2.4rem);
 }
 
+/* A heading that draws nothing. The wordmark below is the page's title, and
+   an h1 wrapper is the only way to say so; display:contents keeps the image a
+   direct flex child of .hero__body, so it keeps the column's gap and its own
+   rect. */
+.hero__title {
+  display: contents;
+}
+
 .hero__mark {
   width: clamp(240px, 30vw, 430px);
 }
@@ -1388,9 +1405,19 @@ a.plate:hover > img,
    finally has something to cap. The title gives up one column to pay for it
    and still clears its longest setting — "Art Connecting" inks 546.6 — by
    85px. */
+/* Its own optical crossing, not h2's. `h1,h2,h3,h4` binds every heading to
+   --vf-h2, which swaps to the sub cut at 1176 because that is where --t-h2's
+   3.4vw clamp crosses 40px. This title is set at --t-h1, 5.6vw, which does not
+   cross 40px until 714 — so from 1176 down to 717 the largest word on five of
+   the eight pages rendered at up to 57.34px carrying the eleven-point cut, a
+   461px band, 43% of the swept range. --vf-h1 and the 714px query written for
+   it existed the whole time and governed nothing but the 404 numeral: the
+   token described the policy instead of enforcing it, which is the exact
+   failure the block declaring them complains about. */
 .phead__title {
   grid-column: 1 / span 6;
   font-size: var(--t-h1);
+  font-variation-settings: var(--vf-h1);
 }
 
 .phead__lede {
@@ -1416,9 +1443,13 @@ a.plate:hover > img,
   padding-bottom: 0;
 }
 
+/* Back to the h2 crossing, because this one really is set at --t-h2 — the
+   ledger head is the quieter shape. Policy is a function of rendered size, so
+   the page whose title is smaller takes the smaller title's crossing. */
 .phead--ledger .phead__title {
   grid-column: 1 / span 3;
   font-size: var(--t-h2);
+  font-variation-settings: var(--vf-h2);
 }
 
 /* Position only. This carried font-size: var(--t-small) and color: var(--fg-3),
@@ -2101,6 +2132,12 @@ a.plate:hover > img,
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.5rem var(--gap);
+  /* Rules on one line even when a label needs two. Between 1044 and 961 the
+     long label's 137.7px of ink stops fitting a 134.8px track and wraps, and
+     with the default stretch its rule dropped 15.9px below its neighbour's —
+     two rules in one cell on two lines, in the one component on the site whose
+     whole argument is that a row closes on one line. */
+  align-items: end;
 }
 
 .idx__slot {
@@ -2479,9 +2516,18 @@ a.plate:hover > img,
   /* --gap, not 1.4rem, and that is what makes the next rule come out exact. */
   gap: 0.5rem var(--gap);
   align-self: stretch;
-  /* Bottom of the cell, so the actions across a row land on one line whatever
-     their titles did above them. */
-  margin-top: auto;
+  /* Under the caption, not at the bottom of the cell. `margin-top: auto` was
+     right when every plate in a row shared a bottom edge: the titles ragged
+     and the actions levelled. Now the plates set their own heights, so there
+     is no shared line left to land on and the pin only opens holes — measured
+     at 1440 it left 211.9px of bare ground between a title and its own link,
+     inside an entry whose neighbour closed tight, and at 390 a hole 172.3px
+     tall in a cell 167px wide. In the worst row it was not even buying
+     alignment: the middle entry carries no link, so two rules were being
+     levelled across a gap. The links belong to the words above them. The slack
+     goes below the entry, above the rule that closes it, which is where slack
+     goes in a plate section. */
+  margin-top: 0;
   padding-top: 0.6rem;
 }
 
@@ -3795,16 +3841,17 @@ body.is-lb .nav {
     grid-column: 2;
   }
 
-  /* Still two slots at this width, but sized to their contents rather than
-     halved: stacked, a row carrying both actions drew two full-width
-     underlines and then the row rule — three horizontals inside 50px on a
-     390px canvas, which turns an index into a ledger. Side by side they share
-     one line, so a row closes on two rules however many actions it has. The
-     report slot takes the slack because its label is the long one; the
-     recording's is one word and can size to it. */
+  /* Two slots, still halved. `minmax(0,1fr) auto` sized the slots to their
+     labels, which is the ragged-underline failure this whole component exists
+     to avoid, and it was drawn at its worst here: at 768 a 542.5px rule ran
+     under 137.7px of ink while VIDEO beside it got a 41.4px rule exactly as
+     long as the word — three measures on one page where the desktop has one.
+     The stack this override was written to prevent does not happen; swept
+     1440 → 320 in 4px steps, the two rules share one line at every width and
+     the long label simply takes two lines below 414, which .label is built
+     for. */
   .idx__links {
     grid-column: 2;
-    grid-template-columns: minmax(0, 1fr) auto;
     gap: 0.35rem var(--gap);
   }
 

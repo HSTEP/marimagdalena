@@ -13,8 +13,15 @@
   <div class="hero__body">
     <p class="label hero__eyebrow">{{ site.city }} &nbsp;·&nbsp; od&nbsp;{{ site.founded }}</p>
 
-    {{ img(site.logo_gold, alt=site.name ~ ' — ' ~ site.tagline, cls='hero__mark',
-           sizes='(max-width:960px) 60vw, 430px', loading='eager', fetchpriority='high') }}
+    {# The wordmark is this page's title — it is the salon's name, set at the
+       largest size on the site, and it was the only page-opening name on the
+       site that was not a heading. .hero__title is display:contents, so the
+       heading exists in the outline and draws nothing: the image stays a
+       direct flex child of .hero__body and every rect is unchanged. #}
+    <h1 class="hero__title">
+      {{ img(site.logo_gold, alt=site.name ~ ' — ' ~ site.tagline, cls='hero__mark',
+             sizes='(max-width:960px) 60vw, 430px', loading='eager', fetchpriority='high') }}
+    </h1>
 
     {# "založeném" is a locative and agrees with nothing in this sentence; the
        participle qualifies "ideálu", which takes the genitive "založeného".

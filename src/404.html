@@ -14,7 +14,10 @@
        rendered at 112px — the size --t-hero declared and nothing used. It
        takes the page-title step now, like every other largest-thing-on-a-page. #}
     <p class="num num--display">404</p>
-    <p class="label label--gold">Stránka nenalezena</p>
+    {# The numeral above is the ornament; this line is what the page is called,
+       so it is the heading. Every declaration that draws it comes from .label,
+       which outranks the element selector on all of them. #}
+    <h1 class="label label--gold">Stránka nenalezena</h1>
     <p class="band__q serif-it">
       Tady nic nevisí. Zkuste to o patro níž — v galerii, ve výstavách
       nebo rovnou v ateliéru.

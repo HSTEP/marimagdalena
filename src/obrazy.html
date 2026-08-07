@@ -56,7 +56,7 @@
     <a class="works__item rv" href="{{ big(painting.url) }}"
        data-lb-item data-batch-item data-state="sale"
        data-title="{{ painting.title }}" data-tag="K prodeji"
-       style="--d:{{ (loop.index0 % 6) * 55 }}ms"
+       style="--d:{{ (loop.index0 % 12) * 25 }}ms"
        aria-label="{{ painting.title }}">
       <div class="works__fig">
         {{ img(painting.url, alt=painting.title,
@@ -94,7 +94,7 @@
     <a class="works__item rv" href="{{ big(painting.url) }}"
        data-lb-item data-batch-item data-state="sold"
        data-title="{{ painting.title }}" data-tag="Prodáno"
-       style="--d:{{ (loop.index0 % 6) * 45 }}ms"
+       style="--d:{{ (loop.index0 % 12) * 25 }}ms"
        aria-label="{{ painting.title }} — prodáno">
       <div class="works__fig">
         {{ img(painting.url, alt=painting.title,

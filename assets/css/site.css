@@ -435,8 +435,9 @@ a.plate:hover > img,
   color: var(--fg);
 }
 
+/* No margin-left:auto. Flung to the far edge of a 12-column caption, the role
+   read as a second, unrelated fragment 460px from the name it belongs to. */
 .cap__m {
-  margin-left: auto;
   white-space: nowrap;
 }
 
@@ -2681,16 +2682,23 @@ body.is-lb .progress {
     font-size: 0.85rem;
   }
 
+  /* The index numeral goes. At 390px it spent 14% of the width on decoration
+     and squeezed the titles into a 209px measure, which broke them as
+     "Kostel Sv. / Vita, Dobrany" — an abbreviation orphaned from its noun. */
   .idx__row,
   .idx__row:hover {
-    grid-template-columns: 2.2rem 4.6rem minmax(0, 1fr);
+    grid-template-columns: 4.6rem minmax(0, 1fr);
     padding-left: 0;
     row-gap: 0.3rem;
     align-items: start;
   }
 
+  .idx__row .num {
+    display: none;
+  }
+
   .idx__title {
-    grid-column: 3;
+    grid-column: 2;
     grid-row: 1;
   }
 
@@ -2699,7 +2707,7 @@ body.is-lb .progress {
      the page ran to eleven screens of one repeated module — and the scanned
      white posters among them tore holes in the near-black page. */
   .idx__thumb {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 1 / span 3;
     width: 100%;
     aspect-ratio: 1 !important;
@@ -2708,7 +2716,7 @@ body.is-lb .progress {
 
   .idx__date,
   .idx__links {
-    grid-column: 3;
+    grid-column: 2;
     justify-content: flex-start;
   }
 

@@ -1,117 +1,174 @@
-{% extends "container.html" %} {% set active_page = 2 %} {% block content %}
-<section class="post featured">
-    <header class="major">
-        <h2>Art Connecting</h2>
-        <img
-            class="image main"
-            src="images/vystavy/vit.jpg"
-            style="width: 100%"
-            alt="Art Connecting Event"
-        />
-    </header>
-    <h3>
-        Vytváříme novou kulturní platformu pro vaši realizaci ART CONNECTING
-    </h3>
-    <p>
-        Zajímá vás výtvarné umění, literatura, hudba, tanec? Tvoříte, zkoušíte a
-        hledáte prostor, kde se můžete prezentovat a potkávat se se stejně
+{% extends "_base.html" %}
+{% import "_icons.html" as ico %}
+{% set page = 'projekty' %}
+
+{% block title %}Projekty — Art Connecting | {{ site.name }}{% endblock %}
+{% block canonical %}projekty.html{% endblock %}
+{% block description %}ART CONNECTING — kulturní platforma propojující výtvarné umění, literaturu, hudbu a tanec v Dobřanech. A další projekty salonu Maří Magdalena.{% endblock %}
+
+{% block content %}
+
+<section class="shell shell--wide phead">
+  <div class="phead__grid">
+    <div class="phead__meta">
+      <span class="num">Platforma</span>
+      <span class="label">{{ projekty|length }} projektů</span>
+    </div>
+    <h1 class="phead__title">Art&nbsp;Connecting</h1>
+    <p class="phead__lede lede">
+      Vytváříme novou kulturní platformu pro vaši realizaci — propojujeme
+      výtvarné umění, mluvené slovo, hudbu a tanec.
+    </p>
+  </div>
+</section>
+
+<section class="shell shell--wide bay--top">
+  <div class="grid">
+    {# The poster is set type, not a photograph — shown whole on a paper
+       plate rather than cropped to a banner through its own headline. #}
+    <figure class="poster rv-clip" style="grid-column: 1 / span 4">
+      {{ img('images/vystavy/vit.jpg',
+             alt='Plakát Art Connecting — 8. května 2024, kostel sv. Mikuláše v Dobřanech',
+             sizes='(max-width:960px) 92vw, 30vw', loading='eager') }}
+      <figcaption class="cap">
+        <span class="cap__t">Art Connecting</span>
+        <span class="cap__m label">8. května 2024</span>
+      </figcaption>
+    </figure>
+
+    <div class="prose prose--cap rv" style="grid-column: 6 / span 7; --d:80ms">
+      <p>
+        Zajímá vás výtvarné umění, literatura, hudba, tanec? Tvoříte, zkoušíte
+        a hledáte prostor, kde se můžete prezentovat a potkávat se se stejně
         naladěnými lidmi? Zajímáte se o umění nebo jen rádi chodíte do
         společnosti? Přicházíme s novým projektem, do kterého se může zapojit
         aktivně i pasivně každý z Vás. Vytvořili jsme nový kulturní prostor,
         který Vás bude bavit. Přicházíme s myšlenkou propojování různých
         uměleckých oborů a setkávání lidí v Dobřanech. Napříč Českou republikou
-        a partnerskými městy chceme navazovat nová přátelství, inspirovat a
-        pomáhat zviditelnit vaše malé i velké projekty. Může se přidat každý z
-        vás.
-    </p>
-    <p>
-        Naše první akce proběhne ve středu 8. května v Dobřanském kostele sv.
-        Mikuláše od 17 hodin. Navazujeme tím na úspěšnou Fashion Art Show, která
-        se uskutečnila v roce 2019 v kostele sv. Víta v Dobřanech. Na programu
-        je prolínání výtvarného umění, mluveného slova, hudby a zpěvu. Výstava
-        obrazů Marie Baštařové, výtvarnice a iniciátorky projektu, bude
+        a partnerskými městy chceme navazovat nová přátelství, inspirovat
+        a pomáhat zviditelnit vaše malé i velké projekty. Může se přidat každý
+        z vás.
+      </p>
+      <p>
+        Naše první akce proběhla ve středu 8. května v Dobřanském kostele sv.
+        Mikuláše od 17 hodin. Navázali jsme tím na úspěšnou Fashion Art Show,
+        která se uskutečnila v roce 2019 v kostele sv. Víta v Dobřanech. Na
+        programu bylo prolínání výtvarného umění, mluveného slova, hudby a zpěvu.
+        Výstava obrazů Marie Baštařové, výtvarnice a iniciátorky projektu, byla
         doprovázena hrou na klavír česko-makedonské pianistky a pedagožky,
         umělecké ředitelky a předsedkyně spolku ICL Emy Jedličky Gogové a jejími
-        hosty. Innou Aslamas (koncertní pianistka, pedagožka, vedoucí klav. odd.
-        brněnské Konzervatoře), Vierou Gulázsi Maňáskovou (sopranistka) a
-        Kateřinou Oškerovou Machovskou (altistka). Obohacením akce bude promoce
+        hosty — Innou Aslamas (koncertní pianistka, pedagožka, vedoucí klavírního
+        oddělení brněnské Konzervatoře), Vierou Gulázsi Maňáskovou (sopranistka)
+        a Kateřinou Oškerovou Machovskou (altistka). Obohacením akce byla promoce
         a autorské čtení sbírky básní Zuzany Fryčkové (místní pedagožka, hudební
         interpretka a básnířka).
-    </p>
-    <p>
-        Dne 22. června připravujeme s Evou Šimandlovou (pedagožka, kytaristka)
-        projekt v Mariánské Týnici, vzniká zde prostor pro další výstavu vašich
-        uměleckých děl, budeme rádi, když se připojíte. Můžete obrátit na
+      </p>
+      <p>
+        S Evou Šimandlovou (pedagožka, kytaristka) připravujeme projekt
+        v Mariánské Týnici, vzniká zde prostor pro další výstavu vašich
+        uměleckých děl. Budeme rádi, když se připojíte — obrátit se můžete na
         <a href="mailto:artconnecting@email.cz">artconnecting@email.cz</a>.
-    </p>
-    <p>
-        Zároveň věříme, že tímto projektem přispějeme nejen ke kulturnímu
-        rozvoji našeho města, ale i k zachování a obnově národních památek a
-        hodnot České republiky a Evropského kulturního dědictví, protože výtěžek
-        z dobrovolného vstupného budeme věnovat na obnovu dobřanských varhan.
-    </p>
-    <p>Realizační tým ART CONNECTING</p>
+      </p>
+      <p>
+        Zároveň věříme, že tímto projektem přispějeme nejen ke kulturnímu rozvoji
+        našeho města, ale i k zachování a obnově národních památek a hodnot České
+        republiky a Evropského kulturního dědictví, protože výtěžek
+        z dobrovolného vstupného věnujeme na obnovu dobřanských varhan.
+      </p>
+      <p class="label" style="margin-top:2.4rem">Realizační tým ART CONNECTING</p>
+    </div>
+  </div>
 </section>
 
-<section class="posts">
-    {% for projekt in projekty %}
-    <article>
-        <header>
-            {% if projekt.date %}
-            <span class="date">{{ projekt.date }}</span>
-            {% endif %}
-            <h2>{{ projekt.title | safe }}</h2>
-            {# Use safe filter for HTML in title #}
-        </header>
+<section class="shell shell--wide bay--sm">
+  <div class="sec rv">
+    <div class="sec__meta">
+      <span class="num">Archiv</span>
+      <span class="label">Projekty</span>
+    </div>
+    <h2 class="sec__title">Co jsme dosud uspořádali</h2>
+    <p class="sec__note">Focení, workshopy, přehlídky a setkání — od roku 2019 do dneška.</p>
+  </div>
 
-        {# Display image or video #} {% if projekt.video_url %}
-        <iframe
-            width="100%"
-            height="367"
-            {#
-            Adjust
-            height
-            as
-            needed
-            #}
-            src="{{ projekt.video_url }}"
-            title="YouTube video player for {{ projekt.title | striptags | safe }}"
-            {#
-            Add
-            descriptive
-            title
-            #}
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-        ></iframe>
-        {% elif projekt.image %}
-        <a
-            class="image fit"
-            href="{{ projekt.links[0].url if projekt.links else '#' }}"
-        >
-            {# Link image to first link if available #}
-            <img
-                src="{{ projekt.image }}"
-                alt="{{ projekt.title | striptags | safe }}"
-            />
-            {# Add alt text #}
+  {% if projekty %}
+  {# 41 records of wildly mixed provenance — studio photographs, phone
+     snapshots, scanned A4 posters, two videos. The alternating full-width
+     timeline this replaced gave every one of them a 743px-wide picture beside
+     a 100px caption, so each row carried ~900px of empty column and the rows
+     touched each other with no gap at all. An archive is an index: uniform
+     tiles, one axis, the year rules doing the work of chapter breaks. #}
+  <div class="arch" data-batch="2">
+  {% for year, group in projekty_years %}
+    <section class="arch__chapter" data-batch-item>
+    {% if year %}
+    <div class="arch__year rv">
+      <span class="num">{{ year }}</span>
+      <span class="label">{{ plural_cz(group|length, 'akce', 'akce', 'akcí') }}</span>
+    </div>
+    {% endif %}
+    <div class="arch__grid">
+    {% for p in group %}
+      {% set embed = video_embed(p.video_url) %}
+      {% set nat = ratio(p.image) if p.image else 1.0 %}
+      {# A poster is a designed object; cropping it to a uniform tile slices its
+         own typography. Anything appreciably taller than the tile is shown
+         whole on the raised field instead. #}
+      {% set is_doc = p.image and nat < 0.85 %}
+      <article class="arch__item rv{% if embed or (p.video_url and not embed) %} arch__item--wide{% endif %}"
+               style="--d:{{ (loop.index0 % 6) * 45 }}ms">
+        {% if embed %}
+        <div class="arch__field arch__field--video">
+          <iframe src="{{ embed }}" title="{{ p.title|striptags }}" loading="lazy"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen></iframe>
+        </div>
+        {% elif p.video_url %}
+        {# Facebook sends X-Frame-Options: deny, so an embed here would be a
+           permanently blank box. Link out instead. #}
+        <div class="arch__field arch__field--offsite">
+          <a class="feed__offsite" href="{{ p.video_url }}" target="_blank" rel="noopener noreferrer">
+            <span class="feed__offsite-t">Přehrát na {{ link_label('', p.video_url) }}</span>
+            {{ ico.external() }}
+          </a>
+        </div>
+        {% elif p.image %}
+        <a class="arch__field{% if is_doc %} arch__field--doc{% endif %}"
+           href="{{ big(p.image) }}" data-lb-item
+           data-title="{{ p.title|striptags }}" data-tag="{{ cz_date(p.date) }}">
+          {{ img(p.image, alt=p.title|striptags,
+                 sizes='(max-width:620px) 92vw, (max-width:1100px) 46vw, 30vw',
+                 cover=not is_doc) }}
         </a>
-        {% endif %} {# Display description if available #} {% if
-        projekt.description %}
-        <p>{{ projekt.description }}</p>
-        {% endif %} {# Display links if available #} {% if projekt.links %}
-        <ul class="actions special">
-            {% for link in projekt.links %}
-            <li>
-                <a href="{{ link.url }}" class="button">{{ link.text }}</a>
-            </li>
-            {% endfor %}
-        </ul>
         {% endif %}
-    </article>
-    {% else %}
-    <p>Žádné projekty k zobrazení.</p>
-    {# Message if projekty list is empty #} {% endfor %}
+
+        <div class="arch__meta">
+          {% if p.date %}<p class="label label--gold">{{ cz_date(p.date) }}</p>{% endif %}
+          <h3 class="arch__title">{{ p.title|safe }}</h3>
+          {% if p.description %}<p class="arch__note">{{ p.description }}</p>{% endif %}
+          {% if p.links %}
+          <div class="arch__links">
+            {% for link in p.links %}
+            <a class="qlink" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link_label(link.text, link.url) }}</a>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </article>
+    {% endfor %}
+    </div>
+    </section>
+  {% endfor %}
+  </div>
+
+  <div class="works__more" data-more hidden>
+    <button class="cta" type="button" data-more-btn>
+      <span>Starší projekty</span>{{ ico.arrow() }}
+    </button>
+    <span class="label" data-more-count></span>
+  </div>
+  {% else %}
+  <p class="lede">Žádné projekty k zobrazení.</p>
+  {% endif %}
 </section>
-{% endblock content %}
+
+{% endblock %}

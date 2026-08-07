@@ -43,8 +43,14 @@ RUN uv pip install --system --no-cache .
 # Copy Python application files
 COPY api.py .
 COPY build.py .
+COPY media.py .
 COPY src ./src
 COPY images ./images
+
+# Static assets for the public site (stylesheet, script, self-hosted fonts).
+# Nginx serves these from /app alongside the HTML that build.py generates.
+COPY assets ./assets
+COPY favicon.ico .
 
 # Copy mariadmin source code for the dev server
 COPY mariadmin/ ./mariadmin/

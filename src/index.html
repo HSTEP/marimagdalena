@@ -1,52 +1,204 @@
-{% extends "container.html"%} {% set active_page = 0 %} {% block content %}
-<!-- Featured Post -->
-<article class="post featured">
-    <header class="major">
-        <!--<h2><a href="#">Hair & art salon</a></h2>-->
-        <h3 style="text-transform: none; font-family: Merriweather, sans-serif">
-            <i
-                >Renesance ideálu krásy založeném na uznání individuality,<br />
-                která z každého z nás dělá to co chce.</i
-            >
-        </h3>
-    </header>
-    <a href="#" class="image main" style="width: 50%"
-        ><img src="images/me01.png" alt=""
-    /></a>
-    <p>
-        Máří Magdalena je kadeřnický salon v Dobřanech, který v roce 2011
-        otevřela Marie Baštařová. Salon pojala jako ateliér pro sebevyjádření,
-        uspokojení a radost nejen svoji, ale i svých zákaznic. Středobodem je
-        nádherné zrcadlo odrážející krásu a autenticitu každé ženy.
-    </p>
-    <p>
-        V kadeřnickém salonu Máří Magdalena najdete špičkové kadeřnické služby –
-        stříhání vlasů, barvení vlasů, styling nebo proměny spojené s líčením a
-        focením. Zapózovat můžete třeba u klavíru, který je součástí salonu. Při
-        procedurách si můžete vypít kávu a zapovídat se s tvůrčími ženami, které
-        si do ateliéru nacházejí cestu.
-    </p>
-    <p>
-        V salonu se také nachází umělecká galerie, kde si můžete prohléndnout
-        autorská díla.
-    </p>
-    <!-- <ul class="actions special">
-						<li><a href="#" class="button large">Full Story</a></li>
-					</ul> -->
-</article>
+{% extends "_base.html" %}
+{% import "_icons.html" as ico %}
+{% set page = 'salon' %}
 
-<!-- Odkaz na další příspěvky pomocí podstránek
-				<footer>
-					<div class="pagination">
-						###<a href="#" class="previous">Prev</a>
-						<a href="#" class="page active">1</a>
-						<a href="#" class="page">2</a>
-						<a href="#" class="page">3</a>
-						<span class="extra">&hellip;</span>
-						<a href="#" class="page">8</a>
-						<a href="#" class="page">9</a>
-						<a href="#" class="page">10</a>
-						<a href="#" class="next">Next</a>
-					</div>
-				</footer> -->
+{% block content %}
+
+<section class="hero">
+  <div class="hero__art">
+    {{ img(plates.hero, alt='Marie Baštařová v ateliéru salonu Maří Magdalena',
+           sizes='(max-width:960px) 100vw, 55vw', loading='eager', fetchpriority='high') }}
+  </div>
+
+  <div class="hero__body">
+    <p class="label hero__eyebrow">{{ site.city }} &nbsp;·&nbsp; od&nbsp;{{ site.founded }}</p>
+
+    {{ img(site.logo_gold, alt=site.name ~ ' — ' ~ site.tagline, cls='hero__mark',
+           sizes='(max-width:960px) 60vw, 430px', loading='eager', fetchpriority='high') }}
+
+    <p class="hero__motto serif-it">
+      Renesance ideálu krásy založeném na uznání individuality,
+      která z každého z nás dělá to, co chce.
+    </p>
+
+    <div class="actions">
+      <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>Objednat se</span>{{ ico.arrow() }}</a>
+      <a class="qlink" href="obrazy.html">Obrazy v ateliéru</a>
+    </div>
+  </div>
+
+  <div class="hero__foot">
+    <a class="scroll-cue label" href="#atelier">
+      <span class="scroll-cue__line" aria-hidden="true"></span>
+      <span>Dále</span>
+    </a>
+    <p class="label">Hair&nbsp;&amp;&nbsp;Art&nbsp;Salon</p>
+  </div>
+</section>
+
+
+<section class="shell shell--wide bay" id="atelier">
+  <div class="sec rv">
+    <div class="sec__meta">
+      <span class="num">01</span>
+      <span class="label">O&nbsp;salonu</span>
+    </div>
+    <h2 class="sec__title">Kadeřnictví,<br>které je zároveň ateliérem</h2>
+    <p class="sec__note">{{ site.street }}, {{ site.city }}</p>
+  </div>
+
+  <div class="grid">
+    <div class="prose prose--cap rv" style="grid-column: 1 / span 6; --d:80ms">
+      <p>
+        Maří Magdalena je kadeřnický salon v Dobřanech, který v roce 2011 otevřela
+        {{ site.person }}. Salon pojala jako ateliér pro sebevyjádření, uspokojení
+        a radost nejen svoji, ale i svých zákaznic. Středobodem je nádherné zrcadlo
+        odrážející krásu a autenticitu každé ženy.
+      </p>
+      <p>
+        V kadeřnickém salonu Maří Magdalena najdete špičkové kadeřnické služby —
+        stříhání vlasů, barvení vlasů, styling nebo proměny spojené s líčením
+        a focením. Zapózovat můžete třeba u klavíru, který je součástí salonu.
+        Při procedurách si můžete vypít kávu a zapovídat se s tvůrčími ženami,
+        které si do ateliéru nacházejí cestu.
+      </p>
+      <p>
+        V salonu se také nachází umělecká galerie, kde si můžete prohlédnout
+        autorská díla.
+      </p>
+      <p style="margin-top:2.2rem">
+        <a class="qlink" href="galerie.html">Hair&nbsp;&amp;&nbsp;Styling</a>
+      </p>
+    </div>
+
+    <figure class="atelier__fig rv-clip" style="--d:180ms">
+      <span class="plate" style="display:block; aspect-ratio:4/5">
+        {{ img(plates.salon, alt='Marie Baštařová, zakladatelka salonu Maří Magdalena',
+               sizes='(max-width:960px) 100vw, 40vw', cover=true) }}
+      </span>
+      <figcaption class="cap">
+        <span class="cap__t">{{ site.person }}</span>
+        <span class="cap__m label">Zakladatelka</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+
+<section class="shell shell--wide bay--sm">
+  <div class="sec rv">
+    <div class="sec__meta">
+      <span class="num">02</span>
+      <span class="label">Služby</span>
+    </div>
+    <h2 class="sec__title">Co u nás zařídíme</h2>
+    <p class="sec__note">Ceny jsou orientační, konečná cena vždy vychází z konzultace.</p>
+  </div>
+
+  <div class="svc rv">
+    {% for name, desc, price in services %}
+    <div class="svc__row">
+      <span class="num">{{ '%02d'|format(loop.index) }}</span>
+      <span class="svc__name">{{ name }}</span>
+      <span class="svc__desc">{{ desc }}</span>
+      <span class="svc__price">{{ price }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="actions rv" style="margin-top:2.6rem">
+    <a class="cta" href="cenik.html"><span>Celý ceník</span>{{ ico.arrow() }}</a>
+    <a class="qlink qlink--plain" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
+  </div>
+</section>
+
+
+<section class="band">
+  <div class="band__bg">
+    {{ img(plates.atelier, alt='', sizes='100vw') }}
+  </div>
+  <div class="band__in">
+    <p class="label label--gold">Londa Professional · Mezinárodní artistický tým</p>
+    <p class="h2 band__q serif-it">
+      Jako členka Mezinárodního artistického týmu LONDA Professional
+      a ambasadorka značky jsem se podílela na vytváření nové kolekce
+      a trendů ve spolupráci s uměleckým ředitelem Bertem Kietzerowem.
+    </p>
+    <p class="label">— {{ site.person }}</p>
+    <a class="cta" href="galerie.html"><span>Kolekce Color&nbsp;Tune</span>{{ ico.arrow() }}</a>
+  </div>
+</section>
+
+
+<section class="shell shell--wide bay">
+  <div class="sec rv">
+    <div class="sec__meta">
+      <span class="num">03</span>
+      <span class="label">Galerie</span>
+    </div>
+    <h2 class="sec__title">Obrazy visí přímo<br>v prostorách salonu</h2>
+    <p class="sec__note">{{ paintings|length }} autorských děl {{ site.person_gen }}. Vybrané kusy jsou k prodeji.</p>
+  </div>
+
+  <div class="reel rv">
+    {% for painting in paintings[:9] %}
+    <a class="reel__item works__item" href="{{ big(painting.url) }}"
+       data-lb-item data-title="{{ painting.title }}"
+       data-tag="{% if painting.sold %}Prodáno{% else %}K prodeji{% endif %}">
+      <div class="works__fig">
+        {% if painting.sold %}<span class="sold">Prodáno</span>{% endif %}
+        {{ img(painting.url, alt=painting.title, sizes='(max-width:620px) 78vw, 26vw') }}
+        <span class="works__over">
+          <span class="works__name">{{ painting.title }}</span>
+          <span class="works__no">{{ '%02d'|format(loop.index) }}</span>
+        </span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+  <div class="reel__meta rv">
+    <span class="label">01 — {{ '%02d'|format(paintings[:9]|length) }}</span>
+    <span class="label">Táhněte do strany</span>
+  </div>
+
+  <div class="actions rv" style="margin-top:2rem">
+    <a class="cta" href="obrazy.html"><span>Všechny obrazy</span>{{ ico.arrow() }}</a>
+  </div>
+</section>
+
+
+<section class="shell shell--wide bay--sm">
+  <div class="sec rv">
+    <div class="sec__meta">
+      <span class="num">04</span>
+      <span class="label">Dění</span>
+    </div>
+    <h2 class="sec__title">Výstavy a projekty</h2>
+    <p class="sec__note">Salon je zároveň kulturním prostorem — pořádáme výstavy, setkání a workshopy.</p>
+  </div>
+
+  {# Newest record with an image big enough to run at this size — see
+     feature() in build.py for why the resolution floor is there. #}
+  {% set teasers = feature(vystavy) + feature(projekty) %}
+  {# Bottom-aligned: the two records have different native proportions and
+     neither may be cropped, so their captions share a baseline instead of
+     their tops sharing one and leaving a hole under the shorter plate. #}
+  <div class="grid" style="align-items: end">
+    {% for rec in teasers %}
+    <a class="rv" href="{% if loop.first %}vystavy.html{% else %}projekty.html{% endif %}"
+       style="grid-column: {{ '1 / span 6' if loop.first else '7 / span 6' }}; --d:{{ loop.index0 * 120 }}ms">
+      <figure class="plate plate--zoom" style="aspect-ratio:{{ ratio(rec.image) }}">
+        {{ img(rec.image, alt=rec.title|striptags, sizes='(max-width:960px) 100vw, 46vw', cover=true) }}
+      </figure>
+      <div class="cap">
+        <span class="cap__t">{{ rec.title|striptags }}</span>
+        <span class="cap__m label">{{ 'Výstavy' if loop.first else 'Projekty' }}</span>
+      </div>
+      <p class="label" style="margin-top:.7rem">{{ cz_date(rec.date) }}</p>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
 {% endblock %}

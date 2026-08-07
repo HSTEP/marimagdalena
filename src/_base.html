@@ -1,0 +1,194 @@
+{% import "_icons.html" as ico %}
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+{# Scripting flag, set before first paint. Reveal-on-scroll styles hang off
+   .js so that with scripting disabled the page renders fully visible
+   rather than as a stack of empty sections. #}
+<script>document.documentElement.className = 'js';</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ site.name }} — {{ site.tagline }}, {{ site.city }}{% endblock %}</title>
+<meta name="description" content="{% block description %}Kadeřnický salon a umělecká galerie Marie Baštařové v Dobřanech. Střih, barva, styling, proměny — a autorské obrazy vystavené přímo v ateliéru.{% endblock %}">
+<meta name="author" content="{{ site.person }}">
+<link rel="canonical" href="{{ site.url }}/{% block canonical %}{% endblock %}">
+<meta name="theme-color" content="#0b0a08">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:site_name" content="{{ site.name }}">
+<meta property="og:title" content="{{ self.title() }}">
+<meta property="og:description" content="{{ self.description() }}">
+<meta property="og:image" content="{{ site.url }}/images/_d/bg-1c5a1152-1280.webp">
+
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/jost-normal-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/bodoni-moda-normal-latin.woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/site.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HairSalon",
+  "name": {{ site.name|tojson }},
+  "alternateName": {{ (site.name ~ " — " ~ site.tagline)|tojson }},
+  "url": {{ site.url|tojson }},
+  "image": {{ (site.url ~ "/images/_d/bg-1c5a1152-1280.webp")|tojson }},
+  "telephone": {{ site.phone_display|tojson }},
+  "email": {{ site.email|tojson }},
+  "founder": { "@type": "Person", "name": {{ site.person|tojson }} },
+  "foundingDate": "2011",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": {{ site.street|tojson }},
+    "addressLocality": {{ site.city|tojson }},
+    "postalCode": {{ site.zip|tojson }},
+    "addressCountry": "CZ"
+  },
+  "sameAs": [{{ site.instagram|tojson }}, {{ site.facebook|tojson }}]
+}
+</script>
+
+<script data-goatcounter="https://marimagdalena.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JWQK0C4N5N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-JWQK0C4N5N');
+</script>
+</head>
+
+<body>
+<div class="progress" data-progress></div>
+
+<header class="nav" data-nav>
+  <div class="nav__in">
+    <a class="nav__mark" href="index.html" aria-label="{{ site.name }} — úvodní strana">
+      {{ img(site.logo_gold, alt=site.name ~ ' — ' ~ site.tagline, sizes='160px', loading='eager') }}
+    </a>
+
+    <nav class="nav__links" aria-label="Hlavní navigace">
+      {% for item in nav %}
+      <a class="nav__link{% if item.slug == page %} is-active{% endif %}{% if item.external %} nav__ext{% endif %}"
+         href="{{ item.href }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}
+         {% if item.slug == page %}aria-current="page"{% endif %}>{{ item.label|safe }}{% if item.external %}{{ ico.external() }}{% endif %}</a>
+      {% endfor %}
+      <span class="nav__sep" aria-hidden="true"></span>
+      <a class="nav__call" href="tel:{{ site.phone_href }}">{{ ico.phone() }}{{ site.phone_display }}</a>
+    </nav>
+
+    <button class="burger" data-burger type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="menu" id="menu" data-menu>
+  <nav aria-label="Navigace">
+    <ul class="menu__list">
+      {% for item in nav %}
+      <li class="menu__item">
+        <a class="menu__link" style="--i:{{ loop.index0 }}" href="{{ item.href }}"
+           {% if item.external %}target="_blank" rel="noopener"{% endif %}>
+          <span class="num">{{ '%02d'|format(loop.index) }}</span>
+          <span>{{ item.label|safe }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+  <div class="menu__foot">
+    <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>Objednat se</span>{{ ico.arrow() }}</a>
+    <a class="qlink qlink--plain" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
+    <a class="qlink qlink--plain" href="mailto:{{ site.email }}">{{ site.email }}</a>
+    <p class="label">{{ site.street }} · {{ site.city }}</p>
+  </div>
+</div>
+
+<main id="main">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="foot on-paper">
+  <div class="shell shell--wide">
+    <div class="foot__grid">
+      <div class="foot__mark">
+        {{ img(site.logo_dark, alt=site.name, sizes='210px') }}
+      </div>
+
+      <div class="foot__col foot__col--wide">
+        <p class="label">Ateliér</p>
+        {# The address belongs to the map plate; repeating it here printed it
+           twice in one footer. #}
+        <p class="foot__line">
+          {{ site.tagline }} {{ site.name }}<br>
+          {{ site.person }}
+        </p>
+        <a class="qlink qlink--plain" href="{{ site.instagram }}" target="_blank" rel="noopener">{{ site.instagram_handle }} {{ ico.external() }}</a>
+      </div>
+
+      <div class="foot__col foot__col--contact">
+        <p class="label">Spojení</p>
+        <a class="foot__link" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
+        <a class="foot__link" href="mailto:{{ site.email }}">{{ site.email }}</a>
+        <div class="foot__social">
+          <a href="{{ site.instagram }}" target="_blank" rel="noopener" aria-label="Instagram salonu">{{ ico.instagram() }}</a>
+          <a href="{{ site.facebook }}" target="_blank" rel="noopener" aria-label="Facebook">{{ ico.facebook() }}</a>
+        </div>
+      </div>
+
+      {# The Google embed is loaded on request, not on page load: it sets
+         third-party cookies, and until it is asked for the slot shows the
+         address rather than an empty bordered box. #}
+      <div class="foot__map" data-map data-src="{{ site.maps }}"
+           data-title="Mapa — {{ site.street }}, {{ site.city }}">
+        <div class="foot__map-ph">
+          <p class="label">Kde nás najdete</p>
+          <p class="foot__map-addr">{{ site.street }}<br>{{ site.zip }} {{ site.city }}</p>
+          <button class="cta" type="button" data-map-load><span>Zobrazit mapu</span>{{ ico.arrow() }}</button>
+          <p class="foot__map-note">Načte se z Google Maps.</p>
+        </div>
+      </div>
+
+      <div class="foot__col foot__col--nav">
+        <p class="label">Rozcestník</p>
+        <div class="foot__map-links">
+          {% for item in nav %}
+          <a class="foot__link" href="{{ item.href }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.label|safe }}{% if item.external %}{{ ico.external() }}{% endif %}</a>
+          {% endfor %}
+          <a class="foot__link" href="cenik.html">Ceník</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot__bar">
+      <p class="label">© {{ build_year }} {{ site.name }}</p>
+      <p class="label">Logo — Slávka Štrbová</p>
+      <p class="label">Web — <a href="https://github.com/HSTEP/marimagdalena" target="_blank" rel="noopener">Štěpán Havlovic</a></p>
+    </div>
+  </div>
+</footer>
+
+{# Floating plate preview for index rows (pointer devices only) #}
+<div class="peek" data-peek aria-hidden="true"><img alt=""></div>
+
+<div class="lb" data-lb role="dialog" aria-modal="true" aria-label="Prohlížeč obrazů" hidden>
+  <div class="lb__bar">
+    <span class="num lb__count" data-lb-count></span>
+    <button class="lb__x" data-lb-close type="button">{{ ico.close() }}<span>Zavřít</span></button>
+  </div>
+  <div class="lb__stage">
+    <img class="lb__img" data-lb-img alt="">
+    <button class="lb__nav lb__nav--prev" data-lb-prev type="button" aria-label="Předchozí">{{ ico.chevron('left') }}</button>
+    <button class="lb__nav lb__nav--next" data-lb-next type="button" aria-label="Další">{{ ico.chevron('right') }}</button>
+  </div>
+  <div class="lb__foot">
+    <span class="lb__title" data-lb-title></span>
+    <span class="label" data-lb-tag></span>
+  </div>
+</div>
+
+<script src="assets/js/site.js" defer></script>
+</body>
+</html>

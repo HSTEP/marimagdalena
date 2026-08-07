@@ -1,0 +1,26 @@
+{% extends "_base.html" %}
+{% import "_icons.html" as ico %}
+{% set page = none %}
+
+{% block title %}Stránka nenalezena | {{ site.name }}{% endblock %}
+{% block description %}Tuhle stránku se nám nepodařilo najít.{% endblock %}
+
+{% block content %}
+
+<section class="band" style="min-height: calc(100svh - 4.75rem)">
+  <div class="band__bg">{{ img(plates.atelier, alt='', sizes='100vw') }}</div>
+  <div class="band__in">
+    <p class="num" style="font-size: clamp(3rem, 12vw, 7rem); line-height:1">404</p>
+    <p class="label label--gold">Stránka nenalezena</p>
+    <p class="h2 band__q serif-it">
+      Tady nic nevisí. Zkuste to o patro níž — v galerii, ve výstavách
+      nebo rovnou v ateliéru.
+    </p>
+    <div class="actions" style="justify-content:center">
+      <a class="cta cta--gold" href="index.html"><span>Zpět na úvod</span>{{ ico.arrow() }}</a>
+      <a class="qlink" href="obrazy.html">Obrazy</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

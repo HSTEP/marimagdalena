@@ -1,56 +1,63 @@
-{% extends "container.html"%}
-{% set active_page = 4 %}
+{% extends "_base.html" %}
+{% import "_icons.html" as ico %}
+{% set page = 'partneri' %}
+
+{% block title %}Partneři | {{ site.name }}{% endblock %}
+{% block canonical %}partneri.html{% endblock %}
+{% block description %}Fotografové, návrhářky, floristky a výtvarnice, se kterými salon Maří Magdalena spolupracuje na proměnách, výstavách a projektech.{% endblock %}
+
 {% block content %}
 
-<section class="posts">
-    <article>
-        <a href="http://jirkakrejcik.cz" class="image fit"><img src="images/loga/jirkaf.jpg" alt="" /></a>
-        <ul class="actions special">
-            <li><a href="http://jirkakrejcik.cz" class="image fit"><img src="images/loga/jirka.png" alt="" style="margin:auto; width:50%"/></a></li>
-        </ul>
-    </article>
-    <article>
-        <a href="https://www.instagram.com/lydie_bernklauova/" class="image fit"><img src="images/loga/lidaf.png" alt="" /></a>
-        <ul class="actions special">
-            <li><a href="https://www.instagram.com/lydie_bernklauova/"  class="image fit"><img src="images/loga/lida.png" alt="" style="margin:auto; width:50%"/></a></li>
-        </ul>
-    </article>
-    <article>
-        <a href="https://www.irynabidasova.com" class="image fit"><img src="images/loga/irinaf.jpg" alt="" /></a>
-        <ul class="actions special">
-            <li><a href="https://www.irynabidasova.com" class="image fit" ><img src="images/loga/irina.png" alt="" style="margin:auto; width:50%"/></a></li>
-        </ul>
-    </article>
-    <article>
-        <a href="http://michaelanausova.com" class="image fit"><img src="images/loga/nausovaf.png" alt="" /></a>
-        <ul class="actions special">
-            <li><a href="http://michaelanausova.com" class="image fit" ><img src="images/loga/michaela.png" alt="" style="margin:auto; width:50%"/></a></li>
-        </ul>
-    </article>
-    <article>
-    <header>
-        <span class="date">Autorka loga</span>
-        <img src="images/logo_b.png" alt="" style="width: 50%;"/>
-    </header>
-    <a href="https://domazlicky.denik.cz/lide-odvedle/slavka-strbova-lasku-k-malovani-mi-sudicky-i-s-pastelkami-vlozily-do-kolebky-20200118.html?cast=1&fbclid=IwAR1AMZ0cPBpUEtDNDjbeDuQ9t49JWDgG0ydbaE5l8YnMW9-PRfXR93BQoyE" class="image fit"><img src="images/loga/slavka.jpg" alt="" /></a>
-    <ul class="actions special">
-        <li>
-            <a class="button" href="https://domazlicky.denik.cz/lide-odvedle/slavka-strbova-lasku-k-malovani-mi-sudicky-i-s-pastelkami-vlozily-do-kolebky-20200118.html?cast=1&fbclid=IwAR1AMZ0cPBpUEtDNDjbeDuQ9t49JWDgG0ydbaE5l8YnMW9-PRfXR93BQoyE" class="image fit">
-                Slávka Štrbová</a></li>
-    </ul>
-    </article>
-    <article>
-        <a href="https://www.lenkakosco.cz" class="image fit"><img src="images/loga/lenkaf.jpg" alt="" /></a>
-        <ul class="actions special">
-            <li><a href="https://www.lenkakosco.cz" class="image fit" ><img src="images/loga/lenka.png" alt="" style="margin:auto; width:50%"/></a></li>
-        </ul>
-    </article>
-    <article>
-        <a href="https://www.instagram.com/red_renata_diviskova_art/" class="image fit"><img src="images/loga/renataf.jpg" alt="" /></a>
-        <ul class="actions special">
-            <li><a href="https://www.instagram.com/red_renata_diviskova_art/" class="image fit" ><img src="images/loga/renata.png" alt="" style="margin:auto; width:50%"/></a></li>
-        </ul>
-    </article>
+<section class="shell shell--wide phead">
+  <div class="phead__grid">
+    <div class="phead__meta">
+      <span class="num">Lidé</span>
+      <span class="label">{{ partners|length }} spoluprací</span>
+    </div>
+    <h1 class="phead__title">Partneři</h1>
+    <p class="phead__lede lede">
+      Nic z toho nevzniká samo. Fotografové, návrhářky, floristky
+      a výtvarnice, bez kterých by proměny ani výstavy nedávaly smysl.
+    </p>
+  </div>
 </section>
 
-{% endblock content %}
+<section class="shell shell--wide" style="padding-bottom: var(--bay)">
+  <div class="people">
+    {% for p in partners %}
+    <a class="person rv" href="{{ p.url }}" target="_blank" rel="noopener noreferrer"
+       style="--d:{{ (loop.index0 % 4) * 90 }}ms">
+      <div class="person__art">
+        {{ img(p.photo, alt=p.name, sizes='(max-width:620px) 92vw, (max-width:1180px) 44vw, 30vw', cover=true) }}
+        {% if p.logo %}
+        <img class="person__logo" src="{{ big(p.logo) }}" alt="" loading="lazy" decoding="async">
+        {% endif %}
+      </div>
+      <div class="person__body">
+        <span class="person__name">{{ p.name }}</span>
+        <span class="person__role">{{ p.role }}{% if p.studio %} · {{ p.studio }}{% endif %}</span>
+      </div>
+    </a>
+    {% endfor %}
+
+    <a class="person person--call rv" href="mailto:{{ site.email }}"
+       style="--d:{{ (partners|length % 4) * 90 }}ms">
+      <h3>Chcete<br>spolupracovat?</h3>
+      <span class="qlink">Napište nám</span>
+    </a>
+  </div>
+</section>
+
+<section class="shell shell--wide" style="padding-bottom: var(--bay)">
+  <div class="pull rv">
+    <p class="pull__q serif-it">
+      Tvoříte a hledáte prostor, kde se potkat se stejně naladěnými lidmi?
+    </p>
+    <div class="pull__by actions" style="justify-content:center">
+      <a class="cta" href="projekty.html"><span>Art&nbsp;Connecting</span>{{ ico.arrow() }}</a>
+      <a class="qlink qlink--plain" href="mailto:{{ site.email }}">Ozvat se</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

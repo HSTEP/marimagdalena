@@ -1,139 +1,46 @@
-{% extends "container.html" %}
-{% set active_page = 1 %}
+{% extends "_base.html" %}
+{% import "_icons.html" as ico %}
+{% import "_parts.html" as parts %}
+{% set page = 'cenik' %}
+
+{% block title %}Ceník | {{ site.name }}{% endblock %}
+{% block canonical %}cenik.html{% endblock %}
+{% block description %}Ceník kadeřnických služeb salonu Maří Magdalena v Dobřanech — střih, barva, melír, regenerace, účesy, líčení a fotoportrét.{% endblock %}
+
 {% block content %}
 
-    <!-- Post -->
-    <section class="post">
-        <header class="major">
-            <h1>Ceník</h1>
-        </header>
+<section class="shell shell--wide phead">
+  <div class="phead__grid">
+    <div class="phead__meta">
+      <span class="num">Ceník</span>
+      <span class="label">{{ site.city }}</span>
+    </div>
+    <h1 class="phead__title">Ceník</h1>
+    <p class="phead__lede lede">
+      Ceny jsou orientační. Konečná částka vždy vychází z konzultace,
+      délky a stavu vlasů — vždy ji řekneme dopředu.
+    </p>
+  </div>
+</section>
 
-        <!-- Table -->
-        <div class="table-wrapper">
-            <table>
-                <tbody>
-                <tr>
-                    <td>Pánský střih bez mytí</td>
-                    <td>490 Kč</td>
-                </tr>
-                <tr>
-                    <td>Pánský střih s mytím</td>
-                    <td>590 Kč</td>
-                </tr>
+<section class="shell shell--wide" style="padding-bottom: var(--bay)">
+  {{ parts.pricelist(pricing) }}
 
-                </tbody>
-            </table>
-        </div>
+  <div class="actions rv" style="margin-top:3.2rem">
+    <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>Objednat se</span>{{ ico.arrow() }}</a>
+    <a class="qlink" href="galerie.html">Hair&nbsp;&amp;&nbsp;Styling</a>
+  </div>
+</section>
 
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>Krátké</th>
-                    <th>Polodlouhé</th>
-                    <th>dlouhé</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Dámský střih, péče, mytí, foukání</td>
-                    <td>1 590 Kč</td>
-                    <td>1 790 Kč</td>
-                    <td>1 990 Kč</td>
-                </tr>
-                <tr>
-                    <td>Barva (odrost) + střih</td>
-                    <td>1 790 Kč</td>
-                    <td>1 990 Kč</td>
-                    <td>2 190 Kč</td>
-                </tr>
-                <tr>
-                    <td>Barva (celá) + střih</td>
-                    <td>1 990 Kč</td>
-                    <td>2 190 Kč</td>
-                    <td>2 790 Kč</td>
-                </tr>
-                <tr>
-                    <td>Melír + tónování + střih</td>
-                    <td>2 590 Kč</td>
-                    <td>2 790 Kč</td>
-                    <td>3 590 Kč</td>
-                </tr>
-                <tr>
-                    <td>Stahování barvy + střih</td>
-                    <td>2 990 Kč</td>
-                    <td>4 590 Kč</td>
-                    <td>7 990 Kč</td>
-                </tr>
-                <tr>
-                    <td>Malibu C - čištění vlasů</td>
-                    <td>1 990 Kč</td>
-                    <td>2 190 Kč</td>
-                    <td>2 790 Kč</td>
-                </tr>
-                <tr>
-                    <td>Kolagen</td>
-                    <td>2 190 Kč</td>
-                    <td>2 590 Kč</td>
-                    <td>3 190 Kč</td>
-                <tr>
-                    <td>Keratin</td>
-                    <td>2 590 Kč</td>
-                    <td>3 590 Kč</td>
-                    <td>4 590 Kč</td>
-                </tr>
-                <tr>
-                    <td>Botox</td>
-                    <td>1 790 Kč</td>
-                    <td>3 190 Kč</td>
-                    <td>3 990 Kč</td>
-                </tr>
-                <tr>
-                    <td>Metal detox</td>
-                    <td>+300 Kč</td>
-                    <td>+350 Kč</td>
-                    <td>+500 Kč</td>
-                </tr>
-                <tr>
-                    <td>Wella plex</td>
-                    <td>+500 Kč</td>
-                    <td>+550 Kč</td>
-                    <td>+700 Kč</td>
-                </tr>
-
-                </tbody>
-            </table>
-        </div>
-
-        <div class="table-wrapper">
-            <table>
-                <tbody>
-                <tr>
-                    <td>Večerní líčení</td>
-                    <td>990 Kč</td>
-                </tr>
-                <tr>
-                    <td>Společenský účes</td>
-                    <td>990 Kč</td>
-                </tr>
-                <tr>
-                    <td>Fotoportrét</td>
-                    <td>3 990 Kč</td>
-                </tr>
-                <tr>
-                    <td>Svatební líčení</td>
-                    <td>1 990 Kč</td>
-                </tr>
-                <tr>
-                    <td>Svatební účes</td>
-                    <td>2 990 Kč</td>
-                </tr>
-                </tbody>
-            </table>
-            <span class="image fit"><img src="images/loga/Londa.png" alt=""/></span>
-
-        </div>
-    </section>
+<section class="band">
+  <div class="band__bg">{{ img(plates.salon, alt='', sizes='100vw') }}</div>
+  <div class="band__in">
+    <p class="label label--gold">{{ site.street }} · {{ site.city }}</p>
+    <p class="h2 band__q serif-it">Objednávky přijímáme telefonicky i e‑mailem.</p>
+    <div class="actions" style="justify-content:center">
+      <a class="cta" href="tel:{{ site.phone_href }}"><span>{{ site.phone_display }}</span>{{ ico.arrow() }}</a>
+    </div>
+  </div>
+</section>
 
 {% endblock %}

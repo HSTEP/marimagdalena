@@ -1,159 +1,75 @@
-{% extends "container.html" %}
-{% set active_page = 3 %}
+{% extends "_base.html" %}
+{% import "_icons.html" as ico %}
+{% set page = 'hair' %}
+
+{% block title %}Hair & Styling — kolekce Londa Color Tune | {{ site.name }}{% endblock %}
+{% block canonical %}galerie.html{% endblock %}
+{% block description %}Střih, barva, styling a proměny v salonu Maří Magdalena v Dobřanech. Kolekce LONDA Color Tune, Berlín 2023.{% endblock %}
+
 {% block content %}
 
-    <section class="post">
-        <header class="major">
-            <h1>HAIR & STYLING</h1>
-        </header>
-        <h2 style="text-align:  center">
-            Kolekce LONDA Color Tune Berlín 2023
-        </h2>
-        <p>
-            Jako členka Mezinárodního artistického týmu LONDA Professional a ambasadorka značky jsem se podílela na
-            vytváření nové kolekce a trendů ve spolupráci s uměleckým řiditelem Bertem Kietzerowem.
+<section class="shell shell--wide phead">
+  <div class="phead__grid">
+    <div class="phead__meta">
+      <span class="num">Vlasy</span>
+      <span class="label">Londa Professional</span>
+    </div>
+    <h1 class="phead__title">Hair&nbsp;&amp;&nbsp;Styling</h1>
+    <p class="phead__lede lede">
+      Střih, barva, regenerace a proměny spojené s líčením a focením —
+      v ateliéru, kde se dá u toho i posedět u klavíru.
+    </p>
+  </div>
+</section>
 
-        </p>
+<section class="shell shell--wide bay--sm" style="padding-top:0">
+  <div class="sec rv">
+    <div class="sec__meta">
+      <span class="num">01</span>
+      <span class="label">Kolekce</span>
+    </div>
+    <h2 class="sec__title">Londa Color&nbsp;Tune<br>Berlín 2023</h2>
+    <p class="sec__note">{{ images|length }} snímků z tvorby kolekce</p>
+  </div>
 
-        <!-- Image -->
-        <div class="row gtr-50 gtr-uniform" data-nanogallery2-lightbox id="nanogallery2">
-            {% for image in images %}
-                <div class="col-4"><span class="image fit"><img src="{{ image }}" data-ngsrc="{{ image }}" data-nanogallery2-lightbox = '{ "viewerGallery ": "none" }'  alt=""></img></span></div>
-            {% endfor %}
-        </div>
+  <div class="grid" style="margin-bottom: clamp(2.5rem,5vw,4rem)">
+    <p class="lede rv" style="grid-column: 1 / span 7">
+      Jako členka Mezinárodního artistického týmu LONDA Professional
+      a ambasadorka značky jsem se podílela na vytváření nové kolekce a trendů
+      ve spolupráci s uměleckým ředitelem Bertem Kietzerowem.
+    </p>
+    <p class="label rv" style="grid-column: 9 / span 4; align-self:end">— {{ site.person }}</p>
+  </div>
 
-    </section>
-<section class="post">
-        <header class="major">
-            <h1>Ceník</h1>
-        </header>
+  {# Three across: 21 frames divide evenly, so no orphan in the last row. #}
+  <div class="tiles tiles--3">
+    {% for image in images %}
+    <a class="tiles__item rv" href="{{ big(image) }}" data-lb-item
+       data-title="Londa Color Tune — Berlín 2023"
+       data-tag="{{ '%02d'|format(loop.index) }} / {{ images|length }}"
+       style="--d:{{ (loop.index0 % 7) * 50 }}ms"
+       aria-label="Snímek {{ loop.index }} z kolekce Londa Color Tune">
+      {{ img(image, alt='Kolekce Londa Color Tune, Berlín 2023 — snímek ' ~ loop.index,
+             sizes='(max-width:760px) 46vw, 30vw', cover=true) }}
+    </a>
+    {% endfor %}
+  </div>
+</section>
 
-        <!-- Table -->
-        <div class="table-wrapper">
-            <table>
-                <tbody>
-                <tr>
-                    <td>Pánský střih bez mytí</td>
-                    <td>490 Kč</td>
-                </tr>
-                <tr>
-                    <td>Pánský střih s mytím</td>
-                    <td>590 Kč</td>
-                </tr>
-
-                </tbody>
-            </table>
-        </div>
-
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>Krátké</th>
-                    <th>Polodlouhé</th>
-                    <th>dlouhé</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Dámský střih, péče, mytí, foukání</td>
-                    <td>1 590 Kč</td>
-                    <td>1 790 Kč</td>
-                    <td>1 990 Kč</td>
-                </tr>
-                <tr>
-                    <td>Barva (odrost) + střih</td>
-                    <td>1 790 Kč</td>
-                    <td>1 990 Kč</td>
-                    <td>2 190 Kč</td>
-                </tr>
-                <tr>
-                    <td>Barva (celá) + střih</td>
-                    <td>1 990 Kč</td>
-                    <td>2 190 Kč</td>
-                    <td>2 790 Kč</td>
-                </tr>
-                <tr>
-                    <td>Melír + tónování + střih</td>
-                    <td>2 590 Kč</td>
-                    <td>2 790 Kč</td>
-                    <td>3 590 Kč</td>
-                </tr>
-                <tr>
-                    <td>Stahování barvy + střih</td>
-                    <td>2 990 Kč</td>
-                    <td>4 590 Kč</td>
-                    <td>7 990 Kč</td>
-                </tr>
-                <tr>
-                    <td>Malibu C - čištění vlasů</td>
-                    <td>1 990 Kč</td>
-                    <td>2 190 Kč</td>
-                    <td>2 790 Kč</td>
-                </tr>
-                <tr>
-                    <td>Kolagen</td>
-                    <td>2 190 Kč</td>
-                    <td>2 590 Kč</td>
-                    <td>3 190 Kč</td>
-                <tr>
-                    <td>Keratin</td>
-                    <td>2 590 Kč</td>
-                    <td>3 590 Kč</td>
-                    <td>4 590 Kč</td>
-                </tr>
-                <tr>
-                    <td>Botox</td>
-                    <td>1 790 Kč</td>
-                    <td>3 190 Kč</td>
-                    <td>3 990 Kč</td>
-                </tr>
-                <tr>
-                    <td>Metal detox</td>
-                    <td>+300 Kč</td>
-                    <td>+350 Kč</td>
-                    <td>+500 Kč</td>
-                </tr>
-                <tr>
-                    <td>Wella plex</td>
-                    <td>+500 Kč</td>
-                    <td>+550 Kč</td>
-                    <td>+700 Kč</td>
-                </tr>
-
-                </tbody>
-            </table>
-        </div>
-
-        <div class="table-wrapper">
-            <table>
-                <tbody>
-                <tr>
-                    <td>Večerní líčení</td>
-                    <td>990 Kč</td>
-                </tr>
-                <tr>
-                    <td>Společenský účes</td>
-                    <td>990 Kč</td>
-                </tr>
-                <tr>
-                    <td>Fotoportrét</td>
-                    <td>3 990 Kč</td>
-                </tr>
-                <tr>
-                    <td>Svatební líčení</td>
-                    <td>1 990 Kč</td>
-                </tr>
-                <tr>
-                    <td>Svatební účes</td>
-                    <td>2 990 Kč</td>
-                </tr>
-                </tbody>
-            </table>
-            <span class="image fit"><img src="images/loga/Londa.png" alt=""/></span>
-
-        </div>
-    </section>
+{# The price list lives on /cenik. Restating it here in full meant two places
+   to keep in step, and the services block was a verbatim copy of the
+   homepage's — same numerals, same heading, same six rows. #}
+<section class="shell shell--wide bay--sm" id="cenik">
+  <div class="pull rv">
+    <p class="pull__q serif-it">
+      Střih, barva, regenerace i proměny — orientační ceny všech služeb
+      najdete v ceníku.
+    </p>
+    <div class="pull__by actions" style="justify-content:center">
+      <a class="cta cta--gold" href="cenik.html"><span>Ceník</span>{{ ico.arrow() }}</a>
+      <a class="qlink qlink--plain" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
+    </div>
+  </div>
+</section>
 
 {% endblock %}

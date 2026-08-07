@@ -1,58 +1,73 @@
-{% extends "container.html" %} {% set active_page = 7 %} {% block content %}
-<section class="posts">
-    {% for vystava in vystavy %}
-    <article>
-        <header>
-            {% if vystava.date %}
-            <span class="date">{{ vystava.date }}</span>
-            {% endif %} {# Title remains in the header #}
-            <h2>{{ vystava.title | safe }}</h2>
-        </header>
+{% extends "_base.html" %}
+{% import "_icons.html" as ico %}
+{% set page = 'vystavy' %}
 
-        {# Image moved outside the header, link points to image itself #} {% if
-        vystava.image %}
-        <a href="{{ vystava.image }}" class="image fit">
-            <img
-                src="{{ vystava.image }}"
-                alt="{{ vystava.title | striptags | safe }}"
-                {#
-                Keep
-                striptags
-                for
-                safety
-                #}
-                onerror="this.onerror=null; this.parentElement.innerHTML = '<div style=\'color: #a0aec0; text-align: center; padding: 2rem; border: 1px dashed #cbd5e0;\'>Obrázek nelze načíst</div>';"
-                {#
-                Basic
-                inline
-                style
-                for
-                placeholder
-                #}
-            />
-        </a>
-        {% endif %} {# Links moved outside the header #} {% if vystava.links %}
-        <ul class="actions special">
-            {% for link in vystava.links %}
-            <li>
-                {# Added target and rel attributes for external links #}
-                <a
-                    href="{{ link.url }}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="button"
-                    >{{ link.text }}</a
-                >
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-    </article>
-    {% else %} {# Message if vystavy list is empty #}
-    <p style="padding: 4rem; text-align: center">Žádné výstavy k zobrazení.</p>
-    {% endfor %}
+{% block title %}Výstavy | {{ site.name }}{% endblock %}
+{% block canonical %}vystavy.html{% endblock %}
+{% block description %}Přehled výstav a kulturních večerů, na kterých se salon Maří Magdalena a Marie Baštařová podílely.{% endblock %}
+
+{% block content %}
+
+<section class="shell shell--wide phead">
+  <div class="phead__grid">
+    <div class="phead__meta">
+      <span class="num">Kalendář</span>
+      <span class="label">{{ vystavy|length }} záznamů</span>
+    </div>
+    <h1 class="phead__title">Výstavy</h1>
+    <p class="phead__lede lede">
+      Obrazy nezůstávají jen v ateliéru. Kostely, kavárny, hotely
+      i galerie — místa, kde byla díla k vidění.
+    </p>
+  </div>
 </section>
-{% endblock content %} ``` You can replace the content of your existing
-`src/vystavy.html` file with this updated code. After replacing it, run your
-`build.py` script again to generate the final `vystavy.html` output file with
-the new structure and styling inherited from `container.html` and `main.cs
+
+<section class="shell shell--wide" style="padding-bottom: var(--bay)">
+  {% if vystavy %}
+  <div class="idx" data-peek-scope>
+    {% for v in vystavy %}
+    <article class="idx__row rv" style="--d:{{ (loop.index0 % 8) * 45 }}ms"
+             {% if v.image %}data-peek-src="{{ big(v.image) }}" data-peek-ratio="{{ ratio(v.image) }}"{% endif %}>
+      <span class="num">{{ '%02d'|format(vystavy|length - loop.index0) }}</span>
+
+      {# Thumbnail precedes the title so it lands in its own grid column;
+         on mobile it spans the full row instead. #}
+      {% if v.image %}
+      <a class="idx__thumb" href="{{ big(v.image) }}" data-lb-item
+         style="--nat:{{ ratio(v.image) }}"
+         data-title="{{ v.title|striptags }}" data-tag="{{ cz_date(v.date) }}">
+        {{ img(v.image, alt=v.title|striptags, sizes='(max-width:960px) 92vw, 8rem', cover=true) }}
+      </a>
+      {% else %}
+      <span aria-hidden="true"></span>
+      {% endif %}
+
+      <h2 class="idx__title">{{ cz_title(v.title|striptags) }}</h2>
+
+      <p class="idx__date">{{ cz_date(v.date) }}</p>
+
+      <div class="idx__links">
+        {% for link in v.links %}
+        <a class="qlink" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link_label(link.text, link.url) }}</a>
+        {% else %}
+        <span class="label">&nbsp;</span>
+        {% endfor %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="lede">Žádné výstavy k zobrazení.</p>
+  {% endif %}
+</section>
+
+<section class="band">
+  <div class="band__bg">{{ img(plates.contact, alt='', sizes='100vw') }}</div>
+  <div class="band__in">
+    <p class="label label--gold">Spolupráce</p>
+    <p class="h2 band__q serif-it">Chystáte výstavu, koncert nebo večer, kam by se obrazy hodily?</p>
+    <a class="cta" href="mailto:{{ site.email }}"><span>Napsat</span>{{ ico.arrow() }}</a>
+  </div>
+</section>
+
+{% endblock %}

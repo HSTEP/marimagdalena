@@ -1,0 +1,40 @@
+{# Shared blocks used by more than one page. #}
+
+{% macro pricelist(pricing) %}
+<div class="price">
+  {% for group in pricing %}
+  <div class="price__group rv" style="--d:{{ loop.index0 * 90 }}ms">
+    <div class="price__head">
+      <h3 class="price__title">{{ group.title }}</h3>
+      <span class="label">{{ plural_cz(group.rows|length, 'položka', 'položky', 'položek') }}</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col"><span class="label">{{ 'Délka vlasů' if group.columns else 'Služba' }}</span></th>
+          {% if group.columns %}
+          {% for col in group.columns %}<th scope="col">{{ col }}</th>{% endfor %}
+          {% else %}
+          {# Without a header the lone price column lined up under "Dlouhé"
+             from the table below and invited a misreading. #}
+          <th scope="col">Cena</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for label, prices in group.rows %}
+        <tr>
+          <td>{{ label }}</td>
+          {# data-len labels each cell so the narrow layout can restate the
+             column header inline once the <thead> is off-screen. #}
+          {% for price in prices %}
+          <td data-len="{{ group.columns[loop.index0] if group.columns else 'Cena' }}">{{ price }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endfor %}
+</div>
+{% endmacro %}

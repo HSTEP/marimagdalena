@@ -1,67 +1,81 @@
-{% extends "container.html" %}
-{% set active_page = 5 %}
+{% extends "_base.html" %}
+{% import "_icons.html" as ico %}
+{% set page = 'obrazy' %}
+{% set for_sale = paintings|rejectattr('sold')|list %}
+{% set sold = paintings|selectattr('sold')|list %}
+
+{% block title %}Obrazy — {{ site.person }} | {{ site.name }}{% endblock %}
+{% block canonical %}obrazy.html{% endblock %}
+{% block description %}Autorské obrazy Marie Baštařové vystavené v ateliéru Maří Magdalena v Dobřanech. {{ paintings|length }} děl, {{ for_sale|length }} k prodeji.{% endblock %}
 
 {% block content %}
-<section class="post">
-    <header class="major">
-        <h1>Galerie</h1>
-        <p>
-            V prostorách salonu si můžete prohlédnout autorské obrazy Marie
-            Baštařové
-        </p>
-    </header>
 
-    <!-- The main container for the paintings -->
-    <div class="paintings-container">
-        {# Loop through the list of painting objects passed from the build script #}
-        {% for painting in paintings %}
-        <a href="{{ painting.url }}" class="painting-link">
-            <div class="painting">
-
-                {# Conditionally display the "Sold" badge if painting.sold is true #}
-                {% if painting.sold %}
-                <div
-                    style="
-                        position: relative;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        background-color: black;
-                        transform: rotate(15deg);
-                        color: white;
-                        font-family: Pacifico, cursive;
-                        font-size: 15px;
-                        z-index: 20;
-                        margin-left: calc(100% - 60px);
-                        border-radius: 50px;
-                        width: 50px;
-                        height: 50px;
-                        top: 60px;
-                    "
-                >
-                    <div>Sold</div>
-                </div>
-                {% endif %}
-
-                {# Display the image using the URL from the painting object #}
-                <img src="{{ painting.url }}" alt="{{ painting.title }}" />
-
-                <div class="img-footer">
-                    <div class="painting-title">
-                        {# Display the title directly from the painting object #}
-                        <div>{{ painting.title }}</div>
-                    </div>
-                </div>
-            </div>
-        </a>
-        {% endfor %}
+<section class="shell shell--wide phead">
+  <div class="phead__grid">
+    <div class="phead__meta">
+      <span class="num">Galerie</span>
+      <span class="label">{{ paintings|length }} děl</span>
     </div>
+    <h1 class="phead__title">Obrazy</h1>
+    <p class="phead__lede lede">
+      V prostorách salonu si můžete prohlédnout autorské obrazy
+      {{ site.person_gen }} — a odnést si je domů. Náhledy ukazují díla
+      zasazená do interiéru.
+    </p>
+  </div>
 </section>
 
-<script defer>
-    // This script remains the same
-    var lightbox = new SimpleLightbox(".painting-link", {
-        /* options */
-    });
-</script>
+<section class="shell shell--wide" style="padding-bottom: var(--bay)">
+  <div class="filters" data-filters>
+    <button class="filter is-on" type="button" data-filter="all">Vše<span class="filter__n">{{ paintings|length }}</span></button>
+    <button class="filter" type="button" data-filter="sale">K&nbsp;prodeji<span class="filter__n">{{ for_sale|length }}</span></button>
+    <button class="filter" type="button" data-filter="sold">Prodáno<span class="filter__n">{{ sold|length }}</span></button>
+    <span class="filters__count" data-filter-count></span>
+  </div>
+
+  <div class="works" data-gallery data-batch="24" data-batch-noun="obrazů">
+    {% for painting in paintings %}
+    <a class="works__item rv" href="{{ big(painting.url) }}"
+       data-lb-item data-batch-item
+       data-state="{{ 'sold' if painting.sold else 'sale' }}"
+       data-title="{{ painting.title }}"
+       data-tag="{{ 'Prodáno' if painting.sold else 'K prodeji' }}"
+       style="--d:{{ (loop.index0 % 6) * 55 }}ms"
+       aria-label="{{ painting.title }}{{ ' — prodáno' if painting.sold else '' }}">
+      <div class="works__fig">
+        {% if painting.sold %}<span class="sold">Prodáno</span>{% endif %}
+        {{ img(painting.url, alt=painting.title,
+               sizes='(max-width:620px) 92vw, (max-width:960px) 46vw, (max-width:1180px) 31vw, 23vw') }}
+        <span class="works__over">
+          <span class="works__name">{{ painting.title }}</span>
+          <span class="works__no">{{ '%02d'|format(loop.index) }}</span>
+        </span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+  {# Progressive disclosure — without JS the whole set is already in the
+     document, so this control simply never appears. #}
+  <div class="works__more" data-more hidden>
+    <button class="cta" type="button" data-more-btn>
+      <span>Zobrazit další</span>{{ ico.arrow() }}
+    </button>
+    <span class="label" data-more-count></span>
+  </div>
+</section>
+
+<section class="shell shell--wide" style="padding-bottom: var(--bay)">
+  <div class="pull rv">
+    <p class="pull__q serif-it">
+      Máte vyhlédnuté dílo? Ozvěte se — obrazy je možné vidět naživo
+      přímo v ateliéru.
+    </p>
+    <div class="pull__by actions" style="justify-content:center">
+      <a class="cta" href="tel:{{ site.phone_href }}"><span>{{ site.phone_display }}</span>{{ ico.arrow() }}</a>
+      <a class="qlink qlink--plain" href="mailto:{{ site.email }}">{{ site.email }}</a>
+    </div>
+  </div>
+</section>
+
 {% endblock %}

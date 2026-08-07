@@ -120,6 +120,40 @@ def looks_like_url(value):
     return bool(URL_RE.match(value) or BARE_DOMAIN_RE.match(value))
 
 
+# Corrections to admin-entered copy, applied at load time so a title, its alt
+# text and its lightbox caption can never disagree. Kept here rather than
+# edited into the JSON: the source data stays exactly as the owner typed it,
+# and every change the site makes to their words is listed in one place.
+TEXT_FIXES = [
+    # A proper noun typed lower-case: "Večer pro klášter chotěšov".
+    (re.compile(r"\bchotěšov\b"), "Chotěšov"),
+    # Her own site and domain spell it without diacritics
+    # (irynabidasova.com), and "s" takes the instrumental case.
+    (re.compile(r"\bs\s+Iryna\s+Bidašová\b"), "s Irynou Bidasovou"),
+    (re.compile(r"\bIryna\s+Bidašová\b"), "Iryna Bidasova"),
+]
+
+TEXT_FIELDS = ("title", "description")
+
+
+def repair_text(records):
+    """Trim stray whitespace and apply the corrections above."""
+    fixed = 0
+    for record in records:
+        for field in TEXT_FIELDS:
+            value = record.get(field)
+            if not isinstance(value, str):
+                continue
+            original = value
+            value = value.strip()
+            for pattern, replacement in TEXT_FIXES:
+                value = pattern.sub(replacement, value)
+            if value != original:
+                fixed += 1
+            record[field] = value
+    return fixed
+
+
 def normalise_links(records):
     """Repair link records coming out of the admin JSON.
 
@@ -234,6 +268,12 @@ MONTH_RE = re.compile("|".join(sorted(MONTH_FORMS, key=len, reverse=True)), re.I
 ORPHAN_RE = re.compile(r"(?<!\w)([KkSsVvZzOoUuAaIi])[ 	]+(?=[^\s<])")
 # Nor should a day number be split from its month: "8. kvetna".
 DAY_RE = re.compile(r"(\d{1,2}\.)[ 	]+(?=[^\s<])")
+
+# A spaced hyphen typed where a dash was meant. The site sets em dashes
+# everywhere else, so a single record read "Flower Day - styling" beside
+# twelve that used "—". Bounded by whitespace, so hyphenated words and
+# URLs are never touched.
+DASH_RE = re.compile(r"(?<=\s)-(?=\s)")
 SKIP_TAGS = re.compile(r"^</?(script|style|title)\b", re.I)
 
 
@@ -276,6 +316,7 @@ def typeset_cz(html):
         elif skipping or not part.strip():
             out.append(part)
         else:
+            part = DASH_RE.sub("—", part)
             part = ORPHAN_RE.sub(r"\1" + NBSP, part)
             out.append(DAY_RE.sub(r"\1" + NBSP, part))
     return "".join(out)
@@ -537,6 +578,10 @@ if __name__ == "__main__":
     repaired = normalise_links(projekty_data) + normalise_links(vystavy_data)
     if repaired:
         print(f"Repaired {repaired} malformed link field(s) from the admin data.")
+
+    corrected = repair_text(projekty_data) + repair_text(vystavy_data)
+    if corrected:
+        print(f"Corrected {corrected} text field(s) from the admin data.")
 
     print(f"Loaded and processed {len(paintings_data)} paintings.")
     print(f"Loaded {len(projekty_data)} projects.")

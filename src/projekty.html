@@ -12,7 +12,6 @@
   <div class="phead__grid">
     <div class="phead__meta">
       <span class="num">Platforma</span>
-      <span class="label">{{ projekty|length }} projektů</span>
     </div>
     <h1 class="phead__title">Art&nbsp;Connecting</h1>
     <p class="phead__lede lede">
@@ -103,7 +102,6 @@
     {% if year %}
     <div class="arch__year rv">
       <span class="num">{{ year }}</span>
-      <span class="label">{{ plural_cz(group|length, 'akce', 'akce', 'akcí') }}</span>
     </div>
     {% endif %}
     <div class="arch__grid">

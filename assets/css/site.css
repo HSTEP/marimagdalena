@@ -2170,9 +2170,15 @@ a.plate:hover > img,
 .foot__map {
   grid-column: 10 / span 3;
   position: relative;
-  aspect-ratio: 4 / 3;
   overflow: hidden;
   border-top: 1px solid var(--hair);
+}
+
+/* The ratio is reserved only once the embed is actually in the DOM. Held
+   unconditionally it padded the on-demand placeholder — an address and a
+   button — out to a fixed box with empty space below it. */
+.foot__map:has(iframe) {
+  aspect-ratio: 4 / 3;
 }
 
 .foot__map iframe {
@@ -2661,16 +2667,38 @@ body.is-lb .progress {
     display: none;
   }
 
+  /* The price rides the same baseline as the service it belongs to. Dropped
+     to its own full-width line it stayed right-aligned against nothing and
+     read as detached from the row above it. */
   .svc__row,
   .svc__row:hover {
-    grid-template-columns: 2.6rem minmax(0, 1fr);
-    row-gap: 0.35rem;
+    grid-template-columns: 2rem minmax(0, 1fr) auto;
+    row-gap: 0.3rem;
     padding-left: 0;
+    align-items: baseline;
   }
 
-  .svc__desc,
-  .svc__price {
+  .svc__name {
     grid-column: 2;
+    grid-row: 1;
+  }
+
+  .svc__price {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .svc__desc {
+    grid-column: 2 / -1;
+    grid-row: 2;
+  }
+
+  /* Not a fourth filter: at the end of the same flex line, in the same
+     letterspaced micro type, the running count read as one more control. */
+  .filters__count {
+    margin-left: 0;
+    width: 100%;
+    order: 1;
   }
 
   .pull__q,
@@ -2705,6 +2733,9 @@ body.is-lb .progress {
   .foot__map {
     grid-column: 1 / span 12;
     grid-row: auto;
+  }
+
+  .foot__map:has(iframe) {
     aspect-ratio: 16 / 9;
   }
 }

@@ -147,7 +147,6 @@
           <p class="label">Kde nás najdete</p>
           <p class="foot__map-addr">{{ site.street }}<br>{{ site.zip }} {{ site.city }}</p>
           <button class="cta" type="button" data-map-load><span>Zobrazit mapu</span>{{ ico.arrow() }}</button>
-          <p class="foot__map-note">Načte se z Google Maps.</p>
         </div>
       </div>
 
@@ -157,7 +156,6 @@
           {% for item in nav %}
           <a class="foot__link" href="{{ item.href }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.label|safe }}{% if item.external %}{{ ico.external() }}{% endif %}</a>
           {% endfor %}
-          <a class="foot__link" href="cenik.html">Ceník</a>
         </div>
       </div>
     </div>

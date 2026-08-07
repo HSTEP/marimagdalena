@@ -90,7 +90,11 @@
       <li class="menu__item">
         <a class="menu__link" style="--i:{{ loop.index0 }}" href="{{ item.href }}"
            {% if item.external %}target="_blank" rel="noopener"{% endif %}>
-          <span class="num">{{ '%02d'|format(loop.index) }}</span>
+          {# No ordinal. Eight gold figures ran down the left of this list
+             numbering a navigation — and nothing anywhere refers to "04".
+             An ordinal earns its place when something cites it; printed
+             beside a menu it is a row index, and a row index is what a
+             database shows you, not what a catalogue does. #}
           {# The desktop nav and the footer both mark this link as leaving the
              site; the mobile menu omitted it, so Zahrada looked like a page. #}
           <span>{{ item.label|safe }}{% if item.external %}{{ ico.external() }}{% endif %}</span>

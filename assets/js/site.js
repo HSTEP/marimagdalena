@@ -147,20 +147,16 @@
     const batch = parseInt(root.dataset.batch, 10) || items.length;
     const moreBox = $("[data-more]", scope);
     const moreBtn = $("[data-more-btn]", scope);
-    const moreCount = $("[data-more-count]", scope);
-    const noun = root.dataset.batchNoun || "";
 
     let limit = batch;
 
+    // The button used to be trailed by a live "Zbývá 66 obrazů" in micro-caps.
+    // It is still the control's only job to reveal the rest, and the label
+    // says so; the residual count was a figure that existed because it could
+    // be computed, and it changed under the reader every time they pressed.
     const render = () => {
       items.forEach((i, n) => (i.hidden = n >= limit));
-
-      const shown = Math.min(limit, items.length);
-      if (moreBox) {
-        const rest = items.length - shown;
-        moreBox.hidden = rest <= 0;
-        if (moreCount) moreCount.textContent = `Zbývá ${rest}${noun ? " " + noun : ""}`;
-      }
+      if (moreBox) moreBox.hidden = items.length - Math.min(limit, items.length) <= 0;
       collectLightbox();
     };
 

@@ -69,6 +69,38 @@
   --t-small: 0.875rem;
   --t-micro: 0.6875rem;
 
+  /* Optical size, stated once instead of guessed at twenty call sites.
+
+     Bodoni is a modern face: its whole character is the contrast between the
+     stems and the hairlines, and the `opsz` axis is what governs that ratio.
+     High optical sizes are display cuts — the hairlines go razor-thin, which
+     is the drama you want at 80px. Low optical sizes are text cuts, drawn
+     with sturdier hairlines so they survive at a caption's size.
+
+     The previous values simply tracked the rendered size, which is the right
+     rule on paper and the wrong one here. Two things on this page fight the
+     hairline: it is pale type on a near-black ground, where light bleeds into
+     dark and strokes read thinner than they measure, and below about 22px a
+     display cut's hairline is under one device pixel, so it renders as a grey
+     suggestion or as nothing. Hence three steps, biased down as the type gets
+     smaller:
+
+       display  ≥40px  — enough contrast to stay dramatic, enough to stay lit
+       sub      22-40  — one step down, so sub-heads hold together
+       text     ≤22px  — the font's own text cut, its sturdiest hairline
+
+     These were checked against a rendered sweep of the axis rather than
+     reasoned about, and the sweep settled one thing worth writing down: the
+     weight axis does not fix this. Going 400 → 500 at a display size thickens
+     the stems and leaves the hairlines exactly where they were, so the letter
+     gets heavier without getting more legible. `opsz` moves the hairline
+     itself. Weight is therefore only added at the text step, where the whole
+     glyph is small enough to need the body. */
+  --opsz-display: 32;
+  --opsz-sub: 16;
+  --opsz-text: 11;
+  --serif-text: "opsz" var(--opsz-text), "wght" 500;
+
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --nav-h: 4.75rem;
 }
@@ -105,11 +137,19 @@ html {
 body {
   background: var(--ink);
   color: var(--bone);
-  font: 300 var(--t-body) / 1.75 var(--sans);
+  /* 350, not 300. Jost's Light on a near-black ground was already at the edge
+     of legible before the smoothing below was taken off it. */
+  font: 350 var(--t-body) / 1.75 var(--sans);
   font-synthesis-weight: none;
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
+  /* No `-webkit-font-smoothing: antialiased`. It forces greyscale AA, which
+     thins every glyph — on a light-on-dark page that is the wrong direction
+     twice over, because pale type on a dark ground already loses weight to
+     irradiation, and because this serif is a modern face whose hairlines are
+     under a pixel at text sizes. The two together were erasing the thin
+     strokes outright. Left to the platform default, the same type renders
+     with the weight it was drawn with. */
 }
 
 img,
@@ -203,7 +243,7 @@ h4 {
   font-weight: 400;
   line-height: 1.04;
   letter-spacing: -0.012em;
-  font-variation-settings: "opsz" 72;
+  font-variation-settings: "opsz" var(--opsz-display);
   font-kerning: normal;
   font-feature-settings: "kern" 1;
   text-wrap: balance;
@@ -211,7 +251,7 @@ h4 {
 
 h3,
 h4 {
-  font-variation-settings: "opsz" 28;
+  font-variation-settings: "opsz" var(--opsz-sub);
   line-height: 1.18;
 }
 
@@ -235,7 +275,7 @@ h4 {
   font-family: var(--serif);
   font-style: italic;
   font-weight: 400;
-  font-variation-settings: "opsz" 40;
+  font-variation-settings: "opsz" var(--opsz-sub);
 }
 
 /* Letterspaced micro-caps. Used for every label, eyebrow and metadatum on the
@@ -264,7 +304,7 @@ h4 {
   font-family: var(--serif);
   font-style: italic;
   font-size: 0.95rem;
-  font-variation-settings: "opsz" 14;
+  font-variation-settings: var(--serif-text);
   color: var(--gold);
   letter-spacing: 0.06em;
 }
@@ -295,7 +335,7 @@ h4 {
   font-family: var(--serif);
   font-style: italic;
   font-size: var(--t-small);
-  font-variation-settings: "opsz" 16;
+  font-variation-settings: var(--serif-text);
   color: var(--fg-3);
 }
 
@@ -328,7 +368,7 @@ h4 {
   margin-left: -0.06em;
   margin-right: 0.02em;
   color: var(--gold);
-  font-variation-settings: "opsz" 96;
+  font-variation-settings: "opsz" var(--opsz-display);
 }
 
 /* --------------------------------------------------------------- 4. layout */
@@ -518,7 +558,7 @@ a.plate:hover > img,
   font-family: var(--serif);
   font-style: italic;
   font-size: 1.0625rem;
-  font-variation-settings: "opsz" 16;
+  font-variation-settings: var(--serif-text);
   line-height: 1.35;
   color: var(--fg);
 }
@@ -878,9 +918,6 @@ a.plate:hover > img,
   animation-delay: calc(0.06s + var(--i) * 0.028s);
 }
 
-.menu__link .num {
-  font-size: 0.8rem;
-}
 
 .menu__foot {
   margin-top: 2.6rem;
@@ -1124,7 +1161,7 @@ a.plate:hover > img,
   font-family: var(--serif);
   font-size: clamp(1.15rem, 1.75vw, 1.55rem);
   line-height: 1.15;
-  font-variation-settings: "opsz" 28;
+  font-variation-settings: "opsz" var(--opsz-sub);
   transition: color 0.4s;
 }
 
@@ -1132,11 +1169,6 @@ a.plate:hover > img,
   color: var(--gold);
 }
 
-/* Quiet: two independent gold italic numeral series ran 200px apart on the
-   homepage. The section index keeps the accent; row numbers don't need it. */
-.svc__row .num {
-  color: var(--fg-3);
-}
 
 .svc__desc {
   color: var(--fg-3);
@@ -1289,9 +1321,16 @@ a.plate:hover > img,
   align-self: baseline;
 }
 
+/* Two counters survive the cull — this one and the lightbox's — because each
+   answers a question the reader cannot answer by looking: how far into a
+   horizontally scrolled strip you are, and how deep into eighty-seven plates.
+   Both were gold, which made position-in-a-list the most emphatic thing in
+   its own frame. Gold is this site's accent for one idea, the accent, and a
+   counter is the least of what is on screen. Grey, tabular, out of the way. */
 .reel__count {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+  color: var(--fg-3);
 }
 
 /* "Drag sideways" is an instruction for a thumb. Printed at 1440, where the
@@ -1410,7 +1449,7 @@ a.plate:hover > img,
   font-family: var(--serif);
   font-style: italic;
   font-size: 1.05rem;
-  font-variation-settings: "opsz" 16;
+  font-variation-settings: var(--serif-text);
   color: var(--bone);
   line-height: 1.3;
 }
@@ -1426,6 +1465,17 @@ a.plate:hover > img,
 
 .works__more[hidden] {
   display: none !important;
+}
+
+/* On /obrazy this rule is the only thing closing the grid, because the tiles
+   there carry none of their own. The archive's entries each close on a rule
+   already, so drawing a full-width one 31px under them put a third hairline
+   into a 51px band — the entry's underline, the entry's rule, then the list's
+   rule, two of them closing the same thing at the same moment. The entries
+   close the list. */
+.arch + .works__more {
+  border-top: 0;
+  padding-top: clamp(1.5rem, 3vw, 2.4rem);
 }
 
 @media (width <= 620px) {
@@ -1534,23 +1584,6 @@ a.plate:hover > img,
   background: var(--ink-raise);
 }
 
-.tiles__n {
-  display: block;
-  margin-top: 0.6rem;
-  padding-top: 0.45rem;
-  border-top: 1px solid var(--hair);
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 0.9rem;
-  font-variation-settings: "opsz" 14;
-  font-variant-numeric: tabular-nums;
-  color: var(--fg-3);
-  transition: color 0.4s;
-}
-
-.tiles__item:hover .tiles__n {
-  color: var(--gold);
-}
 
 .tiles__item img {
   width: 100%;
@@ -1599,7 +1632,7 @@ a.plate:hover > img,
 
 .idx__chapter .num {
   font-size: clamp(1.6rem, 3vw, 2.4rem);
-  font-variation-settings: "opsz" 40;
+  font-variation-settings: "opsz" var(--opsz-sub);
 }
 
 .idx__row {
@@ -1619,7 +1652,10 @@ a.plate:hover > img,
      three separate baselines, 14px apart — there is no width at which that
      resolves. The thumbnail has no text to sit on, so it centres itself. */
   align-items: baseline;
-  padding: clamp(1.15rem, 2.6vw, 1.9rem) 0;
+  /* The bottom pad has to clear the action underlines, not just the type: at
+     1.15rem the row rule closed 19px under them, two hairlines of different
+     weight and length inside the 20px this system will not draw within. */
+  padding: clamp(1.15rem, 2.6vw, 1.9rem) 0 clamp(1.9rem, 3vw, 2.4rem);
   border-bottom: 1px solid var(--hair);
   position: relative;
   transition: padding-left 0.55s var(--ease);
@@ -1633,7 +1669,7 @@ a.plate:hover > img,
   font-family: var(--serif);
   font-size: clamp(1.3rem, 2.4vw, 2rem);
   line-height: 1.12;
-  font-variation-settings: "opsz" 40;
+  font-variation-settings: "opsz" var(--opsz-sub);
   transition: color 0.4s;
 }
 
@@ -1667,6 +1703,17 @@ a.plate:hover > img,
   min-width: 0;
 }
 
+/* Placed, not ordered. The template skips a slot with nothing in it rather
+   than printing an empty box, so the surviving slot has to name its own track
+   or a lone recording would pack left into the report column. */
+.idx__slot--1 {
+  grid-column: 1;
+}
+
+.idx__slot--2 {
+  grid-column: 2;
+}
+
 /* The rule belongs to the column, not to the word. Sized to their own text,
    two stacked underlines in one slot ran 136px and 39px — a system whose whole
    structure is hairlines cannot afford rules whose length is an accident of
@@ -1678,13 +1725,20 @@ a.plate:hover > img,
 
 /* A person's name is a credit, not an action. Set in the same tracked caps as
    VIDEO and REPORTÁŽ it read as a third thing to press. */
+/* Changing the face was not enough on its own: the slot rule runs the full
+   column, so once the credit was block-level it carried a 158px --hair-strong
+   underline in the exact slot and at the exact x where this index's own signal
+   for "pressable" lives. Length and position talk louder than an italic. The
+   rule goes; the gold wipe stays, so it is still legibly a link when you reach
+   for it, and at rest it is a line of type in a catalogue. */
 .idx__slot .qlink--credit {
   text-transform: none;
   letter-spacing: 0.01em;
   font-size: var(--t-small);
   font-family: var(--serif);
   font-style: italic;
-  font-variation-settings: "opsz" 16;
+  font-variation-settings: var(--serif-text);
+  border-bottom-color: transparent;
 }
 
 /* A real thumbnail in the row. The floating hover plate was the page's only
@@ -1780,7 +1834,7 @@ a.plate:hover > img,
 
 .arch__year .num {
   font-size: clamp(1.6rem, 3vw, 2.4rem);
-  font-variation-settings: "opsz" 40;
+  font-variation-settings: "opsz" var(--opsz-sub);
 }
 
 .arch__grid {
@@ -1807,7 +1861,10 @@ a.plate:hover > img,
   justify-content: flex-start;
   gap: 1.05rem;
   min-width: 0;
-  padding-bottom: 1.15rem;
+  /* 1.15rem put this rule 19px under the caption's own link underline — two
+     hairlines of two different weights and two different lengths inside 20px,
+     against a system that draws no two rules closer than about that. */
+  padding-bottom: 2rem;
   border-bottom: 1px solid var(--hair);
 }
 
@@ -1845,12 +1902,16 @@ a.plate:hover > img,
   width: 100%;
   height: 100%;
   object-fit: contain;
-  /* A proportional mat rather than a fixed one. Contain will always letterbox
-     a mixed archive differently per artefact — that is the price of showing
-     posters whole — but a mat that scales with the frame at least makes the
-     inset itself a constant, so the double-width video cells and the square
-     ones read as the same plate at two sizes. */
-  padding: 7%;
+  /* Hung from the corner, not floated in the middle. The mat that used to live
+     here made the *inset* a constant and left the *position* free: `contain`
+     centres its residual on both axes, so three items in one row put their left
+     edges at 72 / 543 / 1021 under captions at 72 / 517 / 957 — each picture
+     missing its own caption by a different amount, and the amount was a
+     function of the artefact's aspect ratio, which no reader can infer.
+     Aligned to the corner every plate hangs from its column's left edge and
+     from one top line across the row, the way plates hang in a catalogue. The
+     slack all collects at the bottom, where a ragged edge is honest. */
+  object-position: left top;
   background-color: transparent !important;
 }
 
@@ -1862,20 +1923,26 @@ a.plate:hover > img,
    column blank. One record here is a Facebook video with no still and no
    frameable embed, and the template had no branch for it — so its cell was
    empty from the top of the row down to a lone link pinned 313px lower by
-   `margin-top: auto`, which reads as a broken image, not as a record. */
+   `margin-top: auto`, which reads as a broken image, not as a record.
+
+   No fill. The first version of this set the year in large italic on an
+   --ink-raise panel, which was wrong twice: --ink-raise is used in five other
+   places and in every one of them it sits behind an image and is never seen, so
+   exposing it as a surface invented a third ground for one cell — the
+   shadowless card this system exists to avoid. And the year was already on
+   screen twice, in the chapter head and in the caption below, so the panel was
+   decoration standing in for content. The field keeps its square so the row
+   rhythm holds; the slug hangs from the same top-left corner as every real
+   plate beside it, and says the one thing not said anywhere else. */
 .arch__field--none {
-  display: grid;
-  place-items: center;
-  background: var(--ink-raise);
+  display: block;
 }
 
 .arch__field--none span {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(2rem, 4.5vw, 3rem);
-  font-variation-settings: "opsz" 48;
+  font-size: var(--t-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: var(--fg-3);
-  opacity: 0.6;
 }
 
 .arch__field--video {
@@ -2002,7 +2069,7 @@ a.plate:hover > img,
   font-family: var(--serif);
   font-size: 1.3rem;
   line-height: 1.16;
-  font-variation-settings: "opsz" 24;
+  font-variation-settings: var(--serif-text);
   transition: color 0.4s;
 }
 
@@ -2170,7 +2237,7 @@ a.plate:hover > img,
   font-family: var(--serif);
   font-size: var(--t-h2);
   line-height: 1.05;
-  font-variation-settings: "opsz" 40;
+  font-variation-settings: "opsz" var(--opsz-sub);
 }
 
 .price colgroup ~ tbody td,
@@ -2370,7 +2437,7 @@ a.plate:hover > img,
   font-family: var(--serif);
   font-style: italic;
   font-size: clamp(1.15rem, 2vw, 1.6rem);
-  font-variation-settings: "opsz" 28;
+  font-variation-settings: "opsz" var(--opsz-sub);
   line-height: 1.25;
   max-width: 34ch;
 }
@@ -2436,7 +2503,7 @@ a.plate:hover > img,
 .quote__q {
   font-size: clamp(1.3rem, 2.2vw, 2rem);
   line-height: 1.36;
-  font-variation-settings: "opsz" 36;
+  font-variation-settings: "opsz" var(--opsz-sub);
   max-width: 30ch;
   text-wrap: pretty;
 }
@@ -2638,7 +2705,7 @@ a.plate:hover > img,
   font-family: var(--serif);
   font-size: 1.15rem;
   line-height: 1.35;
-  font-variation-settings: "opsz" 18;
+  font-variation-settings: var(--serif-text);
 }
 
 .foot__map-note {
@@ -2751,8 +2818,12 @@ a.plate:hover > img,
   border-bottom: 1px solid var(--line);
 }
 
+/* Grey, like the reel's — see the note there. On this screen the plate's own
+   title is set in bone, so gold on the counter beside it ranked the index
+   above the work it indexes. */
 .lb__count {
   font-variant-numeric: tabular-nums;
+  color: var(--fg-3);
 }
 
 .lb__x {
@@ -2865,7 +2936,7 @@ a.plate:hover > img,
   font-family: var(--serif);
   font-style: italic;
   font-size: 1.2rem;
-  font-variation-settings: "opsz" 20;
+  font-variation-settings: var(--serif-text);
 }
 
 body.is-lb,
@@ -3119,12 +3190,17 @@ body.is-lb .nav {
     grid-column: 2;
   }
 
-  /* One column at this width: two 130px slots would break "REPORTÁŽ Z VÝSTAVY"
-     across three lines. */
+  /* Still two slots at this width, but sized to their contents rather than
+     halved: stacked, a row carrying both actions drew two full-width
+     underlines and then the row rule — three horizontals inside 50px on a
+     390px canvas, which turns an index into a ledger. Side by side they share
+     one line, so a row closes on two rules however many actions it has. The
+     report slot takes the slack because its label is the long one; the
+     recording's is one word and can size to it. */
   .idx__links {
     grid-column: 2;
-    grid-template-columns: 1fr;
-    gap: 0.35rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.35rem var(--gap);
   }
 
   .peek {

@@ -31,9 +31,14 @@
   <div class="idx" data-peek-scope>
     {% for year, group in vystavy_years %}
     {% if year %}
+    {# The year alone. A tally of the rows directly beneath it — "3 výstavy"
+       over three visible rows — tells the reader something the rows have
+       already told them, and it is the one thing on a chapter head that has
+       to be recomputed rather than read. /projekty next door sets its year
+       with nothing beside it; these are the two halves of one archive and
+       they now open a chapter the same way. #}
     <div class="idx__chapter rv">
       <span class="num">{{ year }}</span>
-      <span class="label">{{ group|length }} {{ 'výstava' if group|length == 1 else ('výstavy' if group|length < 5 else 'výstav') }}</span>
     </div>
     {% endif %}
     {% for v in group %}
@@ -69,15 +74,25 @@
          empty on all eleven rows: a track reserved by a rule that could never
          fire. It now reads the path Facebook itself uses and the word the
          editor typed, both of which are already in the record. #}
+      {# An empty slot is not rendered — it is placed. A slot span with no
+         children still stretched to the row's height, and a grid takes its
+         first baseline from its first item, so on the rows carrying one action
+         the block's baseline was synthesised from the empty box's bottom edge
+         and the underline dropped 15px below where the same underline sat on
+         the rows carrying two. The rules were constant-length and column-locked
+         and still did not sit on a line. Each slot now names its own column, so
+         every row exports a real text baseline from a real link. #}
       {% set slots = link_slots(v.links) %}
       <div class="idx__links">
         {% for slot in slots %}
-        <span class="idx__slot">
+        {% if slot %}
+        <span class="idx__slot idx__slot--{{ loop.index }}">
           {% for link in slot %}
           <a class="qlink{{ ' qlink--credit' if link.kind == 'profile' }}"
              href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link_label(link.text, link.url) }}</a>
           {% endfor %}
         </span>
+        {% endif %}
         {% endfor %}
       </div>
     </article>

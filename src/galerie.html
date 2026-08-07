@@ -35,7 +35,7 @@
       <span class="label">Kolekce</span>
     </div>
     <h2 class="sec__title">Londa Color&nbsp;Tune<br>Berlín 2023</h2>
-    <p class="sec__note">{{ images|length }} snímků z tvorby kolekce</p>
+    <p class="sec__note">Ze zákulisí focení kolekce.</p>
   </div>
 
   {# Set as a quote, with the attribution under the words it attributes. It
@@ -58,9 +58,15 @@
      Set as plates instead, on a measure of seven over six columns: a row of
      three at index scale, then two pairs at reading scale, the second pair
      square again. Twenty-one divides by seven exactly, so the sequence closes
-     on a complete row. Each plate carries its number, the way a catalogue
-     plate does — the only caption these frames can honestly hold, since all
-     twenty-one are one shoot and the shoot is named once, above. #}
+     on a complete row.
+
+     Each plate used to carry its number under a hairline, defended as "the
+     only caption these frames can honestly hold". The honest conclusion was
+     the other one: they hold none. A plate number exists so that running text
+     can say "see plate 14" — nothing on this site cites one, so twenty-one
+     figures and twenty-one rules were a numbering scheme with no referent,
+     which is the look of a table with the column headings taken off. The
+     shoot is named once, above; the frames are the frames. #}
   <div class="tiles tiles--plates">
     {% for image in images %}
     {# No data-tag. The lightbox writes its own "01 / 21" into the top bar, so
@@ -74,7 +80,6 @@
         {{ img(image, alt='Kolekce Londa Color Tune, Berlín 2023 — snímek ' ~ loop.index,
                sizes='(max-width:760px) 46vw, 30vw', cover=true) }}
       </span>
-      <span class="tiles__n">{{ '%02d'|format(loop.index) }}</span>
     </a>
     {% endfor %}
   </div>

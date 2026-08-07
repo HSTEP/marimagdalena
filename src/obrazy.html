@@ -14,7 +14,11 @@
   <div class="phead__grid">
     <div class="phead__meta">
       <span class="num">Katalog</span>
-      <span class="label">{{ paintings|length }} děl</span>
+      {# "87 děl" stood here. Six page headers on this site; five name a
+         category and this one also declared its row count, which made the
+         header a record summary. /galerie's second slot holds "Londa
+         Professional" — a name, something you could not have guessed. A
+         tally of what is directly below is not that. #}
     </div>
     <h1 class="phead__title">Obrazy</h1>
     <p class="phead__lede lede">
@@ -44,13 +48,23 @@
       <span class="label">K&nbsp;prodeji</span>
     </div>
     <h2 class="sec__title">Volná díla</h2>
+    {# Three row-counts in one sentence — "34 z 87 pláten je k dispozici.
+       Zbývajících 53 najdete…" — and a fourth over the archive below. Every
+       one of them was a `|length` printed as if it were a sentence, which is
+       how an inventory system describes a collection and not how a gallery
+       does. The figures also went stale in the reader's hand: they change
+       whenever a painting sells, so the page made a promise about stock that
+       the plates underneath already answer by simply being there.
+
+       What the reader needs here is the division, not the tally: these are
+       for sale, those are gone, and the archive is that way. #}
     <p class="sec__note">
-      {{ for_sale|length }} z {{ paintings|length }} pláten je k dispozici.
-      Zbývajících {{ sold|length }} najdete <a href="#prodano">v archivu níže</a>.
+      Plátna, která jsou k dispozici. Co už našlo majitele, je
+      <a href="#prodano">v archivu níže</a>.
     </p>
   </div>
 
-  <div class="works" data-gallery data-batch="24" data-batch-noun="obrazů">
+  <div class="works" data-gallery data-batch="24">
     {% for painting in for_sale %}
     <a class="works__item rv" href="{{ big(painting.url) }}"
        data-lb-item data-batch-item data-state="sale"
@@ -78,7 +92,6 @@
     <button class="cta" type="button" data-more-btn>
       <span>Zobrazit další</span>{{ ico.arrow() }}
     </button>
-    <span class="label" data-more-count></span>
   </div>
 </section>
 
@@ -88,12 +101,12 @@
       <span class="label">Archiv</span>
     </div>
     <h2 class="sec__title">Prodáno</h2>
-    <p class="sec__note">{{ sold|length }} děl už našlo majitele.</p>
+    <p class="sec__note">Díla, která už visí jinde.</p>
   </div>
 
   {# Smaller frames, more per row. A record of what has gone should read as an
      index, not compete at the same scale with what you can still buy. #}
-  <div class="works works--index" data-gallery data-batch="20" data-batch-noun="obrazů">
+  <div class="works works--index" data-gallery data-batch="20">
     {% for painting in sold %}
     <a class="works__item rv" href="{{ big(painting.url) }}"
        data-lb-item data-batch-item data-state="sold"
@@ -115,7 +128,6 @@
     <button class="cta" type="button" data-more-btn>
       <span>Zobrazit další</span>{{ ico.arrow() }}
     </button>
-    <span class="label" data-more-count></span>
   </div>
 </section>
 

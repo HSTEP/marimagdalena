@@ -132,9 +132,14 @@
         {# A record with a Facebook video and no still: the host refuses framing
            so there is no embed, and there is no image to fall back to. Without
            this branch the cell simply had no field, and its caption dropped to
-           the bottom of a row its neighbours filled from the top. #}
+           the bottom of a row its neighbours filled from the top.
+
+           The slug used to be the year, which was already set twice within
+           300px — in the chapter head above and in the caption directly below.
+           A catalogue's note for a missing plate says what is missing, not
+           something the reader has just read. #}
         <span class="arch__field arch__field--none" aria-hidden="true">
-          <span>{{ year or '—' }}</span>
+          <span>Bez&nbsp;vyobrazení</span>
         </span>
         {% endif %}
 
@@ -176,7 +181,6 @@
     <button class="cta" type="button" data-more-btn>
       <span>Starší projekty</span>{{ ico.arrow() }}
     </button>
-    <span class="label" data-more-count></span>
   </div>
   {% else %}
   <p class="lede">Žádné projekty k zobrazení.</p>

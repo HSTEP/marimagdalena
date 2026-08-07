@@ -39,13 +39,21 @@
     </a>
     {% endfor %}
 
-    {# Short enough to fit the card at every width. "Chcete spolupracovat?"
-       needed auto-hyphenation to survive a 167px phone card, and a hyphenated
-       Bodoni display line is a worse answer than a shorter sentence. #}
+    {# Same two parts as a partner card — plate, then ruled caption — so it
+       registers with the row instead of hanging in the band between the
+       photographs and their names. Short enough to fit the plate at every
+       width: "Chcete spolupracovat?" needed auto-hyphenation to survive a
+       167px phone card, and a hyphenated Bodoni display line is a worse
+       answer than a shorter sentence. #}
     <a class="person person--call rv" href="mailto:{{ site.email }}"
        style="--d:{{ (partners|length % 4) * 90 }}ms">
-      <h3>Chcete se přidat?</h3>
-      <span class="qlink">Napište nám</span>
+      <div class="person__art person__art--call">
+        <span class="person__ask">Chcete se přidat?</span>
+      </div>
+      <div class="person__body">
+        <span class="person__name">Napište nám</span>
+        <span class="person__role">{{ site.email }}</span>
+      </div>
     </a>
   </div>
 </section>

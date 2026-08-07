@@ -35,7 +35,11 @@
    record, so the page answers "what can I buy" by its own shape and the reader
    always knows which half they are in. #}
 <section class="shell shell--wide bay--top" id="k-prodeji">
-  <div class="sec sec--lead rv">
+  {# Not .sec--lead. That rank is the homepage's, where there is no page header
+     to outrank it; here it set the chapter at the same 80px as "Obrazy" 290px
+     above it, so on first paint you could not tell which line was the page and
+     which was the chapter. The ladder on this page runs 80 / 48 / 35. #}
+  <div class="sec rv">
     <div class="sec__meta">
       <span class="label">K&nbsp;prodeji</span>
     </div>
@@ -49,7 +53,7 @@
   <div class="works" data-gallery data-batch="24" data-batch-noun="obrazů">
     {% for painting in for_sale %}
     <a class="works__item rv" href="{{ big(painting.url) }}"
-       data-lb-item data-batch-item
+       data-lb-item data-batch-item data-state="sale"
        data-title="{{ painting.title }}" data-tag="K prodeji"
        style="--d:{{ (loop.index0 % 6) * 55 }}ms"
        aria-label="{{ painting.title }}">
@@ -92,7 +96,7 @@
   <div class="works works--index" data-gallery data-batch="20" data-batch-noun="obrazů">
     {% for painting in sold %}
     <a class="works__item rv" href="{{ big(painting.url) }}"
-       data-lb-item data-batch-item
+       data-lb-item data-batch-item data-state="sold"
        data-title="{{ painting.title }}" data-tag="Prodáno"
        style="--d:{{ (loop.index0 % 6) * 45 }}ms"
        aria-label="{{ painting.title }} — prodáno">

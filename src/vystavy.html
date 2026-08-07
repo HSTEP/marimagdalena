@@ -60,11 +60,17 @@
 
       <p class="idx__date">{{ cz_date(v.date) }}</p>
 
+      {# Two fixed slots — report left, recording right — so a label holds one
+         x-position down the whole index and a row that has only one action
+         leaves the other column empty rather than sliding into it. #}
+      {% set slots = link_slots(v.links) %}
       <div class="idx__links">
-        {% for link in v.links %}
-        <a class="qlink" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link_label(link.text, link.url) }}</a>
-        {% else %}
-        <span class="label">&nbsp;</span>
+        {% for slot in slots %}
+        <span class="idx__slot">
+          {% for link in slot %}
+          <a class="qlink" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link_label(link.text, link.url) }}</a>
+          {% endfor %}
+        </span>
         {% endfor %}
       </div>
     </article>

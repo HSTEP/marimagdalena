@@ -32,16 +32,34 @@
   <div class="price__layout">
     {{ parts.pricelist(pricing) }}
 
+    {# The filled button belongs to the page's close, not to a panel that
+       follows you down it — one gold button per page, and this one carries the
+       number instead. #}
     <aside class="price__aside rv">
       <p class="label">Objednání</p>
       <p>
         Objednávky přijímáme telefonicky i e‑mailem. Termín potvrdíme
         a cenu upřesníme při konzultaci.
       </p>
-      <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>Objednat se</span>{{ ico.arrow() }}</a>
+      <a class="qlink qlink--plain price__tel" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
       <a class="qlink qlink--plain" href="mailto:{{ site.email }}">{{ site.email }}</a>
       <p>{{ site.street }}<br>{{ site.zip }}&nbsp;{{ site.city }}</p>
     </aside>
+  </div>
+</section>
+
+{# The page closed on nothing: the last table row, then 185px of empty ink to
+   the footer. The booking column is not a close — it is sticky, so below
+   1100px it stops being a column at all and ends up buried between two tables.
+   The transactional page gets the same endnote as the rest, with the filled
+   action on it rather than parked mid-column. #}
+<section class="shell shell--wide bay--top">
+  <div class="endnote rv">
+    <p class="endnote__t">Nevíte, která služba je ta pravá? Řekneme si to při konzultaci.</p>
+    <div class="endnote__a">
+      <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>Objednat se</span>{{ ico.arrow() }}</a>
+      <a class="qlink" href="mailto:{{ site.email }}">{{ site.email }}</a>
+    </div>
   </div>
 </section>
 

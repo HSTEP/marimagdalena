@@ -24,8 +24,11 @@
 
 <section class="shell shell--wide" style="padding-top:0">
   <div class="sec rv">
+    {# Grey micro-caps, like every other section eyebrow. Gold italic serif is
+       the page header's voice; using both in the same slot on different pages
+       left two vocabularies doing one job. #}
     <div class="sec__meta">
-      <span class="num">Kolekce</span>
+      <span class="label">Kolekce</span>
     </div>
     <h2 class="sec__title">Londa Color&nbsp;Tune<br>Berlín 2023</h2>
     <p class="sec__note">{{ images|length }} snímků z tvorby kolekce</p>
@@ -43,16 +46,29 @@
     <p class="label rv" style="grid-column: 1 / span 7; margin-top:1.1rem">— {{ site.person }}</p>
   </blockquote>
 
-  {# Three across: 21 frames divide evenly, so no orphan in the last row. #}
-  <div class="tiles tiles--3">
+  {# Twenty-one identical squares in a flat 3×7 grid is a contact sheet, not a
+     collection — the deepest page on the site was also the flattest, and the
+     homepage reel it is supposed to pay off gave each frame a title and a
+     state while this gave them nothing.
+
+     Set as plates instead, on a measure of seven over six columns: a row of
+     three at index scale, then two pairs at reading scale, the second pair
+     square again. Twenty-one divides by seven exactly, so the sequence closes
+     on a complete row. Each plate carries its number, the way a catalogue
+     plate does — the only caption these frames can honestly hold, since all
+     twenty-one are one shoot and the shoot is named once, above. #}
+  <div class="tiles tiles--plates">
     {% for image in images %}
     <a class="tiles__item rv" href="{{ big(image) }}" data-lb-item
        data-title="Londa Color Tune — Berlín 2023"
        data-tag="{{ '%02d'|format(loop.index) }} / {{ images|length }}"
        style="--d:{{ (loop.index0 % 7) * 50 }}ms"
        aria-label="Snímek {{ loop.index }} z kolekce Londa Color Tune">
-      {{ img(image, alt='Kolekce Londa Color Tune, Berlín 2023 — snímek ' ~ loop.index,
-             sizes='(max-width:760px) 46vw, 30vw', cover=true) }}
+      <span class="tiles__fig">
+        {{ img(image, alt='Kolekce Londa Color Tune, Berlín 2023 — snímek ' ~ loop.index,
+               sizes='(max-width:760px) 46vw, (max-width:1180px) 30vw, 22vw', cover=true) }}
+      </span>
+      <span class="tiles__n">{{ '%02d'|format(loop.index) }}</span>
     </a>
     {% endfor %}
   </div>

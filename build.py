@@ -207,6 +207,26 @@ def link_label(text, url=""):
     return text
 
 
+VIDEO_HOSTS = ("youtube.com", "youtu.be", "facebook.com", "fb.watch", "vimeo.com")
+
+
+def link_slots(links):
+    """Split a record's links into the exhibition index's two action slots.
+
+    The index gives every row the same two columns so that a label keeps one
+    x-position down the whole page and a missing action leaves its gap where
+    the eye already expects it. Packed left instead, "VIDEO" set at 977px on
+    the rows that carried only a video and at 1189px on the rows that carried
+    a report as well. Recordings go right, everything else left.
+    """
+    video, other = [], []
+    for link in links or []:
+        host = re.sub(r"^https?://", "", (link.get("url") or "").strip())
+        host = host.split("/")[0].removeprefix("www.").lower()
+        (video if host.endswith(VIDEO_HOSTS) else other).append(link)
+    return other, video
+
+
 def date_key(record):
     """Sortable (year, month, day) from a free-text Czech date.
 
@@ -659,6 +679,7 @@ if __name__ == "__main__":
         ratio=make_ratio_helper(media),
         year_of=year_of,
         link_label=link_label,
+        link_slots=link_slots,
         is_document=is_document,
         cz_date=cz_date,
         video_embed=video_embed,

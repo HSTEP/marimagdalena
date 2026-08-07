@@ -85,12 +85,16 @@
           <dd>{{ site.street }}<br>{{ site.zip }}&nbsp;{{ site.city }}</dd>
         </div>
         <div class="facts__row">
-          <dt class="label">Otevřeno od</dt>
-          <dd>{{ site.founded }}</dd>
-        </div>
-        <div class="facts__row">
           <dt class="label">V ateliéru</dt>
           <dd>Kadeřnictví, galerie, klavír</dd>
+        </div>
+        {# Was "Otevřeno od {{ site.founded }}" — the third time that year
+           appeared inside five hundred pixels, after the hero eyebrow and the
+           first sentence of the paragraph directly above. A row that repeats
+           the page is ballast; this section otherwise offered nothing to do. #}
+        <div class="facts__row">
+          <dt class="label">Objednání</dt>
+          <dd><a class="qlink qlink--plain" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a></dd>
         </div>
       </dl>
     </div>
@@ -131,12 +135,15 @@
 
   {# The caveat belongs next to the prices it qualifies, not in a grey column
      to the right of the heading two hundred pixels above them. #}
+  {# Laid out on the table's own columns rather than pushed to the two far
+     edges of the measure: flush right, the section's main action sat 958px
+     from the reading axis with a 677px hole between it and the caveat. #}
   <div class="svc__foot rv">
-    <p class="svc__note">Ceny jsou orientační, konečná cena vždy vychází z konzultace.</p>
     <div class="actions">
       <a class="cta" href="cenik.html"><span>Celý ceník</span>{{ ico.arrow() }}</a>
       <a class="qlink qlink--plain" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
     </div>
+    <p class="svc__note">Ceny jsou orientační, konečná cena vždy vychází z konzultace.</p>
   </div>
 </section>
 
@@ -181,7 +188,8 @@
   <div class="reel rv">
     {% for painting in paintings[:9] %}
     <a class="reel__item works__item" href="{{ big(painting.url) }}"
-       data-lb-item data-title="{{ painting.title }}"
+       data-lb-item data-state="{{ 'sold' if painting.sold else 'sale' }}"
+       data-title="{{ painting.title }}"
        data-tag="{% if painting.sold %}Prodáno{% else %}K prodeji{% endif %}">
       <div class="works__fig">
         {{ img(painting.url, alt=painting.title, sizes='(max-width:620px) 78vw, 26vw') }}
@@ -195,13 +203,19 @@
   </div>
 
   {# The counter used to be the constant string "01 — 09" sitting under a strip
-     you drag: a readout that never read anything. It now tracks the reel. #}
-  <div class="reel__meta rv" data-reel-meta>
-    <span class="label"><span data-reel-index>01</span> / {{ '%02d'|format(paintings[:9]|length) }}</span>
-    <span class="label">Táhněte do strany</span>
-  </div>
+     you drag: a readout that never read anything. It now tracks the reel, and
+     it is set the way the lightbox counter is set — gold italic figures — so
+     the same readout does not appear in two typographic voices.
 
-  <div class="actions rv" style="margin-top:2rem">
+     The rule is its own element rather than a ::after on a flexed counter:
+     flexing the counter made " / 09" an anonymous flex item and the row gap
+     opened an 18px hole after the figures, which read as a broken template
+     string. One row rather than three: the strip's own metadata, then the
+     rule carrying the eye to the action, in the direction the strip moves. #}
+  <div class="reel__meta rv" data-reel-meta>
+    <span class="num reel__count"><span data-reel-index>01</span> / {{ '%02d'|format(paintings[:9]|length) }}</span>
+    <span class="label">Táhněte do strany</span>
+    <span class="reel__rule" aria-hidden="true"></span>
     <a class="cta" href="obrazy.html"><span>Všechny obrazy</span>{{ ico.arrow() }}</a>
   </div>
 </section>

@@ -387,7 +387,11 @@ main > section:last-of-type {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 0 var(--gap);
-  align-items: end;
+  /* Same reasoning as .phead__grid: the note sits on the title's baseline
+     instead of hanging from its bottom edge. Under .sec--minor, where the
+     title is short and the note runs to two lines, box alignment put the
+     note's first line clear above the heading. */
+  align-items: baseline;
   padding-top: 1.1rem;
   border-top: 1px solid var(--hair-strong);
   margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
@@ -401,23 +405,24 @@ main > section:last-of-type {
   margin-bottom: clamp(1.1rem, 2.4vw, 2rem);
 }
 
-/* Carries the label out to the full measure, the way .phead__meta does. */
-.sec__meta::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--hair);
-}
+/* No trailing rule here, unlike .phead__meta. A section header already draws a
+   full-bleed rule above itself to divide it from what precedes; adding the
+   label rule put two hairlines of two different weights 16px apart, one bled
+   and one indented, at the top of every section. The two headers now open
+   differently on purpose: a page opens on a label with a rule running out of
+   it, a section opens on a rule with a label hanging under it. */
 
 .sec__title {
   grid-column: 1 / span 7;
   font-size: var(--t-h2);
 }
 
+/* Flush right. Left-aligned it left short notes — "45 děl už našlo majitele."
+   is 138px in a 412px track — stranded mid-measure under a rule that runs all
+   the way to the margin, so the section header had no right edge. */
 .sec__note {
   grid-column: 9 / span 4;
-  align-self: end;
-  padding-bottom: 0.4rem;
+  text-align: right;
   font-size: var(--t-small);
   color: var(--fg-3);
   line-height: 1.6;
@@ -428,13 +433,20 @@ main > section:last-of-type {
    what this place is. The gallery is what makes a hairdresser's worth a
    second look, so it is the loudest thing on the page after the hero; the
    services and the events run quieter than the two that matter. */
+/* --lead is the homepage's rank and only the homepage's: that page has a hero
+   rather than a page header, so nothing else on it is set at h1. On a page
+   that does have a header, a section at h1 ties with the page title. */
 .sec--lead .sec__title {
   grid-column: 1 / span 8;
   font-size: var(--t-h1);
 }
 
+/* Not --t-h3. At 1440 that resolves to 27px, and the service names it heads
+   are set at 33 — a section title smaller than its own list items, in the
+   same face, reads as a demoted sibling rather than a signpost. The three
+   ranks now step 80 / 48 / 35 against a 25px row. */
 .sec--minor .sec__title {
-  font-size: var(--t-h3);
+  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
 }
 
 .sec--minor {
@@ -1018,11 +1030,16 @@ a.plate:hover > img,
   padding-bottom: clamp(1.6rem, 3vw, 2.6rem);
 }
 
+/* Baselines, not boxes. Bottom-aligning the two cells lines up the *bottom*
+   of a three-line lede with the bottom of a one-line title, which starts the
+   secondary text 23px above the cap-line of the heading it belongs to — the
+   note appears to introduce the title rather than annotate it. Aligning first
+   baselines starts both on the same line and lets the lede run downward. */
 .phead__grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: var(--gap);
-  align-items: end;
+  align-items: baseline;
 }
 
 .phead__meta {
@@ -1047,8 +1064,6 @@ a.plate:hover > img,
 
 .phead__lede {
   grid-column: 9 / span 4;
-  align-self: end;
-  padding-bottom: 0.6rem;
 }
 
 /* The studio portraits are full-length figures on a black seamless, so an
@@ -1089,11 +1104,14 @@ a.plate:hover > img,
   padding-left: 0.9rem;
 }
 
+/* This block is a teaser for /cenik, not the price list — it was set louder
+   than the heading above it and louder than the same rows on the page that
+   actually owns them. */
 .svc__name {
   font-family: var(--serif);
-  font-size: clamp(1.35rem, 2.5vw, 2.05rem);
-  line-height: 1.1;
-  font-variation-settings: "opsz" 40;
+  font-size: clamp(1.15rem, 1.75vw, 1.55rem);
+  line-height: 1.15;
+  font-variation-settings: "opsz" 28;
   transition: color 0.4s;
 }
 
@@ -1123,20 +1141,29 @@ a.plate:hover > img,
   text-align: right;
 }
 
-/* Caveat left, actions right, on the row that closes the table. */
+/* The row that closes the table, set on the table's own columns: the action
+   sits in the column the service names occupy — on the reading axis — and the
+   caveat in the column their descriptions occupy. Justified to the two edges
+   instead, the pair straddled an empty half-screen. */
 .svc__foot {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.5fr) 7.5rem;
+  gap: var(--gap);
   align-items: baseline;
-  justify-content: space-between;
-  gap: 1.2rem 2.5rem;
   margin-top: 1.6rem;
 }
 
 .svc__note {
   font-size: var(--t-small);
   color: var(--fg-3);
-  max-width: 42ch;
+  max-width: 46ch;
+}
+
+@media (width <= 760px) {
+  .svc__foot {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
 }
 
 /* ------------------------------------------------------------- 11b. facts */
@@ -1182,7 +1209,11 @@ a.plate:hover > img,
      edge while the frames move under it. */
   mask-image: linear-gradient(
     to right,
-    #000 calc(100% - var(--gutter) * 0.8),
+    /* A minimum in absolute terms: --gutter is 20px on a phone, so 0.8 of it
+       faded over 16px — short enough that the next frame's caption was still
+       at full strength when the viewport cut it mid-word, which looks like a
+       failed fade rather than an honest edge. */
+      #000 calc(100% - max(2.75rem, var(--gutter) * 0.8)),
     rgb(0 0 0 / 0%) 100%
   );
 }
@@ -1224,32 +1255,33 @@ a.plate:hover > img,
   object-fit: cover;
 }
 
+/* Counter and hint left, the action right, one rule carrying the eye across
+   the measure between them. */
 .reel__meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
-  margin-top: 0.9rem;
+  gap: 1rem 1.4rem;
+  margin-top: 1.1rem;
 }
 
-/* Counter left, hint right, one rule carrying the eye between them — instead
-   of both labels huddled left with a rule trailing off after them. */
-.reel__meta > :first-child {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.reel__rule {
   flex: 1;
-}
-
-.reel__meta > :first-child::after {
-  content: "";
-  flex: 1;
+  min-width: 2rem;
   height: 1px;
   background: var(--hair);
 }
 
-.reel__meta [data-reel-index] {
+.reel__count {
   font-variant-numeric: tabular-nums;
-  color: var(--fg-2);
+  white-space: nowrap;
+}
+
+@media (width <= 620px) {
+  /* The rule has nowhere to run once the action wraps to its own line. */
+  .reel__rule {
+    display: none;
+  }
 }
 
 /* ------------------------------------------------------- 13. gallery/works */
@@ -1266,7 +1298,11 @@ a.plate:hover > img,
    kind of thing. */
 .works--index {
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: clamp(1.5rem, 2.2vw, 2.1rem) var(--gap);
+  /* A tighter gutter, not just smaller frames. Carrying the full page gap
+     between 190px tiles made the archive read airier per frame than the 4-up
+     grid of work that is actually for sale — the opposite of the density the
+     smaller frames are there to signal. */
+  gap: clamp(1.5rem, 2.2vw, 2.1rem) clamp(0.9rem, 1.3vw, 1.2rem);
 }
 
 .works--index .works__name {
@@ -1387,39 +1423,103 @@ a.plate:hover > img,
   }
 }
 
-/* 21 frames divide evenly by three; at four across the last row held a single
-   orphan tile beside three empty cells. */
-.tiles--3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+/* A plate sequence, not a contact sheet. Six columns carrying a measure of
+   seven: three plates at index scale, then two pairs at reading scale, the
+   second pair square again. Three plate sizes and two proportions, repeating —
+   enough rhythm that the eye reads a sequence rather than a wall, and cheap
+   enough that it needs no per-image data, which this page does not have. */
+.tiles--plates {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(1.6rem, 2.6vw, 2.4rem) var(--gap);
 }
 
-/* Two across on phones, never one: a single stack of 21 square frames is
-   both the most monotonous run on the site and twice the scroll. */
+.tiles--plates > * {
+  grid-column: span 2;
+}
+
+.tiles--plates > :nth-child(7n + 4),
+.tiles--plates > :nth-child(7n + 5),
+.tiles--plates > :nth-child(7n + 6),
+.tiles--plates > :nth-child(7n) {
+  grid-column: span 3;
+}
+
+.tiles--plates > :nth-child(7n + 4) .tiles__fig,
+.tiles--plates > :nth-child(7n + 5) .tiles__fig {
+  aspect-ratio: 4 / 5;
+}
+
+@media (width <= 1180px) {
+  /* Four columns: the measure of seven becomes two pairs and a triple, which
+     still closes on a full row every seven frames. */
+  .tiles--plates {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .tiles--plates > *,
+  .tiles--plates > :nth-child(7n + 4),
+  .tiles--plates > :nth-child(7n + 5),
+  .tiles--plates > :nth-child(7n + 6),
+  .tiles--plates > :nth-child(7n) {
+    grid-column: span 2;
+  }
+}
+
 @media (width <= 760px) {
-  .tiles--3 {
+  /* Two across, with every seventh frame running the full width. That is what
+     keeps the last frame from being stranded beside an empty cell: at 21
+     images the closing plate is a seventh, so the sequence ends on a full-
+     width frame by rule rather than by a special case for :last-child. */
+  .tiles--plates {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* 21 frames over two columns strands the last one beside an empty cell.
-     Run it full width instead — a closing frame rather than an orphan.
-     :nth-child(odd) on the last child is true only when the count is odd, so
-     an even collection is untouched. */
-  .tiles--3 > :last-child:nth-child(odd) {
-    grid-column: span 2;
-    aspect-ratio: 16 / 9;
+  .tiles--plates > *,
+  .tiles--plates > :nth-child(7n + 4),
+  .tiles--plates > :nth-child(7n + 5),
+  .tiles--plates > :nth-child(7n + 6) {
+    grid-column: span 1;
   }
 
-  .tiles--3 > :last-child:nth-child(odd) img {
-    object-position: 50% 30%;
+  .tiles--plates > :nth-child(7n) {
+    grid-column: span 2;
+  }
+
+  .tiles--plates > :nth-child(7n) .tiles__fig {
+    aspect-ratio: 4 / 5;
   }
 }
 
 .tiles__item {
+  display: block;
+}
+
+/* The ratio box. It used to be the anchor itself, which left nowhere to hang
+   a caption without laying it over the photograph. */
+.tiles__fig {
   position: relative;
+  display: block;
   aspect-ratio: 1;
   overflow: hidden;
   background: var(--ink-raise);
+}
+
+.tiles__n {
   display: block;
+  margin-top: 0.6rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--hair);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.9rem;
+  font-variation-settings: "opsz" 14;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-3);
+  transition: color 0.4s;
+}
+
+.tiles__item:hover .tiles__n {
+  color: var(--gold);
 }
 
 .tiles__item img {
@@ -1477,9 +1577,13 @@ a.plate:hover > img,
   /* Fixed fractions, not `auto` on the last column: an auto track sized by each
      row's own links would shift the date column and the index would lose its
      vertical rules. */
-  grid-template-columns: 5.5rem minmax(0, 1.5fr) minmax(0, 0.55fr) minmax(0, 0.75fr);
+  grid-template-columns: 5.5rem minmax(0, 1.35fr) minmax(0, 0.5fr) minmax(0, 1fr);
   gap: var(--gap);
-  align-items: center;
+  /* Baselines, not boxes. Centring a 34px serif title against a 14px date
+     against a 10px micro-cap gave every row of a horizontally-scanned index
+     three separate baselines, 14px apart — there is no width at which that
+     resolves. The thumbnail has no text to sit on, so it centres itself. */
+  align-items: baseline;
   padding: clamp(1.15rem, 2.6vw, 1.9rem) 0;
   border-bottom: 1px solid var(--hair);
   position: relative;
@@ -1507,15 +1611,25 @@ a.plate:hover > img,
   font-size: var(--t-small);
 }
 
-/* Left, not right. Right-aligned, a row carrying one link pushed it flush to
-   the shell edge while a row carrying two started 220px earlier, so the same
-   label sat at two different x-positions down the index and the second action
-   never formed a column at all. An index is columns. */
+/* Two fixed slots, not a flex run. Right-aligned, a row carrying one link
+   pushed it flush to the shell edge while a row carrying two started 220px
+   earlier, so the same label sat at two different x-positions down the index.
+   Packed left, the first slot formed a column and the second still floated,
+   landing at 1109 on one row and 1270 on the next under a rule that runs to
+   1368. Given slots, both actions hold their own column and a missing one
+   leaves its gap where the eye already expects it. An index is columns. */
 .idx__links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem var(--gap);
+}
+
+.idx__slot {
   display: flex;
-  gap: 0.5rem 1.4rem;
-  flex-wrap: wrap;
-  justify-content: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  min-width: 0;
 }
 
 /* A real thumbnail in the row. The floating hover plate was the page's only
@@ -1523,6 +1637,7 @@ a.plate:hover > img,
    you happened to hover it. */
 .idx__thumb {
   display: block;
+  align-self: center;
   width: 5.5rem;
   aspect-ratio: 1 !important;
   overflow: hidden;
@@ -1616,9 +1731,16 @@ a.plate:hover > img,
 .arch__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Dense: a double-width video that will not fit the tail of a row otherwise
+     leaves the cell beside it empty and starts a new row, which put a hole in
+     the left third of the 2023 chapter with two tiles sitting out in columns 2
+     and 3. Backfilling costs nothing here — the archive is an index, not a
+     sequence, so nothing depends on strict source order. */
+  grid-auto-flow: row dense;
   /* The row gap has to clear a two-line title plus links; anything tighter and
      a tall tile's caption reads as belonging to the tile below it. */
   gap: clamp(2.8rem, 5vw, 4.2rem) var(--gap);
+  align-items: stretch;
 }
 
 /* Every field is square, so aligning captions to the top of the cell puts
@@ -1671,7 +1793,12 @@ a.plate:hover > img,
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: clamp(0.5rem, 1.4vw, 0.9rem);
+  /* A proportional mat rather than a fixed one. Contain will always letterbox
+     a mixed archive differently per artefact — that is the price of showing
+     posters whole — but a mat that scales with the frame at least makes the
+     inset itself a constant, so the double-width video cells and the square
+     ones read as the same plate at two sizes. */
+  padding: 7%;
   background-color: transparent !important;
 }
 
@@ -1698,8 +1825,13 @@ a.plate:hover > img,
   transform: scale(1.03);
 }
 
+/* Grows to fill the cell so the action row can pin to its bottom. Left to size
+   itself, every wrapped title pushed its own links a line lower than its
+   neighbours' — two identical underlines 25px apart, floating in the space
+   above the chapter rule. */
 .arch__meta {
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.55rem;
@@ -1731,7 +1863,10 @@ a.plate:hover > img,
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 1.4rem;
-  margin-top: 0.2rem;
+  /* Bottom of the cell, so the actions across a row land on one line whatever
+     their titles did above them. */
+  margin-top: auto;
+  padding-top: 0.6rem;
 }
 
 /* -------------------------------------------------------------- 17. people */
@@ -1808,26 +1943,30 @@ a.plate:hover > img,
 }
 
 /* Fills the cell the seventh partner leaves empty, and is a real invitation
-   rather than a spacer. */
-/* A hairline above, not a box around. This was the only bordered element on a
-   site whose structure is carried entirely on rules and space. */
-.person--call {
+   rather than a spacer — built on the partner card's own skeleton, plate above
+   and ruled caption below, so its rule lands on their rules and its name on
+   their names. As a bare flex column sized to 4/5 it matched the photograph
+   alone: its content bottomed out in the band between the pictures and the
+   captions, 98px short of its row-mates, with its own hairline hanging 17px
+   off theirs in a second grey. */
+.person__art--call {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 1.4rem;
-  border-top: 1px solid var(--hair);
-  padding-top: clamp(1.4rem, 3vw, 2rem);
-  aspect-ratio: 4 / 5;
+  align-items: flex-end;
+  padding: clamp(1.2rem, 2.4vw, 1.8rem);
+  background: none;
+  border: 1px solid var(--hair);
   transition: border-color 0.5s var(--ease);
 }
 
-.person--call:hover {
+.person--call:hover .person__art--call {
   border-color: var(--gold);
 }
 
-.person--call h3 {
+.person__ask {
+  font-family: var(--serif);
   font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+  line-height: 1.12;
+  text-wrap: balance;
 }
 
 .person__logo {
@@ -1866,11 +2005,15 @@ a.plate:hover > img,
   align-items: start;
 }
 
+/* No rule. A sticky panel that carries a hairline will disagree with the
+   hairlines of the static content it floats past at every scroll position but
+   one — and it disagreed in a second grey, --hair-strong against the tables'
+   --hair, 58px apart on the same line. The label and the button open the
+   column on their own. */
 .price__aside {
   position: sticky;
   top: calc(var(--nav-h) + 2rem);
-  border-top: 1px solid var(--hair-strong);
-  padding-top: 1.3rem;
+  padding-top: 0.4rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1881,6 +2024,16 @@ a.plate:hover > img,
   font-size: var(--t-small);
   color: var(--fg-3);
   line-height: 1.6;
+}
+
+/* The one thing in the column anyone came for. */
+.price__tel {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  letter-spacing: 0;
+  text-transform: none;
+  font-variation-settings: "opsz" 24;
+  color: var(--fg);
 }
 
 @media (width <= 1100px) {
@@ -2284,10 +2437,11 @@ a.plate:hover > img,
   grid-column: 6 / span 3;
 }
 
-/* Three columns, not two: the site map holds two sub-columns and the longest
-   label ("Hair & Styling") needs ~95px, which a 2/12 cell could not give it. */
+/* Runs to the last column, not to the eleventh: stopping at `span 3` left the
+   twelfth column empty while the credit rule below ran flush to the margin,
+   so the footer ended 223px short of its own bottom rule. */
 .foot__col--nav {
-  grid-column: 9 / span 3;
+  grid-column: 9 / -1;
 }
 
 /* One column. Two sub-columns inside a 2/12 grid cell gave each label ~85px,
@@ -2297,10 +2451,20 @@ a.plate:hover > img,
    cutting the L-shaped hole the two-column version was meant to avoid. */
 .foot__map-links {
   display: grid;
+  /* The parent is a flex column with align-items:flex-start, so this grid
+     never stretched to the cell and its `1fr` tracks sized to their content —
+     two lists huddled at the left of a column twice their width. Stretched
+     explicitly, with the links themselves still starting at their own edge so
+     an underline draws under the word and not across the track. */
+  width: 100%;
+  justify-items: start;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-rows: repeat(4, auto);
   grid-auto-flow: column;
-  gap: 0.62rem 1.1rem;
+  /* An 18px column gap between two lists of micro-caps links read as one
+     wrapped line rather than two columns; the page gutter is the gap every
+     other pair of columns on the site is separated by. */
+  gap: 0.62rem var(--gap);
 }
 
 /* No border: this is the only boxed element in a system that carries
@@ -2509,6 +2673,9 @@ a.plate:hover > img,
   opacity: 1;
 }
 
+/* A bounded target, not a bare glyph. Floating on the backdrop at a hairline's
+   weight, the chevrons read as two more divider rules and gave no sign they
+   could be pressed. */
 .lb__nav {
   position: absolute;
   top: 50%;
@@ -2518,11 +2685,15 @@ a.plate:hover > img,
   display: grid;
   place-items: center;
   color: var(--bone-2);
-  transition: color 0.3s, transform 0.4s var(--ease);
+  border: 1px solid rgb(239 233 223 / 14%);
+  transition: color 0.3s, border-color 0.3s, background-color 0.3s,
+    transform 0.4s var(--ease);
 }
 
 .lb__nav:hover {
   color: var(--gold);
+  border-color: rgb(227 166 60 / 45%);
+  background-color: rgb(239 233 223 / 6%);
 }
 
 .lb__nav svg {
@@ -2650,10 +2821,12 @@ body.is-lb .progress {
     grid-column: 1 / span 9;
   }
 
+  /* Once it drops under the title it is no longer closing a right edge, so it
+     goes back to reading left-to-right off the margin. */
   .sec__note {
     grid-column: 1 / span 8;
+    text-align: left;
     margin-top: 1rem;
-    padding-bottom: 0;
   }
 
   .foot__grid > * {
@@ -2807,15 +2980,22 @@ body.is-lb .progress {
   .idx__thumb {
     grid-column: 1;
     grid-row: 1 / span 3;
+    align-self: start;
     width: 100%;
     aspect-ratio: 1 !important;
     margin-top: 0.2rem;
   }
 
-  .idx__date,
+  .idx__date {
+    grid-column: 2;
+  }
+
+  /* One column at this width: two 130px slots would break "REPORTÁŽ Z VÝSTAVY"
+     across three lines. */
   .idx__links {
     grid-column: 2;
-    justify-content: flex-start;
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
   }
 
   .peek {
@@ -2865,11 +3045,7 @@ body.is-lb .progress {
      happens in the 2/12 cell the site map gets on desktop, and eight stacked
      links cost ~190px of extra scroll on the device that can least afford it. */
   .foot__map-links {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(4, auto);
-    grid-auto-flow: column;
-    gap: 0.62rem 1.2rem;
+    gap: 0.62rem var(--gap);
   }
 
   .foot__map:has(iframe) {
@@ -2954,6 +3130,13 @@ body.is-lb .progress {
 .home .nav:not(.is-stuck) .nav__mark {
   opacity: 0;
   pointer-events: none;
+}
+
+/* Except with the menu open, where the hero it defers to is covered: the
+   header was left holding a close cross and nothing else. */
+body.is-menu.home .nav:not(.is-stuck) .nav__mark {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .nav__mark {

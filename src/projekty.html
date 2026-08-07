@@ -107,9 +107,6 @@
     <div class="arch__grid">
     {% for p in group %}
       {% set embed = video_embed(p.video_url) %}
-      {# A poster is a designed object; cropping it to a uniform tile slices
-         its own typography. Classified by file type — see is_document(). #}
-      {% set is_doc = p.image and is_document(p.image) %}
       <article class="arch__item rv{% if embed %} arch__item--wide{% endif %}"
                style="--d:{{ (loop.index0 % 6) * 45 }}ms">
         {% if embed %}
@@ -119,12 +116,12 @@
                   allowfullscreen></iframe>
         </div>
         {% elif p.image %}
-        <a class="arch__field{% if is_doc %} arch__field--doc{% endif %}"
+        <a class="arch__field"
            href="{{ big(p.image) }}" data-lb-item
            data-title="{{ p.title|striptags }}" data-tag="{{ cz_date(p.date) }}">
           {{ img(p.image, alt=p.title|striptags,
                  sizes='(max-width:620px) 92vw, (max-width:1100px) 46vw, 30vw',
-                 cover=not is_doc) }}
+                 cover=false) }}
         </a>
         {% endif %}
 

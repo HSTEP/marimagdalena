@@ -340,6 +340,13 @@ h4 {
   padding-block: var(--bay) 0;
 }
 
+/* The rhythm belongs to the page, not to a class someone has to remember.
+   The full-bleed quote plate carried no .bay class, so its top gap was
+   exactly zero and the button above it sat 3px off the photograph. */
+main > section + section {
+  padding-top: var(--bay);
+}
+
 main > section:last-of-type {
   padding-bottom: var(--bay);
 }
@@ -1102,6 +1109,15 @@ a.plate:hover > img,
   scroll-snap-align: start;
 }
 
+/* 26vw bottoms out on the clamp floor below ~885px, so a phone inherited a
+   230px tile chosen to protect the desktop strip. One work per screen with a
+   peek is the point of a reel. */
+@media (width <= 620px) {
+  .reel__item {
+    flex: 0 0 78vw;
+  }
+}
+
 /* One crop for the whole strip. Left at their natural ratios the nine plates
    produced a sawtooth bottom edge that read as a bug, not as a mosaic. */
 .reel .works__fig {
@@ -1311,6 +1327,14 @@ a.plate:hover > img,
   gap: var(--gap);
 }
 
+/* Matches the works grid: the two image grids on the site were running
+   different gutters against the same 20px page margin. */
+@media (width <= 620px) {
+  .tiles {
+    gap: 0.75rem;
+  }
+}
+
 /* 21 frames divide evenly by three; at four across the last row held a single
    orphan tile beside three empty cells. */
 .tiles--3 {
@@ -1330,7 +1354,11 @@ a.plate:hover > img,
      an even collection is untouched. */
   .tiles--3 > :last-child:nth-child(odd) {
     grid-column: span 2;
-    aspect-ratio: 2;
+    aspect-ratio: 16 / 9;
+  }
+
+  .tiles--3 > :last-child:nth-child(odd) img {
+    object-position: 50% 30%;
   }
 }
 
@@ -1543,9 +1571,13 @@ a.plate:hover > img,
   gap: clamp(2.8rem, 5vw, 4.2rem) var(--gap);
 }
 
+/* Captions to the bottom of the cell. One 2024 record has no image at all,
+   so its caption sat at the top of a row whose other two sat under their
+   pictures — three cards, three baselines. */
 .arch__item {
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   gap: 1.05rem;
   min-width: 0;
 }
@@ -1564,18 +1596,16 @@ a.plate:hover > img,
   background: var(--ink-raise);
 }
 
+/* Contain, always. Three review rounds running, some poster in here was being
+   guillotined through its own headline: aspect ratio missed the square ones
+   and file type misses the two that are photographs OF posters saved as
+   JPEG. A mixed archive of photos, flyers and scans has no reliable signal,
+   so every item sits whole on the same plate at its own proportion. */
 .arch__field img {
   width: 100%;
   height: 100%;
-}
-
-/* Posters and other portrait documents sit whole on the field rather than
-   being cropped through their own headline. The placeholder colour has to go
-   with them: on a contained image it paints the letterbox bars instead of
-   sitting under the photo, framing every poster in its own average colour. */
-.arch__field--doc img {
   object-fit: contain;
-  padding: clamp(0.6rem, 1.6vw, 1.1rem);
+  padding: clamp(0.5rem, 1.4vw, 0.9rem);
   background-color: transparent !important;
 }
 
@@ -2099,7 +2129,11 @@ a.plate:hover > img,
 
   .quote__art {
     min-height: 0;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 4 / 5;
+  }
+
+  .quote__art img {
+    object-position: 50% 22%;
   }
 }
 
@@ -2675,7 +2709,12 @@ body.is-lb .progress {
     gap: clamp(2rem, 6vw, 2.8rem) var(--gap);
   }
 
-  .arch__item--wide {
+  .arch__item--wide,
+  /* No media field: as a half-width cell stretched by a tall poster beside it,
+     this record left ~194px of empty black under its own text. */
+  .arch__grid > .arch__item:not(:has(.arch__field)),
+  /* An odd item count stranded the last record beside an empty cell. */
+  .arch__grid > .arch__item:last-child:nth-child(odd) {
     grid-column: 1 / -1;
   }
 
@@ -2804,9 +2843,12 @@ body.is-lb .progress {
     --t-body: 1rem;
   }
 
+  /* Row gap far larger than the caption's own offset. At 0.6rem the caption
+     sat 11px under its painting and 10px above the next one, so proximity
+     attributed every title and sale status to the wrong work. */
   .works {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.6rem;
+    gap: 2.6rem 0.75rem;
   }
 
   .sec {
@@ -2864,9 +2906,3 @@ body.is-lb .progress {
   }
 }
 
-@media (hover: none) {
-  .works__over {
-    opacity: 1;
-    transform: none;
-  }
-}

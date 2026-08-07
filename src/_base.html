@@ -92,7 +92,9 @@
         <a class="menu__link" style="--i:{{ loop.index0 }}" href="{{ item.href }}"
            {% if item.external %}target="_blank" rel="noopener"{% endif %}>
           <span class="num">{{ '%02d'|format(loop.index) }}</span>
-          <span>{{ item.label|safe }}</span>
+          {# The desktop nav and the footer both mark this link as leaving the
+             site; the mobile menu omitted it, so Zahrada looked like a page. #}
+          <span>{{ item.label|safe }}{% if item.external %}{{ ico.external() }}{% endif %}</span>
         </a>
       </li>
       {% endfor %}

@@ -44,7 +44,6 @@
 <section class="shell shell--wide bay" id="atelier">
   <div class="sec rv">
     <div class="sec__meta">
-      <span class="num">01</span>
       <span class="label">O&nbsp;salonu</span>
     </div>
     <h2 class="sec__title">Kadeřnictví,<br>které je zároveň ateliérem</h2>
@@ -52,7 +51,10 @@
   </div>
 
   <div class="grid">
-    <div class="prose prose--cap rv" style="grid-column: 1 / span 6; --d:80ms">
+    {# No drop cap here: this paragraph opens on the salon's own name, so the
+       cap swallowed the M and set "Maří Magdalena" half in 4em gold Bodoni
+       and half in 17px Jost. #}
+    <div class="prose rv" style="grid-column: 1 / span 6; --d:80ms">
       <p>
         Maří Magdalena je kadeřnický salon v Dobřanech, který v roce 2011 otevřela
         {{ site.person }}. Salon pojala jako ateliér pro sebevyjádření, uspokojení
@@ -92,7 +94,6 @@
 <section class="shell shell--wide bay--sm">
   <div class="sec rv">
     <div class="sec__meta">
-      <span class="num">02</span>
       <span class="label">Služby</span>
     </div>
     <h2 class="sec__title">Co u nás zařídíme</h2>
@@ -143,7 +144,6 @@
 <section class="shell shell--wide bay">
   <div class="sec rv">
     <div class="sec__meta">
-      <span class="num">03</span>
       <span class="label">Galerie</span>
     </div>
     <h2 class="sec__title">Obrazy visí přímo<br>v prostorách salonu</h2>
@@ -156,12 +156,11 @@
        data-lb-item data-title="{{ painting.title }}"
        data-tag="{% if painting.sold %}Prodáno{% else %}K prodeji{% endif %}">
       <div class="works__fig">
-        {% if painting.sold %}<span class="sold">Prodáno</span>{% endif %}
         {{ img(painting.url, alt=painting.title, sizes='(max-width:620px) 78vw, 26vw') }}
-        <span class="works__over">
-          <span class="works__name">{{ painting.title }}</span>
-          <span class="works__no">{{ '%02d'|format(loop.index) }}</span>
-        </span>
+      </div>
+      <div class="works__cap">
+        <span class="works__name">{{ painting.title }}</span>
+        <span class="works__state{{ ' is-sold' if painting.sold }}">{{ 'Prodáno' if painting.sold else 'K prodeji' }}</span>
       </div>
     </a>
     {% endfor %}
@@ -181,7 +180,6 @@
 <section class="shell shell--wide bay--sm">
   <div class="sec rv">
     <div class="sec__meta">
-      <span class="num">04</span>
       <span class="label">Dění</span>
     </div>
     <h2 class="sec__title">Výstavy a projekty</h2>

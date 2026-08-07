@@ -59,7 +59,6 @@
   --gutter: clamp(1.25rem, 5vw, 5.5rem);
   --gap: clamp(1rem, 2.2vw, 2rem);
   --wide: 1680px;
-  --shell: 1400px;
   --prose: 62ch;
 
   /* Rhythm */
@@ -103,13 +102,44 @@
 
      --t-hero and the old --t-h3 are gone. --t-hero rendered on nothing, and
      every h3 on the site overrode --t-h3 because at 27px it came out smaller
-     than the service names it was heading. */
+     than the service names it was heading.
+
+     THE FLOORS ARE PART OF THE SCALE. The block above was true at 1440 and
+     nowhere else, because six ranks slide on vw at six different rates against
+     three that are fixed, and the six floors were picked one at a time. They
+     were 36.8 / 27.2 / 24 / 20 / 17.6 / 17.2 / 17 / 14 / 11 — three named
+     ranks inside a 3.5% band. Swept 360 → 1680, the smallest gap between two
+     adjacent rungs of the SAME face was 0.20px from 1274 down (Jost: --t-lede
+     bottoming out at 17.2 against --t-body's 17) and 0.60px from 1135 down
+     (Bodoni: --t-h5 at 17.6 against the .works__name / .cap__t pair, which are
+     Bodoni set at --t-body). At 1024 /projekty set a standfirst at 17.2 and
+     the paragraph under it at 17.0 — same family, same weight, same colour,
+     1.18% apart. That is the failure this comment claims to have fixed, three
+     times worse, one viewport width away.
+
+     Two floors fix it, and they are chosen so ranks MERGE rather than crowd:
+
+       --t-lede floors at 19.2, not 17.2. It is Jost, and the Jost ladder does
+       not scale — body, small and micro are fixed — so its top rung should not
+       either. Below 1422 the text ladder is a constant 19.2 / 17 / 14 / 11.
+
+       --t-h5 floors on --t-body itself. The display ladder has to run out of
+       room somewhere: at 360px there is no width at which six Bodoni ranks and
+       three Jost ones are all distinguishable, and pretending otherwise is
+       what produced 17.6-against-17. So the bottom display rank descends onto
+       the body rung and lands on it exactly, at 1097. Below that the site has
+       eight rungs, not nine, and says so.
+
+     Swept the same 360 → 1680: minimum same-face gap 2.20px in Jost and a
+     clean merge in Bodoni, against 0.20 and 0.60. The two ladders still cross
+     each other mid-range — --t-h5 passes --t-lede around 1240 — and that is
+     the overlap argued above: different faces on different errands. */
   --t-h1: clamp(2.3rem, 5.6vw, 5rem);
   --t-h2: clamp(1.7rem, 3.4vw, 3rem);
   --t-h3: clamp(1.5rem, 2.3vw, 2rem);
   --t-h4: clamp(1.25rem, 1.85vw, 1.6rem);
-  --t-h5: clamp(1.1rem, 1.55vw, 1.35rem);
-  --t-lede: clamp(1.075rem, 1.35vw, 1.3rem);
+  --t-h5: clamp(var(--t-body), 1.55vw, 1.35rem);
+  --t-lede: clamp(1.2rem, 1.35vw, 1.3rem);
   --t-body: 1.0625rem;
   --t-small: 0.875rem;
   --t-micro: 0.6875rem;
@@ -543,15 +573,15 @@ h4 {
 }
 
 /* --------------------------------------------------------------- 4. layout */
+/* One measure. There were two — a --shell at 1400 and a --wide at 1440 — and
+   a `.shell--wide` modifier to choose between them, which all 23 shells on the
+   site carried. A modifier every instance opts into is not a modifier, and the
+   narrower measure it opted out of had never been drawn. */
 .shell {
   width: 100%;
-  max-width: var(--shell);
+  max-width: var(--wide);
   margin-inline: auto;
   padding-inline: var(--gutter);
-}
-
-.shell--wide {
-  max-width: var(--wide);
 }
 
 /* One rhythm. These used to set padding on both edges at two different
@@ -602,12 +632,6 @@ main > section:last-of-type {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: var(--gap);
-}
-
-.rule {
-  height: 1px;
-  background: var(--hair);
-  border: 0;
 }
 
 /* Section header. Deliberately the same skeleton as .phead — rule, label row,
@@ -1397,11 +1421,14 @@ a.plate:hover > img,
   font-size: var(--t-h2);
 }
 
+/* Position only. This carried font-size: var(--t-small) and color: var(--fg-3),
+   which put the one page on the site with a class called `lede` rendering at
+   14px / #948c80 — 0.00px and 0 shades from the note beneath it, and 3px
+   SMALLER than the body copy it introduces. The ledger head is a quieter shape
+   than the other two; that is what the shorter span and the demoted h1 are for.
+   It is not a licence for the standfirst to stop being one. */
 .phead--ledger .phead__lede {
   grid-column: 5 / span 6;
-  font-size: var(--t-small);
-  color: var(--fg-3);
-  line-height: var(--lh-note);
 }
 
 /* The one page whose subject is photographs, opening on type. The plate is
@@ -1715,9 +1742,12 @@ a.plate:hover > img,
   color: var(--fg-2);
 }
 
+/* The fourth. 8.8 / 7.2 is 78.6% of the token, which is a tighter caption
+   argued for nowhere — the index tiles are smaller, but the device that closes
+   a plate is the device, and the site has one. */
 .works--index .works__cap {
-  margin-top: 0.55rem;
-  padding-top: 0.45rem;
+  margin-top: var(--cap-lead);
+  padding-top: var(--cap-drop);
 }
 
 .works__item {
@@ -2016,12 +2046,30 @@ a.plate:hover > img,
   padding-left: 1rem;
 }
 
+/* 5 columns, not 6, and --t-h4, not --t-h3.
+
+   The span, because three columns cannot be halved. .idx__links took 10/span 3
+   and divided itself in two, which put its inner edges at 1202.03 and 1233.70
+   against the page's nearest verticals at 1178.40 and 1257.36 — 23.6px off,
+   under nine of the thirteen underlines. On the next page .arch__links performs
+   exactly the same device inside a FOUR-column cell and lands every edge within
+   0.02px of a tick, and its own comment says why: four tracks separated by
+   three gaps is two cells plus one gap. So the title gives up a column, the
+   date follows it, and the links get an even span. All six edges are now on
+   ticks and both slots measure 189.6px — the same underline length /projekty
+   already draws forty-one of.
+
+   The size, because the chapter mark above these titles is --t-h3 too. A year
+   set at the same size as the records under it was carrying its rank on gold
+   and italic alone, which is ornament doing structure's job on a site whose
+   whole claim is that structure comes from scale. /projekty sets the same
+   .num over --t-h5 titles; this is the same interval, one step. */
 .idx__title {
-  grid-column: 2 / span 6;
+  grid-column: 2 / span 5;
   font-family: var(--serif);
-  font-size: var(--t-h3);
+  font-size: var(--t-h4);
   line-height: var(--lh-head);
-  font-variation-settings: var(--vf-h3);
+  font-variation-settings: var(--vf-h4);
   transition: color 0.4s;
 }
 
@@ -2030,16 +2078,16 @@ a.plate:hover > img,
 }
 
 .idx__date {
-  grid-column: 8 / span 2;
+  grid-column: 7 / span 2;
   color: var(--fg-3);
   font-size: var(--t-small);
   line-height: var(--lh-note);
 }
 
-/* Columns 10-12. See .idx__row for why these four spans exist rather than a
-   private track list. */
+/* Columns 9-12. See .idx__row for why these four spans exist rather than a
+   private track list, and .idx__title for why this one is four wide. */
 .idx__links {
-  grid-column: 10 / span 3;
+  grid-column: 9 / span 4;
 }
 
 /* Two fixed slots, not a flex run. Right-aligned, a row carrying one link
@@ -2117,14 +2165,14 @@ a.plate:hover > img,
    The offset is arithmetic, not a nudge. Cap-line minus box-top is the half
    leading plus the gap between the ascender and the cap, and both are
    fractions of the size: (1.12 - 1) / 2 = 0.06, and this cut of Bodoni sets
-   its capitals 0.375em under the ascent. So 0.435 of --t-h3 — measured across
+   its capitals 0.375em under the ascent. So 0.435 of --t-h4 — measured across
    1440 / 1180 / 1024 and constant at every one, which is the point of stating
    it against the token rather than in px. */
 .idx__thumb {
   grid-column: 1;
   display: block;
   align-self: start;
-  margin-top: calc(var(--t-h3) * 0.435);
+  margin-top: calc(var(--t-h4) * 0.435);
   /* The column's width, not 5.5rem. A fixed thumbnail inside a fractional
      track is the row's first vertical set by a number nobody else uses. */
   width: 100%;
@@ -2255,9 +2303,10 @@ a.plate:hover > img,
   align-items: stretch;
 }
 
-/* Every field is square, so aligning captions to the top of the cell puts
-   them all on one baseline. Bottom alignment did not: a two-line title
-   pushed its own date line up while its neighbours' stayed down. */
+/* Top-aligned, and stretched by the grid so the closing rules land on one
+   line across each row. The plates set their own heights, so the captions
+   start where their own pictures end; what holds the row is the rule under it
+   and the link row above that, both of which .arch__meta pins. */
 .arch__item {
   display: flex;
   flex-direction: column;
@@ -2289,57 +2338,42 @@ a.plate:hover > img,
    as debris inside them. The entry is closed by one rule under its caption
    instead: four hairlines per item become one, and the rules run the column's
    width, which is a constant. */
-/* Portrait, like every other plate on the site that is not a landscape crop.
+/* No box at all. Every previous round set a rectangle here and fitted forty-one
+   artefacts of mixed provenance into it — a square first, then 4/5 — and each
+   time `contain` paid for the fit in the same currency: the picture stopped
+   short of the field, the field ran on to the caption, and the distance between
+   a plate and the words about it became a function of that artefact's aspect
+   ratio. Measured in one row of the 2023 chapter it ran 16.8px under one entry
+   and 119.6px under its neighbour. A caption that hangs a different distance
+   under each plate is the single clearest tell of a populated template, and no
+   crop rule can fix it here: the archive has no signal for which artefacts are
+   posters (17 PNG / 22 JPEG, but the PNGs include four square social exports
+   and the JPEGs eleven portraits that may as easily be photographs of a flyer),
+   and both rounds that tried to guess guillotined a poster through its headline.
 
-   The square was costing the archive its left-hand register. `contain` fits
-   the picture inside the box, so a portrait artefact in a square painted at
-   its own ratio's fraction of the column and stopped short of the entry rule
-   beneath it — three items in row two came out 285.8 and 271.4 wide under
-   rules running the full 410.88, which is 125 and 139px of visible shortfall
-   in the one place on the site where a plate edge and a rule are not the same
-   line.
-
-   Cropping instead is the obvious fix and it is not available here. It needs a
-   signal for which artefacts are posters, and this archive has none: 17 of the
-   39 images are PNG and 22 are JPEG, but the PNGs include four square social
-   exports and one 4:3 landscape, and the JPEGs include eleven portraits at
-   0.64-0.72 that are as likely to be photographs of a flyer as photographs.
-   /vystavy can split on file type across ten curated records; forty-one
-   records of mixed provenance cannot, and the two rounds that tried it both
-   guillotined a poster through its own headline.
-
-   So the box moves to the pictures rather than the pictures to the box. At
-   4/5 — the site's portrait plate, already carrying the atelier figure, the
-   partner portraits and the large gallery tiles — 26 of the 39 fill the column
-   edge to edge and the widest remaining shortfall is 82px, down from 148. The
-   slack that is left collects at the bottom, which is where the archive has
-   always let it collect. */
+   So: no aspect-ratio, no fit. The plate is the picture. Every artefact takes
+   the full column width — 410.88 at 1440, the same measure as the rule that
+   closes its entry — and sets its own height, and the caption sits the same
+   distance below all forty-one of them. What rags now is the top of the caption
+   rather than the bottom of the plate, which is how plates hang in a catalogue:
+   the entry belongs to its picture, and the row is held together by the closing
+   rules, which .arch__item still stretches onto one line. */
 .arch__field {
   display: block;
   position: relative;
-  aspect-ratio: 4 / 5;
   overflow: hidden;
 }
 
-/* Contain, always — see the plate above for why no crop rule is available on
-   this archive. Every item sits whole at its own proportion. */
 .arch__field img {
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: contain;
-  /* Hung from the corner, not floated in the middle. The mat that used to live
-     here made the *inset* a constant and left the *position* free: `contain`
-     centres its residual on both axes, so three items in one row put their left
-     edges at 72 / 543 / 1021 under captions at 72 / 517 / 957 — each picture
-     missing its own caption by a different amount, and the amount was a
-     function of the artefact's aspect ratio, which no reader can infer.
-     Aligned to the corner every plate hangs from its column's left edge and
-     from one top line across the row, the way plates hang in a catalogue. The
-     slack all collects at the bottom, where a ragged edge is honest. */
-  object-position: left top;
+  height: auto;
   background-color: transparent !important;
 }
 
+/* The wide item is always the embed — see the promotion rule above — and an
+   iframe has no intrinsic height to grow from, so this one field keeps a
+   declared shape. */
 .arch__item--wide .arch__field {
   aspect-ratio: 16 / 9;
 }
@@ -2361,6 +2395,10 @@ a.plate:hover > img,
    that is now literally all this does. */
 .arch__field--none {
   display: block;
+  /* The one field on the page that still needs a declared shape, because it is
+     the one with no picture to take its shape from. 4/5, the site's portrait
+     plate, so the empty space reads as a plate left empty. */
+  aspect-ratio: 4 / 5;
 }
 
 .arch__field--video {
@@ -2374,7 +2412,7 @@ a.plate:hover > img,
   border: 0;
 }
 
-.arch__field:not(.arch__field--video):not(.arch__field--offsite) img {
+.arch__field:not(.arch__field--video) img {
   transition: transform 1.1s var(--ease);
 }
 
@@ -2470,14 +2508,27 @@ a.plate:hover > img,
 }
 
 @media (width <= 680px) {
+  /* One measure per breakpoint, not one measure. The two-track grid is argued
+     on desktop and correct there; it was never re-checked at 390, where it
+     survives into a 167px cell and yields a 75.5px track. "Přehrát na
+     facebook.com" then sets as three lines — 56.1 / 19.8 / 107.5 — so "na"
+     is orphaned and "facebook.com" runs 32px past the rule that is supposed
+     to underline it. Every archive cell at this width holds one link, so the
+     second track was not merely unused; it was breaking the label. The wide
+     video cell is still two cells, so it keeps two. */
+  .arch__links {
+    grid-template-columns: 1fr;
+  }
+
+  .arch__item--wide .arch__links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .people {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.6rem var(--gap);
   }
 
-  .person__name {
-    font-size: var(--t-body);
-  }
 }
 
 /* A column, so the caption can grow into the row's height and bottom-align its
@@ -2494,7 +2545,14 @@ a.plate:hover > img,
   background: var(--bg);
 }
 
-.person__art img {
+/* `> img:not(.person__logo)`, because `.person__art img` is (0,1,1) and
+   `.person__logo` is (0,1,0): unifying four filter recipes into one token
+   raised this selector's specificity past the logo's own `brightness(0)
+   invert(1)`, and all six partner logos have been compositing a mid-grey ghost
+   under `mix-blend-mode: screen` instead of the white knockout the rule
+   declares. A token that claims every descendant image by accident is worse
+   than the four recipes it replaced. */
+.person__art > img:not(.person__logo) {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -2502,7 +2560,7 @@ a.plate:hover > img,
   transition: filter 0.9s var(--ease), transform 1.2s var(--ease);
 }
 
-.person:hover .person__art img {
+.person:hover .person__art > img:not(.person__logo) {
   filter: none;
   transform: scale(1.04);
 }
@@ -2514,8 +2572,12 @@ a.plate:hover > img,
   flex: 1;
   flex-direction: column;
   gap: 0.4rem;
-  margin-top: 1rem;
-  padding-top: 0.85rem;
+  /* The third consumer of the caption device, and the one the unification
+     missed: 16 / 13.6 against the token's 11.2 / 9.6, on a plate that measures
+     300.25px against .works__fig's 300.24. Same device, same width, same
+     hairline, serif name beneath — and 8.8px of difference nobody chose. */
+  margin-top: var(--cap-lead);
+  padding-top: var(--cap-drop);
   border-top: 1px solid var(--hair);
 }
 
@@ -2571,7 +2633,10 @@ a.plate:hover > img,
 .person__art--call {
   display: flex;
   align-items: flex-end;
-  padding: clamp(1.2rem, 2.4vw, 1.8rem);
+  /* --cap-lead's own 1rem, the same inset .person__logo hangs on. These two
+     sat at 28.8 and 16 on plates measuring an identical 300.25 x 375.31 in one
+     row of one grid: two optical margins for one frame. */
+  padding: 1rem;
   background: var(--paper);
   border: 0;
   transition: background-color 0.5s var(--ease);
@@ -2674,7 +2739,12 @@ a.plate:hover > img,
   letter-spacing: 0.01em;
   text-transform: none;
   font-variant-numeric: tabular-nums;
-  line-height: var(--lh-head);
+  /* --t-lede, the Jost ladder's top rung, not --t-h5. At 21.6 this was the only
+     Jost node on the site at a Bodoni step, and the same .qlink--plain modifier
+     carrying the same phone number renders at 14 on /index — one component at
+     1.54x itself across two pages. */
+  font-size: var(--t-lede);
+  line-height: var(--lh-note);
   color: var(--fg);
 }
 
@@ -2722,11 +2792,17 @@ a.plate:hover > img,
 /* An h3 element carrying the h2 step, so without this it took the h3 leading
    and the largest thing on /cenik was the one page title on the site set
    looser than the other six. */
+/* The chapter rank, not the page rank. This was --t-h2, and so was the h1
+   above it: 48px / 49.92 / opsz 32 / #efe9df at x=72, byte for byte, three
+   times down a page with no h2 on it. The reader got four identical lines in
+   one column and nothing in the type said which one was the page. The ledger
+   head is right to be quiet — that argument stands — but a demoted h1 still
+   has to outrank what it governs, and 48 over 32 is the same interval the
+   archive chapters use on /projekty. As an h3 it now simply takes the h3 cut
+   and the h3 leading, and needs to declare neither. */
 .price__title {
   font-family: var(--serif);
-  font-size: var(--t-h2);
-  font-variation-settings: var(--vf-h2);
-  line-height: var(--lh-display);
+  font-size: var(--t-h3);
 }
 
 .price colgroup ~ tbody td,
@@ -2776,7 +2852,22 @@ a.plate:hover > img,
   padding-left: 0;
   color: var(--fg-2);
   white-space: normal;
-  width: 26rem;
+  /* One reading edge down the page, on the grid. This carried `26rem`, and
+     `26rem` did nothing: a table column takes its width from the first row and
+     nothing was declaring one, so `table-layout: fixed` fell back to equal
+     tracks — which meant the service column measured 426.72 in the two
+     single-price groups and 213.36 in the tiered one, a 213px step in the one
+     vertical line a price list asks you to read down.
+
+     A percentage, not the calc this ought to be: Chrome drops any calc()
+     containing a percentage on a table cell (verified — `410.88px` and
+     `48.146%` both land, `calc(4 * ((100% - 7 * 31.68px) / 8) + 3 * 31.68px)`
+     is ignored), so the grid arithmetic is done here instead. The table spans
+     columns 1-8, four of its columns plus the three gaps between them is
+     (T/2 - g/2), and T and g move together between 1200 and 1440, so the
+     ratio is a constant 48.144% across the whole desktop range and puts the
+     boundary on column 4's right edge, 482.88 at 1440. */
+  width: 48.15%;
 }
 
 /* Fixed, equal price columns. Left to shrink-to-fit they were sized by the
@@ -2806,12 +2897,6 @@ a.plate:hover > img,
 
 .price tbody tr:hover td {
   color: var(--gold);
-}
-
-.price__note {
-  font-size: var(--t-small);
-  color: var(--fg-3);
-  max-width: 46ch;
 }
 
 /* Below ~700px a four-column table shreds the service names into a 70px
@@ -2856,6 +2941,7 @@ a.plate:hover > img,
 
   .price td:not(:first-child) {
     font-size: var(--t-small);
+    line-height: var(--lh-note);
     text-align: right;
   }
 
@@ -2951,7 +3037,12 @@ a.plate:hover > img,
   max-width: 34ch;
 }
 
+/* `margin-left: auto`, so a one-child endnote closes where a two-child one
+   does. `justify-content: space-between` needs two children to mean anything:
+   on /cenik the note is absent and the actions fell to x=72-471, leaving 897px
+   of bare hairline running out to 1368 under nothing at all. */
 .endnote__a {
+  margin-left: auto;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -3213,19 +3304,6 @@ a.plate:hover > img,
 
 /* Sized to sit with the other footer columns — at display scale the address
    became the largest type in the footer and a false hierarchy peak. */
-.foot__map-addr {
-  font-family: var(--serif);
-  font-size: var(--t-body);
-  line-height: var(--lh-cap);
-  font-variation-settings: var(--serif-text);
-}
-
-.foot__map-note {
-  font-size: var(--t-micro);
-  letter-spacing: var(--track-caps);
-  color: var(--fg-3);
-}
-
 .foot__line {
   color: var(--fg-2);
   font-size: var(--t-small);
@@ -3677,10 +3755,6 @@ body.is-lb .nav {
      means the full two columns. */
   .arch__item--wide {
     grid-column: 1 / -1;
-  }
-
-  .arch__title {
-    font-size: var(--t-body);
   }
 
   /* Kept, not hidden: there is no detail page behind these tiles, so a

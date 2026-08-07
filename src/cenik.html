@@ -9,7 +9,7 @@
 
 {% block content %}
 
-<section class="shell shell--wide phead phead--ledger">
+<section class="shell phead phead--ledger">
   <div class="phead__grid">
     <div class="phead__meta">
       <span class="num">Ceník</span>
@@ -23,7 +23,7 @@
   </div>
 </section>
 
-<section class="shell shell--wide bay--top">
+<section class="shell bay--top">
   {# The tables hold a 64rem measure so all three share a right edge, which
      left a quarter of the page empty beside them. The booking column fills it
      and stays with the reader down all three tables. #}
@@ -49,7 +49,7 @@
    1100px it stops being a column at all and ends up buried between two tables.
    Same two actions the page has always ended on, laid out on the endnote's
    grid so the close lands where every other page's close lands. #}
-<section class="shell shell--wide bay--top">
+<section class="shell bay--top">
   <div class="endnote rv">
     <div class="endnote__a">
       <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>Objednat se</span>{{ ico.arrow() }}</a>

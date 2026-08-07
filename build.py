@@ -13,6 +13,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 import time
 from pathlib import Path
 
@@ -259,6 +260,21 @@ def link_slots(links):
     return other, video
 
 
+def fold(text):
+    """Strip diacritics, for matching only.
+
+    The admin types these dates by hand, and one of them is "Řijen, 2022" —
+    plain i, which matches neither "říjen" nor "října", so its month came back
+    0 and the record filed five positions out of sequence at the head of its
+    year. Matching a hand-typed field on exact accents makes the sort a test of
+    the typist's keyboard.
+    """
+    return "".join(
+        c for c in unicodedata.normalize("NFKD", text)
+        if not unicodedata.combining(c)
+    )
+
+
 def date_key(record):
     """Sortable (year, month, day) from a free-text Czech date.
 
@@ -267,13 +283,13 @@ def date_key(record):
     chronological — so the calendar ran out of sequence from row 8 down.
     Missing parts sort to the start of the year.
     """
-    text = (record.get("date") or "").lower()
+    text = fold((record.get("date") or "").lower())
     year = re.search(r"(19|20)\d{2}", text)
     year = int(year.group(0)) if year else 0
 
     month = 0
     for index, (nom, gen) in enumerate(MONTHS.items(), start=1):
-        if nom in text or gen in text:
+        if fold(nom) in text or fold(gen) in text:
             month = max(month, index)  # a range sorts by the month it ends in
     day = re.search(r"\b(\d{1,2})\.", text)
     day = int(day.group(1)) if day else 0

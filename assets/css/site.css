@@ -337,11 +337,22 @@ h4 {
   letter-spacing: 0.06em;
 }
 
+/* 350, like every other run of sans on the site. The body moved off 300 when
+   the type was tuned for legibility and this one class stayed behind, so the
+   largest sans on six pages was also the thinnest — the opposite of the way
+   weight should track size in a Jost this light.
+
+   And one measure. `.lede` meant 411px in six page headers and 743px in the
+   /galerie quote, which is 76 characters a line: the same class name for a
+   caption-width column and for a paragraph half again wider than the prose
+   it sits above. --prose is the site's reading measure and the ledes read by
+   the same rules as everything else. */
 .lede {
   font-size: var(--t-lede);
   line-height: 1.62;
   color: var(--fg-2);
-  font-weight: 300;
+  font-weight: 350;
+  max-width: var(--prose);
   text-wrap: pretty;
 }
 
@@ -506,21 +517,23 @@ main > section:last-of-type {
   font-size: var(--t-h2);
 }
 
-/* Flush right. Left-aligned it left short notes — "45 děl už našlo majitele."
-   is 138px in a 412px track — stranded mid-measure under a rule that runs all
-   the way to the margin, so the section header had no right edge. */
+/* Flush left, like everything else that is set in sentences. This was the one
+   run of prose on the site with a ragged left edge, and it sits in the same
+   track — column 9, x=957.12 — as the page-header lede, which is flush left:
+   on /galerie the two are 300px apart down the same column, one hanging off
+   the right margin and one off the left. The old note argued flush right gave
+   the section header a right edge; the rule above it already does that, all
+   1296px of it, and a short grey note pinned to the margin was reaching for an
+   edge it did not have to hold. */
 .sec__note {
   grid-column: 9 / span 4;
-  text-align: right;
   font-size: var(--t-small);
   color: var(--fg-3);
   line-height: 1.6;
-  /* Ragged left. Set to the full 411px track these broke wherever the words
-     ran out — "…pořádáme výstavy, setkání" then "a workshopy." alone on the
-     second line, a two-word orphan against a hard right edge, which is where
-     a ragged setting is least forgiving because the eye has a straight rule
-     to compare the raggedness against. Balanced, the two lines come out
-     near-equal and the block reads as a shape. */
+  /* These break wherever the words run out — "…pořádáme výstavy, setkání"
+     then "a workshopy." alone on the second line. Balanced, the two lines come
+     out near-equal and the block reads as a shape rather than as a sentence
+     that ran over. */
   text-wrap: balance;
 }
 
@@ -1207,15 +1220,26 @@ a.plate:hover > img,
   border-top: 1px solid var(--hair);
 }
 
+/* The page's twelve columns, not a private track list. `0.62fr 1.5fr 7.5rem`
+   divided this row sensibly and landed on nothing: the description opened at
+   429.06 where the column tick is 403.92, and the price track was a rem
+   measure that moved with the root size rather than with the page. Six pages
+   set their content on ticks; a table two screens below one of them should
+   not be reading from a different ruler. Name 1–3, description 4–10, price
+   11–12 — the same three proportions, now at 72 / 403.92 / 1178.40. */
 .svc__row {
   display: grid;
-  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.5fr) 7.5rem;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: var(--gap);
   align-items: center;
   padding: clamp(1.1rem, 2.4vw, 1.7rem) 0;
   border-bottom: 1px solid var(--hair);
   transition: padding-left 0.5s var(--ease);
 }
+
+.svc__name { grid-column: 1 / span 3; }
+.svc__desc { grid-column: 4 / span 7; }
+.svc__price { grid-column: 11 / span 2; }
 
 .svc__row:hover {
   padding-left: 0.9rem;
@@ -1259,11 +1283,14 @@ a.plate:hover > img,
    instead, the pair straddled an empty half-screen. */
 .svc__foot {
   display: grid;
-  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.5fr) 7.5rem;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: var(--gap);
   align-items: baseline;
   margin-top: 1.6rem;
 }
+
+.svc__foot > .actions { grid-column: 1 / span 3; }
+.svc__note { grid-column: 4 / span 7; }
 
 .svc__note {
   font-size: var(--t-small);
@@ -1275,6 +1302,13 @@ a.plate:hover > img,
   .svc__foot {
     grid-template-columns: 1fr;
     gap: 1.2rem;
+  }
+
+  /* Both children carry a desktop span; without this they would open implicit
+     columns to the right of the single track and drag the row off the page. */
+  .svc__foot > .actions,
+  .svc__note {
+    grid-column: 1;
   }
 }
 
@@ -1731,12 +1765,22 @@ a.plate:hover > img,
   /* Fixed fractions, not `auto` on the last column: an auto track sized by each
      row's own links would shift the date column and the index would lose its
      vertical rules. */
-  /* The date is a fixed field — it is never longer than "22. listopadu 2024" —
-     so giving it a fraction of the measure only parked it in the middle of a
-     195px track it used 110px of, with the title's air on one side and the
-     actions' on the other. Set to its own width it stops being a hole, and the
-     620px it releases goes to the title, which is what anyone is reading. */
-  grid-template-columns: 5.5rem minmax(0, 1.6fr) 9rem minmax(0, 0.9fr);
+  /* The page's own twelve columns, not a private track list.
+
+     This row was `5.5rem minmax(0,1.6fr) 9rem minmax(0,0.9fr)`, which divided
+     its width perfectly sensibly and landed on nothing: outer edge exactly at
+     x=72 and every internal division missing the grid — the date at 843.5
+     against tick 8 at 846.48, the actions at 1019.2 against tick 10 at 1067.76,
+     48.6px out. A rem-and-fraction list is a reasonable local decision made
+     without reference to the system it sits inside, which is precisely the
+     thing a reader registers as "assembled" without being able to name it: the
+     page has verticals, and this row ignores all of them.
+
+     The reasoning the old list encoded is preserved, because spans can say it
+     too. The date is a fixed field — never longer than "22. listopadu 2024" —
+     so it takes two columns rather than a fraction of the measure, and the six
+     it releases go to the title, which is what anyone is reading. */
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: var(--gap);
   /* Baselines, not boxes. Centring a 34px serif title against a 14px date
      against a 10px micro-cap gave every row of a horizontally-scanned index
@@ -1757,6 +1801,7 @@ a.plate:hover > img,
 }
 
 .idx__title {
+  grid-column: 2 / span 6;
   font-family: var(--serif);
   font-size: clamp(1.3rem, 2.4vw, 2rem);
   line-height: 1.12;
@@ -1769,8 +1814,15 @@ a.plate:hover > img,
 }
 
 .idx__date {
+  grid-column: 8 / span 2;
   color: var(--fg-3);
   font-size: var(--t-small);
+}
+
+/* Columns 10-12. See .idx__row for why these four spans exist rather than a
+   private track list. */
+.idx__links {
+  grid-column: 10 / span 3;
 }
 
 /* Two fixed slots, not a flex run. Right-aligned, a row carrying one link
@@ -1836,9 +1888,12 @@ a.plate:hover > img,
    imagery, which left the desktop index looking like a bare data table until
    you happened to hover it. */
 .idx__thumb {
+  grid-column: 1;
   display: block;
   align-self: center;
-  width: 5.5rem;
+  /* The column's width, not 5.5rem. A fixed thumbnail inside a fractional
+     track is the row's first vertical set by a number nobody else uses. */
+  width: 100%;
   aspect-ratio: 1 !important;
   overflow: hidden;
   background: var(--ink-raise);
@@ -2270,16 +2325,6 @@ a.plate:hover > img,
   text-wrap: balance;
 }
 
-/* An address is not a job title. Set in the role slot's tracked micro-caps it
-   ran 12px past the grid's right edge on a 390px phone — the treatment is
-   sized for "FOTOGRAF", not for twenty-two characters and an @. */
-.person--call .person__role {
-  text-transform: none;
-  letter-spacing: 0.01em;
-  font-size: 0.8rem;
-  overflow-wrap: anywhere;
-}
-
 .person__logo {
   position: absolute;
   left: 1rem;
@@ -2304,17 +2349,26 @@ a.plate:hover > img,
   gap: clamp(2.6rem, 5vw, 4.2rem);
 }
 
-/* The tables are capped at 64rem for a reason (see .price__group), but the
-   page header above them ran the full shell, so 272px on the right belonged to
-   nothing and no edge lined up with any other. The practical column now lives
-   there — how to book, where we are — and the page reads as two columns rather
-   than as one narrow one with a hole beside it. */
+/* The tables hold a measure narrower than the shell, but the page header above
+   them runs the full width, so the practical column — how to book, where we
+   are — fills what would otherwise be a quarter-page of nothing, and the page
+   reads as two columns rather than as one narrow one with a hole beside it.
+
+   The two are the page's own columns now. `minmax(0,64rem) minmax(0,1fr)` was
+   a rem measure plus a remainder: it put the tables' right edge at 1096 and
+   opened the aside at 1153.59, neither of which is anywhere near a tick. The
+   tables take 1–8 and the aside 10–12, so the aside opens at 1067.76 with a
+   whole empty column between them — wider separation than the old 57.6px gap,
+   which matters because that column is sticky and slides past a stack of
+   full-width hairlines all the way down. */
 .price__layout {
   display: grid;
-  grid-template-columns: minmax(0, 64rem) minmax(0, 1fr);
-  gap: clamp(2rem, 4vw, 4.5rem);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gap);
   align-items: start;
 }
+
+.price__layout > .price { grid-column: 1 / span 8; }
 
 /* No rule. A sticky panel that carries a hairline will disagree with the
    hairlines of the static content it floats past at every scroll position but
@@ -2322,6 +2376,7 @@ a.plate:hover > img,
    --hair, 58px apart on the same line. The label and the button open the
    column on their own. */
 .price__aside {
+  grid-column: 10 / span 3;
   position: sticky;
   top: calc(var(--nav-h) + 2rem);
   padding-top: 0.4rem;
@@ -2357,6 +2412,11 @@ a.plate:hover > img,
 @media (width <= 1100px) {
   .price__layout {
     grid-template-columns: 1fr;
+  }
+
+  .price__layout > .price,
+  .price__aside {
+    grid-column: 1;
   }
 
   .price__aside {
@@ -2407,7 +2467,12 @@ a.plate:hover > img,
   color: var(--fg-3);
   text-align: right;
   padding: 0 0 0.9rem 1.4rem;
-  border-bottom: 1px solid var(--hair);
+  /* --hair-strong. The head of a table is not one of its rows, and set in the
+     same 13% grey as the eleven rules under it the tier names read as a first
+     row whose prices had failed to load. This is the only place on the page
+     where two hairline weights meet, which is exactly the distinction the two
+     weights exist to draw. */
+  border-bottom: 1px solid var(--hair-strong);
 }
 
 .price th:first-child {
@@ -2425,34 +2490,38 @@ a.plate:hover > img,
   font-size: 0.95rem;
 }
 
+/* The service column is the fixed one, and the prices divide what is left.
+   Left to auto it was sized by the number of price columns beside it — 872px
+   in the two single-price groups against 568px in the eleven-row tiered one,
+   so the same list read at two measures and every one-price row carried a
+   782px void between the name and its figure. Fixing the name column and
+   letting the figures share the remainder means one reading edge down the
+   page and, in a single-price group, a figure that walks left to meet it. */
 .price td:first-child,
 .price th:first-child {
   text-align: left;
   padding-left: 0;
   color: var(--fg-2);
   white-space: normal;
-  width: auto;
+  width: 26rem;
 }
 
 /* Fixed, equal price columns. Left to shrink-to-fit they were sized by the
    header words ("Polodlouhé" wide, "Dlouhé" narrow) and crushed into the
-   last 250px of a 1296px measure. */
+   last 250px of a 1296px measure. `width: 100%` says out loud what the table
+   was doing by accident, and it has to, now that the name column carries a
+   real measure the auto algorithm could otherwise shrink to. */
 .price table {
   table-layout: fixed;
+  width: 100%;
 }
 
-/* One measure for every group, so all three tables share a right edge and
-   their rules stop where the prices stop. Full width put a lone figure a
-   metre of screen from the service it belongs to; two different widths put
-   three different right edges under full-width rules. */
-.price__group {
-  max-width: 64rem;
-}
-
-.price th:not(:first-child),
-.price td:not(:first-child) {
-  width: 9.5rem;
-}
+/* The measure is the layout column now, not a private 64rem cap, so all three
+   tables still share a right edge and their rules still stop where the prices
+   stop — but that edge is a column tick rather than a rem figure that drifts
+   against everything around it. The price columns take no width of their own:
+   with the name column fixed above, `table-layout: fixed` splits the
+   remainder equally between however many tiers a group has. */
 
 .price tr:last-child td {
   border-bottom: 0;
@@ -2504,10 +2573,11 @@ a.plate:hover > img,
     padding: 0;
   }
 
-  /* Must match the specificity of the fixed 9.5rem desktop columns above,
-     otherwise three of them survive into the grid and overflow the page. */
-  .price td:not(:first-child),
-  .price th:not(:first-child) {
+  /* The rows are a grid down here, and the desktop name column is a 416px
+     track measured against a 1440px page. Left standing it would overflow a
+     375px phone by itself. */
+  .price td:first-child,
+  .price th:first-child {
     width: auto;
   }
 
@@ -2974,6 +3044,17 @@ a.plate:hover > img,
   visibility: visible;
 }
 
+/* Same height as the foot, and the foot the same as this. Both were sized by
+   whatever they happened to contain — 54.8px of counter and close button
+   against 66.4px of serif title — so the stage between them was 11.6px
+   off-centre and every plate hung high in the window by half that. In a viewer
+   whose whole job is to put one object in the middle of a black screen, the
+   two bars are a frame and a frame is symmetrical. */
+.lb__bar,
+.lb__foot {
+  min-height: 4.25rem;
+}
+
 .lb__bar {
   display: flex;
   align-items: center;
@@ -3084,13 +3165,16 @@ a.plate:hover > img,
   transform: translate(4px, -50%);
 }
 
+/* The three items keep a shared baseline — a 19px serif title and an 11px
+   micro-cap centred independently would sit on two invisible lines 3px apart.
+   The bar's height comes from the min-height it shares with the top bar, not
+   from its padding, so the two frames match whatever either happens to hold. */
 .lb__foot {
   display: flex;
   align-items: baseline;
   gap: 1.2rem;
   padding: 0.85rem var(--gutter);
   border-top: 1px solid var(--line);
-  min-height: 4rem;
 }
 
 .lb__ask {

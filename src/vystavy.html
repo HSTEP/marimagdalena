@@ -30,13 +30,18 @@
              {% if v.image %}data-peek-src="{{ big(v.image) }}" data-peek-ratio="{{ ratio(v.image) }}"{% endif %}>
       <span class="num">{{ '%02d'|format(vystavy|length - loop.index0) }}</span>
 
-      {# Thumbnail precedes the title so it lands in its own grid column;
-         on mobile it spans the full row instead. #}
+      {# Thumbnail precedes the title so it lands in its own grid column.
+         Several of these records are scanned A4 posters rather than
+         photographs; cropped square and desaturated they became unreadable
+         grey mush, so anything appreciably portrait is shown whole and in
+         colour — a document treated as a document. #}
       {% if v.image %}
-      <a class="idx__thumb" href="{{ big(v.image) }}" data-lb-item
+      {% set is_doc = ratio(v.image) < 0.85 %}
+      <a class="idx__thumb{% if is_doc %} idx__thumb--doc{% endif %}"
+         href="{{ big(v.image) }}" data-lb-item
          style="--nat:{{ ratio(v.image) }}"
          data-title="{{ v.title|striptags }}" data-tag="{{ cz_date(v.date) }}">
-        {{ img(v.image, alt=v.title|striptags, sizes='(max-width:960px) 92vw, 8rem', cover=true) }}
+        {{ img(v.image, alt=v.title|striptags, sizes='8rem', cover=not is_doc) }}
       </a>
       {% else %}
       <span aria-hidden="true"></span>
@@ -61,12 +66,12 @@
   {% endif %}
 </section>
 
-<section class="band">
-  <div class="band__bg">{{ img(plates.contact, alt='', sizes='100vw') }}</div>
-  <div class="band__in">
-    <p class="label label--gold">Spolupráce</p>
-    <p class="h2 band__q serif-it">Chystáte výstavu, koncert nebo večer, kam by se obrazy hodily?</p>
-    <a class="cta" href="mailto:{{ site.email }}"><span>Napsat</span>{{ ico.arrow() }}</a>
+<section class="shell shell--wide" style="padding-bottom: var(--bay)">
+  <div class="endnote rv">
+    <p class="endnote__t">Chystáte výstavu, koncert nebo večer, kam by se obrazy hodily?</p>
+    <div class="endnote__a">
+      <a class="qlink" href="mailto:{{ site.email }}">{{ site.email }}</a>
+    </div>
   </div>
 </section>
 

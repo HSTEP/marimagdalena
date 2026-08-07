@@ -113,19 +113,24 @@
 </section>
 
 
-<section class="band">
-  <div class="band__bg">
-    {{ img(plates.atelier, alt='', sizes='100vw') }}
-  </div>
-  <div class="band__in">
+{# The photograph used to sit behind this quote under a 72–93% scrim, which
+   left it neither legible as an image nor quiet enough to read as texture.
+   Set beside the type instead it runs at full strength, and the quote sits on
+   flat ground where contrast is not a negotiation. #}
+<section class="quote">
+  <figure class="quote__art rv-clip">
+    {{ img(plates.atelier, alt='Ateliér salonu Maří Magdalena',
+           sizes='(max-width:900px) 100vw, 42vw', cover=true) }}
+  </figure>
+  <div class="quote__in rv">
     <p class="label label--gold">Londa Professional · Mezinárodní artistický tým</p>
-    <p class="h2 band__q serif-it">
+    <blockquote class="quote__q serif-it">
       Jako členka Mezinárodního artistického týmu LONDA Professional
       a ambasadorka značky jsem se podílela na vytváření nové kolekce
       a trendů ve spolupráci s uměleckým ředitelem Bertem Kietzerowem.
-    </p>
+    </blockquote>
     <p class="label">— {{ site.person }}</p>
-    <a class="cta" href="galerie.html"><span>Kolekce Color&nbsp;Tune</span>{{ ico.arrow() }}</a>
+    <a class="qlink" href="galerie.html">Kolekce Color&nbsp;Tune</a>
   </div>
 </section>
 

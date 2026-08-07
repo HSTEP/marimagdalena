@@ -63,6 +63,9 @@ NAV = [
     {"slug": "obrazy", "href": "obrazy.html", "label": "Obrazy"},
     {"slug": "vystavy", "href": "vystavy.html", "label": "Výstavy"},
     {"slug": "projekty", "href": "projekty.html", "label": "Projekty"},
+    # "What does a cut cost" is the first question a salon gets on a phone.
+    # It was reachable only from the footer and one mid-page button.
+    {"slug": "cenik", "href": "cenik.html", "label": "Ceník"},
     {"slug": "partneri", "href": "partneri.html", "label": "Partneři"},
     {"slug": "zahrada", "href": SITE["zahrada"], "label": "Zahrada", "external": True},
 ]

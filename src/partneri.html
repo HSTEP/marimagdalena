@@ -40,24 +40,19 @@
     </a>
     {% endfor %}
 
+    {# No forced break: "spolupracovat?" is 14 characters and the card is
+       ~150px wide on a phone, so the hard line ran the word straight through
+       the card's own border and past the page gutter. #}
     <a class="person person--call rv" href="mailto:{{ site.email }}"
        style="--d:{{ (partners|length % 4) * 90 }}ms">
-      <h3>Chcete<br>spolupracovat?</h3>
+      <h3>Chcete spolupracovat?</h3>
       <span class="qlink">Napište nám</span>
     </a>
   </div>
 </section>
 
-<section class="shell shell--wide" style="padding-bottom: var(--bay)">
-  <div class="pull rv">
-    <p class="pull__q serif-it">
-      Tvoříte a hledáte prostor, kde se potkat se stejně naladěnými lidmi?
-    </p>
-    <div class="pull__by actions" style="justify-content:center">
-      <a class="cta" href="projekty.html"><span>Art&nbsp;Connecting</span>{{ ico.arrow() }}</a>
-      <a class="qlink qlink--plain" href="mailto:{{ site.email }}">Ozvat se</a>
-    </div>
-  </div>
-</section>
+{# The page ends on the contact card above — it is already the ask. The
+   centred pull-quote that used to sit here was the sixth identical closer
+   on the site. #}
 
 {% endblock %}

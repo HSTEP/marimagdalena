@@ -1398,6 +1398,18 @@ a.plate:hover > img,
   object-fit: cover;
 }
 
+/* Posters are graphic design, not photography. Cropped to a square and
+   desaturated with everything else they read as damaged images, so they keep
+   their own colour and their own edges. */
+.idx__thumb--doc {
+  filter: none;
+}
+
+.idx__thumb--doc img {
+  object-fit: contain;
+  background-color: transparent !important;
+}
+
 .peek {
   position: fixed;
   top: 0;
@@ -1515,10 +1527,13 @@ a.plate:hover > img,
 }
 
 /* Posters and other portrait documents sit whole on the field rather than
-   being cropped through their own headline. */
+   being cropped through their own headline. The placeholder colour has to go
+   with them: on a contained image it paints the letterbox bars instead of
+   sitting under the photo, framing every poster in its own average colour. */
 .arch__field--doc img {
   object-fit: contain;
   padding: clamp(0.6rem, 1.6vw, 1.1rem);
+  background-color: transparent !important;
 }
 
 .arch__item--wide .arch__field {
@@ -1680,9 +1695,15 @@ a.plate:hover > img,
   border-top: 1px solid var(--hair);
 }
 
+/* Two lines are reserved whether or not the name needs them. "Jirka Krejčík"
+   fits one line and "Lydie Bernklauová" does not, so without this the role
+   labels underneath sit on different baselines and every row of the grid is
+   visibly out of register. */
 .person__name {
   font-family: var(--serif);
   font-size: 1.3rem;
+  line-height: 1.16;
+  min-height: 2.32em;
   font-variation-settings: "opsz" 24;
   transition: color 0.4s;
 }
@@ -1717,6 +1738,9 @@ a.plate:hover > img,
 
 .person--call h3 {
   font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+  /* "spolupracovat?" is longer than the card is wide on a phone. */
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
 .person__logo {
@@ -1832,41 +1856,50 @@ a.plate:hover > img,
 }
 
 /* Below ~700px a four-column table shreds the service names into a 70px
-   column and floats the figures away from the headers that explain them.
-   Each row becomes a name with its own labelled price run underneath. */
+   column. The previous fix inlined each figure behind its own repeated tier
+   label, which restated three headers on all nine rows and — because the
+   labels are different widths — left no two prices sharing an x-position.
+   Scanning a column of figures is the only job a price list has, so the rows
+   become a grid instead and the tiers are declared once per group. */
 @media (width <= 700px) {
-  .price thead {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+  .price table,
+  .price thead,
+  .price tbody,
+  .price tr {
+    display: block;
   }
 
   .price tr {
-    display: block;
-    padding-block: 0.9rem;
+    display: grid;
+    align-items: baseline;
+    gap: 0.15rem 0.7rem;
+    padding-block: 0.75rem;
     border-bottom: 1px solid var(--hair);
   }
 
-  .price tr:last-child {
+  .price tbody tr:last-child {
     border-bottom: 0;
   }
 
-  .price td {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.5rem;
+  .price td,
+  .price th {
     border: 0;
-    padding: 0.35rem 1.1rem 0 0;
-    font-size: 0.9rem;
+    padding: 0;
+  }
+
+  /* Must match the specificity of the fixed 9.5rem desktop columns above,
+     otherwise three of them survive into the grid and overflow the page. */
+  .price td:not(:first-child),
+  .price th:not(:first-child) {
+    width: auto;
+  }
+
+  .price td:not(:first-child) {
+    font-size: 0.95rem;
+    text-align: right;
   }
 
   .price td:first-child {
-    display: block;
-    width: auto;
-    padding: 0;
     font-family: var(--serif);
     font-size: 1.05rem;
     line-height: 1.25;
@@ -1874,12 +1907,39 @@ a.plate:hover > img,
     color: var(--fg);
   }
 
-  .price td:not(:first-child)::before {
-    content: attr(data-len);
-    font-size: var(--t-micro);
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--fg-3);
+  /* One price: name and figure share a baseline. */
+  [data-cols="1"] tr {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  [data-cols="1"] thead {
+    display: none;
+  }
+
+  /* Three tiers: the name takes its own line so the figures below it get a
+     third of the width each and line up down the page. */
+  [data-cols="3"] tr {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  [data-cols="3"] td:first-child {
+    grid-column: 1 / -1;
+    margin-bottom: 0.15rem;
+  }
+
+  [data-cols="3"] thead tr {
+    padding-block: 0 0.55rem;
+  }
+
+  [data-cols="3"] th:first-child {
+    display: none;
+  }
+
+  [data-cols="3"] th {
+    text-align: right;
+    padding: 0;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
   }
 }
 
@@ -1904,6 +1964,86 @@ a.plate:hover > img,
   grid-column: 3 / span 8;
   text-align: center;
   margin-top: 1.6rem;
+}
+
+/* A quiet, functional close. Six of the seven pages used to end with the same
+   centred display-scale italic quote over a ghosted photograph, which is the
+   single loudest "every page built from one template" tell on the site. Only
+   the homepage keeps that moment now; the content pages end on a hairline and
+   a line of type at reading size, and two pages end on their own content. */
+.endnote {
+  border-top: 1px solid var(--hair);
+  padding-top: clamp(1.4rem, 3vw, 2.1rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.9rem 2.4rem;
+}
+
+.endnote__t {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.15rem, 2vw, 1.6rem);
+  font-variation-settings: "opsz" 28;
+  line-height: 1.25;
+  max-width: 34ch;
+}
+
+.endnote__a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem 1.8rem;
+}
+
+/* ------------------------------------------------------- 19b. quote plate */
+.quote {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  align-items: stretch;
+  background: var(--ink-raise);
+}
+
+.quote__art {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(20rem, 46vh, 32rem);
+}
+
+.quote__art img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.quote__in {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: clamp(2.6rem, 6vw, 5rem) clamp(1.6rem, 5vw, 4.5rem);
+  justify-content: center;
+}
+
+.quote__q {
+  font-size: clamp(1.3rem, 2.2vw, 2rem);
+  line-height: 1.36;
+  font-variation-settings: "opsz" 36;
+  max-width: 30ch;
+  text-wrap: pretty;
+}
+
+@media (width <= 900px) {
+  .quote {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .quote__art {
+    min-height: 0;
+    aspect-ratio: 3 / 2;
+  }
 }
 
 /* ---------------------------------------------------------- 20. full plate */
@@ -2013,14 +2153,16 @@ a.plate:hover > img,
   grid-column: 8 / span 2;
 }
 
-/* Two columns, so the site map doesn't fall as one tall stack beside three
-   short ones and cut an L-shaped hole through the footer. */
+/* One column. Two sub-columns inside a 2/12 grid cell gave each label ~85px,
+   and "Hair & Styling" needs ~95px — so it overlapped "Partneři" outright
+   below about 1300px. A single stack of eight is also the same order of
+   height as the map plate beside it, so it fills the footer rather than
+   cutting the L-shaped hole the two-column version was meant to avoid. */
 .foot__map-links {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-rows: repeat(4, auto);
-  grid-auto-flow: column;
-  gap: 0.7rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.62rem;
 }
 
 /* No border: this is the only boxed element in a system that carries
@@ -2462,59 +2604,56 @@ body.is-lb .progress {
     margin-top: 1.2rem;
   }
 
-  .feed__item,
-  .feed__item:nth-child(even) {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  /* Two up rather than one: at 390px a single column gives each of the 41
+     records a full screen of its own, which is what made this page read as a
+     database poured onto a phone. Everything stays on one left axis. */
+  .arch__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 6vw, 2.8rem) var(--gap);
   }
 
-  /* Each caption reads with the media directly above it; without a clear
-     difference between the two gaps a caption sits equidistant from two
-     unrelated images. */
-  .feed {
-    gap: 4.5rem;
+  .arch__item--wide {
+    grid-column: 1 / -1;
   }
 
-  .feed__art,
-  .feed__body {
-    grid-column: auto;
+  .arch__title {
+    font-size: 1.05rem;
+  }
+
+  /* Kept, not hidden: there is no detail page behind these tiles, so a
+     truncated description is content the phone visitor simply never gets. */
+  .arch__note {
+    font-size: 0.85rem;
   }
 
   .idx__row,
   .idx__row:hover {
-    grid-template-columns: 2.6rem minmax(0, 1fr);
+    grid-template-columns: 2.2rem 4.6rem minmax(0, 1fr);
     padding-left: 0;
-    row-gap: 0.55rem;
+    row-gap: 0.3rem;
+    align-items: start;
   }
 
   .idx__title {
-    grid-column: 2;
+    grid-column: 3;
     grid-row: 1;
   }
 
-  /* The plate spans the full row so its edges line up with the rules above
-     and below. No max-height: capping the height of an element that also
-     has an aspect-ratio shrinks its width instead, which is what pulled
-     these thumbnails out of alignment with everything else. */
+  /* The thumbnail stays a thumbnail. Spanning the full row at each image's
+     own aspect ratio gave all eleven records ~500px of full-bleed media, so
+     the page ran to eleven screens of one repeated module — and the scanned
+     white posters among them tore holes in the near-black page. */
   .idx__thumb {
-    grid-column: 1 / -1;
-    grid-row: 2;
+    grid-column: 2;
+    grid-row: 1 / span 3;
     width: 100%;
-    aspect-ratio: var(--nat, 1) !important;
-    filter: none;
-    margin-top: 0.7rem;
-  }
-
-  .idx__thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    aspect-ratio: 1 !important;
+    margin-top: 0.2rem;
   }
 
   .idx__date,
   .idx__links {
-    grid-column: 2;
+    grid-column: 3;
     justify-content: flex-start;
   }
 
@@ -2550,6 +2689,17 @@ body.is-lb .progress {
   .foot__col,
   .foot__col--wide {
     grid-column: span 6;
+  }
+
+  /* Back to two columns here: the overlap that forced a single stack only
+     happens in the 2/12 cell the site map gets on desktop, and eight stacked
+     links cost ~190px of extra scroll on the device that can least afford it. */
+  .foot__map-links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(4, auto);
+    grid-auto-flow: column;
+    gap: 0.62rem 1.2rem;
   }
 
   .foot__map {

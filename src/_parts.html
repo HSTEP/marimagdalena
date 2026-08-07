@@ -3,7 +3,11 @@
 {% macro pricelist(pricing) %}
 <div class="price">
   {% for group in pricing %}
-  <div class="price__group rv" style="--d:{{ loop.index0 * 90 }}ms">
+  {# data-cols drives the narrow layout: a single-price group keeps name and
+     figure on one line, a three-tier group puts the name on its own line and
+     the figures in three real columns underneath a header shown once. #}
+  <div class="price__group rv" data-cols="{{ group.columns|length if group.columns else 1 }}"
+       style="--d:{{ loop.index0 * 90 }}ms">
     <div class="price__head">
       <h3 class="price__title">{{ group.title }}</h3>
       <span class="label">{{ plural_cz(group.rows|length, 'položka', 'položky', 'položek') }}</span>
@@ -25,11 +29,7 @@
         {% for label, prices in group.rows %}
         <tr>
           <td>{{ label }}</td>
-          {# data-len labels each cell so the narrow layout can restate the
-             column header inline once the <thead> is off-screen. #}
-          {% for price in prices %}
-          <td data-len="{{ group.columns[loop.index0] if group.columns else 'Cena' }}">{{ price }}</td>
-          {% endfor %}
+          {% for price in prices %}<td>{{ price }}</td>{% endfor %}
         </tr>
         {% endfor %}
       </tbody>

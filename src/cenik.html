@@ -12,9 +12,7 @@
 <section class="shell shell--wide phead">
   <div class="phead__grid">
     <div class="phead__meta">
-      {# The eyebrow named the page it sits on: gold italic "Ceník" directly
-         above an 80px "Ceník". It names the category instead. #}
-      <span class="num">Salon</span>
+      <span class="num">Ceník</span>
       <span class="label">{{ site.city }}</span>
     </div>
     <h1 class="phead__title">Ceník</h1>
@@ -32,20 +30,15 @@
   <div class="price__layout">
     {{ parts.pricelist(pricing) }}
 
-    {# The filled button belongs to the page's close, not to a panel that
+    {# The note that used to sit under the last table, set as the column beside
+       them. The filled button belongs to the page's close, not to a panel that
        follows you down it — one gold button per page, and this one carries the
        number instead. #}
     <aside class="price__aside rv">
-      <p class="label">Objednání</p>
       <p>
-        Objednávky přijímáme telefonicky i e‑mailem. Termín potvrdíme
-        a cenu upřesníme při konzultaci.
+        Objednávky přijímáme telefonicky i e‑mailem.
+        Najdete nás na adrese {{ site.street }}, {{ site.zip }} {{ site.city }}.
       </p>
-      {# Just the number. The e-mail and the address used to follow it here,
-         and then again in the endnote below, and then verbatim a third time in
-         the footer — the same four lines three times inside 900 vertical
-         pixels. This column's job is "ring us now"; the footer's job is
-         "here is everything". #}
       <a class="qlink qlink--plain price__tel" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
     </aside>
   </div>
@@ -54,11 +47,10 @@
 {# The page closed on nothing: the last table row, then 185px of empty ink to
    the footer. The booking column is not a close — it is sticky, so below
    1100px it stops being a column at all and ends up buried between two tables.
-   The transactional page gets the same endnote as the rest, with the filled
-   action on it rather than parked mid-column. #}
+   Same two actions the page has always ended on, laid out on the endnote's
+   grid so the close lands where every other page's close lands. #}
 <section class="shell shell--wide bay--top">
   <div class="endnote rv">
-    <p class="endnote__t">Nevíte, která služba je ta pravá? Řekneme si to při konzultaci.</p>
     <div class="endnote__a">
       <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>Objednat se</span>{{ ico.arrow() }}</a>
       <a class="qlink" href="mailto:{{ site.email }}">{{ site.email }}</a>

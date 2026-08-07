@@ -31,16 +31,12 @@
     </div>
   </div>
 
-  {# The running foot used to close on "Hair & Art Salon" bottom right. The
-     wordmark 590px above it in the same screen ends on the line "HAIR & ART
-     salon" — the same four words, in the same viewport, and the eyebrow above
-     that already places the salon. A running foot that repeats the masthead is
-     a slot spent on nothing, so the cue keeps it alone. #}
   <div class="hero__foot">
     <a class="scroll-cue label" href="#atelier">
       <span class="scroll-cue__line" aria-hidden="true"></span>
       <span>Dále</span>
     </a>
+    <p class="label">Hair&nbsp;&amp;&nbsp;Art&nbsp;Salon</p>
   </div>
 </section>
 
@@ -51,6 +47,7 @@
       <span class="label">O&nbsp;salonu</span>
     </div>
     <h2 class="sec__title">Kadeřnictví,<br>které je zároveň ateliérem</h2>
+    <p class="sec__note">{{ site.street }}, {{ site.city }}</p>
   </div>
 
   <div class="grid">
@@ -78,29 +75,6 @@
       <p style="margin-top:2.2rem">
         <a class="qlink" href="galerie.html">Hair&nbsp;&amp;&nbsp;Styling</a>
       </p>
-
-      {# The prose ran out well above the portrait beside it, leaving a third of
-         the row empty. The address was the section header's grey right-hand
-         note — a floating caption attached to nothing. Set as facts under the
-         paragraphs it belongs to the text, and it closes the column. #}
-      <dl class="facts">
-        <div class="facts__row">
-          <dt class="label">Adresa</dt>
-          <dd>{{ site.street }}<br>{{ site.zip }}&nbsp;{{ site.city }}</dd>
-        </div>
-        <div class="facts__row">
-          <dt class="label">V ateliéru</dt>
-          <dd>Kadeřnictví, galerie, klavír</dd>
-        </div>
-        {# Was "Otevřeno od {{ site.founded }}" — the third time that year
-           appeared inside five hundred pixels, after the hero eyebrow and the
-           first sentence of the paragraph directly above. A row that repeats
-           the page is ballast; this section otherwise offered nothing to do. #}
-        <div class="facts__row">
-          <dt class="label">Objednání</dt>
-          <dd><a class="qlink qlink--plain" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a></dd>
-        </div>
-      </dl>
     </div>
 
     <figure class="atelier__fig rv-clip" style="--d:180ms">
@@ -142,14 +116,10 @@
   {# Laid out on the table's own columns rather than pushed to the two far
      edges of the measure: flush right, the section's main action sat 958px
      from the reading axis with a 677px hole between it and the caveat. #}
-  {# One action. The phone number that used to sit beside it was the page's
-     fourth printing of the same digits — nav bar, facts row 600px above,
-     here, footer — and it overran its track by 12px, so it wrapped and left a
-     128px underline hanging in the left column with nothing beside it. On a
-     page built out of hairlines an orphan rule reads as a broken one. #}
   <div class="svc__foot rv">
     <div class="actions">
       <a class="cta" href="cenik.html"><span>Celý ceník</span>{{ ico.arrow() }}</a>
+      <a class="qlink qlink--plain" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
     </div>
     <p class="svc__note">Ceny jsou orientační, konečná cena vždy vychází z konzultace.</p>
   </div>

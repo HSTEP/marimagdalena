@@ -1312,53 +1312,6 @@ a.plate:hover > img,
   }
 }
 
-/* ------------------------------------------------------------- 11b. facts */
-/* Three ruled rows that close a text column against a photograph running
-   longer than the prose beside it. Label left, value right, same measure as
-   the paragraphs above. */
-.facts {
-  margin-top: clamp(2.2rem, 4vw, 3.2rem);
-  border-top: 1px solid var(--hair-strong);
-}
-
-/* Equal halves, not 0.7 : 1. The table spans the page's columns 1-6, so two
-   equal tracks put the value on column 4 (x=403.9 at 1440) — the same line
-   the rest of the page registers against. The old ratio landed it at 350.9:
-   57px past column 3, 53px short of column 4, an internal measure invented
-   inside an otherwise tightly registered page and repeated on all three rows.
-   The label column never exceeded x=144, so column 4 was free. */
-.facts__row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--gap);
-  align-items: baseline;
-  padding: 0.85rem 0;
-  border-bottom: 1px solid var(--hair);
-}
-
-/* No underline on the value. The phone was the one link in the table and it
-   drew a gold rule 14.6px above the row's own grey one — two rules, two
-   colours, two weights, inside the 20px this system will not draw within —
-   and it stretched that row to 54px against the 50px of the identical row
-   above, so the table's rhythm limped on its last line. Gold under a phone
-   number in a facts list is also highlighting rather than accenting: it was
-   the third gold appearance in two viewports, all pointing at one number.
-   The label `OBJEDNÁNÍ` already says what it is, and it stays a `tel:` link. */
-.facts a {
-  border-bottom: 0;
-  background-image: none;
-}
-
-.facts a:hover {
-  color: var(--gold);
-}
-
-.facts dd {
-  color: var(--fg-2);
-  font-size: var(--t-small);
-  line-height: 1.55;
-}
-
 /* ---------------------------------------------------------- 11. strip/reel */
 .reel {
   display: flex;
@@ -2286,6 +2239,15 @@ a.plate:hover > img,
   letter-spacing: var(--track-caps);
   text-transform: uppercase;
   color: var(--fg-3);
+}
+
+/* The ninth card's role slot holds the address, which is not a job title: set
+   in tracked micro-caps like the eight above it, it ran 214px wide in a 167px
+   phone card. Lower case, same size and colour, no tracking — it stays on the
+   caption's second baseline and reads as what it is. */
+.person--call .person__role {
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 /* Fills the cell the seventh partner leaves empty, and is a real invitation

@@ -77,7 +77,7 @@
       {# A colophon, not a label. Set in tracked micro-caps at the foot of the
          column with nothing under it, it read as a heading whose list had
          failed to render — a label labels something. #}
-      <p class="prose__sign">— Realizační tým ART CONNECTING</p>
+      <p class="prose__sign">Realizační tým ART CONNECTING</p>
     </div>
   </div>
 </section>
@@ -89,6 +89,7 @@
        caps on /obrazy — the same word, the same slot, two clicks apart. #}
     <div class="sec__meta">
       <span class="label">Archiv</span>
+      <span class="label">Projekty</span>
     </div>
     <h2 class="sec__title">Co jsme dosud uspořádali</h2>
     <p class="sec__note">Focení, workshopy, přehlídky a setkání — od roku 2019 do dneška.</p>
@@ -155,13 +156,9 @@
           {% if p.description %}<p class="arch__note">{{ p.description }}</p>{% endif %}
           {% if p.video_url and not embed %}
           {# Facebook sends X-Frame-Options: deny, so an embed would be a
-             permanently blank box. A link in the caption, not a media tile.
-             The label is one word, like GALERIE beside it — printing the
-             hostname put a domain in tracked micro-caps in a column where
-             every other label is a noun, and the href already says where it
-             goes. #}
+             permanently blank box. A link in the caption, not a media tile. #}
           <div class="arch__links">
-            <a class="qlink" href="{{ p.video_url }}" target="_blank" rel="noopener noreferrer">Video</a>
+            <a class="qlink" href="{{ p.video_url }}" target="_blank" rel="noopener noreferrer">Přehrát na {{ link_label('', p.video_url) }}</a>
           </div>
           {% endif %}
           {% if p.links %}
@@ -187,15 +184,6 @@
   {% else %}
   <p class="lede">Žádné projekty k zobrazení.</p>
   {% endif %}
-</section>
-
-<section class="shell shell--wide bay--top">
-  <div class="endnote rv">
-    <p class="endnote__t">Máte projekt, který by se sem hodil? Přidat se může každý.</p>
-    <div class="endnote__a">
-      <a class="qlink" href="mailto:artconnecting@email.cz">artconnecting@email.cz</a>
-    </div>
-  </div>
 </section>
 
 {% endblock %}

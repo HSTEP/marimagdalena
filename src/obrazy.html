@@ -13,12 +13,12 @@
 <section class="shell shell--wide phead">
   <div class="phead__grid">
     <div class="phead__meta">
-      <span class="num">Katalog</span>
-      {# "87 děl" stood here. Six page headers on this site; five name a
-         category and this one also declared its row count, which made the
-         header a record summary. /galerie's second slot holds "Londa
+      {# "87 děl" stood in a second slot here. Six page headers on this site;
+         five name a category and this one also declared its row count, which
+         made the header a record summary. /galerie's second slot holds "Londa
          Professional" — a name, something you could not have guessed. A
          tally of what is directly below is not that. #}
+      <span class="num">Galerie</span>
     </div>
     <h1 class="phead__title">Obrazy</h1>
     <p class="phead__lede lede">
@@ -39,29 +39,18 @@
    record, so the page answers "what can I buy" by its own shape and the reader
    always knows which half they are in. #}
 <section class="shell shell--wide bay--top" id="k-prodeji">
-  {# Not .sec--lead. That rank is the homepage's, where there is no page header
-     to outrank it; here it set the chapter at the same 80px as "Obrazy" 290px
-     above it, so on first paint you could not tell which line was the page and
-     which was the chapter. The ladder on this page runs 80 / 48 / 35. #}
-  <div class="sec rv">
-    <div class="sec__meta">
-      <span class="label">K&nbsp;prodeji</span>
-    </div>
-    <h2 class="sec__title">Volná díla</h2>
-    {# Three row-counts in one sentence — "34 z 87 pláten je k dispozici.
-       Zbývajících 53 najdete…" — and a fourth over the archive below. Every
-       one of them was a `|length` printed as if it were a sentence, which is
-       how an inventory system describes a collection and not how a gallery
-       does. The figures also went stale in the reader's hand: they change
-       whenever a painting sells, so the page made a promise about stock that
-       the plates underneath already answer by simply being there.
+  {# Chapter heads, not section heads: no eyebrow and no note, because the two
+     titles are the only words on this page that were not already written for
+     it. They are the data's own two states — the same pair the filter bar
+     printed and the same pair the tiles used to carry as badges — so the split
+     is labelled without anything being composed for it.
 
-       What the reader needs here is the division, not the tally: these are
-       for sale, those are gone, and the archive is that way. #}
-    <p class="sec__note">
-      Plátna, která jsou k dispozici. Co už našlo majitele, je
-      <a href="#prodano">v archivu níže</a>.
-    </p>
+     Not .sec--lead either. That rank is the homepage's, where there is no page
+     header to outrank it; here it set the chapter at the same 80px as "Obrazy"
+     290px above it, so on first paint you could not tell which line was the
+     page and which was the chapter. The ladder on this page runs 80 / 48. #}
+  <div class="sec rv">
+    <h2 class="sec__title">K&nbsp;prodeji</h2>
   </div>
 
   <div class="works" data-gallery data-batch="24">
@@ -97,11 +86,7 @@
 
 <section class="shell shell--wide" id="prodano">
   <div class="sec sec--minor rv">
-    <div class="sec__meta">
-      <span class="label">Archiv</span>
-    </div>
     <h2 class="sec__title">Prodáno</h2>
-    <p class="sec__note">Díla, která už visí jinde.</p>
   </div>
 
   {# Smaller frames, more per row. A record of what has gone should read as an

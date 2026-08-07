@@ -716,8 +716,24 @@ a.plate:hover > img,
    an underline instead of between two rules.
 
    Matching the button's own vertical padding lands the underline exactly on
-   its bottom border, so the pair closes as one ruled band. */
-.actions .qlink {
+   its bottom border, so the pair closes as one ruled band.
+
+   Keyed to the pair, not to the wrapper it was reported in. The first version
+   of this was `.actions .qlink`, which fixed the hero and left /cenik's
+   endnote — the identical device, a gold `.cta` beside a `.qlink` on a shared
+   baseline — still 8.8px out. A component that behaves two ways in two places
+   because the correction was scoped to one parent class is the tell this whole
+   review is hunting: it fixes the instance somebody complained about instead
+   of the thing that was wrong. What makes the padding necessary is a button
+   standing next to the link, so that is what selects it. */
+.cta ~ .qlink {
+  padding-bottom: 1.05rem;
+}
+
+/* And the same row led by the link. Kept as its own rule rather than added to
+   the list above: an unsupported `:has()` invalidates an entire selector list,
+   which would take the sibling case down with it. */
+:is(.actions, .endnote__a):has(.cta) .qlink {
   padding-bottom: 1.05rem;
 }
 
@@ -1824,8 +1840,15 @@ a.plate:hover > img,
   filter: none;
 }
 
+/* Hung from the corner, exactly as .arch__field img is and for the same reason:
+   `contain` centres whatever it could not fill, so the one portrait poster in
+   this index painted 12.8px right of the ten photographs stacked under it and
+   the column's left edge visibly stepped at that row. The archive's own comment
+   makes this argument already — it just never reached the other page that does
+   the same thing. */
 .idx__thumb--doc img {
   object-fit: contain;
+  object-position: left center;
   background-color: transparent !important;
 }
 
@@ -1971,30 +1994,24 @@ a.plate:hover > img,
   aspect-ratio: 16 / 9;
 }
 
-/* A catalogue that has no plate for an entry sets a slug; it does not leave the
-   column blank. One record here is a Facebook video with no still and no
-   frameable embed, and the template had no branch for it — so its cell was
-   empty from the top of the row down to a lone link pinned 313px lower by
-   `margin-top: auto`, which reads as a broken image, not as a record.
+/* Reserved space, nothing in it. One record here is a Facebook video with no
+   still and no frameable embed; its cell holds the square so its caption keeps
+   the line its two neighbours are on, and holds nothing else.
 
-   No fill. The first version of this set the year in large italic on an
-   --ink-raise panel, which was wrong twice: --ink-raise is used in five other
-   places and in every one of them it sits behind an image and is never seen, so
-   exposing it as a surface invented a third ground for one cell — the
-   shadowless card this system exists to avoid. And the year was already on
-   screen twice, in the chapter head and in the caption below, so the panel was
-   decoration standing in for content. The field keeps its square so the row
-   rhythm holds; the slug hangs from the same top-left corner as every real
-   plate beside it, and says the one thing not said anywhere else. */
+   Two things were tried in this square and both were the same mistake. First
+   the year, set large italic on an --ink-raise panel: --ink-raise sits behind an
+   image everywhere else it is used and is never actually seen, so exposing it as
+   a surface invented a third ground for one cell — the shadowless card this
+   system exists to avoid — and the year was already on screen twice within
+   300px anyway. Then a tracked micro-cap slug, BEZ VYOBRAZENÍ, which was worse
+   for being subtler: 109×16 of grey type with 387px of void beneath it, telling
+   the reader which branch of the template they had landed in. Neither is a
+   caption. Both are the build talking about itself.
+
+   A printed catalogue missing a plate leaves the space and sets the entry, and
+   that is now literally all this does. */
 .arch__field--none {
   display: block;
-}
-
-.arch__field--none span {
-  font-size: var(--t-micro);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--fg-3);
 }
 
 .arch__field--video {
@@ -2050,14 +2067,48 @@ a.plate:hover > img,
   line-height: 1.5;
 }
 
+/* The same two-track index as .idx__links on /vystavy, for the same reason and
+   with the same mechanism. Wrapped in a flex row these forty-one underlines
+   were forty-one lengths — twenty-three distinct ones, 41px to 158px — because
+   each rule was exactly as long as the label the editor happened to type.
+   /vystavy carries the argument against that in a comment eight hundred lines
+   above; having written the principle down and shipped it on the smaller of the
+   two archives, leaving the larger on the old behaviour is just a fix applied
+   where it was reported instead of where it applies.
+
+   Two tracks rather than one: thirty-one of these cells hold a single link, and
+   a single track would close every one of them on a 411px rule as long as the
+   tile itself and as heavy as the chapter rules that divide the page. At half
+   the measure the action is legibly an action, and the four cells that hold two
+   land on the same two verticals as their neighbours' first column.
+
+   align-self, because .arch__meta packs its children to flex-start and a grid
+   that does not claim the column would still be sized by its contents. */
 .arch__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.4rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* --gap, not 1.4rem, and that is what makes the next rule come out exact. */
+  gap: 0.5rem var(--gap);
+  align-self: stretch;
   /* Bottom of the cell, so the actions across a row land on one line whatever
      their titles did above them. */
   margin-top: auto;
   padding-top: 0.6rem;
+}
+
+/* The video tile spans two cells, so two tracks made its one link 416px against
+   everyone else's 194 — the ragged-underline problem moved rather than solved,
+   and moved onto the single widest item on the page where it is most visible.
+   Four tracks, because a wide cell is exactly two cells plus one --gap: four
+   tracks separated by three --gaps is two of those pairs plus the gap between
+   them, so the track width comes out identical rather than merely close. Every
+   one of the forty-one underlines on this page is now 189.6px. */
+.arch__item--wide .arch__links {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.arch__links .qlink {
+  display: block;
 }
 
 /* -------------------------------------------------------------- 16. people */

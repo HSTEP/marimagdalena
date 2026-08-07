@@ -35,7 +35,12 @@
       <span class="label">Kolekce</span>
     </div>
     <h2 class="sec__title">Londa Color&nbsp;Tune<br>Berlín 2023</h2>
-    <p class="sec__note">Ze zákulisí focení kolekce.</p>
+    {# Signposts the split below. "Nejdřív" is doing real work: it tells the
+       reader the seven frames that follow are one part of two, so the second
+       chapter rule arrives as the sequence continuing rather than as the page
+       changing subject. The old note said "Ze zákulisí focení kolekce" over all
+       twenty-one plates, which was true of about seven of them. #}
+    <p class="sec__note">Nejdřív ze zákulisí — tým, příprava, studio.</p>
   </div>
 
   {# Set as a quote, with the attribution under the words it attributes. It
@@ -73,8 +78,33 @@
      figures and twenty-one rules were a numbering scheme with no referent,
      which is the look of a table with the column headings taken off. The
      shoot is named once, above; the frames are the frames. #}
+
+  {# Broken in two, at seven.
+
+     Set as one run this was 5,799px of pictures — 78% of the page, about six
+     and a half screens — between the attribution above it and the ceník note at
+     the bottom, with not one word in it. Cutting the plate numbers was right;
+     they were a numbering scheme with no referent. But twenty-one hairlines
+     were also the only thing pacing the scroll, and taking them out without
+     putting anything back left a folder of images where a catalogue had been.
+     A printed catalogue of twenty-one plates has chapter breaks. It does not
+     run six spreads without a running head.
+
+     The break is at seven because the sequence already leans that way. Five of
+     the seven process frames — the artistic team on the stairs, the briefing,
+     the colour swatches, the whiteboard, the empty studio before anyone is in
+     it — fall inside the first seven positions; only two of the remaining
+     fourteen are process shots, and the rest is the finished thing, the styled
+     looks and the boxes. That is the curator's own file ordering, not a
+     division imposed on it, so the heads only name what is already there.
+     Hence "Nejdřív" rather than a claim that the halves are pure.
+
+     Seven is also exactly one cycle of the 7n layout rhythm and fourteen is
+     exactly two, and `nth-child` counts within its own parent, so both halves
+     open on a row of three and close on a complete row. Splitting anywhere else
+     would have left a stub. #}
   <div class="tiles tiles--plates">
-    {% for image in images %}
+    {% for image in images[:7] %}
     {# No data-tag. The lightbox writes its own "01 / 21" into the top bar, so
        supplying the same string as the tag printed the counter twice on one
        overlay, in two different typographic voices. #}
@@ -84,6 +114,32 @@
        aria-label="Snímek {{ loop.index }} z kolekce Londa Color Tune">
       <span class="tiles__fig">
         {{ img(image, alt='Kolekce Londa Color Tune, Berlín 2023 — snímek ' ~ loop.index,
+               sizes='(max-width:760px) 46vw, 30vw', cover=true) }}
+      </span>
+    </a>
+    {% endfor %}
+  </div>
+
+  {# Minor rank, and no note. This is a chapter inside the section above, not a
+     new section — the eyebrow names the category the way every eyebrow on the
+     site does, the title says what follows, and .sec's own --hair-strong rule
+     is the chapter break. The signposting was already spent on the note above;
+     saying it twice would make the halfway mark louder than the shoot. #}
+  <div class="sec sec--minor rv" style="margin-top: var(--bay-sm)">
+    <div class="sec__meta">
+      <span class="label">Kampaň</span>
+    </div>
+    <h2 class="sec__title">Hotové looky</h2>
+  </div>
+
+  <div class="tiles tiles--plates">
+    {% for image in images[7:] %}
+    <a class="tiles__item rv" href="{{ big(image) }}" data-lb-item
+       data-title="Londa Color Tune — Berlín 2023"
+       style="--d:{{ (loop.index0 % 7) * 50 }}ms"
+       aria-label="Snímek {{ loop.index + 7 }} z kolekce Londa Color Tune">
+      <span class="tiles__fig">
+        {{ img(image, alt='Kolekce Londa Color Tune, Berlín 2023 — snímek ' ~ (loop.index + 7),
                sizes='(max-width:760px) 46vw, 30vw', cover=true) }}
       </span>
     </a>

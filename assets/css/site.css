@@ -244,7 +244,10 @@ h4 {
   font-family: var(--sans);
   font-size: var(--t-micro);
   font-weight: 400;
-  letter-spacing: 0.26em;
+  /* 0.26em is display tracking. At 11px on strings carrying háčky and čárky
+     ("TÁHNĚTE DO STRANY", "REPORTÁŽ Z VÝSTAVY") the accents floated clear of
+     their letters and the word stopped reading as one word. */
+  letter-spacing: 0.17em;
   text-transform: uppercase;
   /* Set for the single-line desktop case at 1. These strings wrap on a phone,
      where the acute on a capital Y ran straight into the line above. */
@@ -370,38 +373,76 @@ main > section:last-of-type {
   border: 0;
 }
 
-/* Section header: hairline, index numeral, title, optional note. The numeral
-   and the rule are the recurring signature across every page. */
+/* Section header. Deliberately the same skeleton as .phead — rule, label row,
+   flush-left title, note bottom-right — because a section header and a page
+   header are the same organism at two ranks, and the site should own that
+   rather than keep two unrelated arrangements.
+
+   The title used to sit at `grid-column: 4 / span 6`, i.e. 404px in from the
+   left on a 1440 viewport, while every other thing on the page — body copy,
+   the rules, the buttons, the footer — began at the 72px margin. Nothing lined
+   up with it, and it recurred often enough to read as the template showing
+   through. Titles now start on the margin like everything else. */
 .sec {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--gap);
-  /* Baseline, not `end`: the title is one or two lines depending on the page,
-     and bottom-aligning made the numeral and the note sit at a different
-     height in every section header. */
-  align-items: baseline;
-  padding-top: 1.35rem;
-  border-top: 1px solid var(--hair);
+  gap: 0 var(--gap);
+  align-items: end;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--hair-strong);
   margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
 }
 
 .sec__meta {
-  grid-column: 1 / span 3;
+  grid-column: 1 / -1;
   display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: clamp(1.1rem, 2.4vw, 2rem);
+}
+
+/* Carries the label out to the full measure, the way .phead__meta does. */
+.sec__meta::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--hair);
 }
 
 .sec__title {
-  grid-column: 4 / span 6;
+  grid-column: 1 / span 7;
   font-size: var(--t-h2);
 }
 
 .sec__note {
-  grid-column: 10 / span 3;
+  grid-column: 9 / span 4;
+  align-self: end;
+  padding-bottom: 0.4rem;
   font-size: var(--t-small);
   color: var(--fg-3);
   line-height: 1.6;
+}
+
+/* Ranks. Four sections set at one size, in one arrangement, with one rule
+   above each is a list, not a hierarchy — the reader gets no help deciding
+   what this place is. The gallery is what makes a hairdresser's worth a
+   second look, so it is the loudest thing on the page after the hero; the
+   services and the events run quieter than the two that matter. */
+.sec--lead .sec__title {
+  grid-column: 1 / span 8;
+  font-size: var(--t-h1);
+}
+
+.sec--minor .sec__title {
+  font-size: var(--t-h3);
+}
+
+.sec--minor {
+  margin-bottom: clamp(1.8rem, 3.2vw, 2.8rem);
+}
+
+.sec--minor .sec__meta {
+  margin-bottom: clamp(0.7rem, 1.4vw, 1.1rem);
 }
 
 /* ------------------------------------------------------------ 5. img/plate */
@@ -465,7 +506,7 @@ a.plate:hover > img,
   font-family: var(--sans);
   font-size: var(--t-micro);
   font-weight: 400;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.17em;
   text-transform: uppercase;
   color: var(--fg);
   position: relative;
@@ -540,7 +581,7 @@ a.plate:hover > img,
   gap: 0.7rem;
   font-family: var(--sans);
   font-size: var(--t-micro);
-  letter-spacing: 0.26em;
+  letter-spacing: 0.17em;
   text-transform: uppercase;
   color: var(--fg-2);
   padding-bottom: 0.5rem;
@@ -769,7 +810,7 @@ a.plate:hover > img,
   justify-content: center;
   padding: var(--nav-h) var(--gutter) 3rem;
   clip-path: inset(0 0 100% 0);
-  transition: clip-path 0.8s var(--ease);
+  transition: clip-path 0.44s var(--ease);
   visibility: hidden;
   overflow-y: auto;
 }
@@ -804,9 +845,12 @@ a.plate:hover > img,
   transform: translateY(1rem);
 }
 
+/* Eight items at 55ms apart on top of a 750ms rise meant the last link in the
+   list finished arriving 1.35s after the tap — long enough on a phone to look
+   like the page had stalled. Navigation should not be an entrance. */
 .is-menu .menu__link {
-  animation: rise 0.75s var(--ease) forwards;
-  animation-delay: calc(0.16s + var(--i) * 0.055s);
+  animation: rise 0.4s var(--ease) forwards;
+  animation-delay: calc(0.06s + var(--i) * 0.028s);
 }
 
 .menu__link .num {
@@ -1059,8 +1103,7 @@ a.plate:hover > img,
 
 /* Quiet: two independent gold italic numeral series ran 200px apart on the
    homepage. The section index keeps the accent; row numbers don't need it. */
-.svc__row .num,
-.idx__row .num {
+.svc__row .num {
   color: var(--fg-3);
 }
 
@@ -1080,6 +1123,46 @@ a.plate:hover > img,
   text-align: right;
 }
 
+/* Caveat left, actions right, on the row that closes the table. */
+.svc__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.2rem 2.5rem;
+  margin-top: 1.6rem;
+}
+
+.svc__note {
+  font-size: var(--t-small);
+  color: var(--fg-3);
+  max-width: 42ch;
+}
+
+/* ------------------------------------------------------------- 11b. facts */
+/* Three ruled rows that close a text column against a photograph running
+   longer than the prose beside it. Label left, value right, same measure as
+   the paragraphs above. */
+.facts {
+  margin-top: clamp(2.2rem, 4vw, 3.2rem);
+  border-top: 1px solid var(--hair-strong);
+}
+
+.facts__row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr);
+  gap: var(--gap);
+  align-items: baseline;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--hair);
+}
+
+.facts dd {
+  color: var(--fg-2);
+  font-size: var(--t-small);
+  line-height: 1.55;
+}
+
 /* ---------------------------------------------------------- 12. strip/reel */
 .reel {
   display: flex;
@@ -1092,6 +1175,16 @@ a.plate:hover > img,
   scroll-snap-type: x mandatory;
   padding-bottom: 1.5rem;
   scrollbar-width: thin;
+  /* The bleed put the strip's right edge at the viewport's, so the partial
+     frame arrived with its title sliced mid-word — "Time", "Cognit" — which
+     reads as text overflowing, not as more to come. Fading the last gutter
+     makes the cut deliberate; the mask is on the scroller, so it stays at the
+     edge while the frames move under it. */
+  mask-image: linear-gradient(
+    to right,
+    #000 calc(100% - var(--gutter) * 0.8),
+    rgb(0 0 0 / 0%) 100%
+  );
 }
 
 .reel::-webkit-scrollbar {
@@ -1131,8 +1224,6 @@ a.plate:hover > img,
   object-fit: cover;
 }
 
-
-
 .reel__meta {
   display: flex;
   align-items: center;
@@ -1140,18 +1231,52 @@ a.plate:hover > img,
   margin-top: 0.9rem;
 }
 
-.reel__meta::after {
+/* Counter left, hint right, one rule carrying the eye between them — instead
+   of both labels huddled left with a rule trailing off after them. */
+.reel__meta > :first-child {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.reel__meta > :first-child::after {
   content: "";
   flex: 1;
   height: 1px;
   background: var(--hair);
 }
 
+.reel__meta [data-reel-index] {
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-2);
+}
+
 /* ------------------------------------------------------- 13. gallery/works */
 .works {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--gap);
+  gap: clamp(2rem, 3vw, 2.8rem) var(--gap);
+}
+
+/* The sold chapter. Smaller frames, more of them per row: a record of what has
+   gone should read at index scale rather than compete, plate for plate, with
+   the work you can still buy. It is also the only variation in tile scale on
+   the page, and scale is what tells a reader the two halves are not the same
+   kind of thing. */
+.works--index {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(1.5rem, 2.2vw, 2.1rem) var(--gap);
+}
+
+.works--index .works__name {
+  font-size: 0.9rem;
+  color: var(--fg-2);
+}
+
+.works--index .works__cap {
+  margin-top: 0.55rem;
+  padding-top: 0.45rem;
 }
 
 .works__item {
@@ -1198,12 +1323,17 @@ a.plate:hover > img,
   border-top: 1px solid var(--hair);
 }
 
+/* Not gold. Gold is already carrying brand, active nav, the section eyebrows
+   and the primary button; spending it again on a status that is true of half
+   the catalogue turned the wall into a rash of accent and left the colour
+   meaning nothing anywhere. Availability is the default state and reads in
+   plain bone; "prodáno" is the marked one and steps back. */
 .works__state {
   font-family: var(--sans);
   font-size: var(--t-micro);
-  letter-spacing: 0.18em;
+  letter-spacing: 0.17em;
   text-transform: uppercase;
-  color: var(--gold-deep);
+  color: var(--fg-2);
   white-space: nowrap;
   flex: none;
 }
@@ -1219,33 +1349,6 @@ a.plate:hover > img,
   font-variation-settings: "opsz" 16;
   color: var(--bone);
   line-height: 1.3;
-}
-
-.works__no {
-  font-size: var(--t-micro);
-  letter-spacing: 0.2em;
-  color: var(--bone-3);
-  font-variant-numeric: tabular-nums;
-}
-
-/* Sold mark: a hairline gold roundel, set in the corner like a catalogue stamp */
-.sold {
-  position: absolute;
-  top: 0.85rem;
-  right: 0.85rem;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.7rem;
-  background: rgb(6 5 5 / 62%);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgb(227 166 60 / 45%);
-  color: var(--gold);
-  font-size: 0.625rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  line-height: 1;
 }
 
 .works__more {
@@ -1267,59 +1370,6 @@ a.plate:hover > img,
     align-items: flex-start;
     gap: 1rem;
   }
-}
-
-.filters {
-  display: flex;
-  gap: 1.8rem;
-  align-items: center;
-  flex-wrap: wrap;
-  padding-bottom: 1.2rem;
-  border-bottom: 1px solid var(--hair);
-  margin-bottom: clamp(1.8rem, 4vw, 3rem);
-}
-
-.filter {
-  font-size: var(--t-micro);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--fg-2);
-  min-height: 2.75rem;
-  display: inline-flex;
-  align-items: center;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid transparent;
-  transition: color 0.35s, border-color 0.35s;
-}
-
-.filter:hover {
-  color: var(--fg);
-}
-
-.filter.is-on {
-  color: var(--gold);
-  border-bottom-color: var(--gold);
-}
-
-/* The count is subordinate to the label, but dimming it with opacity drops it
-   below AA — step down the colour instead, which keeps it legible. */
-.filter__n {
-  font-variant-numeric: tabular-nums;
-  color: var(--fg-3);
-  margin-left: 0.4rem;
-  transition: color 0.35s;
-}
-
-.filter.is-on .filter__n {
-  color: var(--gold-deep);
-}
-
-.filters__count {
-  margin-left: auto;
-  font-size: var(--t-micro);
-  letter-spacing: 0.22em;
-  color: var(--fg-3);
-  font-variant-numeric: tabular-nums;
 }
 
 /* ------------------------------------------------------------- 14. squares */
@@ -1364,8 +1414,6 @@ a.plate:hover > img,
   }
 }
 
-
-
 .tiles__item {
   position: relative;
   aspect-ratio: 1;
@@ -1403,7 +1451,25 @@ a.plate:hover > img,
 /* Exhibitions: a catalogue index. Hovering a row floats its plate under the
    cursor on pointer devices; on touch the plate is simply part of the row. */
 .idx {
-  border-top: 1px solid var(--hair);
+  border-top: 1px solid var(--hair-strong);
+}
+
+/* Chapter break. The year carries the numeral the rows gave up. */
+.idx__chapter {
+  display: flex;
+  align-items: baseline;
+  gap: 1.1rem;
+  padding: clamp(2.2rem, 4vw, 3.4rem) 0 0.8rem;
+  border-bottom: 1px solid var(--hair);
+}
+
+.idx__chapter:first-child {
+  padding-top: 1.1rem;
+}
+
+.idx__chapter .num {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-variation-settings: "opsz" 40;
 }
 
 .idx__row {
@@ -1411,7 +1477,7 @@ a.plate:hover > img,
   /* Fixed fractions, not `auto` on the last column: an auto track sized by each
      row's own links would shift the date column and the index would lose its
      vertical rules. */
-  grid-template-columns: 3.2rem 5.5rem minmax(0, 1.35fr) minmax(0, 0.6fr) minmax(0, 0.7fr);
+  grid-template-columns: 5.5rem minmax(0, 1.5fr) minmax(0, 0.55fr) minmax(0, 0.75fr);
   gap: var(--gap);
   align-items: center;
   padding: clamp(1.15rem, 2.6vw, 1.9rem) 0;
@@ -1441,11 +1507,15 @@ a.plate:hover > img,
   font-size: var(--t-small);
 }
 
+/* Left, not right. Right-aligned, a row carrying one link pushed it flush to
+   the shell edge while a row carrying two started 220px earlier, so the same
+   label sat at two different x-positions down the index and the second action
+   never formed a column at all. An index is columns. */
 .idx__links {
   display: flex;
-  gap: 1.2rem;
+  gap: 0.5rem 1.4rem;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 /* A real thumbnail in the row. The floating hover plate was the page's only
@@ -1522,29 +1592,7 @@ a.plate:hover > img,
   border: 1px solid var(--hair);
 }
 
-/* ---------------------------------------------------------------- 16. feed */
-/* Projects: an alternating two-column feed, offset so the eye zig-zags. */
-.feed {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(4rem, 9vw, 8.5rem);
-}
-
-.feed__year {
-  display: flex;
-  align-items: baseline;
-  gap: 1.2rem;
-  padding-bottom: 0.9rem;
-  border-bottom: 1px solid var(--hair);
-  margin-bottom: clamp(0.5rem, 2vw, 1.5rem);
-}
-
-.feed__year .num {
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
-  font-variation-settings: "opsz" 40;
-}
-
-/* ------------------------------------------------- 16b. project archive */
+/* ------------------------------------------------- 16. project archive */
 .arch {
   display: flex;
   flex-direction: column;
@@ -1584,24 +1632,34 @@ a.plate:hover > img,
   min-width: 0;
 }
 
-/* The one record with no media becomes a full-width text band at every size.
-   Left in a cell it was ~400px of empty black beside two tall pictures. */
-.arch__grid > .arch__item:not(:has(.arch__field)) {
-  grid-column: 1 / -1;
-}
-
-/* The two video records break the three-up rhythm on purpose — 41 identical
-   tiles is the thing that reads as a database dump. */
+/* One promotion rule, and it is editorial: a video is wider than it is tall,
+   so it takes two cells. The archive used to promote three different ways —
+   videos, records with no media, and any last item that happened to land on an
+   odd count — so tile scale, which is the loudest signal on a page, varied for
+   reasons no reader could infer. A record with nothing to show now simply
+   occupies its cell, and a ragged last row is left ragged, the way the last
+   row of a catalogue always is. */
 .arch__item--wide {
   grid-column: span 2;
 }
 
+/* A hairline frame, not a filled plate. The stylesheet's own doctrine is that
+   structure comes from rules and space and that this site has no cards; the
+   archive was the one place on ink that broke it, and it sat directly next to
+   /obrazy, where images bleed to the tile edge with no panel at all. The frame
+   does the same job — every artefact whole, on one field — with the device the
+   rest of the site already uses. */
 .arch__field {
   display: block;
   position: relative;
   aspect-ratio: 1;
   overflow: hidden;
-  background: var(--ink-raise);
+  border: 1px solid var(--hair);
+  transition: border-color 0.5s var(--ease);
+}
+
+.arch__field:hover {
+  border-color: var(--hair-strong);
 }
 
 /* Contain, always. Three review rounds running, some poster in here was being
@@ -1647,6 +1705,12 @@ a.plate:hover > img,
   gap: 0.55rem;
 }
 
+/* Matches .idx__date on /vystavy — one treatment for one kind of datum. */
+.arch__date {
+  color: var(--fg-3);
+  font-size: var(--t-small);
+}
+
 .arch__title {
   font-size: clamp(1.15rem, 1.5vw, 1.4rem);
   line-height: 1.16;
@@ -1668,62 +1732,6 @@ a.plate:hover > img,
   flex-wrap: wrap;
   gap: 0.5rem 1.4rem;
   margin-top: 0.2rem;
-}
-
-.feed__title {
-  font-size: clamp(1.5rem, 2.6vw, 2.2rem);
-  line-height: 1.12;
-}
-
-.feed__title br {
-  display: none;
-}
-
-.feed__frame {
-  position: relative;
-  overflow: hidden;
-  background: var(--ink-raise);
-}
-
-.feed__frame iframe {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  height: auto;
-  border: 0;
-}
-
-/* Sized to its content. Held at 16:9 it was 230px of empty bordered box and
-   still read as the failed embed it replaced. */
-.feed__offsite {
-  display: inline-flex;
-  align-items: center;
-  gap: 1.1rem;
-  padding: 1.15rem 1.6rem;
-  border: 1px solid var(--hair);
-  transition: border-color 0.5s var(--ease), color 0.4s;
-}
-
-.feed__offsite::before {
-  content: "";
-  flex: none;
-  width: 0;
-  height: 0;
-  border-left: 0.72rem solid currentColor;
-  border-top: 0.44rem solid transparent;
-  border-bottom: 0.44rem solid transparent;
-  opacity: 0.75;
-}
-
-.feed__offsite:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-}
-
-.feed__offsite-t {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(1.2rem, 2vw, 1.6rem);
-  font-variation-settings: "opsz" 24;
 }
 
 /* -------------------------------------------------------------- 17. people */
@@ -1846,6 +1854,45 @@ a.plate:hover > img,
   gap: clamp(2.6rem, 5vw, 4.2rem);
 }
 
+/* The tables are capped at 64rem for a reason (see .price__group), but the
+   page header above them ran the full shell, so 272px on the right belonged to
+   nothing and no edge lined up with any other. The practical column now lives
+   there — how to book, where we are — and the page reads as two columns rather
+   than as one narrow one with a hole beside it. */
+.price__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 64rem) minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 4.5rem);
+  align-items: start;
+}
+
+.price__aside {
+  position: sticky;
+  top: calc(var(--nav-h) + 2rem);
+  border-top: 1px solid var(--hair-strong);
+  padding-top: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.2rem;
+}
+
+.price__aside p {
+  font-size: var(--t-small);
+  color: var(--fg-3);
+  line-height: 1.6;
+}
+
+@media (width <= 1100px) {
+  .price__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .price__aside {
+    position: static;
+  }
+}
+
 .price__group {
   border-top: 1px solid var(--hair);
   padding-top: 1.3rem;
@@ -1861,10 +1908,15 @@ a.plate:hover > img,
   margin-bottom: 1.1rem;
 }
 
+/* The scale used to run 80px for the page title and then nothing above 23px
+   for the fifteen screens underneath it, so the H1 read as decoration rather
+   than as the top of anything. These are the chapters of the list and they are
+   set as chapters. */
 .price__title {
   font-family: var(--serif);
-  font-size: 1.45rem;
-  font-variation-settings: "opsz" 24;
+  font-size: var(--t-h2);
+  line-height: 1.05;
+  font-variation-settings: "opsz" 40;
 }
 
 .price colgroup ~ tbody td,
@@ -1872,7 +1924,7 @@ a.plate:hover > img,
   font-family: var(--sans);
   font-weight: 400;
   font-size: var(--t-micro);
-  letter-spacing: 0.2em;
+  letter-spacing: 0.17em;
   text-transform: uppercase;
   color: var(--fg-3);
   text-align: right;
@@ -1986,11 +2038,14 @@ a.plate:hover > img,
     text-align: right;
   }
 
+  /* Same typeface as the desktop table. Swapping the service names to Bodoni
+     below 700px made the price list a different design at each width, and put
+     a Didone at 1.05rem reversed out of near-black, where the hairline strokes
+     of "+" and "(" thinned to almost nothing. Presence comes from size and
+     colour instead. */
   .price td:first-child {
-    font-family: var(--serif);
-    font-size: 1.05rem;
-    line-height: 1.25;
-    font-variation-settings: "opsz" 18;
+    font-size: 1rem;
+    line-height: 1.3;
     color: var(--fg);
   }
 
@@ -2042,28 +2097,6 @@ a.plate:hover > img,
 }
 
 /* -------------------------------------------------------------- 19. quotes */
-.pull {
-  border-top: 1px solid var(--hair);
-  padding-block: clamp(2.5rem, 5vw, 4rem);
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--gap);
-}
-
-.pull__q {
-  grid-column: 3 / span 8;
-  font-size: clamp(1.35rem, 2.7vw, 2.4rem);
-  line-height: 1.32;
-  text-align: center;
-  text-wrap: balance;
-}
-
-.pull__by {
-  grid-column: 3 / span 8;
-  text-align: center;
-  margin-top: 1.6rem;
-}
-
 /* A quiet, functional close. Six of the seven pages used to end with the same
    centred display-scale italic quote over a ghosted photograph, which is the
    single loudest "every page built from one template" tell on the site. Only
@@ -2605,17 +2638,22 @@ body.is-lb .progress {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .sec__meta {
-    grid-column: 1 / span 3;
+  .works--index {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .sec__title {
-    grid-column: 4 / span 9;
+  /* The note loses its own column before the title loses its measure: it drops
+     to a row of its own under the title rather than squeezing to four words
+     per line beside it. */
+  .sec__title,
+  .sec--lead .sec__title {
+    grid-column: 1 / span 9;
   }
 
   .sec__note {
-    grid-column: 4 / span 9;
-    margin-top: 0.6rem;
+    grid-column: 1 / span 8;
+    margin-top: 1rem;
+    padding-bottom: 0;
   }
 
   .foot__grid > * {
@@ -2660,6 +2698,10 @@ body.is-lb .progress {
 
   .works {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .works--index {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   /* Stacked, not overlaid. Overlaying the desktop composition put the gold
@@ -2725,12 +2767,9 @@ body.is-lb .progress {
     gap: clamp(2rem, 6vw, 2.8rem) var(--gap);
   }
 
-  .arch__item--wide,
-  /* No media field: as a half-width cell stretched by a tall poster beside it,
-     this record left ~194px of empty black under its own text. */
-  .arch__grid > .arch__item:not(:has(.arch__field)),
-  /* An odd item count stranded the last record beside an empty cell. */
-  .arch__grid > .arch__item:last-child:nth-child(odd) {
+  /* Same single rule as on desktop: only a video is promoted, and here that
+     means the full two columns. */
+  .arch__item--wide {
     grid-column: 1 / -1;
   }
 
@@ -2744,9 +2783,6 @@ body.is-lb .progress {
     font-size: 0.85rem;
   }
 
-  /* The index numeral goes. At 390px it spent 14% of the width on decoration
-     and squeezed the titles into a 209px measure, which broke them as
-     "Kostel Sv. / Vita, Dobrany" — an abbreviation orphaned from its noun. */
   .idx__row,
   .idx__row:hover {
     grid-template-columns: 4.6rem minmax(0, 1fr);
@@ -2755,8 +2791,8 @@ body.is-lb .progress {
     align-items: start;
   }
 
-  .idx__row .num {
-    display: none;
+  .idx__chapter {
+    padding-top: clamp(1.6rem, 5vw, 2.4rem);
   }
 
   .idx__title {
@@ -2812,19 +2848,6 @@ body.is-lb .progress {
     grid-row: 2;
   }
 
-  /* Not a fourth filter: at the end of the same flex line, in the same
-     letterspaced micro type, the running count read as one more control. */
-  .filters__count {
-    margin-left: 0;
-    width: 100%;
-    order: 1;
-  }
-
-  .pull__q,
-  .pull__by {
-    grid-column: 1 / span 12;
-  }
-
   .foot__grid {
     gap: 2.2rem var(--gap);
   }
@@ -2859,41 +2882,47 @@ body.is-lb .progress {
     --t-body: 1rem;
   }
 
-  /* Row gap far larger than the caption's own offset. At 0.6rem the caption
-     sat 11px under its painting and 10px above the next one, so proximity
-     attributed every title and sale status to the wrong work. */
+  /* One work per row. Two 169px thumbnails separated by 12px read as a single
+     picture — the column gap was a fifth of the row gap, so the grid bound
+     each painting to the one beside it rather than to its own caption. At this
+     width the catalogue is better as a column than as a contact sheet. */
   .works {
+    grid-template-columns: 1fr;
+    gap: 2.6rem;
+  }
+
+  /* The archive keeps its density: it is an index, and at two across the
+     frames still land well clear of each other. */
+  .works--index {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2.6rem 0.75rem;
+    gap: 1.8rem var(--gap);
+  }
+
+  /* Baseline-aligned on one row, a two-word title wrapped underneath the
+     status label with nothing between them. Stack instead. */
+  .works__cap {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
   }
 
   .sec {
     grid-template-columns: 1fr;
-    row-gap: 0.9rem;
   }
 
   .sec__meta,
   .sec__title,
+  .sec--lead .sec__title,
   .sec__note {
     grid-column: 1;
   }
 
   .sec__meta {
-    flex-direction: row;
-    align-items: center;
-    gap: 0.9rem;
+    margin-bottom: 0.9rem;
   }
 
-  .filters {
-    gap: 1.1rem;
-  }
-
-  /* Kept on the filter row and right-aligned. Dropped onto its own line at
-     the same size and colour it read as a broken fourth tab. */
-  .filters__count {
-    margin-left: auto;
-    font-size: 0.625rem;
-    letter-spacing: 0.16em;
+  .sec__note {
+    margin-top: 0.8rem;
   }
 
   .foot__col,
@@ -2901,10 +2930,13 @@ body.is-lb .progress {
     grid-column: span 12;
   }
 
-  /* The site map repeats the full-screen menu verbatim, and that menu is one
-     tap away from every screen. It cost ~330px on all seven pages. */
+  /* The map stays. It was hidden here on the grounds that the burger repeats
+     it — but the bottom of a five-thousand-pixel catalogue is exactly where a
+     reader wants a way onward, and hiding it left the two-sub-column layout
+     above dead code that never rendered on the width it was written for. Two
+     columns of four keep it to ~150px. */
   .foot__col--nav {
-    display: none;
+    grid-column: span 12;
   }
 
   /* All three credits left-aligned; `margin-left:auto` on the last one threw
@@ -2913,16 +2945,7 @@ body.is-lb .progress {
     margin-left: 0;
   }
 
-  .pull__q {
-    text-align: left;
-  }
-
-  .pull__by {
-    text-align: left;
-  }
 }
-
-
 
 /* The homepage hero *is* the wordmark, at 430px. Repeating the same artwork
    in the header 200px above it spends the most valuable space on the site

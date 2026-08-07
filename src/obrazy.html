@@ -13,7 +13,7 @@
 <section class="shell shell--wide phead">
   <div class="phead__grid">
     <div class="phead__meta">
-      <span class="num">Galerie</span>
+      <span class="num">Katalog</span>
       <span class="label">{{ paintings|length }} děl</span>
     </div>
     <h1 class="phead__title">Obrazy</h1>
@@ -25,23 +25,34 @@
   </div>
 </section>
 
-<section class="shell shell--wide bay--top">
-  <div class="filters" data-filters>
-    <button class="filter is-on" type="button" data-filter="all">Vše<span class="filter__n">{{ paintings|length }}</span></button>
-    <button class="filter" type="button" data-filter="sale">K&nbsp;prodeji<span class="filter__n">{{ for_sale|length }}</span></button>
-    <button class="filter" type="button" data-filter="sold">Prodáno<span class="filter__n">{{ sold|length }}</span></button>
-    <span class="filters__count" data-filter-count></span>
+{# Two acts, not one wall of eighty-seven identical frames.
+
+   This page used to be a single grid with three filter buttons above it. The
+   grid ran twenty-two identical rows deep with nothing to mark position, and
+   the filters were a state toggle standing in for the structure the page never
+   had — pressing one did not take you anywhere, it took things away. Available
+   work now opens the page at full size and sold work follows as a denser
+   record, so the page answers "what can I buy" by its own shape and the reader
+   always knows which half they are in. #}
+<section class="shell shell--wide bay--top" id="k-prodeji">
+  <div class="sec sec--lead rv">
+    <div class="sec__meta">
+      <span class="label">K&nbsp;prodeji</span>
+    </div>
+    <h2 class="sec__title">Volná díla</h2>
+    <p class="sec__note">
+      {{ for_sale|length }} z {{ paintings|length }} pláten je k dispozici.
+      Zbývajících {{ sold|length }} najdete <a href="#prodano">v archivu níže</a>.
+    </p>
   </div>
 
   <div class="works" data-gallery data-batch="24" data-batch-noun="obrazů">
-    {% for painting in paintings %}
+    {% for painting in for_sale %}
     <a class="works__item rv" href="{{ big(painting.url) }}"
        data-lb-item data-batch-item
-       data-state="{{ 'sold' if painting.sold else 'sale' }}"
-       data-title="{{ painting.title }}"
-       data-tag="{{ 'Prodáno' if painting.sold else 'K prodeji' }}"
+       data-title="{{ painting.title }}" data-tag="K prodeji"
        style="--d:{{ (loop.index0 % 6) * 55 }}ms"
-       aria-label="{{ painting.title }}{{ ' — prodáno' if painting.sold else '' }}">
+       aria-label="{{ painting.title }}">
       <div class="works__fig">
         {{ img(painting.url, alt=painting.title,
                sizes='(max-width:620px) 92vw, (max-width:960px) 46vw, (max-width:1180px) 31vw, 23vw') }}
@@ -52,7 +63,6 @@
          status badge also sat on top of the painting. #}
       <div class="works__cap">
         <span class="works__name">{{ painting.title }}</span>
-        <span class="works__state{{ ' is-sold' if painting.sold }}">{{ 'Prodáno' if painting.sold else 'K prodeji' }}</span>
       </div>
     </a>
     {% endfor %}
@@ -60,6 +70,43 @@
 
   {# Progressive disclosure — without JS the whole set is already in the
      document, so this control simply never appears. #}
+  <div class="works__more" data-more hidden>
+    <button class="cta" type="button" data-more-btn>
+      <span>Zobrazit další</span>{{ ico.arrow() }}
+    </button>
+    <span class="label" data-more-count></span>
+  </div>
+</section>
+
+<section class="shell shell--wide" id="prodano">
+  <div class="sec sec--minor rv">
+    <div class="sec__meta">
+      <span class="label">Archiv</span>
+    </div>
+    <h2 class="sec__title">Prodáno</h2>
+    <p class="sec__note">{{ sold|length }} děl už našlo majitele.</p>
+  </div>
+
+  {# Smaller frames, more per row. A record of what has gone should read as an
+     index, not compete at the same scale with what you can still buy. #}
+  <div class="works works--index" data-gallery data-batch="20" data-batch-noun="obrazů">
+    {% for painting in sold %}
+    <a class="works__item rv" href="{{ big(painting.url) }}"
+       data-lb-item data-batch-item
+       data-title="{{ painting.title }}" data-tag="Prodáno"
+       style="--d:{{ (loop.index0 % 6) * 45 }}ms"
+       aria-label="{{ painting.title }} — prodáno">
+      <div class="works__fig">
+        {{ img(painting.url, alt=painting.title,
+               sizes='(max-width:620px) 92vw, (max-width:960px) 31vw, 18vw') }}
+      </div>
+      <div class="works__cap">
+        <span class="works__name">{{ painting.title }}</span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
   <div class="works__more" data-more hidden>
     <button class="cta" type="button" data-more-btn>
       <span>Zobrazit další</span>{{ ico.arrow() }}

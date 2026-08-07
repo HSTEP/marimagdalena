@@ -23,12 +23,22 @@
 
 <section class="shell shell--wide bay--top">
   {% if vystavy %}
+  {# Chaptered by year, like the project archive next door. The first column
+     used to hold an inverse ordinal — 11, 10, 09 … — which counted down the
+     page and would renumber every existing row the moment a twelfth
+     exhibition was added. The year is the division that actually means
+     something, and it is set once. #}
   <div class="idx" data-peek-scope>
-    {% for v in vystavy %}
+    {% for year, group in vystavy_years %}
+    {% if year %}
+    <div class="idx__chapter rv">
+      <span class="num">{{ year }}</span>
+      <span class="label">{{ group|length }} {{ 'výstava' if group|length == 1 else ('výstavy' if group|length < 5 else 'výstav') }}</span>
+    </div>
+    {% endif %}
+    {% for v in group %}
     <article class="idx__row rv" style="--d:{{ (loop.index0 % 8) * 45 }}ms"
              {% if v.image %}data-peek-src="{{ big(v.image) }}" data-peek-ratio="{{ ratio(v.image) }}"{% endif %}>
-      <span class="num">{{ '%02d'|format(vystavy|length - loop.index0) }}</span>
-
       {# Thumbnail precedes the title so it lands in its own grid column.
          Several of these records are scanned A4 posters rather than
          photographs; cropped square and desaturated they became unreadable
@@ -58,6 +68,7 @@
         {% endfor %}
       </div>
     </article>
+    {% endfor %}
     {% endfor %}
   </div>
   {% else %}

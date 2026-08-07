@@ -47,7 +47,6 @@
       <span class="label">O&nbsp;salonu</span>
     </div>
     <h2 class="sec__title">Kadeřnictví,<br>které je zároveň ateliérem</h2>
-    <p class="sec__note">{{ site.street }}, {{ site.city }}</p>
   </div>
 
   <div class="grid">
@@ -75,6 +74,25 @@
       <p style="margin-top:2.2rem">
         <a class="qlink" href="galerie.html">Hair&nbsp;&amp;&nbsp;Styling</a>
       </p>
+
+      {# The prose ran out well above the portrait beside it, leaving a third of
+         the row empty. The address was the section header's grey right-hand
+         note — a floating caption attached to nothing. Set as facts under the
+         paragraphs it belongs to the text, and it closes the column. #}
+      <dl class="facts">
+        <div class="facts__row">
+          <dt class="label">Adresa</dt>
+          <dd>{{ site.street }}<br>{{ site.zip }}&nbsp;{{ site.city }}</dd>
+        </div>
+        <div class="facts__row">
+          <dt class="label">Otevřeno od</dt>
+          <dd>{{ site.founded }}</dd>
+        </div>
+        <div class="facts__row">
+          <dt class="label">V ateliéru</dt>
+          <dd>Kadeřnictví, galerie, klavír</dd>
+        </div>
+      </dl>
     </div>
 
     <figure class="atelier__fig rv-clip" style="--d:180ms">
@@ -92,12 +110,13 @@
 
 
 <section class="shell shell--wide bay--sm">
-  <div class="sec rv">
+  {# Minor rank. What a salon charges is a utility list, not the reason anyone
+     came here — it does not deserve the same size as the gallery. #}
+  <div class="sec sec--minor rv">
     <div class="sec__meta">
       <span class="label">Služby</span>
     </div>
     <h2 class="sec__title">Co u nás zařídíme</h2>
-    <p class="sec__note">Ceny jsou orientační, konečná cena vždy vychází z konzultace.</p>
   </div>
 
   <div class="svc rv">
@@ -110,9 +129,14 @@
     {% endfor %}
   </div>
 
-  <div class="actions rv" style="margin-top:2.6rem">
-    <a class="cta" href="cenik.html"><span>Celý ceník</span>{{ ico.arrow() }}</a>
-    <a class="qlink qlink--plain" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
+  {# The caveat belongs next to the prices it qualifies, not in a grey column
+     to the right of the heading two hundred pixels above them. #}
+  <div class="svc__foot rv">
+    <p class="svc__note">Ceny jsou orientační, konečná cena vždy vychází z konzultace.</p>
+    <div class="actions">
+      <a class="cta" href="cenik.html"><span>Celý ceník</span>{{ ico.arrow() }}</a>
+      <a class="qlink qlink--plain" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
+    </div>
   </div>
 </section>
 
@@ -142,7 +166,11 @@
 
 
 <section class="shell shell--wide bay">
-  <div class="sec rv">
+  {# Lead rank — the one section on the page allowed to be loud. A hairdresser
+     that hangs a working painter's canvases on its walls is the whole reason
+     this site is not interchangeable with any other salon's, and it was set
+     at the same size as the opening hours. #}
+  <div class="sec sec--lead rv">
     <div class="sec__meta">
       <span class="label">Galerie</span>
     </div>
@@ -166,8 +194,10 @@
     {% endfor %}
   </div>
 
-  <div class="reel__meta rv">
-    <span class="label">01 — {{ '%02d'|format(paintings[:9]|length) }}</span>
+  {# The counter used to be the constant string "01 — 09" sitting under a strip
+     you drag: a readout that never read anything. It now tracks the reel. #}
+  <div class="reel__meta rv" data-reel-meta>
+    <span class="label"><span data-reel-index>01</span> / {{ '%02d'|format(paintings[:9]|length) }}</span>
     <span class="label">Táhněte do strany</span>
   </div>
 
@@ -178,7 +208,7 @@
 
 
 <section class="shell shell--wide bay--sm">
-  <div class="sec rv">
+  <div class="sec sec--minor rv">
     <div class="sec__meta">
       <span class="label">Dění</span>
     </div>

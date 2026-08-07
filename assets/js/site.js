@@ -52,6 +52,38 @@
     if (e.target.closest("a")) setMenu(false);
   });
 
+  /* ----------------------------------------------------------- reel index */
+  /* The strip's counter was a hard-coded "01 — 09" printed under a control
+     whose whole purpose is to move. Report the leftmost frame actually in
+     view, so the readout is worth the line it occupies. */
+  const reel = $(".reel");
+  const reelIndex = $("[data-reel-index]");
+
+  if (reel && reelIndex) {
+    const frames = $$(".reel__item", reel);
+    let reelTicking = false;
+
+    const updateReel = () => {
+      const edge = reel.scrollLeft + 1;
+      let i = frames.findIndex((f) => f.offsetLeft + f.offsetWidth > edge);
+      if (i < 0) i = frames.length - 1;
+      reelIndex.textContent = String(i + 1).padStart(2, "0");
+      reelTicking = false;
+    };
+
+    reel.addEventListener(
+      "scroll",
+      () => {
+        if (!reelTicking) {
+          reelTicking = true;
+          requestAnimationFrame(updateReel);
+        }
+      },
+      { passive: true }
+    );
+    updateReel();
+  }
+
   /* -------------------------------------------------------------- reveals */
   /* `observe` is exported to the batching code below: an element that was
      display:none when the observer first ran never reports an intersection,
@@ -89,67 +121,50 @@
   let cursor = 0;
   let opener = null;
 
-  // Set by a batched list so the viewer can page through everything that
-  // matches the current filter, not just the tiles rendered so far.
-  let groupOverride = null;
-
+  /* A batched item counts as part of the set even while it is waiting its
+     turn to render, so the viewer walks the whole catalogue — all 87 works,
+     both chapters — rather than only the tiles currently on screen. Anything
+     else has to actually be visible to join the group. */
   function collectLightbox() {
-    group = groupOverride
-      ? groupOverride.filter((el) => el.matches("[data-lb-item]"))
-      : $$("[data-lb-item]").filter((el) => !el.hidden && el.offsetParent !== null);
+    group = $$("[data-lb-item]").filter(
+      (el) =>
+        el.matches("[data-batch-item]") || (!el.hidden && el.offsetParent !== null)
+    );
   }
 
-  /* ------------------------------------------------- filter + batch reveal */
+  /* ---------------------------------------------------------- batch reveal */
   /* 87 paintings is ~10 000 px of grid and the project archive is 44 000 px.
      The full set stays in the document — so it works without JS, prints, and
-     is indexable — but only a batch is displayed at a time. Filtering and
-     batching share one render pass, because "show more" has to mean more of
-     the *current* filter. Used by the paintings grid (items = tiles, with
-     filters) and the project archive (items = year chapters, no filters). */
+     is indexable — but only a batch is displayed at a time. Used by the two
+     paintings chapters on /obrazy and by the project archive (items = year
+     chapters).
+
+     This used to also run a three-button filter bar over one undivided grid.
+     /obrazy is now split into "k prodeji" and "prodáno" as actual sections of
+     the page, which is what the filter was standing in for — so the batching
+     is just batching, and each chapter counts its own. */
   $$("[data-batch]").forEach((root) => {
     const scope = root.closest("section") || document;
     const items = $$("[data-batch-item]", root);
     const batch = parseInt(root.dataset.batch, 10) || items.length;
-    const filterBar = $("[data-filters]", scope);
-    const countEl = $("[data-filter-count]", scope);
     const moreBox = $("[data-more]", scope);
     const moreBtn = $("[data-more-btn]", scope);
     const moreCount = $("[data-more-count]", scope);
     const noun = root.dataset.batchNoun || "";
 
-    let mode = "all";
     let limit = batch;
 
     const render = () => {
-      const matching = items.filter(
-        (i) => mode === "all" || i.dataset.state === mode
-      );
-      items.forEach((i) => (i.hidden = true));
-      matching.slice(0, limit).forEach((i) => (i.hidden = false));
+      items.forEach((i, n) => (i.hidden = n >= limit));
 
-      const shown = Math.min(limit, matching.length);
-      if (countEl) countEl.textContent = `${shown} z ${matching.length}`;
-      // The viewer browses the whole filtered set even though only `limit`
-      // tiles are on screen.
-      if (matching.some((i) => i.matches("[data-lb-item]"))) groupOverride = matching;
+      const shown = Math.min(limit, items.length);
       if (moreBox) {
-        const rest = matching.length - shown;
+        const rest = items.length - shown;
         moreBox.hidden = rest <= 0;
         if (moreCount) moreCount.textContent = `Zbývá ${rest}${noun ? " " + noun : ""}`;
       }
       collectLightbox();
     };
-
-    filterBar?.addEventListener("click", (e) => {
-      const btn = e.target.closest("[data-filter]");
-      if (!btn) return;
-      $$("[data-filter]", filterBar).forEach((b) =>
-        b.classList.toggle("is-on", b === btn)
-      );
-      mode = btn.dataset.filter;
-      limit = batch;
-      render();
-    });
 
     moreBtn?.addEventListener("click", () => {
       const before = new Set(items.filter((i) => !i.hidden));

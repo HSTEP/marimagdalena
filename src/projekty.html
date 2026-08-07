@@ -126,7 +126,11 @@
         {% endif %}
 
         <div class="arch__meta">
-          {% if p.date %}<p class="label label--gold">{{ cz_date(p.date) }}</p>{% endif %}
+          {# Grey sentence case, the same as the dates on /vystavy. These are
+             the two archive pages in the same nav group, showing the same kind
+             of record, and the one field they share was set in opposite
+             registers: gold tracked caps here, quiet grey text there. #}
+          {% if p.date %}<p class="arch__date">{{ cz_date(p.date) }}</p>{% endif %}
           <h3 class="arch__title">{{ p.title|safe }}</h3>
           {% if p.description %}<p class="arch__note">{{ p.description }}</p>{% endif %}
           {% if p.video_url and not embed %}
@@ -160,6 +164,15 @@
   {% else %}
   <p class="lede">Žádné projekty k zobrazení.</p>
   {% endif %}
+</section>
+
+<section class="shell shell--wide bay--top">
+  <div class="endnote rv">
+    <p class="endnote__t">Máte projekt, který by se sem hodil? Přidat se může každý.</p>
+    <div class="endnote__a">
+      <a class="qlink" href="mailto:artconnecting@email.cz">artconnecting@email.cz</a>
+    </div>
+  </div>
 </section>
 
 {% endblock %}

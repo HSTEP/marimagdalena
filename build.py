@@ -587,6 +587,19 @@ if __name__ == "__main__":
 
     vystavy_data.sort(key=date_key, reverse=True)
 
+    # Same chapters as the project archive. The index used to number its rows
+    # `%02d` counting *down* the page, which is not a catalogue number: it
+    # carried nothing the date beside it did not already carry, it read as a
+    # miscount, and adding a twelfth exhibition renumbered all eleven existing
+    # rows. The year is the real division and the rows already arrive sorted.
+    for record in vystavy_data:
+        record["year"] = year_of(record)
+    vystavy_years = []
+    for record in vystavy_data:
+        if not vystavy_years or vystavy_years[-1][0] != record["year"]:
+            vystavy_years.append((record["year"], []))
+        vystavy_years[-1][1].append(record)
+
     repaired = normalise_links(projekty_data) + normalise_links(vystavy_data)
     if repaired:
         print(f"Repaired {repaired} malformed link field(s) from the admin data.")
@@ -668,6 +681,7 @@ if __name__ == "__main__":
                 "paintings": paintings_data,
                 "images": galerie_images,
                 "projekty_years": projekty_years,
+                "vystavy_years": vystavy_years,
             }
             html_content = typeset_cz(template.render(context))
             (OUTPUT_DIR / filename).write_text(html_content, encoding="utf-8")

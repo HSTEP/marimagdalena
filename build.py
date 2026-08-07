@@ -180,6 +180,18 @@ def normalise_links(records):
     return fixed
 
 
+def is_document(path):
+    """True when an image is a poster or graphic rather than a photograph.
+
+    Aspect ratio was the wrong signal: it letterboxed portrait photographs
+    while a poster that happened to be square was cropped straight through its
+    own headline. In this archive the distinction is carried by file type —
+    every scanned or exported poster is a PNG, every camera photograph is a
+    JPEG — so a poster is never cropped and a photograph never floats.
+    """
+    return (path or "").lower().endswith(".png")
+
+
 def link_label(text, url=""):
     """Readable label for a link.
 
@@ -634,6 +646,7 @@ if __name__ == "__main__":
         ratio=make_ratio_helper(media),
         year_of=year_of,
         link_label=link_label,
+        is_document=is_document,
         cz_date=cz_date,
         video_embed=video_embed,
         plural_cz=plural_cz,

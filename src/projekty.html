@@ -107,27 +107,16 @@
     <div class="arch__grid">
     {% for p in group %}
       {% set embed = video_embed(p.video_url) %}
-      {% set nat = ratio(p.image) if p.image else 1.0 %}
-      {# A poster is a designed object; cropping it to a uniform tile slices its
-         own typography. Anything appreciably taller than the tile is shown
-         whole on the raised field instead. #}
-      {% set is_doc = p.image and nat < 0.85 %}
-      <article class="arch__item rv{% if embed or (p.video_url and not embed) %} arch__item--wide{% endif %}"
+      {# A poster is a designed object; cropping it to a uniform tile slices
+         its own typography. Classified by file type — see is_document(). #}
+      {% set is_doc = p.image and is_document(p.image) %}
+      <article class="arch__item rv{% if embed %} arch__item--wide{% endif %}"
                style="--d:{{ (loop.index0 % 6) * 45 }}ms">
         {% if embed %}
         <div class="arch__field arch__field--video">
           <iframe src="{{ embed }}" title="{{ p.title|striptags }}" loading="lazy"
                   allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowfullscreen></iframe>
-        </div>
-        {% elif p.video_url %}
-        {# Facebook sends X-Frame-Options: deny, so an embed here would be a
-           permanently blank box. Link out instead. #}
-        <div class="arch__field arch__field--offsite">
-          <a class="feed__offsite" href="{{ p.video_url }}" target="_blank" rel="noopener noreferrer">
-            <span class="feed__offsite-t">Přehrát na {{ link_label('', p.video_url) }}</span>
-            {{ ico.external() }}
-          </a>
         </div>
         {% elif p.image %}
         <a class="arch__field{% if is_doc %} arch__field--doc{% endif %}"
@@ -143,6 +132,13 @@
           {% if p.date %}<p class="label label--gold">{{ cz_date(p.date) }}</p>{% endif %}
           <h3 class="arch__title">{{ p.title|safe }}</h3>
           {% if p.description %}<p class="arch__note">{{ p.description }}</p>{% endif %}
+          {% if p.video_url and not embed %}
+          {# Facebook sends X-Frame-Options: deny, so an embed would be a
+             permanently blank box. A link in the caption, not a media tile. #}
+          <div class="arch__links">
+            <a class="qlink" href="{{ p.video_url }}" target="_blank" rel="noopener noreferrer">Přehrát na {{ link_label('', p.video_url) }}</a>
+          </div>
+          {% endif %}
           {% if p.links %}
           <div class="arch__links">
             {% for link in p.links %}

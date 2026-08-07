@@ -119,8 +119,6 @@
 
       <div class="foot__col foot__col--wide">
         <p class="label">Ateliér</p>
-        {# The address belongs to the map plate; repeating it here printed it
-           twice in one footer. #}
         <p class="foot__line">
           {{ site.tagline }} {{ site.name }}<br>
           {{ site.person }}
@@ -128,30 +126,35 @@
         <a class="qlink qlink--plain" href="{{ site.instagram }}" target="_blank" rel="noopener">{{ site.instagram_handle }} {{ ico.external() }}</a>
       </div>
 
+      {# Address and contact in one column. Split across two, the address sat
+         in a slot that carried its own hairline rule while the other columns
+         did not, so its heading hung 22px below every other heading. #}
       <div class="foot__col foot__col--contact">
         <p class="label">Spojení</p>
         <a class="foot__link" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
         <a class="foot__link" href="mailto:{{ site.email }}">{{ site.email }}</a>
+        <p class="foot__line">{{ site.street }}<br>{{ site.zip }} {{ site.city }}</p>
+
+        {# The Google embed is loaded on request, not on page load: it sets
+           third-party cookies. It lives inside this column rather than in a
+           grid cell of its own, which at five columns was 79px wide — too
+           narrow for its own button. #}
+        <div class="foot__map" data-map data-src="{{ site.maps }}"
+             data-title="Mapa — {{ site.street }}, {{ site.city }}">
+          <div class="foot__map-ph">
+            <button class="cta" type="button" data-map-load><span>Zobrazit mapu</span>{{ ico.arrow() }}</button>
+          </div>
+        </div>
         <div class="foot__social">
           <a href="{{ site.instagram }}" target="_blank" rel="noopener" aria-label="Instagram salonu">{{ ico.instagram() }}</a>
           <a href="{{ site.facebook }}" target="_blank" rel="noopener" aria-label="Facebook">{{ ico.facebook() }}</a>
         </div>
       </div>
 
-      {# The Google embed is loaded on request, not on page load: it sets
-         third-party cookies, and until it is asked for the slot shows the
-         address rather than an empty bordered box. #}
-      <div class="foot__map" data-map data-src="{{ site.maps }}"
-           data-title="Mapa — {{ site.street }}, {{ site.city }}">
-        <div class="foot__map-ph">
-          <p class="label">Kde nás najdete</p>
-          <p class="foot__map-addr">{{ site.street }}<br>{{ site.zip }} {{ site.city }}</p>
-          <button class="cta" type="button" data-map-load><span>Zobrazit mapu</span>{{ ico.arrow() }}</button>
-        </div>
-      </div>
-
       <div class="foot__col foot__col--nav">
         <p class="label">Rozcestník</p>
+        {# Two columns of four. A single stack of eight ran 240px below the
+           other columns and left that much dead paper beside it. #}
         <div class="foot__map-links">
           {% for item in nav %}
           <a class="foot__link" href="{{ item.href }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.label|safe }}{% if item.external %}{{ ico.external() }}{% endif %}</a>

@@ -35,7 +35,7 @@
          grey mush, so anything appreciably portrait is shown whole and in
          colour — a document treated as a document. #}
       {% if v.image %}
-      {% set is_doc = ratio(v.image) < 0.85 %}
+      {% set is_doc = is_document(v.image) %}
       <a class="idx__thumb{% if is_doc %} idx__thumb--doc{% endif %}"
          href="{{ big(v.image) }}" data-lb-item
          style="--nat:{{ ratio(v.image) }}"

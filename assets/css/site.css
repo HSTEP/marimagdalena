@@ -246,7 +246,10 @@ h4 {
   font-weight: 400;
   letter-spacing: 0.26em;
   text-transform: uppercase;
-  line-height: 1;
+  /* Set for the single-line desktop case at 1. These strings wrap on a phone,
+     where the acute on a capital Y ran straight into the line above. */
+  line-height: 1.45;
+  text-wrap: balance;
   color: var(--fg-3);
 }
 
@@ -504,7 +507,19 @@ a.plate:hover > img,
 /* Quiet inline link: a resting hairline that fills gold from the left on
    hover. It needs the resting rule — without it these read as captions
    rather than as something you can click. */
+/* 11px caps with 8px of padding measured ~21px tall; two stacked qlinks on
+   /vystavy sat 28px apart. The pseudo-element grows the hit area without
+   changing the rule's position or the text's leading. */
+.qlink::after {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 2.75rem;
+  transform: translateY(-50%);
+}
+
 .qlink {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
@@ -698,6 +713,9 @@ a.plate:hover > img,
   height: 2.4rem;
   position: relative;
   z-index: 2;
+  /* The sole mobile nav control; 2.4rem left it under the 44px minimum. */
+  min-width: 2.75rem;
+  min-height: 2.75rem;
 }
 
 .burger span {
@@ -1142,26 +1160,30 @@ a.plate:hover > img,
   transform: scale(1.04);
 }
 
-/* The caption sits over the image and rises on hover — the grid stays a clean
-   mosaic at rest and only names a work when you reach for it. */
-.works__over {
-  position: absolute;
-  inset: auto 0 0;
-  padding: 3.5rem 1.1rem 1rem;
+/* A permanent caption under the frame. A hover overlay names nothing on a
+   touch device, which is where this page is mostly read. */
+.works__cap {
   display: flex;
-  align-items: flex-end;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 0.8rem;
-  background: linear-gradient(to top, rgb(6 5 5 / 88%), rgb(6 5 5 / 0%));
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+  gap: 0.7rem;
+  margin-top: 0.7rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--hair);
 }
 
-.works__item:hover .works__over,
-.works__item:focus-visible .works__over {
-  opacity: 1;
-  transform: none;
+.works__state {
+  font-family: var(--sans);
+  font-size: var(--t-micro);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  white-space: nowrap;
+  flex: none;
+}
+
+.works__state.is-sold {
+  color: var(--fg-3);
 }
 
 .works__name {
@@ -1292,6 +1314,15 @@ a.plate:hover > img,
 @media (width <= 760px) {
   .tiles--3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* 21 frames over two columns strands the last one beside an empty cell.
+     Run it full width instead — a closing frame rather than an orphan.
+     :nth-child(odd) on the last child is true only when the count is odd, so
+     an even collection is untouched. */
+  .tiles--3 > :last-child:nth-child(odd) {
+    grid-column: span 2;
+    aspect-ratio: 2;
   }
 }
 
@@ -1520,7 +1551,7 @@ a.plate:hover > img,
 .arch__field {
   display: block;
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1;
   overflow: hidden;
   background: var(--ink-raise);
 }
@@ -1544,8 +1575,7 @@ a.plate:hover > img,
   aspect-ratio: 16 / 9;
 }
 
-.arch__field--video,
-.arch__field--offsite {
+.arch__field--video {
   display: grid;
   place-items: center;
 }
@@ -1742,9 +1772,6 @@ a.plate:hover > img,
 
 .person--call h3 {
   font-size: clamp(1.35rem, 2.2vw, 1.85rem);
-  /* "spolupracovat?" is longer than the card is wide on a phone. */
-  overflow-wrap: anywhere;
-  hyphens: auto;
 }
 
 .person__logo {
@@ -1834,6 +1861,13 @@ a.plate:hover > img,
    last 250px of a 1296px measure. */
 .price table {
   table-layout: fixed;
+}
+
+/* A single price column stretched to the full 1296px measure left the figure
+   over a metre of screen away from the service it belongs to, with nothing
+   to track along. Three-tier tables still use the full width. */
+[data-cols="1"] table {
+  max-width: 52rem;
 }
 
 .price th:not(:first-child),
@@ -1931,8 +1965,19 @@ a.plate:hover > img,
     margin-bottom: 0.15rem;
   }
 
+  [data-cols="3"] thead {
+    /* The group is ~790px tall, so a header printed once at the top scrolled
+       away and left five rows of three unlabelled figures. Offset by the
+       sticky navigation bar so it never hides under it. */
+    position: sticky;
+    top: var(--nav-h);
+    z-index: 2;
+    background: var(--ink);
+  }
+
   [data-cols="3"] thead tr {
-    padding-block: 0 0.55rem;
+    padding-block: 0.5rem 0.55rem;
+    border-bottom: 1px solid var(--hair);
   }
 
   [data-cols="3"] th:first-child {
@@ -2150,11 +2195,13 @@ a.plate:hover > img,
 }
 
 .foot__col--contact {
-  grid-column: 6 / span 2;
+  grid-column: 6 / span 3;
 }
 
+/* Three columns, not two: the site map holds two sub-columns and the longest
+   label ("Hair & Styling") needs ~95px, which a 2/12 cell could not give it. */
 .foot__col--nav {
-  grid-column: 8 / span 2;
+  grid-column: 9 / span 3;
 }
 
 /* One column. Two sub-columns inside a 2/12 grid cell gave each label ~85px,
@@ -2163,19 +2210,19 @@ a.plate:hover > img,
    height as the map plate beside it, so it fills the footer rather than
    cutting the L-shaped hole the two-column version was meant to avoid. */
 .foot__map-links {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.62rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(4, auto);
+  grid-auto-flow: column;
+  gap: 0.62rem 1.1rem;
 }
 
 /* No border: this is the only boxed element in a system that carries
    structure on hairlines, and the box read as a broken embed. */
 .foot__map {
-  grid-column: 10 / span 3;
   position: relative;
   overflow: hidden;
-  border-top: 1px solid var(--hair);
+  width: 100%;
 }
 
 /* The ratio is reserved only once the embed is actually in the DOM. Held
@@ -2322,7 +2369,7 @@ a.plate:hover > img,
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  padding: 1.4rem var(--gutter);
+  padding: 0.85rem var(--gutter);
   border-bottom: 1px solid var(--line);
 }
 
@@ -2346,12 +2393,15 @@ a.plate:hover > img,
   color: var(--gold);
 }
 
+/* Tight padding on purpose. A portrait work is height-constrained here, so
+   every pixel of vertical padding costs width twice over: 40px of padding
+   took ~34px off the width of the artwork as well. */
 .lb__stage {
   position: relative;
   display: grid;
   grid-template: minmax(0, 1fr) / minmax(0, 1fr);
   place-items: center;
-  padding: clamp(1rem, 3vw, 2.5rem);
+  padding: clamp(0.4rem, 1vw, 0.9rem) clamp(1rem, 4vw, 3.5rem);
   min-height: 0;
   overflow: hidden;
 }
@@ -2512,11 +2562,6 @@ body.is-lb .progress {
 
   .foot__grid > * {
     grid-row: auto;
-  }
-
-  .foot__map {
-    grid-column: 8 / span 5;
-    grid-row: 1 / span 2;
   }
 
   .foot__mark {
@@ -2734,11 +2779,6 @@ body.is-lb .progress {
     gap: 0.62rem 1.2rem;
   }
 
-  .foot__map {
-    grid-column: 1 / span 12;
-    grid-row: auto;
-  }
-
   .foot__map:has(iframe) {
     aspect-ratio: 16 / 9;
   }
@@ -2786,6 +2826,12 @@ body.is-lb .progress {
   .foot__col,
   .foot__col--wide {
     grid-column: span 12;
+  }
+
+  /* The site map repeats the full-screen menu verbatim, and that menu is one
+     tap away from every screen. It cost ~330px on all seven pages. */
+  .foot__col--nav {
+    display: none;
   }
 
   /* All three credits left-aligned; `margin-left:auto` on the last one threw

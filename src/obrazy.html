@@ -43,13 +43,16 @@
        style="--d:{{ (loop.index0 % 6) * 55 }}ms"
        aria-label="{{ painting.title }}{{ ' — prodáno' if painting.sold else '' }}">
       <div class="works__fig">
-        {% if painting.sold %}<span class="sold">Prodáno</span>{% endif %}
         {{ img(painting.url, alt=painting.title,
                sizes='(max-width:620px) 92vw, (max-width:960px) 46vw, (max-width:1180px) 31vw, 23vw') }}
-        <span class="works__over">
-          <span class="works__name">{{ painting.title }}</span>
-          <span class="works__no">{{ '%02d'|format(loop.index) }}</span>
-        </span>
+      </div>
+      {# The title used to live in a hover overlay, so on a phone — where the
+         work is actually for sale — every tile was anonymous, and the only
+         fact the page communicated was which pieces were already gone. The
+         status badge also sat on top of the painting. #}
+      <div class="works__cap">
+        <span class="works__name">{{ painting.title }}</span>
+        <span class="works__state{{ ' is-sold' if painting.sold }}">{{ 'Prodáno' if painting.sold else 'K prodeji' }}</span>
       </div>
     </a>
     {% endfor %}

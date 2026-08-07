@@ -39,12 +39,12 @@
     </a>
     {% endfor %}
 
-    {# No forced break: "spolupracovat?" is 14 characters and the card is
-       ~150px wide on a phone, so the hard line ran the word straight through
-       the card's own border and past the page gutter. #}
+    {# Short enough to fit the card at every width. "Chcete spolupracovat?"
+       needed auto-hyphenation to survive a 167px phone card, and a hyphenated
+       Bodoni display line is a worse answer than a shorter sentence. #}
     <a class="person person--call rv" href="mailto:{{ site.email }}"
        style="--d:{{ (partners|length % 4) * 90 }}ms">
-      <h3>Chcete spolupracovat?</h3>
+      <h3>Chcete se přidat?</h3>
       <span class="qlink">Napište nám</span>
     </a>
   </div>

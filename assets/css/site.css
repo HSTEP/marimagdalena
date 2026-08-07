@@ -20,7 +20,7 @@
   /* Type on ink */
   --bone: #efeae1;
   --bone-2: #b7afa2;
-  --bone-3: #857e73;
+  --bone-3: #948c80;  /* was #857e73 (4.9:1) — thin for 11px caps */
   --line: rgb(239 234 225 / 13%);
   --line-strong: rgb(239 234 225 / 26%);
 
@@ -1793,13 +1793,15 @@ a.plate:hover > img,
 
 /* Fills the cell the seventh partner leaves empty, and is a real invitation
    rather than a spacer. */
+/* A hairline above, not a box around. This was the only bordered element on a
+   site whose structure is carried entirely on rules and space. */
 .person--call {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   gap: 1.4rem;
-  border: 1px solid var(--hair);
-  padding: clamp(1.4rem, 3vw, 2rem);
+  border-top: 1px solid var(--hair);
+  padding-top: clamp(1.4rem, 3vw, 2rem);
   aspect-ratio: 4 / 5;
   transition: border-color 0.5s var(--ease);
 }
@@ -2509,6 +2511,11 @@ a.plate:hover > img,
   padding: 1.3rem var(--gutter) 1.7rem;
   border-top: 1px solid var(--line);
   min-height: 4rem;
+  padding-block: 0.85rem;
+}
+
+.lb__ask {
+  margin-left: auto;
 }
 
 .lb__title {

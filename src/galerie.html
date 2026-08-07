@@ -31,14 +31,17 @@
     <p class="sec__note">{{ images|length }} snímků z tvorby kolekce</p>
   </div>
 
-  <div class="grid" style="margin-bottom: clamp(2.5rem,5vw,4rem)">
+  {# Set as a quote, with the attribution under the words it attributes. It
+     was body copy in columns 1-7 with an em-dash credit parked in column 9,
+     bottom-aligned to nothing 400px away. #}
+  <blockquote class="grid" style="margin-bottom: clamp(2.5rem,5vw,4rem)">
     <p class="lede rv" style="grid-column: 1 / span 7">
       Jako členka Mezinárodního artistického týmu LONDA Professional
       a ambasadorka značky jsem se podílela na vytváření nové kolekce a trendů
       ve spolupráci s uměleckým ředitelem Bertem Kietzerowem.
     </p>
-    <p class="label rv" style="grid-column: 9 / span 4; align-self:end">— {{ site.person }}</p>
-  </div>
+    <p class="label rv" style="grid-column: 1 / span 7; margin-top:1.1rem">— {{ site.person }}</p>
+  </blockquote>
 
   {# Three across: 21 frames divide evenly, so no orphan in the last row. #}
   <div class="tiles tiles--3">

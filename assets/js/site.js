@@ -177,6 +177,7 @@
     const lbTitle = $("[data-lb-title]", lb);
     const lbTag = $("[data-lb-tag]", lb);
     const lbCount = $("[data-lb-count]", lb);
+    const lbAsk = $("[data-lb-ask]", lb);
     const pad = (n) => String(n).padStart(2, "0");
 
     const show = (i) => {
@@ -194,6 +195,18 @@
       lbTitle.textContent = el.dataset.title || "";
       lbTag.textContent = el.dataset.tag || "";
       lbCount.textContent = `${pad(cursor + 1)} / ${pad(group.length)}`;
+      // Only paintings carry a sale state, and only unsold ones can be asked
+      // about; exhibition and archive images have nothing to enquire after.
+      if (lbAsk) {
+        const forSale = el.dataset.state === "sale";
+        lbAsk.hidden = !forSale;
+        if (forSale) {
+          const base = lbAsk.getAttribute("href").split("?")[0];
+          lbAsk.href = `${base}?subject=${encodeURIComponent(
+            "Dotaz k obrazu: " + (el.dataset.title || "")
+          )}`;
+        }
+      }
       // Warm the neighbours so arrowing through feels instant.
       [1, -1].forEach((d) => {
         const n = group[(cursor + d + group.length) % group.length];

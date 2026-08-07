@@ -128,7 +128,12 @@
           {{ site.tagline }} {{ site.name }}<br>
           {{ site.person }}
         </p>
-        <a class="qlink qlink--plain" href="{{ site.instagram }}" target="_blank" rel="noopener">{{ site.instagram_handle }} {{ ico.external() }}</a>
+        {# foot__link, like the phone and the email in the next column. As a
+           qlink--plain this was the third of three contact links in one footer
+           and the only one drawing a rule at rest — a 235.55px underline whose
+           length was the length of the handle, which is the same accident of
+           typing the archives were just cured of. #}
+        <a class="foot__link" href="{{ site.instagram }}" target="_blank" rel="noopener">{{ site.instagram_handle }} {{ ico.external() }}</a>
       </div>
 
       {# Address and contact in one column. Split across two, the address sat

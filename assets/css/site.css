@@ -109,6 +109,25 @@
   --opsz-text: 11;
   --serif-text: "opsz" var(--opsz-text), "wght" 500;
 
+  /* Micro-caps, one setting. A census of every uppercase leaf node on the seven
+     pages found 11px type tracked four ways — 0.16em on partner roles, 0.17em on
+     labels and buttons and links and table heads, 0.2em in the nav, 0.24em on
+     the lightbox close — and the dominant 0.17em set at two weights, 81 nodes
+     inheriting the body's 350 and 103 declaring 400. At eleven pixels a 0.01em
+     difference is invisible in isolation and a weight difference is not: two
+     labels of different colour beside each other is the whole tell, because it
+     says the two came from different hands rather than from one rule.
+
+     0.17em because .label's own comment already argued it from the type: at 11px
+     on strings carrying háčky and čárky, display tracking floats the accents off
+     their letters and the word stops reading as one word. 400 because at this
+     size Jost at 350 on the near-black ground is the weight that made the serif
+     unreadable for the same reason — there is not enough stem left.
+
+     No display variant. Every one of these renders at --t-micro; a second token
+     would only be a place for the fifth value to hide. */
+  --track-caps: 0.17em;
+
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --nav-h: 4.75rem;
 }
@@ -292,10 +311,11 @@ h4 {
   font-family: var(--sans);
   font-size: var(--t-micro);
   font-weight: 400;
-  /* 0.26em is display tracking. At 11px on strings carrying háčky and čárky
+  /* Both from --track-caps' policy, which was argued here first: 0.26em is
+     display tracking, and at 11px on strings carrying háčky and čárky
      ("TÁHNĚTE DO STRANY", "REPORTÁŽ Z VÝSTAVY") the accents floated clear of
      their letters and the word stopped reading as one word. */
-  letter-spacing: 0.17em;
+  letter-spacing: var(--track-caps);
   text-transform: uppercase;
   /* Set for the single-line desktop case at 1. These strings wrap on a phone,
      where the acute on a capital Y ran straight into the line above. */
@@ -594,7 +614,7 @@ a.plate:hover > img,
   font-family: var(--sans);
   font-size: var(--t-micro);
   font-weight: 400;
-  letter-spacing: 0.17em;
+  letter-spacing: var(--track-caps);
   text-transform: uppercase;
   color: var(--fg);
   position: relative;
@@ -669,7 +689,8 @@ a.plate:hover > img,
   gap: 0.7rem;
   font-family: var(--sans);
   font-size: var(--t-micro);
-  letter-spacing: 0.17em;
+  font-weight: 400;
+  letter-spacing: var(--track-caps);
   text-transform: uppercase;
   color: var(--fg-2);
   padding-bottom: 0.5rem;
@@ -800,7 +821,8 @@ a.plate:hover > img,
 .nav__link {
   position: relative;
   font-size: var(--t-micro);
-  letter-spacing: 0.2em;
+  font-weight: 400;
+  letter-spacing: var(--track-caps);
   text-transform: uppercase;
   color: var(--bone-2);
   padding-block: 0.5rem;
@@ -1502,7 +1524,8 @@ a.plate:hover > img,
 .works__state {
   font-family: var(--sans);
   font-size: var(--t-micro);
-  letter-spacing: 0.17em;
+  font-weight: 400;
+  letter-spacing: var(--track-caps);
   text-transform: uppercase;
   color: var(--fg-2);
   white-space: nowrap;
@@ -1878,17 +1901,32 @@ a.plate:hover > img,
   object-fit: cover;
 }
 
-/* Printed matter — posters and flyers — sits on paper and is never cropped;
-   the type on them is part of the artefact. */
+/* Printed matter is never cropped; the type on it is part of the artefact.
+   That is the whole treatment now.
+
+   It used to also get a paper mat — background: var(--paper), 17.6px of
+   padding, a hairline border — which made this the only card on a site whose
+   first rule is that it has none. Three things were wrong with it. The mat was
+   arguing that a poster needs paper under it, but the poster IS paper: this
+   artefact is a white A4, so the mat was paper behind paper and read as a
+   mount, not a ground. The border was drawing an edge onto an object whose own
+   edge is white against near-black, the highest-contrast edge available. And
+   the mat was not even --paper: build.py writes an inline LQIP average onto
+   every opaque img, inline beats the stylesheet, so the visible colour was
+   #dfddd5 — a fourth ground, sampled from the picture, introduced by the
+   loading placeholder leaking out past the picture that was supposed to cover
+   it. With the padding gone the image covers its own placeholder and the LQIP
+   goes back to being a LQIP.
+
+   Removing the border also closes a defect it caused downstream: its bottom
+   ran 11.19px above the caption's border-top, two hairlines of two weights
+   inside a distance this system does not draw two rules in. */
 .poster {
   align-self: start;
 }
 
 .poster > img {
   width: 100%;
-  background: var(--paper);
-  padding: clamp(0.6rem, 1.4vw, 1.1rem);
-  border: 1px solid var(--hair);
 }
 
 /* ------------------------------------------------- 15. project archive */
@@ -2189,7 +2227,8 @@ a.plate:hover > img,
 .person__role {
   margin-top: auto;
   font-size: var(--t-micro);
-  letter-spacing: 0.16em;
+  font-weight: 400;
+  letter-spacing: var(--track-caps);
   text-transform: uppercase;
   color: var(--fg-3);
 }
@@ -2219,10 +2258,14 @@ a.plate:hover > img,
   background: var(--gold);
 }
 
+/* The one serif on the site that carried no opsz at all and fell back to the
+   font's default axis. It renders at 29.6px, inside the 22–40 band, so it takes
+   the sub step like every other heading in that range. */
 .person__ask {
   font-family: var(--serif);
   font-size: clamp(1.35rem, 2.2vw, 1.85rem);
   line-height: 1.12;
+  font-variation-settings: "opsz" var(--opsz-sub);
   color: var(--ink);
   text-wrap: balance;
 }
@@ -2288,7 +2331,11 @@ a.plate:hover > img,
   gap: 1.2rem;
 }
 
-.price__aside p {
+/* :not(.label), because the aside's heading is a <p class="label"> and this
+   selector outweighs .label by one class. One label on the site therefore
+   rendered at 14px against the other 184 at 11px — not a decision anybody made,
+   just two rules meeting where nobody looked. */
+.price__aside p:not(.label) {
   font-size: var(--t-small);
   color: var(--fg-3);
   line-height: 1.6;
@@ -2336,11 +2383,18 @@ a.plate:hover > img,
    for the fifteen screens underneath it, so the H1 read as decoration rather
    than as the top of anything. These are the chapters of the list and they are
    set as chapters. */
+/* --opsz-display, because this renders at --t-h2 — the same 48px as .sec__title,
+   which takes the display step. Pinned to the sub step it was a Bodoni set at
+   half the optical size it was drawn at: heavier hairlines, blunter serifs, and
+   visible as such because /cenik's group titles and /index's section titles are
+   the same size one click apart. The policy picks the step from the rendered
+   size, not from the block's name; this was the one call site that named a
+   token instead of reading its own font-size. */
 .price__title {
   font-family: var(--serif);
   font-size: var(--t-h2);
   line-height: 1.05;
-  font-variation-settings: "opsz" var(--opsz-sub);
+  font-variation-settings: "opsz" var(--opsz-display);
 }
 
 .price colgroup ~ tbody td,
@@ -2348,7 +2402,7 @@ a.plate:hover > img,
   font-family: var(--sans);
   font-weight: 400;
   font-size: var(--t-micro);
-  letter-spacing: 0.17em;
+  letter-spacing: var(--track-caps);
   text-transform: uppercase;
   color: var(--fg-3);
   text-align: right;
@@ -2838,18 +2892,25 @@ a.plate:hover > img,
   border-bottom-color: var(--gold-deep);
 }
 
+/* 0.4rem put the top of these boxes 18.39px under the map button's bottom
+   border — inside the ~20px this system does not draw two rules within, at the
+   same x, in a column where they are the only two boxed things. */
 .foot__social {
   display: flex;
   gap: 0.6rem;
-  margin-top: 0.4rem;
+  margin-top: 1.15rem;
 }
 
+/* --hair-strong, matching the .cta stacked directly above. A box is a box: the
+   footer was drawing both of the system's hairline weights on two boxed devices
+   in one glance, with nothing distinguishing them but which rule was written
+   first. Two weights are a hierarchy only while they mean two things. */
 .foot__social a {
   width: 2.5rem;
   height: 2.5rem;
   display: grid;
   place-items: center;
-  border: 1px solid var(--hair);
+  border: 1px solid var(--hair-strong);
   transition: background-color 0.4s, color 0.4s, border-color 0.4s;
 }
 
@@ -2936,7 +2997,8 @@ a.plate:hover > img,
   gap: 0.7rem;
   color: var(--bone-2);
   font-size: var(--t-micro);
-  letter-spacing: 0.24em;
+  font-weight: 400;
+  letter-spacing: var(--track-caps);
   text-transform: uppercase;
   transition: color 0.3s;
 }

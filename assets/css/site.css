@@ -107,7 +107,41 @@
   --opsz-display: 32;
   --opsz-sub: 16;
   --opsz-text: 11;
+
+  /* The three steps as whole settings rather than three loose numbers, so a
+     call site names a step, and so the weight that belongs to the text step
+     travels with it instead of being remembered separately at each use. */
+  --serif-display: "opsz" var(--opsz-display);
+  --serif-sub: "opsz" var(--opsz-sub);
   --serif-text: "opsz" var(--opsz-text), "wght" 500;
+
+  /* Which step each rank takes. The policy above is written as a function of
+     rendered size and was implemented as a function of element name: `h1,h2`
+     took the display cut and `h3,h4` the sub cut, whatever they measured. So
+     the page-header h1 and the 21px archive h3 were both cut by their tag,
+     and a census found 82 of 245 serif nodes off-policy at 1440 and 119 at
+     390 — including the mobile menu, the largest serif a phone visitor ever
+     sees, which declared no optical size at all.
+
+     These tokens are the fix: every `font-size: var(--t-h2)` is paired with
+     `font-variation-settings: var(--vf-h2)`, so a rank cannot be sized in one
+     place and optically cut in another. A component with its own clamp gets
+     its own token rather than inheriting a step it never checked.
+
+     The values here are the widest step; the queries below the block flip
+     each at the width where its clamp actually crosses 40px or 22px. Those
+     widths are derived, not chosen: for `clamp(min, N vw, max)` the crossing
+     is W = boundary ÷ N × 100. */
+  --vf-hero: var(--serif-display);
+  --vf-h1: var(--serif-display);
+  --vf-h2: var(--serif-display);
+  --vf-h3: var(--serif-sub);
+  --vf-svc: var(--serif-sub);
+  --vf-idx: var(--serif-sub);
+  --vf-endnote: var(--serif-sub);
+  --vf-quote: var(--serif-sub);
+  --vf-motto: var(--serif-sub);
+  --vf-menu: var(--serif-display);
 
   /* Micro-caps, one setting. A census of every uppercase leaf node on the seven
      pages found 11px type tracked four ways — 0.16em on partner roles, 0.17em on
@@ -459,6 +493,11 @@ main > section:last-of-type {
    ground between a page title and its first row of content. */
 .phead + section {
   padding-top: var(--bay-sm);
+}
+
+/* The ledger head closes on nothing and hands straight to the first group. */
+.phead--ledger + section {
+  padding-top: clamp(1.4rem, 2.6vw, 2rem);
 }
 
 .grid {
@@ -1014,17 +1053,29 @@ a.plate:hover > img,
 }
 
 /* ----------------------------------------------------------------- 8. hero */
+/* The page's own seam, not a twelfth of the viewport. `repeat(12, 1fr)` here
+   was a second grid wearing the first one's name: no gutter, no gap, so its
+   column seven opened at 720 where the page's opens at 735.84, and the largest
+   division on the site fell in the gutter between columns six and seven —
+   11px off either edge, on the one composition every visitor sees first.
+
+   Same expression as .quote, and for the same reason: gutter + 6col + 5gap
+   reduces to W/2 - gap/2, so a two-track grid built from that lands the
+   photograph on the real column seven at every width without knowing the
+   column measure. The right edge stays at the viewport — a bleeding plate is
+   the point of the hero. */
 .hero {
   position: relative;
   min-height: 100svh;
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-columns: calc(50% - var(--gap) / 2) minmax(0, 1fr);
+  column-gap: var(--gap);
   align-items: stretch;
   isolation: isolate;
 }
 
 .hero__art {
-  grid-area: 1 / 7 / 2 / 13;
+  grid-area: 1 / 2 / 2 / 3;
   position: relative;
   overflow: hidden;
 }
@@ -1065,7 +1116,7 @@ a.plate:hover > img,
 }
 
 .hero__body {
-  grid-area: 1 / 1 / 2 / 8;
+  grid-area: 1 / 1 / 2 / 3;
   z-index: 2;
   align-self: center;
   padding: calc(var(--nav-h) + 3rem) 0 4.5rem var(--gutter);
@@ -1187,13 +1238,90 @@ a.plate:hover > img,
   background: var(--hair);
 }
 
+/* Column seven, where the hero and the quote plate also break. The lede used
+   to sit at 9 / span 4 — 410.9px, which at 19.44px is about 38 characters:
+   a caption measure carrying three lines of body copy, which is why five of
+   six ledes wrapped to exactly three lines and read as chopped. Six columns
+   is 632, near enough 58 characters, and `max-width: var(--prose)` on .lede
+   finally has something to cap. The title gives up one column to pay for it
+   and still clears its longest setting — "Art Connecting" inks 546.6 — by
+   85px. */
 .phead__title {
-  grid-column: 1 / span 7;
+  grid-column: 1 / span 6;
   font-size: var(--t-h1);
 }
 
 .phead__lede {
-  grid-column: 9 / span 4;
+  grid-column: 7 / span 6;
+}
+
+/* ------------------------------------------------- 9b. page head variants */
+/* Six interior pages opened on one object: h1 at x=72 y=239 at 80px, lede at
+   x=957.1 y=287 at 19.44px, identical to the pixel on all six. That is a
+   template emitting a partial, not a designer laying out six chapters, and it
+   means the first screen of pages two through seven is the same screen. The
+   default above stays the default — four record indexes genuinely are the
+   same kind of opening — and the two pages that are not indexes break it:
+   the photo essay opens on a photograph, the price list opens on prices. */
+
+/* A ledger, so it opens on the ledger. The visitor came here to read numbers
+   and got 470px of chapter opening first: an 80px word above a three-line
+   note above 200px of air. Title at h2, note beside it rather than under it,
+   and the padding cut to the section rhythm — the first price group now
+   clears the fold instead of sitting under it. */
+.phead--ledger {
+  padding-top: calc(var(--nav-h) + clamp(1.6rem, 3vw, 2.6rem));
+  padding-bottom: 0;
+}
+
+.phead--ledger .phead__title {
+  grid-column: 1 / span 3;
+  font-size: var(--t-h2);
+}
+
+.phead--ledger .phead__lede {
+  grid-column: 5 / span 6;
+  font-size: var(--t-small);
+  color: var(--fg-3);
+  line-height: 1.6;
+}
+
+/* The one page whose subject is photographs, opening on type. The plate is
+   the collection's own first frame, run at the full measure above the
+   masthead, so the page states what it is before it names it — and it is a
+   real lightbox item, so the sequence below it is still complete rather than
+   quoting itself. */
+.phead--plate {
+  padding-top: calc(var(--nav-h) + clamp(1.4rem, 2.6vw, 2.2rem));
+}
+
+.phead__plate {
+  display: block;
+  margin-bottom: clamp(1.8rem, 3.6vw, 3rem);
+  aspect-ratio: 16 / 7;
+  overflow: hidden;
+  position: relative;
+}
+
+.phead__plate img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.9s var(--ease);
+}
+
+.phead--plate:hover .phead__plate img,
+.phead__plate:hover img {
+  transform: scale(1.03);
+}
+
+/* The masthead follows the plate rather than heading it, so the meta rule
+   reads as a caption rule under the picture — the same relation the tiles
+   below keep with their own frames. */
+.phead--plate .phead__meta {
+  margin-bottom: 1.1rem;
 }
 
 /* The studio portraits are full-length figures on a black seamless, so an
@@ -1316,6 +1444,11 @@ a.plate:hover > img,
 .reel {
   display: flex;
   gap: var(--gap);
+  /* The strip's own copy of the page column, so a plate can be sized in
+     columns rather than in vw. The bleed is margin plus padding, so under
+     border-box the content width a percentage resolves against is still the
+     shell's own measure — the twelve columns divide out of it directly. */
+  --rcol: calc((100% - 11 * var(--gap)) / 12);
   /* Bleeds past the content margin: cut at the gutter, the peeking card
      read as a clipped image instead of an invitation to scroll. */
   margin-right: calc(var(--gutter) * -1);
@@ -1352,8 +1485,16 @@ a.plate:hover > img,
   background: var(--gold-deep);
 }
 
+/* Four columns, so three plates are twelve — the strip fills the page's
+   measure exactly and its two internal seams fall on columns five and nine,
+   the lines everything else on the page registers against. It was 26vw:
+   374.4px at 1440, which is no span of anything, giving a pitch of 406.1
+   against a column pitch of 110.64 and putting every seam in the strip
+   somewhere different from every seam outside it. What shows of the fourth
+   plate past the viewport is then a consequence of the grid meeting the
+   screen edge rather than a number chosen to look like a peek. */
 .reel__item {
-  flex: 0 0 clamp(230px, 26vw, 400px);
+  flex: 0 0 calc(var(--rcol) * 4 + var(--gap) * 3);
   scroll-snap-align: start;
 }
 
@@ -1580,10 +1721,17 @@ a.plate:hover > img,
 }
 
 /* A plate sequence, not a contact sheet. Six columns carrying a measure of
-   seven: three plates at index scale, then two pairs at reading scale, the
-   second pair square again. Three plate sizes and two proportions, repeating —
-   enough rhythm that the eye reads a sequence rather than a wall, and cheap
-   enough that it needs no per-image data, which this page does not have. */
+   five: three plates at index scale, then a pair at reading scale. Two plate
+   sizes and two proportions, repeating — enough rhythm that the eye reads a
+   sequence rather than a wall, and cheap enough that it needs no per-image
+   data, which this page does not have.
+
+   Five, not seven, because the opening plate now sits in the page header:
+   twenty frames run here, and twenty divides by five exactly, so the last
+   cycle closes on a complete row. The measure of seven ended on a second pair
+   that repeated the first at a different ratio, which was the one part of the
+   rhythm a reader could not have predicted and also the one part that said
+   nothing — the third size existed to fill out the count. */
 .tiles--plates {
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: clamp(1.6rem, 2.6vw, 2.4rem) var(--gap);
@@ -1593,15 +1741,13 @@ a.plate:hover > img,
   grid-column: span 2;
 }
 
-.tiles--plates > :nth-child(7n + 4),
-.tiles--plates > :nth-child(7n + 5),
-.tiles--plates > :nth-child(7n + 6),
-.tiles--plates > :nth-child(7n) {
+.tiles--plates > :nth-child(5n + 4),
+.tiles--plates > :nth-child(5n) {
   grid-column: span 3;
 }
 
-.tiles--plates > :nth-child(7n + 4) .tiles__fig,
-.tiles--plates > :nth-child(7n + 5) .tiles__fig {
+.tiles--plates > :nth-child(5n + 4) .tiles__fig,
+.tiles--plates > :nth-child(5n) .tiles__fig {
   aspect-ratio: 4 / 5;
 }
 
@@ -1614,36 +1760,33 @@ a.plate:hover > img,
    reading scale reads exactly as it does at 1440. */
 
 @media (width <= 760px) {
-  /* Two across, with every seventh frame running the full width. That is what
-     keeps the last frame from being stranded beside an empty cell: at 21
-     images the closing plate is a seventh, so the sequence ends on a full-
-     width frame by rule rather than by a special case for :last-child.
+  /* Two across, with every fifth frame running the full width. That is what
+     keeps the last frame from being stranded beside an empty cell: at twenty
+     images the closing plate is a fifth, so the sequence ends on a full-width
+     frame by rule rather than by a special case for :last-child.
 
-     Six squares and then one wide plate. Two frames side by side must be the
+     Four squares and then one wide plate. Two frames side by side must be the
      same height — a phone shows one row at a time and nothing else on screen
-     can absorb a mismatch — so the accent moves to the seventh, where it has
-     the row to itself. */
+     can absorb a mismatch — so the accent moves to the fifth, where it has the
+     row to itself. */
   .tiles--plates {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .tiles--plates > *,
-  .tiles--plates > :nth-child(7n + 4),
-  .tiles--plates > :nth-child(7n + 5),
-  .tiles--plates > :nth-child(7n + 6) {
+  .tiles--plates > :nth-child(5n + 4) {
     grid-column: span 1;
   }
 
-  .tiles--plates > :nth-child(7n + 4) .tiles__fig,
-  .tiles--plates > :nth-child(7n + 5) .tiles__fig {
+  .tiles--plates > :nth-child(5n + 4) .tiles__fig {
     aspect-ratio: 1;
   }
 
-  .tiles--plates > :nth-child(7n) {
+  .tiles--plates > :nth-child(5n) {
     grid-column: span 2;
   }
 
-  .tiles--plates > :nth-child(7n) .tiles__fig {
+  .tiles--plates > :nth-child(5n) .tiles__fig {
     aspect-ratio: 4 / 5;
   }
 }

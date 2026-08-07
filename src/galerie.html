@@ -8,7 +8,17 @@
 
 {% block content %}
 
-<section class="shell shell--wide phead">
+<section class="shell shell--wide phead phead--plate">
+  {# The page whose subject is photographs, opening on a photograph. It is the
+     collection's own first frame, not a chosen key image, and it is a real
+     lightbox item — the sequence below starts at the second, so nothing is
+     quoted twice and the overlay still counts twenty-one. #}
+  <a class="phead__plate rv-clip" href="{{ big(images[0]) }}" data-lb-item
+     data-title="Londa Color Tune — Berlín 2023"
+     aria-label="Snímek 1 z kolekce Londa Color Tune">
+    {{ img(images[0], alt='Kolekce Londa Color Tune, Berlín 2023 — snímek 1',
+           sizes='100vw', cover=true) }}
+  </a>
   <div class="phead__grid">
     <div class="phead__meta">
       <span class="num">Vlasy</span>
@@ -54,10 +64,10 @@
      homepage reel it is supposed to pay off gave each frame a title and a
      state while this gave them nothing.
 
-     Set as plates instead, on a measure of seven over six columns: a row of
-     three at index scale, then two pairs at reading scale, the second pair
-     square again. Twenty-one divides by seven exactly, so the sequence closes
-     on a complete row.
+     Set as plates instead, on a measure of five over six columns: a row of
+     three at index scale, then a pair at reading scale. The first frame is
+     the page header's plate, so twenty run here and twenty divides by five
+     exactly — the sequence closes on a complete row.
 
      Each plate used to carry its number under a hairline, defended as "the
      only caption these frames can honestly hold". The honest conclusion was
@@ -67,16 +77,16 @@
      which is the look of a table with the column headings taken off. The
      shoot is named once, above; the frames are the frames. #}
   <div class="tiles tiles--plates">
-    {% for image in images %}
+    {% for image in images[1:] %}
     {# No data-tag. The lightbox writes its own "01 / 21" into the top bar, so
        supplying the same string as the tag printed the counter twice on one
        overlay, in two different typographic voices. #}
     <a class="tiles__item rv" href="{{ big(image) }}" data-lb-item
        data-title="Londa Color Tune — Berlín 2023"
-       style="--d:{{ (loop.index0 % 7) * 50 }}ms"
-       aria-label="Snímek {{ loop.index }} z kolekce Londa Color Tune">
+       style="--d:{{ (loop.index0 % 5) * 50 }}ms"
+       aria-label="Snímek {{ loop.index + 1 }} z kolekce Londa Color Tune">
       <span class="tiles__fig">
-        {{ img(image, alt='Kolekce Londa Color Tune, Berlín 2023 — snímek ' ~ loop.index,
+        {{ img(image, alt='Kolekce Londa Color Tune, Berlín 2023 — snímek ' ~ (loop.index + 1),
                sizes='(max-width:760px) 46vw, 30vw', cover=true) }}
       </span>
     </a>

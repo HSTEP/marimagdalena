@@ -46,6 +46,11 @@
      letterspaced labels, which is most of the footer's text. */
   --paper-3: #6e665a;
   --paper-line: rgb(20 17 13 / 15%);
+  /* The strong half, declared here rather than written out inside .on-paper.
+     The ink ground has both weights as tokens; the paper ground had one token
+     and one literal, so changing --paper-line moved one hairline and left its
+     partner behind. */
+  --paper-line-strong: rgb(20 17 13 / 30%);
 
   /* Contextual aliases — flipped wholesale by .on-paper */
   --fg: var(--bone);
@@ -276,7 +281,17 @@
   --img-quiet: grayscale(1) contrast(1.05);
 
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Two heights, because the masthead has two states. --nav-h is the height it
+     opens at, and it is the right number for the paddings that clear it at the
+     top of a page, where it is never stuck. --nav-h-stuck is the height it
+     shrinks to on scroll, and it is the only right number for a `top:` offset,
+     because anything sticky is by definition parked under the shrunk bar.
+     Offsetting from --nav-h left a 4px slot at the phone widths where --nav-h
+     is 4.25rem — permanently open, not transitional, because the thing that
+     parks there is 900px down the page. Table rules and the tops of price
+     digits slid through it. */
   --nav-h: 4.75rem;
+  --nav-h-stuck: 4rem;
 }
 
 /* The crossings. --t-h1 is 5.6vw between 657 and 1429, so it drops under 40px
@@ -308,7 +323,7 @@
   --fg-3: var(--paper-3);
   --bg: var(--paper);
   --hair: var(--paper-line);
-  --hair-strong: rgb(20 17 13 / 30%);
+  --hair-strong: var(--paper-line-strong);
   background: var(--bg);
   color: var(--fg);
 }
@@ -975,7 +990,7 @@ a.plate:hover > img,
    ignore, and the blur was the one piece of glass in a design whose whole
    argument is printed paper. A masthead is opaque. */
 .nav.is-stuck {
-  height: 4rem;
+  height: var(--nav-h-stuck);
   background: var(--ink);
   border-bottom-color: var(--line);
 }
@@ -1140,7 +1155,15 @@ a.plate:hover > img,
   background: var(--ink);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* `safe`, because centring an overflowing column overflows it symmetrically
+     and the top half of that overflow cannot be scrolled back to — scrollTop
+     clamps at 0. On a phone in landscape (740×360) the drawer opened on item 5
+     of 8 with two items off the top of the screen and no way to reach them,
+     and at 390×700 and 360×640 the first item or two sat behind the opaque
+     masthead. `safe` falls back to flex-start exactly when centring would
+     overflow, which is what the padding above already declares; where the list
+     fits, it still centres. */
+  justify-content: safe center;
   padding: var(--nav-h) var(--gutter) 3rem;
   clip-path: inset(0 0 100% 0);
   transition: clip-path 0.44s var(--ease);
@@ -1270,7 +1293,11 @@ a.plate:hover > img,
   z-index: 2;
   align-self: center;
   padding: calc(var(--nav-h) + 3rem) 0 4.5rem var(--gutter);
-  max-width: 41rem;
+  /* The gutter is inside the box, so a bare 41rem cap subtracted it from the
+     measure instead of clearing it — and because the gutter grows with the
+     viewport, the text ran 604.8px wide at 1024 and 572px at 1680, narrowing
+     by 32.8px as the screen gained 656. */
+  max-width: calc(41rem + var(--gutter));
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -2757,7 +2784,10 @@ a.plate:hover > img,
 .price__aside {
   grid-column: 10 / span 3;
   position: sticky;
-  top: calc(var(--nav-h) + 2rem);
+  /* --nav-h-stuck, not --nav-h: this only ever pins while the bar is shrunk,
+     so offsetting from the open height put 44px of air under a bar 12px
+     shorter than the sum assumed. */
+  top: calc(var(--nav-h-stuck) + 2rem);
   padding-top: 0.4rem;
   display: flex;
   flex-direction: column;
@@ -3024,10 +3054,11 @@ a.plate:hover > img,
 
   [data-cols="3"] thead {
     /* The group is ~790px tall, so a header printed once at the top scrolled
-       away and left five rows of three unlabelled figures. Offset by the
-       sticky navigation bar so it never hides under it. */
+       away and left five rows of three unlabelled figures. Parked against the
+       bar's stuck height, which is the only height it can ever meet — the
+       first of these tables is ~900px down and the bar shrinks at ~50. */
     position: sticky;
-    top: var(--nav-h);
+    top: var(--nav-h-stuck);
     z-index: 2;
     background: var(--ink);
   }
@@ -3779,11 +3810,20 @@ body.is-lb .nav {
     display: none;
   }
 
-  .phead__title {
+  /* Both selectors, because `.phead--ledger .phead__title` is (0,2,0) and the
+     bare class is (0,1,0) — a media query adds no specificity, so the mobile
+     stack lost to the desktop two-column rule and /cenik alone never stacked.
+     At 390 it was setting its standfirst to a 167px measure, about twenty
+     characters, inside a 350px page, with its title 76px wide beside a column
+     of nothing; the title-to-lede gap read −26.3px, which is to say they were
+     still side by side at 360. */
+  .phead__title,
+  .phead--ledger .phead__title {
     grid-column: 1 / span 12;
   }
 
-  .phead__lede {
+  .phead__lede,
+  .phead--ledger .phead__lede {
     grid-column: 1 / span 12;
     padding-bottom: 0;
     margin-top: 1.2rem;

@@ -287,6 +287,18 @@ h4 {
   margin-bottom: 0;
 }
 
+/* Who wrote the text, set the way a catalogue essay signs off — in the column's
+   own register, one size down, not in the micro-caps reserved for field
+   labels. */
+.prose__sign {
+  margin-top: 2.4rem;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: var(--t-small);
+  font-variation-settings: "opsz" 16;
+  color: var(--fg-3);
+}
+
 .prose a {
   color: var(--fg);
   border-bottom: 1px solid var(--gold-deep);
@@ -338,9 +350,18 @@ h4 {
    gap is always exactly --bay, and the last section on a page carries the
    space down to the footer. */
 .bay,
-.bay--sm,
 .bay--top {
   padding-block: var(--bay) 0;
+}
+
+/* The space ladder, which has to agree with the type ladder. .bay--sm was in
+   the selector list above, i.e. it was --bay under another name, so the two
+   sections the homepage marks as minor in its markup and sets 13px smaller in
+   its type were separated from their neighbours by the same 158px as
+   everything else. A catalogue signals subordination with space before it
+   signals it with size. */
+.bay--sm {
+  padding-block: var(--bay-sm) 0;
 }
 
 /* The rhythm belongs to the page, not to a class someone has to remember.
@@ -618,11 +639,16 @@ a.plate:hover > img,
   border-bottom-color: transparent;
 }
 
+/* Baselines here too. Centring set the button's label 4px off the link beside
+   it — same family, same size, side by side, on the largest call to action on
+   the site — and left the link's underline 13px inside the button's bottom
+   edge, sharing no edge with it either. A button is a line of type with a
+   ground behind it; it sits on the line. */
 .actions {
   display: flex;
   flex-wrap: wrap;
   gap: 1.4rem 2.2rem;
-  align-items: center;
+  align-items: baseline;
   min-width: 0;
 }
 
@@ -634,20 +660,7 @@ a.plate:hover > img,
   overflow-wrap: anywhere;
 }
 
-/* ------------------------------------------------------------- 7. progress */
-.progress {
-  position: fixed;
-  inset: 0 auto auto 0;
-  height: 2px;
-  width: 100%;
-  transform: scaleX(0);
-  transform-origin: 0 50%;
-  background: var(--gold);
-  z-index: 70;
-  pointer-events: none;
-}
-
-/* ------------------------------------------------------------------ 8. nav */
+/* ------------------------------------------------------------------ 7. nav */
 .nav {
   position: fixed;
   inset: 0 0 auto;
@@ -883,7 +896,7 @@ a.plate:hover > img,
   }
 }
 
-/* ----------------------------------------------------------------- 9. hero */
+/* ----------------------------------------------------------------- 8. hero */
 .hero {
   position: relative;
   min-height: 100svh;
@@ -1021,7 +1034,7 @@ a.plate:hover > img,
   }
 }
 
-/* --------------------------------------------------- 10. page head (inner) */
+/* --------------------------------------------------- 9. page head (inner) */
 /* Six interior pages open with this block, so its slack is paid six times.
    It was spending ~630px of the first screen to set a single word. */
 .phead {
@@ -1085,7 +1098,7 @@ a.plate:hover > img,
   }
 }
 
-/* ------------------------------------------------------------- 11. service */
+/* ------------------------------------------------------------- 10. service */
 .svc {
   border-top: 1px solid var(--hair);
 }
@@ -1190,7 +1203,7 @@ a.plate:hover > img,
   line-height: 1.55;
 }
 
-/* ---------------------------------------------------------- 12. strip/reel */
+/* ---------------------------------------------------------- 11. strip/reel */
 .reel {
   display: flex;
   gap: var(--gap);
@@ -1260,21 +1273,34 @@ a.plate:hover > img,
 .reel__meta {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: baseline;
   gap: 1rem 1.4rem;
   margin-top: 1.1rem;
 }
 
+/* On the baseline, which for 11px micro-caps is a long way below the centre of
+   their boxes — centred, the rule crossed the line of type at its x-height.
+   A rule set into a line of type sits on the line. */
 .reel__rule {
   flex: 1;
   min-width: 2rem;
   height: 1px;
   background: var(--hair);
+  align-self: baseline;
 }
 
 .reel__count {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+/* "Drag sideways" is an instruction for a thumb. Printed at 1440, where the
+   affordance is a wheel and a cursor, it is a phone's caption left on a
+   desktop. */
+@media (width > 900px) {
+  .reel__hint {
+    display: none;
+  }
 }
 
 @media (width <= 620px) {
@@ -1284,7 +1310,7 @@ a.plate:hover > img,
   }
 }
 
-/* ------------------------------------------------------- 13. gallery/works */
+/* ------------------------------------------------------- 12. gallery/works */
 .works {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1296,13 +1322,15 @@ a.plate:hover > img,
    the work you can still buy. It is also the only variation in tile scale on
    the page, and scale is what tells a reader the two halves are not the same
    kind of thing. */
+/* One gutter on the page. The tighter column gap this used to carry meant six
+   columns on 20px sat under four columns on 32px, so the archive shared no
+   interior edge with the catalogue above it — it was a second grid that
+   happened to start and end at the same margins. On --gap, six tracks and four
+   tracks meet at the page's centre line, and density comes from the thing that
+   should carry it: the frames are 190px against 300px. */
 .works--index {
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  /* A tighter gutter, not just smaller frames. Carrying the full page gap
-     between 190px tiles made the archive read airier per frame than the 4-up
-     grid of work that is actually for sale — the opposite of the density the
-     smaller frames are there to signal. */
-  gap: clamp(1.5rem, 2.2vw, 2.1rem) clamp(0.9rem, 1.3vw, 1.2rem);
+  row-gap: clamp(1.5rem, 2.2vw, 2.1rem);
 }
 
 .works--index .works__name {
@@ -1408,7 +1436,7 @@ a.plate:hover > img,
   }
 }
 
-/* ------------------------------------------------------------- 14. squares */
+/* ------------------------------------------------------------- 13. squares */
 .tiles {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
@@ -1449,27 +1477,24 @@ a.plate:hover > img,
   aspect-ratio: 4 / 5;
 }
 
-@media (width <= 1180px) {
-  /* Four columns: the measure of seven becomes two pairs and a triple, which
-     still closes on a full row every seven frames. */
-  .tiles--plates {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .tiles--plates > *,
-  .tiles--plates > :nth-child(7n + 4),
-  .tiles--plates > :nth-child(7n + 5),
-  .tiles--plates > :nth-child(7n + 6),
-  .tiles--plates > :nth-child(7n) {
-    grid-column: span 2;
-  }
-}
+/* No tablet breakpoint. There used to be one that flattened all seven frames
+   to a uniform 2-up, so the sequence — the whole point of the page — existed
+   only above 1181px, and it kept the 4/5 ratio on frames 4 and 5 while their
+   new row-mates stayed square, which put the two plates in a row 43px out of
+   register. The grid is six tracks of its own, not the page's twelve: at 761px
+   a third of the measure is still 217px, so three at index scale against two at
+   reading scale reads exactly as it does at 1440. */
 
 @media (width <= 760px) {
   /* Two across, with every seventh frame running the full width. That is what
      keeps the last frame from being stranded beside an empty cell: at 21
      images the closing plate is a seventh, so the sequence ends on a full-
-     width frame by rule rather than by a special case for :last-child. */
+     width frame by rule rather than by a special case for :last-child.
+
+     Six squares and then one wide plate. Two frames side by side must be the
+     same height — a phone shows one row at a time and nothing else on screen
+     can absorb a mismatch — so the accent moves to the seventh, where it has
+     the row to itself. */
   .tiles--plates {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1479,6 +1504,11 @@ a.plate:hover > img,
   .tiles--plates > :nth-child(7n + 5),
   .tiles--plates > :nth-child(7n + 6) {
     grid-column: span 1;
+  }
+
+  .tiles--plates > :nth-child(7n + 4) .tiles__fig,
+  .tiles--plates > :nth-child(7n + 5) .tiles__fig {
+    aspect-ratio: 1;
   }
 
   .tiles--plates > :nth-child(7n) {
@@ -1547,7 +1577,7 @@ a.plate:hover > img,
   border-color: rgb(227 166 60 / 55%);
 }
 
-/* --------------------------------------------------------------- 15. index */
+/* --------------------------------------------------------------- 14. index */
 /* Exhibitions: a catalogue index. Hovering a row floats its plate under the
    cursor on pointer devices; on touch the plate is simply part of the row. */
 .idx {
@@ -1577,7 +1607,12 @@ a.plate:hover > img,
   /* Fixed fractions, not `auto` on the last column: an auto track sized by each
      row's own links would shift the date column and the index would lose its
      vertical rules. */
-  grid-template-columns: 5.5rem minmax(0, 1.35fr) minmax(0, 0.5fr) minmax(0, 1fr);
+  /* The date is a fixed field — it is never longer than "22. listopadu 2024" —
+     so giving it a fraction of the measure only parked it in the middle of a
+     195px track it used 110px of, with the title's air on one side and the
+     actions' on the other. Set to its own width it stops being a hole, and the
+     620px it releases goes to the title, which is what anyone is reading. */
+  grid-template-columns: 5.5rem minmax(0, 1.6fr) 9rem minmax(0, 0.9fr);
   gap: var(--gap);
   /* Baselines, not boxes. Centring a 34px serif title against a 14px date
      against a 10px micro-cap gave every row of a horizontally-scanned index
@@ -1627,9 +1662,29 @@ a.plate:hover > img,
 .idx__slot {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 0.4rem;
   min-width: 0;
+}
+
+/* The rule belongs to the column, not to the word. Sized to their own text,
+   two stacked underlines in one slot ran 136px and 39px — a system whose whole
+   structure is hairlines cannot afford rules whose length is an accident of
+   what the editor typed. Block-level, both run the slot's width and every row
+   of the index closes on the same two verticals. */
+.idx__slot .qlink {
+  display: block;
+}
+
+/* A person's name is a credit, not an action. Set in the same tracked caps as
+   VIDEO and REPORTÁŽ it read as a third thing to press. */
+.idx__slot .qlink--credit {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-size: var(--t-small);
+  font-family: var(--serif);
+  font-style: italic;
+  font-variation-settings: "opsz" 16;
 }
 
 /* A real thumbnail in the row. The floating hover plate was the page's only
@@ -1707,7 +1762,7 @@ a.plate:hover > img,
   border: 1px solid var(--hair);
 }
 
-/* ------------------------------------------------- 16. project archive */
+/* ------------------------------------------------- 15. project archive */
 .arch {
   display: flex;
   flex-direction: column;
@@ -1752,6 +1807,8 @@ a.plate:hover > img,
   justify-content: flex-start;
   gap: 1.05rem;
   min-width: 0;
+  padding-bottom: 1.15rem;
+  border-bottom: 1px solid var(--hair);
 }
 
 /* One promotion rule, and it is editorial: a video is wider than it is tall,
@@ -1765,23 +1822,18 @@ a.plate:hover > img,
   grid-column: span 2;
 }
 
-/* A hairline frame, not a filled plate. The stylesheet's own doctrine is that
-   structure comes from rules and space and that this site has no cards; the
-   archive was the one place on ink that broke it, and it sat directly next to
-   /obrazy, where images bleed to the tile edge with no panel at all. The frame
-   does the same job — every artefact whole, on one field — with the device the
-   rest of the site already uses. */
+/* No frame. Ruling all four sides made the archive the one place on the site
+   with cards after all — and because `contain` letterboxes each artefact
+   differently, three items in a row sat 243, 232 and 350px wide inside three
+   identical rectangles, so the eye read the boxes as the grid and the pictures
+   as debris inside them. The entry is closed by one rule under its caption
+   instead: four hairlines per item become one, and the rules run the column's
+   width, which is a constant. */
 .arch__field {
   display: block;
   position: relative;
   aspect-ratio: 1;
   overflow: hidden;
-  border: 1px solid var(--hair);
-  transition: border-color 0.5s var(--ease);
-}
-
-.arch__field:hover {
-  border-color: var(--hair-strong);
 }
 
 /* Contain, always. Three review rounds running, some poster in here was being
@@ -1804,6 +1856,26 @@ a.plate:hover > img,
 
 .arch__item--wide .arch__field {
   aspect-ratio: 16 / 9;
+}
+
+/* A catalogue that has no plate for an entry sets a slug; it does not leave the
+   column blank. One record here is a Facebook video with no still and no
+   frameable embed, and the template had no branch for it — so its cell was
+   empty from the top of the row down to a lone link pinned 313px lower by
+   `margin-top: auto`, which reads as a broken image, not as a record. */
+.arch__field--none {
+  display: grid;
+  place-items: center;
+  background: var(--ink-raise);
+}
+
+.arch__field--none span {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-variation-settings: "opsz" 48;
+  color: var(--fg-3);
+  opacity: 0.6;
 }
 
 .arch__field--video {
@@ -1869,7 +1941,7 @@ a.plate:hover > img,
   padding-top: 0.6rem;
 }
 
-/* -------------------------------------------------------------- 17. people */
+/* -------------------------------------------------------------- 16. people */
 .people {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
@@ -1885,6 +1957,13 @@ a.plate:hover > img,
   .person__name {
     font-size: 1.05rem;
   }
+}
+
+/* A column, so the caption can grow into the row's height and bottom-align its
+   role against the cards beside it. */
+.person {
+  display: flex;
+  flex-direction: column;
 }
 
 .person__art {
@@ -1911,6 +1990,7 @@ a.plate:hover > img,
    both on one line and the pair breaks apart at different points per card. */
 .person__body {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 0.4rem;
   margin-top: 1rem;
@@ -1918,15 +1998,10 @@ a.plate:hover > img,
   border-top: 1px solid var(--hair);
 }
 
-/* Two lines are reserved whether or not the name needs them. "Jirka Krejčík"
-   fits one line and "Lydie Bernklauová" does not, so without this the role
-   labels underneath sit on different baselines and every row of the grid is
-   visibly out of register. */
 .person__name {
   font-family: var(--serif);
   font-size: 1.3rem;
   line-height: 1.16;
-  min-height: 2.32em;
   font-variation-settings: "opsz" 24;
   transition: color 0.4s;
 }
@@ -1935,7 +2010,14 @@ a.plate:hover > img,
   color: var(--gold);
 }
 
+/* Bottom-aligned across the row rather than pushed down by a reserved second
+   line. `min-height: 2.32em` on the name held every role on one baseline, but
+   it did it by opening 2.32 lines under names that use one — so the caption
+   rule sat 33px above the name and the name 45px above its own role, which set
+   the two lines that belong together further apart than the line that divides
+   them from the picture. */
 .person__role {
+  margin-top: auto;
   font-size: var(--t-micro);
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1949,24 +2031,40 @@ a.plate:hover > img,
    alone: its content bottomed out in the band between the pictures and the
    captions, 98px short of its row-mates, with its own hairline hanging 17px
    off theirs in a second grey. */
+/* Paper, not an outline. Ruled on four sides it was the only box on a page of
+   photographs and 84% of it was empty ink, which reads as an image that failed
+   to load rather than as an invitation. The site has exactly two grounds and
+   this is what the second one is for: one paper plate among seven ink ones is
+   a deliberate inversion, and it needs no border to be seen. */
 .person__art--call {
   display: flex;
   align-items: flex-end;
   padding: clamp(1.2rem, 2.4vw, 1.8rem);
-  background: none;
-  border: 1px solid var(--hair);
-  transition: border-color 0.5s var(--ease);
+  background: var(--paper);
+  border: 0;
+  transition: background-color 0.5s var(--ease);
 }
 
 .person--call:hover .person__art--call {
-  border-color: var(--gold);
+  background: var(--gold);
 }
 
 .person__ask {
   font-family: var(--serif);
   font-size: clamp(1.35rem, 2.2vw, 1.85rem);
   line-height: 1.12;
+  color: var(--ink);
   text-wrap: balance;
+}
+
+/* An address is not a job title. Set in the role slot's tracked micro-caps it
+   ran 12px past the grid's right edge on a 390px phone — the treatment is
+   sized for "FOTOGRAF", not for twenty-two characters and an @. */
+.person--call .person__role {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
 }
 
 .person__logo {
@@ -1987,7 +2085,7 @@ a.plate:hover > img,
   transform: none;
 }
 
-/* --------------------------------------------------------------- 18. price */
+/* --------------------------------------------------------------- 17. price */
 .price {
   display: grid;
   gap: clamp(2.6rem, 5vw, 4.2rem);
@@ -2026,13 +2124,16 @@ a.plate:hover > img,
   line-height: 1.6;
 }
 
-/* The one thing in the column anyone came for. */
+/* The one thing in the column anyone came for. Set in Bodoni its leading "+"
+   rode above the baseline of the lining figures as a small operator glyph,
+   which at 60px from forty Jost prices reads as a smudge — and the same number
+   is set in Jost in the nav and the footer. Size carries the emphasis; the
+   family is the one every other numeral on the site uses. */
 .price__tel {
-  font-family: var(--serif);
   font-size: 1.35rem;
-  letter-spacing: 0;
+  letter-spacing: 0.01em;
   text-transform: none;
-  font-variation-settings: "opsz" 24;
+  font-variant-numeric: tabular-nums;
   color: var(--fg);
 }
 
@@ -2249,7 +2350,7 @@ a.plate:hover > img,
   }
 }
 
-/* -------------------------------------------------------------- 19. quotes */
+/* -------------------------------------------------------------- 18. quotes */
 /* A quiet, functional close. Six of the seven pages used to end with the same
    centred display-scale italic quote over a ghosted photograph, which is the
    single loudest "every page built from one template" tell on the site. Only
@@ -2281,12 +2382,31 @@ a.plate:hover > img,
   gap: 0.6rem 1.8rem;
 }
 
-/* ------------------------------------------------------- 19b. quote plate */
+/* ------------------------------------------------------- 18b. quote plate */
+/* Full-bleed on the left, on the page's own grid on the right. The split is
+   derived, not tuned: the shell's sixth column ends at half the viewport minus
+   half a gap — gutter + 6col + 5gap reduces to W/2 - gap/2 — so the photograph
+   closes on a real column line and the blockquote opens on column seven at
+   every width. Set as 5fr 7fr of the full viewport it started at 672px against
+   a page whose column seven is at 736: 64px off the only vertical it could
+   have agreed with, on the one block trying hardest to look composed.
+
+   The raised ground is gone with it. It painted a rectangle seven levels above
+   the page — too faint to read as a register change, too visible to read as
+   nothing — and because --bay lands inside the section's own padding, the box
+   swallowed the gap above it, so the only visible break in the page's vertical
+   rhythm was this block. There are two grounds on this site. */
 .quote {
   display: grid;
-  grid-template-columns: 5fr 7fr;
+  /* Percentages in a track list resolve against the content box, and this grid
+     has a gutter's worth of right padding — so a plain 50% measured half of
+     1368, not half of 1440, and landed 36px short. Add the padding back before
+     halving. */
+  grid-template-columns:
+    calc((100% + var(--gutter) - var(--gap)) / 2) minmax(0, 1fr);
+  gap: 0 var(--gap);
+  padding-right: var(--gutter);
   align-items: stretch;
-  background: var(--ink-raise);
 }
 
 .quote__art {
@@ -2307,7 +2427,9 @@ a.plate:hover > img,
   flex-direction: column;
   align-items: flex-start;
   gap: 1.5rem;
-  padding: clamp(2.6rem, 6vw, 5rem) clamp(1.6rem, 5vw, 4.5rem);
+  /* No inline padding: the grid already places this on column seven, and any
+     padding here would push it off again. */
+  padding-block: clamp(2.6rem, 6vw, 5rem);
   justify-content: center;
 }
 
@@ -2322,6 +2444,12 @@ a.plate:hover > img,
 @media (width <= 900px) {
   .quote {
     grid-template-columns: minmax(0, 1fr);
+    padding-right: 0;
+  }
+
+  /* Stacked, the text has no column to sit on, so it takes the page margin. */
+  .quote__in {
+    padding-inline: var(--gutter);
   }
 
   .quote__art {
@@ -2334,7 +2462,7 @@ a.plate:hover > img,
   }
 }
 
-/* ---------------------------------------------------------- 20. full plate */
+/* ---------------------------------------------------------- 19. full plate */
 .band {
   position: relative;
   min-height: clamp(24rem, 62vh, 42rem);
@@ -2390,7 +2518,7 @@ a.plate:hover > img,
   text-wrap: pretty;
 }
 
-/* -------------------------------------------------------------- 21. footer */
+/* -------------------------------------------------------------- 20. footer */
 .foot {
   padding-top: clamp(3.5rem, 7vw, 6rem);
 }
@@ -2588,7 +2716,7 @@ a.plate:hover > img,
   margin-left: auto;
 }
 
-/* ------------------------------------------------------------ 22. lightbox */
+/* ------------------------------------------------------------ 21. lightbox */
 .lb {
   position: fixed;
   inset: 0;
@@ -2673,9 +2801,13 @@ a.plate:hover > img,
   opacity: 1;
 }
 
-/* A bounded target, not a bare glyph. Floating on the backdrop at a hairline's
-   weight, the chevrons read as two more divider rules and gave no sign they
-   could be pressed. */
+/* On the page margin, unboxed. The border was there to make the chevrons look
+   pressable, but it made them the only two visible boxes on a site whose first
+   rule is that there are none — generic gallery-plugin chrome floating in dead
+   ground. And at `left: .5rem` they sat on a third inset: the counter and the
+   close button hang on --gutter, the stage pads 56px, the arrows 8px. One
+   vertical for all four. The glyph is affordance enough at this size; the
+   hover shift says the rest. */
 .lb__nav {
   position: absolute;
   top: 50%;
@@ -2685,15 +2817,11 @@ a.plate:hover > img,
   display: grid;
   place-items: center;
   color: var(--bone-2);
-  border: 1px solid rgb(239 233 223 / 14%);
-  transition: color 0.3s, border-color 0.3s, background-color 0.3s,
-    transform 0.4s var(--ease);
+  transition: color 0.3s, transform 0.4s var(--ease);
 }
 
 .lb__nav:hover {
   color: var(--gold);
-  border-color: rgb(227 166 60 / 45%);
-  background-color: rgb(239 233 223 / 6%);
 }
 
 .lb__nav svg {
@@ -2701,12 +2829,15 @@ a.plate:hover > img,
   height: 1.6rem;
 }
 
+/* Offset so that the chevron itself — not its invisible hit box — lands on the
+   gutter, level with the left edge of the counter and the right edge of the
+   close button. */
 .lb__nav--prev {
-  left: 0.5rem;
+  left: calc(var(--gutter) - (clamp(3rem, 6vw, 4.5rem) - 1.6rem) / 2);
 }
 
 .lb__nav--next {
-  right: 0.5rem;
+  right: calc(var(--gutter) - (clamp(3rem, 6vw, 4.5rem) - 1.6rem) / 2);
 }
 
 .lb__nav--prev:hover {
@@ -2721,10 +2852,9 @@ a.plate:hover > img,
   display: flex;
   align-items: baseline;
   gap: 1.2rem;
-  padding: 1.3rem var(--gutter) 1.7rem;
+  padding: 0.85rem var(--gutter);
   border-top: 1px solid var(--line);
   min-height: 4rem;
-  padding-block: 0.85rem;
 }
 
 .lb__ask {
@@ -2746,14 +2876,13 @@ body.is-menu {
 /* The page chrome is fixed and sat at the same height as the lightbox's own
    bar, so the counter landed on the wordmark and "Zavřít" on the phone
    number. Take the chrome out while the viewer is open. */
-body.is-lb .nav,
-body.is-lb .progress {
+body.is-lb .nav {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s var(--ease);
 }
 
-/* -------------------------------------------------------------- 23. motion */
+/* -------------------------------------------------------------- 22. motion */
 /* Every hidden-until-revealed state is scoped to .js. Without scripting the
    document renders fully visible instead of a page of blank sections. */
 .js .rv {
@@ -2803,7 +2932,7 @@ body.is-lb .progress {
   }
 }
 
-/* ---------------------------------------------------------- 24. responsive */
+/* ---------------------------------------------------------- 23. responsive */
 @media (width <= 1180px) {
   .works {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -3058,20 +3187,24 @@ body.is-lb .progress {
     --t-body: 1rem;
   }
 
-  /* One work per row. Two 169px thumbnails separated by 12px read as a single
-     picture — the column gap was a fifth of the row gap, so the grid bound
-     each painting to the one beside it rather than to its own caption. At this
-     width the catalogue is better as a column than as a contact sheet. */
+  /* Two across, with a row gap twice the column gap. The old failure here was
+     a column gap a fifth of the row gap, which bound each painting to the one
+     beside it rather than to its own caption; the answer to that is the ratio,
+     not one work per screen. At 1-up this page was the only index on the site
+     that became a feed on a phone — /partneri and /projekty both run 2-up at
+     this width — and 87 works arrived one per screen with the sold half at the
+     same scale as the work still for sale, which is the one distinction the
+     page is built on. */
   .works {
-    grid-template-columns: 1fr;
-    gap: 2.6rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem var(--gap);
   }
 
-  /* The archive keeps its density: it is an index, and at two across the
+  /* The archive keeps its density: it is an index, and at three across the
      frames still land well clear of each other. */
   .works--index {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.8rem var(--gap);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 1.5rem;
   }
 
   /* Baseline-aligned on one row, a two-word title wrapped underneath the
@@ -3137,6 +3270,17 @@ body.is-lb .progress {
 body.is-menu.home .nav:not(.is-stuck) .nav__mark {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* And except on a phone, where the eight nav links that make the bar read as a
+   bar are behind a burger. Without the mark the entire header was one icon
+   floating over a photograph, with nothing above the fold naming the site
+   until the hero's own wordmark scrolled into view. */
+@media (width <= 900px) {
+  .home .nav:not(.is-stuck) .nav__mark {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 .nav__mark {

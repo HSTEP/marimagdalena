@@ -9,18 +9,16 @@
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ------------------------------------------------------ scroll progress */
-  const progress = $("[data-progress]");
+  /* ------------------------------------------------------------ sticky nav */
+  /* The gold reading-progress bar that used to be driven from here is gone.
+     It is a long-form-article convention on a five-screen site, and it put a
+     third moving gold element across the top of a page that already carries a
+     gold button and a gold counter. */
   const nav = $("[data-nav]");
 
   let ticking = false;
   const onScroll = () => {
-    const y = window.scrollY;
-    if (progress) {
-      const max = document.documentElement.scrollHeight - innerHeight;
-      progress.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
-    }
-    if (nav) nav.classList.toggle("is-stuck", y > 40);
+    if (nav) nav.classList.toggle("is-stuck", window.scrollY > 40);
     ticking = false;
   };
 

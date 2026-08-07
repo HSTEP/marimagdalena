@@ -207,7 +207,39 @@ def link_label(text, url=""):
     return text
 
 
-VIDEO_HOSTS = ("youtube.com", "youtu.be", "facebook.com", "fb.watch", "vimeo.com")
+VIDEO_HOSTS = ("youtube.com", "youtu.be", "fb.watch", "vimeo.com")
+VIDEO_PATHS = ("/share/v/", "/share/r/", "/watch", "/videos/", "/reel/")
+VIDEO_WORDS = ("video", "záznam", "zaznam", "reel")
+
+# A URL whose path is a single bare segment — no query, no script name — is
+# somebody's page, not a post: a credit, not something to go and read.
+PROFILE_RE = re.compile(r"^[\w.-]+/?$")
+
+
+def link_kind(link):
+    """Classify one editable link: 'video', 'profile' or 'page'.
+
+    Host was the wrong signal. Every link on /vystavy is a facebook.com URL —
+    reports, recordings and one person's page alike — so a host test sent all
+    thirteen of them to the recordings slot and the report column it was
+    written to form was empty on all eleven rows. What actually separates them
+    is the path Facebook itself uses (/share/v/, /share/r/, /watch) and the
+    word the editor typed. Both are in the data already.
+    """
+    url = (link.get("url") or "").strip()
+    text = (link.get("text") or "").strip().lower()
+    rest = re.sub(r"^https?://", "", url).removeprefix("www.")
+    host, _, tail = rest.partition("/")
+    query = "?" in tail
+    path = "/" + tail.split("?")[0].lower()
+
+    if host.lower().endswith(VIDEO_HOSTS) or path.startswith(VIDEO_PATHS) or any(
+        word in text for word in VIDEO_WORDS
+    ):
+        return "video"
+    if not query and "." not in path and PROFILE_RE.match(path.lstrip("/")):
+        return "profile"
+    return "page"
 
 
 def link_slots(links):
@@ -221,9 +253,9 @@ def link_slots(links):
     """
     video, other = [], []
     for link in links or []:
-        host = re.sub(r"^https?://", "", (link.get("url") or "").strip())
-        host = host.split("/")[0].removeprefix("www.").lower()
-        (video if host.endswith(VIDEO_HOSTS) else other).append(link)
+        kind = link_kind(link)
+        entry = dict(link, kind=kind)
+        (video if kind == "video" else other).append(entry)
     return other, video
 
 

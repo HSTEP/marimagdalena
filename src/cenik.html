@@ -41,9 +41,12 @@
         Objednávky přijímáme telefonicky i e‑mailem. Termín potvrdíme
         a cenu upřesníme při konzultaci.
       </p>
+      {# Just the number. The e-mail and the address used to follow it here,
+         and then again in the endnote below, and then verbatim a third time in
+         the footer — the same four lines three times inside 900 vertical
+         pixels. This column's job is "ring us now"; the footer's job is
+         "here is everything". #}
       <a class="qlink qlink--plain price__tel" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
-      <a class="qlink qlink--plain" href="mailto:{{ site.email }}">{{ site.email }}</a>
-      <p>{{ site.street }}<br>{{ site.zip }}&nbsp;{{ site.city }}</p>
     </aside>
   </div>
 </section>

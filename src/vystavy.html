@@ -62,13 +62,20 @@
 
       {# Two fixed slots — report left, recording right — so a label holds one
          x-position down the whole index and a row that has only one action
-         leaves the other column empty rather than sliding into it. #}
+         leaves the other column empty rather than sliding into it.
+
+         link_slots() used to sort on host. Every URL in this file is a
+         facebook.com URL, so every link went right and the report column was
+         empty on all eleven rows: a track reserved by a rule that could never
+         fire. It now reads the path Facebook itself uses and the word the
+         editor typed, both of which are already in the record. #}
       {% set slots = link_slots(v.links) %}
       <div class="idx__links">
         {% for slot in slots %}
         <span class="idx__slot">
           {% for link in slot %}
-          <a class="qlink" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link_label(link.text, link.url) }}</a>
+          <a class="qlink{{ ' qlink--credit' if link.kind == 'profile' }}"
+             href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link_label(link.text, link.url) }}</a>
           {% endfor %}
         </span>
         {% endfor %}

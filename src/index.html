@@ -138,10 +138,14 @@
   {# Laid out on the table's own columns rather than pushed to the two far
      edges of the measure: flush right, the section's main action sat 958px
      from the reading axis with a 677px hole between it and the caveat. #}
+  {# One action. The phone number that used to sit beside it was the page's
+     fourth printing of the same digits — nav bar, facts row 600px above,
+     here, footer — and it overran its track by 12px, so it wrapped and left a
+     128px underline hanging in the left column with nothing beside it. On a
+     page built out of hairlines an orphan rule reads as a broken one. #}
   <div class="svc__foot rv">
     <div class="actions">
       <a class="cta" href="cenik.html"><span>Celý ceník</span>{{ ico.arrow() }}</a>
-      <a class="qlink qlink--plain" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
     </div>
     <p class="svc__note">Ceny jsou orientační, konečná cena vždy vychází z konzultace.</p>
   </div>
@@ -214,7 +218,7 @@
      rule carrying the eye to the action, in the direction the strip moves. #}
   <div class="reel__meta rv" data-reel-meta>
     <span class="num reel__count"><span data-reel-index>01</span> / {{ '%02d'|format(paintings[:9]|length) }}</span>
-    <span class="label">Táhněte do strany</span>
+    <span class="label reel__hint">Táhněte do strany</span>
     <span class="reel__rule" aria-hidden="true"></span>
     <a class="cta" href="obrazy.html"><span>Všechny obrazy</span>{{ ico.arrow() }}</a>
   </div>

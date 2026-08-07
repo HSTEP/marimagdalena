@@ -22,7 +22,11 @@
   </div>
 </section>
 
-<section class="shell shell--wide" style="padding-top:0">
+{# No inline padding override. It was the only one in src/*.html, and it put
+   this page's section rule 52px under the page lede where every other interior
+   page opens on --bay-sm — two full-width hairlines within 260px with a title
+   squeezed between them. #}
+<section class="shell shell--wide">
   <div class="sec rv">
     {# Grey micro-caps, like every other section eyebrow. Gold italic serif is
        the page header's voice; using both in the same slot on different pages
@@ -59,14 +63,16 @@
      twenty-one are one shoot and the shoot is named once, above. #}
   <div class="tiles tiles--plates">
     {% for image in images %}
+    {# No data-tag. The lightbox writes its own "01 / 21" into the top bar, so
+       supplying the same string as the tag printed the counter twice on one
+       overlay, in two different typographic voices. #}
     <a class="tiles__item rv" href="{{ big(image) }}" data-lb-item
        data-title="Londa Color Tune — Berlín 2023"
-       data-tag="{{ '%02d'|format(loop.index) }} / {{ images|length }}"
        style="--d:{{ (loop.index0 % 7) * 50 }}ms"
        aria-label="Snímek {{ loop.index }} z kolekce Londa Color Tune">
       <span class="tiles__fig">
         {{ img(image, alt='Kolekce Londa Color Tune, Berlín 2023 — snímek ' ~ loop.index,
-               sizes='(max-width:760px) 46vw, (max-width:1180px) 30vw, 22vw', cover=true) }}
+               sizes='(max-width:760px) 46vw, 30vw', cover=true) }}
       </span>
       <span class="tiles__n">{{ '%02d'|format(loop.index) }}</span>
     </a>

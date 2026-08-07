@@ -74,7 +74,10 @@
         republiky a Evropského kulturního dědictví, protože výtěžek
         z dobrovolného vstupného věnujeme na obnovu dobřanských varhan.
       </p>
-      <p class="label" style="margin-top:2.4rem">Realizační tým ART CONNECTING</p>
+      {# A colophon, not a label. Set in tracked micro-caps at the foot of the
+         column with nothing under it, it read as a heading whose list had
+         failed to render — a label labels something. #}
+      <p class="prose__sign">— Realizační tým ART CONNECTING</p>
     </div>
   </div>
 </section>
@@ -125,6 +128,14 @@
                  sizes='(max-width:620px) 92vw, (max-width:1100px) 46vw, 30vw',
                  cover=false) }}
         </a>
+        {% else %}
+        {# A record with a Facebook video and no still: the host refuses framing
+           so there is no embed, and there is no image to fall back to. Without
+           this branch the cell simply had no field, and its caption dropped to
+           the bottom of a row its neighbours filled from the top. #}
+        <span class="arch__field arch__field--none" aria-hidden="true">
+          <span>{{ year or '—' }}</span>
+        </span>
         {% endif %}
 
         <div class="arch__meta">
@@ -137,9 +148,13 @@
           {% if p.description %}<p class="arch__note">{{ p.description }}</p>{% endif %}
           {% if p.video_url and not embed %}
           {# Facebook sends X-Frame-Options: deny, so an embed would be a
-             permanently blank box. A link in the caption, not a media tile. #}
+             permanently blank box. A link in the caption, not a media tile.
+             The label is one word, like GALERIE beside it — printing the
+             hostname put a domain in tracked micro-caps in a column where
+             every other label is a noun, and the href already says where it
+             goes. #}
           <div class="arch__links">
-            <a class="qlink" href="{{ p.video_url }}" target="_blank" rel="noopener noreferrer">Přehrát na {{ link_label('', p.video_url) }}</a>
+            <a class="qlink" href="{{ p.video_url }}" target="_blank" rel="noopener noreferrer">Video</a>
           </div>
           {% endif %}
           {% if p.links %}

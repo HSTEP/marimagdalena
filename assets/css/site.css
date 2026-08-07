@@ -966,10 +966,12 @@ a.plate:hover > img,
 }
 
 /* --------------------------------------------------- 10. page head (inner) */
+/* Six interior pages open with this block, so its slack is paid six times.
+   It was spending ~630px of the first screen to set a single word. */
 .phead {
   position: relative;
-  padding-top: calc(var(--nav-h) + clamp(3.5rem, 9vw, 8rem));
-  padding-bottom: clamp(2.5rem, 6vw, 5rem);
+  padding-top: calc(var(--nav-h) + clamp(2.5rem, 5.5vw, 5rem));
+  padding-bottom: clamp(1.6rem, 3vw, 2.6rem);
 }
 
 .phead__grid {
@@ -1571,15 +1573,21 @@ a.plate:hover > img,
   gap: clamp(2.8rem, 5vw, 4.2rem) var(--gap);
 }
 
-/* Captions to the bottom of the cell. One 2024 record has no image at all,
-   so its caption sat at the top of a row whose other two sat under their
-   pictures — three cards, three baselines. */
+/* Every field is square, so aligning captions to the top of the cell puts
+   them all on one baseline. Bottom alignment did not: a two-line title
+   pushed its own date line up while its neighbours' stayed down. */
 .arch__item {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 1.05rem;
   min-width: 0;
+}
+
+/* The one record with no media becomes a full-width text band at every size.
+   Left in a cell it was ~400px of empty black beside two tall pictures. */
+.arch__grid > .arch__item:not(:has(.arch__field)) {
+  grid-column: 1 / -1;
 }
 
 /* The two video records break the three-up rhythm on purpose — 41 identical
@@ -1903,11 +1911,12 @@ a.plate:hover > img,
   table-layout: fixed;
 }
 
-/* A single price column stretched to the full 1296px measure left the figure
-   over a metre of screen away from the service it belongs to, with nothing
-   to track along. Three-tier tables still use the full width. */
-[data-cols="1"] table {
-  max-width: 52rem;
+/* One measure for every group, so all three tables share a right edge and
+   their rules stop where the prices stop. Full width put a lone figure a
+   metre of screen from the service it belongs to; two different widths put
+   three different right edges under full-width rules. */
+.price__group {
+  max-width: 64rem;
 }
 
 .price th:not(:first-child),
@@ -2913,3 +2922,17 @@ body.is-lb .progress {
   }
 }
 
+
+
+/* The homepage hero *is* the wordmark, at 430px. Repeating the same artwork
+   in the header 200px above it spends the most valuable space on the site
+   saying the same thing twice; the header mark fades in once the hero's own
+   has scrolled away. */
+.home .nav:not(.is-stuck) .nav__mark {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav__mark {
+  transition: opacity 0.45s var(--ease);
+}

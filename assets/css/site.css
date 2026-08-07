@@ -344,6 +344,13 @@ main > section:last-of-type {
   padding-bottom: var(--bay);
 }
 
+/* A page header is not a section that ended — the content under it is part of
+   the same opening. Restating the full inter-section gap left ~250px of empty
+   ground between a page title and its first row of content. */
+.phead + section {
+  padding-top: var(--bay-sm);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));

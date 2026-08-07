@@ -10,9 +10,12 @@
 <section class="band" style="min-height: calc(100svh - 4.75rem)">
   <div class="band__bg">{{ img(plates.atelier, alt='', sizes='100vw') }}</div>
   <div class="band__in">
-    <p class="num" style="font-size: clamp(3rem, 12vw, 7rem); line-height:1">404</p>
+    {# The one inline clamp left in src/, and the only thing on the site that
+       rendered at 112px — the size --t-hero declared and nothing used. It
+       takes the page-title step now, like every other largest-thing-on-a-page. #}
+    <p class="num num--display">404</p>
     <p class="label label--gold">Stránka nenalezena</p>
-    <p class="h2 band__q serif-it">
+    <p class="band__q serif-it">
       Tady nic nevisí. Zkuste to o patro níž — v galerii, ve výstavách
       nebo rovnou v ateliéru.
     </p>

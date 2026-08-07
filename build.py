@@ -619,16 +619,19 @@ if __name__ == "__main__":
         if "filename" in painting:
             painting["url"] = f"{IMAGES_DIR.name}/obrazy/{painting['filename']}"
     # Stamp each project with its year so the archive can be broken into
-    # chapters instead of running as one 41-item strip. The admin's `order`
-    # field is only roughly chronological, so sort by year first — otherwise
-    # a year heading opens, closes and opens again further down. Records keep
-    # their curated order within a year; undated ones go last.
+    # chapters instead of running as one 41-item strip.
+    #
+    # Sorted by the same date_key /vystavy uses, not by (year, order). Grouping
+    # by year alone stopped the year headings opening and closing twice, but it
+    # left the admin's `order` running the sequence inside each chapter, and
+    # `order` is only loosely chronological — 2024 read červen, září, červen.
+    # These are the two archive pages in the same nav group, showing the same
+    # kind of record; one of them sorted strictly descending and the other
+    # descended by year and then wandered. date_key falls back to `order` when
+    # two records share a date, so the curator's arrangement still decides ties.
     for record in projekty_data:
         record["year"] = year_of(record)
-    projekty_data.sort(
-        key=lambda r: (int(r["year"]) if r["year"] else -1, r.get("order", 0)),
-        reverse=True,
-    )
+    projekty_data.sort(key=date_key, reverse=True)
     # Group into chapters so the archive can be revealed a year at a time
     # rather than as one 44 000 px scroll.
     projekty_years = []

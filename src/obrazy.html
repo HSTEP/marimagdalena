@@ -45,10 +45,8 @@
      printed and the same pair the tiles used to carry as badges — so the split
      is labelled without anything being composed for it.
 
-     Not .sec--lead either. That rank is the homepage's, where there is no page
-     header to outrank it; here it set the chapter at the same 80px as "Obrazy"
-     290px above it, so on first paint you could not tell which line was the
-     page and which was the chapter. The ladder on this page runs 80 / 48. #}
+     The ladder on this page runs 80 for the page, 48 for the chapter that is
+     still for sale, 32 for the one that is not. #}
   <div class="sec rv">
     <h2 class="sec__title">K&nbsp;prodeji</h2>
   </div>
@@ -120,7 +118,7 @@
   <div class="endnote rv">
     <p class="endnote__t">Obrazy je možné vidět naživo přímo v ateliéru.</p>
     <div class="endnote__a">
-      <a class="qlink" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
+      <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>{{ site.phone_display }}</span>{{ ico.arrow() }}</a>
       <a class="qlink" href="mailto:{{ site.email }}">{{ site.email }}</a>
     </div>
   </div>

@@ -31,12 +31,16 @@
     </div>
   </div>
 
+  {# The running foot used to close on "Hair & Art Salon" bottom right. The
+     wordmark 590px above it in the same screen ends on the line "HAIR & ART
+     salon" — the same four words, in the same viewport, and the eyebrow above
+     that already places the salon. A running foot that repeats the masthead is
+     a slot spent on nothing, so the cue keeps it alone. #}
   <div class="hero__foot">
     <a class="scroll-cue label" href="#atelier">
       <span class="scroll-cue__line" aria-hidden="true"></span>
       <span>Dále</span>
     </a>
-    <p class="label">Hair&nbsp;&amp;&nbsp;Art&nbsp;Salon</p>
   </div>
 </section>
 
@@ -162,7 +166,13 @@
            sizes='(max-width:900px) 100vw, 42vw', cover=true) }}
   </figure>
   <div class="quote__in rv">
-    <p class="label label--gold">Londa Professional · Mezinárodní artistický tým</p>
+    {# Grey, like every other section eyebrow. The site declares two eyebrow
+       species — grey micro-caps in a section head, gold italic serif in a page
+       head — and a gold micro-cap is neither, so the homepage was running
+       three vocabularies for one slot: grey caps under a gold rule in the
+       hero, gold caps here, grey caps over a full-width hairline in the
+       sections below. Two is a system. #}
+    <p class="label">Londa Professional · Mezinárodní artistický tým</p>
     {# Cut to one sentence: the full paragraph runs as body copy on
        /galerie, and the same 40 words in two typographic registers on
        adjacent pages reads as duplicated content, not emphasis. #}

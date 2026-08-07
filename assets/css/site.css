@@ -56,6 +56,14 @@
   --bay: clamp(5.5rem, 11vw, 11rem);
   --bay-sm: clamp(3.5rem, 7vw, 6rem);
 
+  /* How a caption hangs off a plate: the gap down to its rule, then the gap
+     from the rule to the type. One device — a hairline under a picture with
+     a line of type beneath it — was set at 15.2/12.8 on the larger plates and
+     11.2/9.6 on the tiles, so the same join read at two spacings depending on
+     which component drew it. Stated once, both use it. */
+  --cap-lead: 0.7rem;
+  --cap-drop: 0.6rem;
+
   /* Type */
   --serif: "Bodoni Moda", "Times New Roman", serif;
   --sans: "Jost", "Segoe UI", system-ui, sans-serif;
@@ -487,6 +495,13 @@ main > section:last-of-type {
   font-size: var(--t-small);
   color: var(--fg-3);
   line-height: 1.6;
+  /* Ragged left. Set to the full 411px track these broke wherever the words
+     ran out — "…pořádáme výstavy, setkání" then "a workshopy." alone on the
+     second line, a two-word orphan against a hard right edge, which is where
+     a ragged setting is least forgiving because the eye has a straight rule
+     to compare the raggedness against. Balanced, the two lines come out
+     near-equal and the block reads as a shape. */
+  text-wrap: balance;
 }
 
 /* Ranks. Four sections set at one size, in one arrangement, with one rule
@@ -549,8 +564,8 @@ a.plate:hover > img,
   display: flex;
   gap: 1rem;
   align-items: baseline;
-  margin-top: 0.95rem;
-  padding-top: 0.8rem;
+  margin-top: var(--cap-lead);
+  padding-top: var(--cap-drop);
   border-top: 1px solid var(--hair);
 }
 
@@ -690,6 +705,20 @@ a.plate:hover > img,
   gap: 1.4rem 2.2rem;
   align-items: baseline;
   min-width: 0;
+}
+
+/* The paragraph above diagnosed the underline and then only fixed the
+   baseline: the labels went onto one line and the two horizontal edges stayed
+   8.8px apart (button bottom 875.3, underline 866.5), 35px from each other
+   across the gap. At the largest call to action on the site the eye reads that
+   as one stepped line rather than two elements — the same failure the "no two
+   rules within 20px" clause exists to prevent, committed between a border and
+   an underline instead of between two rules.
+
+   Matching the button's own vertical padding lands the underline exactly on
+   its bottom border, so the pair closes as one ruled band. */
+.actions .qlink {
+  padding-bottom: 1.05rem;
 }
 
 /* Link labels come from editable content and are occasionally a raw URL;
@@ -1220,13 +1249,36 @@ a.plate:hover > img,
   border-top: 1px solid var(--hair-strong);
 }
 
+/* Equal halves, not 0.7 : 1. The table spans the page's columns 1-6, so two
+   equal tracks put the value on column 4 (x=403.9 at 1440) — the same line
+   the rest of the page registers against. The old ratio landed it at 350.9:
+   57px past column 3, 53px short of column 4, an internal measure invented
+   inside an otherwise tightly registered page and repeated on all three rows.
+   The label column never exceeded x=144, so column 4 was free. */
 .facts__row {
   display: grid;
-  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--gap);
   align-items: baseline;
   padding: 0.85rem 0;
   border-bottom: 1px solid var(--hair);
+}
+
+/* No underline on the value. The phone was the one link in the table and it
+   drew a gold rule 14.6px above the row's own grey one — two rules, two
+   colours, two weights, inside the 20px this system will not draw within —
+   and it stretched that row to 54px against the 50px of the identical row
+   above, so the table's rhythm limped on its last line. Gold under a phone
+   number in a facts list is also highlighting rather than accenting: it was
+   the third gold appearance in two viewports, all pointing at one number.
+   The label `OBJEDNÁNÍ` already says what it is, and it stays a `tel:` link. */
+.facts a {
+  border-bottom: 0;
+  background-image: none;
+}
+
+.facts a:hover {
+  color: var(--gold);
 }
 
 .facts dd {
@@ -1421,8 +1473,8 @@ a.plate:hover > img,
   align-items: baseline;
   justify-content: space-between;
   gap: 0.7rem;
-  margin-top: 0.7rem;
-  padding-top: 0.6rem;
+  margin-top: var(--cap-lead);
+  padding-top: var(--cap-drop);
   border-top: 1px solid var(--hair);
 }
 
@@ -3348,16 +3400,15 @@ body.is-menu.home .nav:not(.is-stuck) .nav__mark {
   pointer-events: auto;
 }
 
-/* And except on a phone, where the eight nav links that make the bar read as a
-   bar are behind a burger. Without the mark the entire header was one icon
-   floating over a photograph, with nothing above the fold naming the site
-   until the hero's own wordmark scrolled into view. */
-@media (width <= 900px) {
-  .home .nav:not(.is-stuck) .nav__mark {
-    opacity: 1;
-    pointer-events: auto;
-  }
-}
+/* There used to be a third exception here, restoring the mark below 900px on
+   the grounds that with the links behind a burger there was "nothing above the
+   fold naming the site until the hero's own wordmark scrolled into view".
+   Measured, that is false: at 390x844 the header mark sits at y=8-59 and the
+   hero lockup at y=442-545, both in the first screen, the same artwork in the
+   same gold 384px apart. So the page where the principle matters most — the
+   one screen a visitor is guaranteed to see — was the one page it was switched
+   off on. The burger alone over the photograph is the stronger opening, and
+   the mark still arrives on scroll and with the menu open. */
 
 .nav__mark {
   transition: opacity 0.45s var(--ease);

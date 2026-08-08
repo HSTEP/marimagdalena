@@ -84,7 +84,13 @@ PLATES = {
 # Data loading
 # --------------------------------------------------------------------------- #
 def load_and_sort_data(filename: Path):
-    """Load a JSON list and sort it by its 'order' field (newest first)."""
+    """Load a JSON list and sort it by its 'order' field.
+
+    Ascending, so `order` reads the way the page does: 0 is the first item
+    shown. It sorted descending until the admin was rebuilt, which made the
+    editor's first row the site's last item and cost the old reorder screen
+    two compensating reversals.
+    """
     if not filename.is_file():
         print(f"Warning: Data file not found: {filename}")
         return []
@@ -94,7 +100,7 @@ def load_and_sort_data(filename: Path):
         if not isinstance(data, list):
             print(f"Warning: JSON data in {filename} is not a list.")
             return []
-        return sorted(data, key=lambda x: x.get("order", float("inf")), reverse=True)
+        return sorted(data, key=lambda x: x.get("order", float("inf")))
     except json.JSONDecodeError:
         print(f"Error: Could not decode JSON from file: {filename}")
         return []
@@ -293,7 +299,10 @@ def date_key(record):
             month = max(month, index)  # a range sorts by the month it ends in
     day = re.search(r"\b(\d{1,2})\.", text)
     day = int(day.group(1)) if day else 0
-    return (year, month, day, record.get("order", 0))
+    # Negated: these two lists are sorted `reverse=True`, and `order` now
+    # ascends with the page, so the earlier position has to compare greater
+    # to keep winning the tie between two records dated the same month.
+    return (year, month, day, -record.get("order", 0))
 
 
 def cz_title(value):

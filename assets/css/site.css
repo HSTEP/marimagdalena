@@ -835,8 +835,11 @@ main > section.band:last-of-type {
   background: var(--bg);
 }
 
+/* `filter 1.4s` used to ride in this list. Nothing in the sheet changes the
+   filter of a `.plate > img` — the quieting filters live on .idx__thumb and
+   .works__fig, never here — so it had nothing to time. */
 .plate > img {
-  transition: transform 1.4s var(--ease), filter 1.4s var(--ease);
+  transition: transform 1.4s var(--ease);
 }
 
 a.plate:hover > img,
@@ -1127,6 +1130,13 @@ a.plate:hover > img,
   width: clamp(104px, 10vw, 130px);
 }
 
+/* No hover, deliberately. Two reviewers have now measured this as the one
+   a[href] in the masthead that does not answer the pointer, and both stopped
+   short of asking for one, which is the right instinct: .nav__call's rule
+   ("one hover vocabulary for one row") is about the row's navigation, and the
+   masthead's vocabulary is the underline. A signature is not underlined. It
+   already answers in the one way a mark should — it changes width when the
+   bar sticks — and that is the only state it has to report. */
 .nav__mark img {
   width: 100%;
 }
@@ -1708,15 +1718,39 @@ a.plate:hover > img,
   align-items: center;
   padding: clamp(1.1rem, 2.4vw, 1.7rem) 0;
   border-bottom: 1px solid var(--hair);
-  transition: padding-left 0.5s var(--ease);
 }
 
 .svc__name { grid-column: 1 / span 3; }
 .svc__desc { grid-column: 4 / span 7; }
 .svc__price { grid-column: 11 / span 2; }
 
-.svc__row:hover {
-  padding-left: 0.9rem;
+/* The indent steps the row's contents across. It does not resize the row.
+
+   This was `transition: padding-left 0.5s` on the row and `padding-left:
+   0.9rem` on hover, which is the obvious way to write it and the one way it
+   cannot be written here. Both this row and .idx__row are set on `repeat(12,
+   minmax(0, 1fr))` — the page's own twelve columns, adopted (see .idx__row)
+   precisely so that every division inside the row lands on a page tick.
+   Padding narrows the content box, so all twelve tracks narrow with it and
+   every one of those divisions walks off its tick by a different amount:
+   hovering this row moved its three cells 14.39, 10.79 and 2.39px. The
+   gesture read as a squeeze because it was one.
+
+   Translating the children leaves the track grid, the row box and the
+   hairline exactly where they were and moves the contents as one piece. The
+   price overhangs the measure by 1rem while hovered — that is the whole of
+   the gesture, and the only thing that moves.
+
+   One distance and one duration for both indexes. They are the same gesture
+   on two pages and they were 14.4px/500ms here against 16px/550ms there,
+   with nothing to justify either difference. */
+.svc__desc,
+.svc__price {
+  transition: translate 0.5s var(--ease);
+}
+
+.svc__row:hover > * {
+  translate: 1rem;
 }
 
 /* This block is a teaser for /cenik, not the price list — it was set louder
@@ -1727,7 +1761,10 @@ a.plate:hover > img,
   font-size: var(--t-h4);
   line-height: var(--lh-head);
   font-variation-settings: var(--vf-h4);
-  transition: color 0.4s;
+  /* `translate` rides in this list rather than in a blanket `.svc__row > *`,
+     which at (0,2,0) would beat this rule and replace the colour fade
+     outright — the same silent swap that ate the row's own transition. */
+  transition: color 0.4s, translate 0.5s var(--ease);
 }
 
 .svc__row:hover .svc__name {
@@ -1753,9 +1790,9 @@ a.plate:hover > img,
 }
 
 /* The row that closes the table, set on the table's own columns: the action
-   sits in the column the service names occupy — on the reading axis — and the
-   caveat in the column their descriptions occupy. Justified to the two edges
-   instead, the pair straddled an empty half-screen. */
+   sits on the reading axis where the service names start, and the caveat
+   hangs on the lede tick. Justified to the two edges instead, the pair
+   straddled an empty half-screen. */
 .svc__foot {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -1764,8 +1801,29 @@ a.plate:hover > img,
   margin-top: 1.6rem;
 }
 
-.svc__foot > .actions { grid-column: 1 / span 3; }
-.svc__note { grid-column: 4 / span 7; }
+/* Six columns, not three, and the note starts at 7 rather than 4.
+
+   The spans used to be `1 / span 3` and `4 / span 7`, mirroring .svc__name
+   and .svc__desc exactly. The rhyme was the whole idea and nobody measured
+   the cell it needed. The pair inside — a 174.08px bordered .cta, a 35.2px
+   gap and a 115.25px phone number — needs 324.53px. Three columns is 300.23
+   at 1440 and less at every width below it, so the button and the number
+   have been stacked on this page at 1440, 1366, 1280, 1180, 1024, 960, 900
+   and 840, and at 780–820 the cell got tight enough to break the button's
+   own label across two lines. Only below 760, where this grid collapses to
+   a single track, did they sit on one line — the pair reads correctly on a
+   phone and on a 1680 monitor, and is broken on every laptop in between.
+
+   The rhyme also cost the caveat: at `4 / span 7` its box started 7.4px
+   after the phone number's right edge, so had it ever fitted, the two would
+   have read as one run-on line.
+
+   Six columns clears the pair down to 780 (342.4 there), and column 7 —
+   735.83 at 1440 — is the tick .phead__lede hangs on across four other
+   pages. The note is clamped to 46ch and sets one line at every width, so
+   it never used the seven columns it was given. */
+.svc__foot > .actions { grid-column: 1 / span 6; }
+.svc__note { grid-column: 7 / span 6; }
 
 .svc__note {
   font-size: var(--t-small);
@@ -1904,7 +1962,15 @@ a.plate:hover > img,
    A rule set into a line of type sits on the line. */
 .reel__rule {
   flex: 1;
-  min-width: 2rem;
+  /* Not 2rem. A floor on a flex item is a wrap trigger: below 620 the rule
+     could no longer fit its minimum beside the action, so it broke to its own
+     line, and the action — which is only ever pushed right by the rule's
+     growth — sat 108px short of the right margin, flush with nothing. The
+     620 breakpoint that hid the rule was written to stop that, and it cannot:
+     it removes the thing that was doing the aligning. With no floor the rule
+     absorbs whatever is left, down to nothing, and the action stays on the
+     margin until the line genuinely cannot hold both. */
+  min-width: 0;
   height: 1px;
   background: var(--hair);
   align-self: baseline;
@@ -1927,13 +1993,6 @@ a.plate:hover > img,
    desktop. */
 @media (width > 900px) {
   .reel__hint {
-    display: none;
-  }
-}
-
-@media (width <= 620px) {
-  /* The rule has nowhere to run once the action wraps to its own line. */
-  .reel__rule {
     display: none;
   }
 }
@@ -2298,11 +2357,26 @@ a.plate:hover > img,
   padding: clamp(1.15rem, 2.6vw, 1.9rem) 0 clamp(1.9rem, 3vw, 2.4rem);
   border-bottom: 1px solid var(--hair);
   position: relative;
-  transition: padding-left 0.55s var(--ease);
 }
 
-.idx__row:hover {
-  padding-left: 1rem;
+/* Same gesture, same numbers, same reason as .svc__row — see the note there.
+
+   It failed twice as loudly here. The declaration never reached computed
+   style at all: this row carries `.rv`, and `.js .rv` (0,2,0) sets its own
+   `transition` for the reveal, which silently replaced `.idx__row`'s (0,1,0)
+   one, so the indent snapped rather than eased. And the thumbnail is
+   `width: 100%; aspect-ratio: 1`, which turns a narrower first track into a
+   shorter thumbnail: the row lost 1.33px of height under the cursor and the
+   ten rows below it stepped up to meet it. Moving the children fixes both at
+   once — nothing on the row itself animates now, so there is no declaration
+   left for the reveal to eat. */
+.idx__date,
+.idx__links {
+  transition: translate 0.5s var(--ease);
+}
+
+.idx__row:hover > * {
+  translate: 1rem;
 }
 
 /* 5 columns, not 6, and --t-h4, not --t-h3.
@@ -2329,7 +2403,8 @@ a.plate:hover > img,
   font-size: var(--t-h4);
   line-height: var(--lh-head);
   font-variation-settings: var(--vf-h4);
-  transition: color 0.4s;
+  /* See .svc__name: the indent has to be listed here, not in a child blanket. */
+  transition: color 0.4s, translate 0.5s var(--ease);
 }
 
 .idx__row:hover .idx__title {
@@ -2445,7 +2520,8 @@ a.plate:hover > img,
   overflow: hidden;
   background: var(--bg);
   filter: var(--img-quiet);
-  transition: filter 0.6s var(--ease);
+  /* See .svc__name: the indent has to be listed here, not in a child blanket. */
+  transition: filter 0.6s var(--ease), translate 0.5s var(--ease);
 }
 
 .idx__row:hover .idx__thumb {
@@ -2657,7 +2733,21 @@ a.plate:hover > img,
    caption. Both are the build talking about itself.
 
    A printed catalogue missing a plate leaves the space and sets the entry, and
-   that is now literally all this does. */
+   that is now literally all this does.
+
+   A third thing has been proposed and measured: drop the ratio entirely, let
+   the entry rise to the top of its cell and the slack fall below it, the way
+   .arch__links puts slack in this section. It is the wrong read, and the
+   metric that motivates it says so. The caption tops in this row spread
+   102.8px at 1440 — but 0.0 of that is against the row-mate that is also a
+   4/5 portrait (both fields 513.60, both captions at 2293.4); the whole of it
+   is the third artefact, a square poster, ragging exactly as .arch__field
+   above says artefacts of mixed provenance should. Remove the ratio and the
+   spread goes to 513.6 at 1440, 421.5 at 960: one caption alone near the top
+   of the row with half a metre of void under it and its rules nowhere near
+   the others. The reserve is not left over from the levelled-row era — it is
+   the one field with no picture to take a shape from, and 4/5 is the shape
+   the pictures around it take. */
 .arch__field--none {
   display: block;
   /* The one field on the page that still needs a declared shape, because it is
@@ -4188,12 +4278,15 @@ body.is-lb .nav {
     font-size: var(--t-small);
   }
 
-  .idx__row,
-  .idx__row:hover {
+  .idx__row {
     grid-template-columns: 4.6rem minmax(0, 1fr);
-    padding-left: 0;
     row-gap: 0.3rem;
     align-items: start;
+  }
+
+  /* Two columns and no cursor: the indent has nothing left to say. */
+  .idx__row:hover > * {
+    translate: none;
   }
 
   .idx__chapter {
@@ -4241,12 +4334,14 @@ body.is-lb .nav {
   /* The price rides the same baseline as the service it belongs to. Dropped
      to its own full-width line it stayed right-aligned against nothing and
      read as detached from the row above it. */
-  .svc__row,
-  .svc__row:hover {
+  .svc__row {
     grid-template-columns: minmax(0, 1fr) auto;
     row-gap: 0.3rem;
-    padding-left: 0;
     align-items: baseline;
+  }
+
+  .svc__row:hover > * {
+    translate: none;
   }
 
   .svc__name {

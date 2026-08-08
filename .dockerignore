@@ -1,0 +1,18 @@
+# The image is a runtime, not a copy of the website.
+#
+# api.py, build.py, the templates and 166 MB of photographs all arrive at run
+# time from the checkout bind-mounted at /app — they have to, because
+# publishing means committing and pushing that checkout, so a copy baked into
+# the image would be a second, diverging one. Only three things belong in the
+# build context, so this is an allowlist rather than a list of exclusions.
+
+*
+
+!pyproject.toml
+!uv.lock
+!entrypoint.sh
+!mariadmin
+
+# Built inside the image, and both are large enough to double the context.
+mariadmin/node_modules
+mariadmin/dist

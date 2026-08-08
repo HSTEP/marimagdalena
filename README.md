@@ -40,22 +40,31 @@ The system consists of three main components:
         which images the templates reach).
 
 3.  **Admin Interface (`mariadmin/`)**:
-    -   A **React** application built with **Vite**.
-    -   Being rewritten as a phone-first, four-tab app in Czech — Obrazy,
-        Galerie, Projekty, Výstavy — for the artist to run herself. The
-        `react-admin` version still in this directory predates the endpoints
-        above and does not talk to them; it will not work until that rewrite
-        lands.
+    -   A **React** application built with **Vite**. A git submodule, so it has
+        its own history: `git@github.com:basta/mariadmin.git`.
+    -   Four tabs in Czech — Obrazy, Galerie, Projekty, Výstavy — sized for a
+        phone, dressed in the site's own faces and colours. No component
+        library and no router; four tabs do not need one.
+    -   A photograph chosen in the edit sheet is *held* until Uložit, so
+        changing her mind leaves nothing behind in `images/`. Reordering
+        happens by dragging in the grid itself and moves under her finger
+        before the server is asked.
+    -   Nothing reaches the website until **Publikovat**; a banner counts what
+        is waiting.
 
 ## 🚀 Quick Start
 
 ### 1. Set a password
 There are no accounts — one shared password, hashed with `hashlib.scrypt`:
 ```bash
-python3 api.py hash-password        # prompts, prints scrypt$…
-export MARI_PASSWORD_HASH='scrypt$…'
+python3 api.py hash-password        # prompts, prints scrypt:16384:8:1:…:…
+export MARI_PASSWORD_HASH='scrypt:16384:8:1:…:…'
 export SESSION_SECRET="$(python3 -c 'import secrets;print(secrets.token_hex(32))')"
 ```
+Colon-separated rather than the `$` every other scrypt encoding uses: this value
+lives in environment files, and docker compose reads `$` as the start of a
+variable name — it would quietly rewrite the hash and the right password would
+stop working with nothing said.
 `SESSION_SECRET` must be a fixed value: leave it out and one is generated at
 startup, which signs cookies fine but logs everybody out on every restart.
 Over plain HTTP on localhost also set `MARI_INSECURE_COOKIE=1`, since the
@@ -67,6 +76,8 @@ cookie is otherwise `Secure` and the browser will not send it back.
 | `SESSION_SECRET` | signs the session cookie |
 | `MARI_INSECURE_COOKIE` | drops `Secure` for local HTTP development |
 | `SITE_ROOT` | the checkout to edit and build; defaults to the file's own directory |
+| `ADMIN_DIST` | the admin's compiled bundle; defaults to `mariadmin/dist`. The container builds it in an earlier stage and copies it outside the checkout |
+| `MARI_HOST`, `MARI_PORT` | where to listen; `127.0.0.1:8000` |
 
 ### 2. Start the API/Backend
 ```bash
@@ -83,12 +94,50 @@ python3 build.py
 ```
 
 ### 4. Develop Admin App
-To work on the React Admin interface:
 ```bash
 cd mariadmin
-npm install
-npm run dev
+npm ci
+npm run dev        # http://localhost:5173/admin/
 ```
+Vite serves the app and proxies `/api`, `/images` and `/assets` to `api.py` on
+:8000, so the session cookie stays first-party and there is no CORS to
+configure. Run `api.py` alongside it. `npm run build` type-checks first, so a
+build that succeeds is a build that compiled.
+
+## 🐳 Deployment
+
+One container, one process: `api.py` serving `/api`, `/admin` and the site's
+assets. The image carries the Python environment, git and the compiled admin
+app; **the checkout is bind-mounted at `/app`** and everything else is read from
+there — it has to be, because publishing means committing and pushing that very
+checkout.
+
+```bash
+cp .env.example .env        # fill it in; it is gitignored
+docker compose up -d --build
+```
+
+`.env.example` documents every setting. Four of them have no default and the
+container will not start without them: the password hash, the session secret,
+the uid/gid that own the checkout, and the path to an SSH deploy key.
+
+-   **The deploy key** is an SSH key with write access to
+    `HSTEP/marimagdalena`, mounted read-only at `/run/secrets/deploy_key`,
+    mode 400 or 600. Scoped to the one repository by construction, and never
+    part of a URL, so it cannot leak into `.git/config` or a log line. GitHub's
+    host key is baked into the image rather than accepted on first use — a
+    background push has nobody to ask.
+-   **`MARI_UID`/`MARI_GID`** must be the owner of the checkout, or the server
+    writes files as root that the next `git pull` on the host cannot touch.
+    They are build arguments, not just a `user:` mapping — an unmapped uid has
+    no `/etc/passwd` entry and ssh refuses to start without one, which would
+    surface as a publish that dies at the push. Changing them means
+    `docker compose up -d --build`.
+-   **`PUBLISH_BRANCH` has no default in `.env.example`.** Point it at a scratch
+    branch and watch a whole publish land before it ever says `main`.
+-   Nothing is built at startup. The generated HTML is committed — GitHub Pages
+    serves it from the repository — so a build on every restart would rewrite
+    committed files before anyone had asked for anything.
 
 ## 📂 Project Structure
 
@@ -112,6 +161,9 @@ npm run dev
     static host serves them directly.
 -   `.mari/`: **Machine-local, gitignored.** The pending-changes log the
     publish banner reads, and the on-the-fly thumbnail cache.
+-   `Dockerfile`, `docker-compose.yaml`, `entrypoint.sh`, `.env.example`: the
+    deployment. `.dockerignore` is an allowlist — the build context is three
+    entries, because the image copies almost nothing from the checkout.
 
 ## 🔌 API
 

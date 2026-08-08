@@ -1,9 +1,9 @@
 #! python3
 """Static site generator for marimagdalena.cz.
 
-Renders the Jinja2 templates in ``src/`` to HTML in the repository root (which is
-what GitHub Pages and the nginx container serve), pulling content from the JSON
-files that the admin app in ``mariadmin/`` writes to ``src/data/``.
+Renders the Jinja2 templates in ``src/`` to HTML in the repository root, which is
+what GitHub Pages serves, pulling content from the JSON files that the admin app
+in ``mariadmin/`` writes to ``src/data/``.
 
 Templates whose name starts with ``_`` are partials and are never rendered on
 their own.

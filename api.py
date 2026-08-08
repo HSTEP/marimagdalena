@@ -131,24 +131,35 @@ STORES_BARE_FILENAME = {Resource.paintings, Resource.galerie}
 # up to date. Parameters are the interactive-login figures from RFC 7914.
 SCRYPT_N, SCRYPT_R, SCRYPT_P = 2**14, 8, 1
 
+# Colons, not the `$` that every other scrypt encoding uses. This value's whole
+# life is spent inside environment files — docker compose, `docker run -e`, a
+# shell — and all of them read `$` as the start of a variable name. Compose
+# silently rewrites `scrypt$16384$8$1$abcSALT==$defHASH==` to
+# `scrypt$$16384$$8$$1====`, so the password stops working and nothing says why.
+# A colon cannot appear in base64, so it separates just as unambiguously.
+FIELD_SEP = ":"
+
 
 def hash_password(password: str, salt: bytes | None = None) -> str:
     salt = salt or secrets.token_bytes(16)
     digest = hashlib.scrypt(
         password.encode("utf-8"), salt=salt, n=SCRYPT_N, r=SCRYPT_R, p=SCRYPT_P
     )
-    return "scrypt${}${}${}${}${}".format(
-        SCRYPT_N,
-        SCRYPT_R,
-        SCRYPT_P,
-        base64.b64encode(salt).decode(),
-        base64.b64encode(digest).decode(),
+    return FIELD_SEP.join(
+        [
+            "scrypt",
+            str(SCRYPT_N),
+            str(SCRYPT_R),
+            str(SCRYPT_P),
+            base64.b64encode(salt).decode(),
+            base64.b64encode(digest).decode(),
+        ]
     )
 
 
 def verify_password(password: str, encoded: str) -> bool:
     try:
-        scheme, n, r, p, salt_b64, digest_b64 = encoded.split("$")
+        scheme, n, r, p, salt_b64, digest_b64 = encoded.strip().split(FIELD_SEP)
         if scheme != "scrypt":
             return False
         digest = hashlib.scrypt(
@@ -1178,10 +1189,18 @@ if DIST_DIR.is_dir():
 def _startup_checks() -> list[str]:
     """Configuration that must be present before this is worth starting."""
     problems = []
-    if not os.environ.get("MARI_PASSWORD_HASH"):
+    encoded = os.environ.get("MARI_PASSWORD_HASH", "").strip()
+    if not encoded:
         problems.append(
             "MARI_PASSWORD_HASH is not set — nobody can log in.\n"
             "    Generate one with:  python api.py hash-password"
+        )
+    elif len(encoded.split(FIELD_SEP)) != 6:
+        # Checked because the failure is otherwise silent: the login screen
+        # accepts the right password and says it is wrong, forever.
+        problems.append(
+            "MARI_PASSWORD_HASH is not a hash — nobody can log in.\n"
+            "    Copy the whole line from:  python api.py hash-password"
         )
     if not os.environ.get("SESSION_SECRET"):
         problems.append(

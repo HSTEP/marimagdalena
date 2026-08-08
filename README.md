@@ -130,12 +130,50 @@ arbitrary directory.
 | `POST /api/{resource}/reorder` | `{ids: […]}`; ids not mentioned keep their order and go last, so a stale list cannot drop a painting |
 | `GET /api/thumb?path=…&w=…` | small JPEG for the grid, from `images/_d/` when a derivative already fits, otherwise cached under `.mari/thumbs/` |
 | `GET /api/pending` | how many unpublished changes there are, and a Czech sentence for each |
+| `POST /api/pending/discard` | throw all of them away — `git checkout` plus `git clean` over the same paths |
+| `POST /api/publish`, `GET /api/publish/status` | publish, and follow along in Czech while it happens |
 
 Uploads are opened with Pillow and rejected if that fails, so a `.php` named
 `.jpg` never lands on disk. JPEG, PNG and WebP are stored as they arrive;
 anything else — an iPhone's HEIC — is re-encoded to JPEG with the EXIF
 rotation applied, because the browser cannot display the original. Names are
 sanitised and diacritics folded, so `Šárka.jpg` becomes `sarka.jpg`.
+
+### Publishing
+
+One press of **Publikovat** produces exactly one commit:
+
+1. Stage `src/data/` and `images/` — an explicit list, never `git add -A`, so a
+   stray file in the checkout cannot ride along. `images/_d/` is excluded here,
+   because it is build output and not her work.
+2. Commit, with a message written from the pending log.
+3. `git pull --rebase` onto the publish branch.
+4. `python build.py --strict`.
+5. Stage the generated files — the rendered pages, `sitemap.xml`, `robots.txt`,
+   `images/_d/` — and `git commit --amend`, so the data and the site it
+   produces land together.
+6. Push; a rejection sends it back to step 3, up to three times.
+
+Nothing is published if the build fails: the commit is undone with a mixed
+reset, the generated files are restored, and the changes go back to being
+unpublished drafts with an explanation in Czech. Publishing when nothing has
+changed does nothing at all rather than committing a fresh `<lastmod>` in the
+sitemap.
+
+| variable | default | meaning |
+| --- | --- | --- |
+| `PUBLISH_BRANCH` | `main` | point it at a scratch branch until you trust it |
+| `PUBLISH_REMOTE` | `origin` | |
+| `GIT_AUTHOR_NAME`, `GIT_AUTHOR_EMAIL` | `Maří Magdalena` | passed to git per command, so the container needs no global config |
+
+Merging a branch that touched a template against one that touched content
+conflicts in the generated HTML every time. `.gitattributes` marks those files
+with a `generated` merge driver that resolves to either side, so the merge
+completes and the build supplies the real answer afterwards — the resolution is
+never a blend of the two, it is whatever `python build.py` produces. A driver is
+a command, so git will not take it from a repository file: `api.py` passes it
+on every git invocation, but **your own clone needs it configured once**, as
+described at the top of `.gitattributes`.
 
 ## 🛠 How to Make Changes
 

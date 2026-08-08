@@ -16,10 +16,17 @@ HEAD. There is no staging copy to keep in step, and no second source of truth
 about what has changed — ``git status`` is the answer. ``.mari/pending.json``
 holds only the Czech sentences the banner and the commit message are written
 from; git decides whether anything is pending at all.
+
+**Publishing is one commit.** ``POST /api/publish`` commits the data, rebases
+on the remote, rebuilds, folds the generated files into the same commit, and
+pushes — behind a lock, so pressing the button twice cannot produce two builds
+racing over the manifest. Every failure path leaves her work exactly where it
+was: unpublished, and still in the tree.
 """
 
 from __future__ import annotations
 
+import asyncio
 import base64
 import hashlib
 import hmac
@@ -28,6 +35,8 @@ import json
 import os
 import re
 import secrets
+import subprocess
+import sys
 import tempfile
 import time
 import unicodedata
@@ -246,6 +255,11 @@ def read_pending() -> list[dict[str, Any]]:
     except (OSError, json.JSONDecodeError):
         return []
     return entries if isinstance(entries, list) else []
+
+
+def clear_pending() -> None:
+    """Called once a publish has actually reached GitHub, and not before."""
+    PENDING_LOG.unlink(missing_ok=True)
 
 
 # --------------------------------------------------------------------------- #
@@ -521,13 +535,280 @@ LABEL = {
 
 
 # --------------------------------------------------------------------------- #
+# Publishing
+# --------------------------------------------------------------------------- #
+# The pipeline stages exactly these paths, never `git add -A`, so a stray file
+# in the checkout can never ride along into a commit.
+#
+# Her work. `images/_d` is excluded because it is build output: running
+# `python build.py` by hand would otherwise light the banner up with three
+# hundred changes she did not make.
+DRAFT_PATHS = ("src/data", "images", ":(exclude)images/_d")
+
+# The build's work. `:(glob)` stops `*` matching a slash, so this is the eight
+# rendered pages at the root and never the templates of the same name in `src/`.
+GENERATED_PATHS = (":(glob)*.html", "sitemap.xml", "robots.txt", "images/_d")
+
+PUBLISH_REMOTE = os.environ.get("PUBLISH_REMOTE", "origin")
+PUBLISH_BRANCH = os.environ.get("PUBLISH_BRANCH", "main")
+GIT_NAME = os.environ.get("GIT_AUTHOR_NAME", "Maří Magdalena")
+GIT_EMAIL = os.environ.get("GIT_AUTHOR_EMAIL", "web@marimagdalena.cz")
+PUSH_ATTEMPTS = 3
+GIT_TIMEOUT = 120
+BUILD_TIMEOUT = 900
+
+
+class PublishError(RuntimeError):
+    """A step failed, with a message written to be read by the artist."""
+
+
+def git(*args: str, timeout: int = GIT_TIMEOUT) -> subprocess.CompletedProcess:
+    """Run git in the checkout, with an identity that does not depend on config.
+
+    The container has no global git config and no home directory worth the
+    name, so the author is passed in rather than looked up.
+
+    The `generated` merge driver comes along for the same reason. A driver is a
+    command, so git will not take it from `.gitattributes` and it has to be
+    configured per clone; passing it here rather than writing it into the
+    checkout's config means the server can rebase over a template change
+    without quietly editing the repository it was given.
+    """
+    return subprocess.run(
+        [
+            "git",
+            "-c",
+            f"user.name={GIT_NAME}",
+            "-c",
+            f"user.email={GIT_EMAIL}",
+            "-c",
+            "merge.generated.name=generated — rebuild after merging",
+            "-c",
+            "merge.generated.driver=true",
+            *args,
+        ],
+        cwd=BASE_DIR,
+        capture_output=True,
+        text=True,
+        timeout=timeout,
+    )
+
+
+def draft_changes() -> list[str]:
+    """Porcelain lines for everything unpublished. Empty means nothing to do."""
+    try:
+        result = git("status", "--porcelain", "--", *DRAFT_PATHS, timeout=60)
+    except (OSError, subprocess.SubprocessError):
+        raise PublishError("Nepodařilo se přečíst stav repozitáře.")
+    if result.returncode != 0:
+        raise PublishError("Nepodařilo se přečíst stav repozitáře.")
+    return [line for line in result.stdout.splitlines() if line.strip()]
+
+
+def plural_cz(n: int, one: str, few: str, many: str) -> str:
+    if n == 1:
+        return one
+    return few if 2 <= n <= 4 else many
+
+
+def commit_message(entries: list[dict[str, Any]]) -> str:
+    """A commit message in Czech, so the history reads like a diary.
+
+    The log is a convenience, not the truth, so an empty one still produces a
+    perfectly good commit.
+    """
+    texts = [str(e.get("text_cs", "")).strip() for e in entries]
+    texts = [t for t in texts if t]
+    if not texts:
+        return "Úpravy obsahu webu"
+    if len(texts) == 1:
+        return texts[0]
+    count = plural_cz(len(texts), "změna", "změny", "změn")
+    body = "\n".join(f"- {t}" for t in texts)
+    return f"Úpravy webu — {len(texts)} {count}\n\n{body}"
+
+
+def commit_url(sha: str) -> str | None:
+    result = git("remote", "get-url", PUBLISH_REMOTE, timeout=30)
+    if result.returncode != 0:
+        return None
+    match = re.search(r"github\.com[:/](.+?)(?:\.git)?/?$", result.stdout.strip())
+    return f"https://github.com/{match.group(1)}/commit/{sha}" if match else None
+
+
+# --------------------------------------------------------------------------- #
+# The publish job
+# --------------------------------------------------------------------------- #
+# One at a time. Pressing Publikovat twice must produce one commit, not two
+# builds racing over `images/_d/manifest.json`.
+_publish_lock = asyncio.Lock()
+_publish: dict[str, Any] = {
+    "state": "idle",  # idle | running | done | error
+    "step": "",
+    "message": "",
+    "commit_url": None,
+}
+# asyncio only holds a weak reference to a running task, so without this the
+# publish can be collected mid-flight and simply stop.
+_publish_task: asyncio.Task | None = None
+
+
+def say(step: str, message: str) -> None:
+    _publish["step"] = step
+    _publish["message"] = message
+
+
+def run_build() -> None:
+    """Rebuild the site, translating build.py's chatter into progress.
+
+    `--strict` so an image the build could not read is a failure rather than a
+    hole in a published page. The render still writes that broken HTML, which
+    is exactly why the caller must not commit after this raises.
+    """
+    env = {**os.environ, "SITE_ROOT": str(BASE_DIR), "PYTHONUNBUFFERED": "1"}
+    process = subprocess.Popen(
+        [sys.executable, "build.py", "--strict"],
+        cwd=BASE_DIR,
+        env=env,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+    )
+    tail: deque[str] = deque(maxlen=40)
+    assert process.stdout is not None
+    for line in process.stdout:
+        line = line.rstrip()
+        tail.append(line)
+        if line.startswith("Checking"):
+            say("build", "Připravuji fotky…")
+        elif line.startswith("Rendering"):
+            say("build", "Sestavuji stránky…")
+    if process.wait(timeout=BUILD_TIMEOUT) != 0:
+        detail = "\n".join(tail)
+        raise PublishError(
+            "Web se nepodařilo sestavit, takže se nic nezveřejnilo. "
+            f"Změny zůstaly uložené tady.\n\n{detail}"
+        )
+
+
+def undo_commit() -> None:
+    """Put the commit back as unpublished drafts.
+
+    A mixed reset: the working tree is untouched, so whatever she changed is
+    still there to try again with, but the index is returned to HEAD. That
+    second half matters — `git checkout -- path` restores from the *index*, so
+    leaving the changes staged would make a later discard faithfully restore
+    the very edits it was asked to throw away.
+    """
+    git("reset", "HEAD~1")
+
+
+def publish_now() -> dict[str, Any]:
+    """Commit, rebuild, and push. Runs in a worker thread, holding the lock."""
+    say("check", "Kontroluji změny…")
+    if not draft_changes():
+        return {
+            "state": "done",
+            "step": "done",
+            "message": "Nebylo co zveřejnit — web je aktuální.",
+            "commit_url": None,
+        }
+
+    say("commit", "Ukládám změny…")
+    entries = read_pending()
+    if git("add", "--", *DRAFT_PATHS).returncode != 0:
+        raise PublishError("Nepodařilo se připravit změny k uložení.")
+    result = git("commit", "-m", commit_message(entries))
+    if result.returncode != 0:
+        raise PublishError(
+            "Změny se nepodařilo uložit.\n\n" + (result.stderr or result.stdout).strip()
+        )
+
+    last_error = ""
+    for attempt in range(1, PUSH_ATTEMPTS + 1):
+        say("pull", "Stahuji poslední verzi webu…")
+        # The build is about to remake these, so local build output is worth
+        # nothing and would only stand in the way of a rebase.
+        git("checkout", "HEAD", "--", *GENERATED_PATHS)
+        pull = git("pull", "--rebase", "--autostash", PUBLISH_REMOTE, PUBLISH_BRANCH)
+        if pull.returncode != 0:
+            git("rebase", "--abort")
+            undo_commit()
+            raise PublishError(
+                "Nepodařilo se spojit se změnami na GitHubu. "
+                "Změny zůstaly uložené tady.\n\n" + pull.stderr.strip()
+            )
+
+        try:
+            run_build()
+        except PublishError:
+            git("checkout", "HEAD", "--", *GENERATED_PATHS)
+            undo_commit()
+            raise
+
+        say("commit", "Ukládám sestavený web…")
+        git("add", "--", *GENERATED_PATHS)
+        amended = git("commit", "--amend", "--no-edit")
+        if amended.returncode != 0:
+            undo_commit()
+            raise PublishError(
+                "Sestavený web se nepodařilo uložit.\n\n"
+                + (amended.stderr or amended.stdout).strip()
+            )
+
+        say("push", "Odesílám na web…")
+        push = git("push", PUBLISH_REMOTE, f"HEAD:{PUBLISH_BRANCH}")
+        if push.returncode == 0:
+            sha = git("rev-parse", "HEAD").stdout.strip()
+            clear_pending()
+            return {
+                "state": "done",
+                "step": "done",
+                "message": "Hotovo. Web se obnoví během několika minut.",
+                "commit_url": commit_url(sha),
+            }
+
+        last_error = push.stderr.strip()
+        say("push", f"Web se mezitím změnil, zkouším znovu ({attempt}/{PUSH_ATTEMPTS})…")
+
+    undo_commit()
+    raise PublishError(
+        "Nepodařilo se odeslat změny na GitHub. Zůstaly uložené tady, "
+        "zkuste to prosím za chvíli znovu.\n\n" + last_error
+    )
+
+
+def discard_now() -> None:
+    """Throw away every unpublished change.
+
+    All or nothing on purpose: her edits to nine paintings live in one JSON
+    file, so there is no per-change granularity to offer without inventing the
+    second data store this design exists to avoid.
+    """
+    git("checkout", "HEAD", "--", *DRAFT_PATHS)
+    # Photographs uploaded since the last publish are untracked; checkout does
+    # not know about them.
+    git("clean", "-fd", "--", *DRAFT_PATHS)
+    clear_pending()
+
+
+async def publish_job() -> None:
+    async with _publish_lock:
+        try:
+            _publish.update(await asyncio.to_thread(publish_now))
+        except PublishError as exc:
+            _publish.update(state="error", step="error", message=str(exc))
+        except Exception as exc:  # noqa: BLE001 - the app must hear about it
+            _publish.update(
+                state="error",
+                step="error",
+                message=f"Neočekávaná chyba při publikování: {exc}",
+            )
+
+
+# --------------------------------------------------------------------------- #
 # Routes
 # --------------------------------------------------------------------------- #
-# Everything the site publishes lives under one of these. The publish pipeline
-# stages exactly this list, never `git add -A`, so a stray file in the checkout
-# can never ride along into a commit.
-PUBLISH_ALLOWLIST = ("src/data", "images")
-
 public = APIRouter(prefix="/api")
 api = APIRouter(prefix="/api", dependencies=[Depends(require_session)])
 
@@ -577,25 +858,52 @@ def get_pending():
     log, which is only there to be readable; if it is missing or behind, the
     banner still shows the right count.
     """
-    import subprocess
-
     try:
-        result = subprocess.run(
-            ["git", "status", "--porcelain", "--", *PUBLISH_ALLOWLIST],
-            cwd=BASE_DIR,
-            capture_output=True,
-            text=True,
-            timeout=30,
-        )
-        changed = [line for line in result.stdout.splitlines() if line.strip()]
-    except (OSError, subprocess.SubprocessError):
-        raise HTTPException(500, "Nepodařilo se zjistit neuložené změny.")
+        changed = draft_changes()
+    except PublishError as exc:
+        raise HTTPException(500, str(exc))
 
     return {
         "count": len(changed),
         "files": len(changed),
         "items": read_pending()[-50:],
     }
+
+
+@api.post("/pending/discard")
+async def discard():
+    """Throw away everything unpublished. The app asks twice before calling."""
+    if _publish["state"] == "running":
+        raise HTTPException(409, "Právě probíhá zveřejňování, počkejte prosím.")
+    async with _publish_lock:
+        await asyncio.to_thread(discard_now)
+    return {"ok": True}
+
+
+@api.post("/publish", status_code=202)
+async def start_publish():
+    """Begin publishing and return at once; the app polls /api/publish/status.
+
+    A second press while one is running is answered with the running job
+    rather than starting another. The state is set here, before the task is
+    scheduled, so there is no window in which two presses both see `idle`.
+    """
+    global _publish_task
+    if _publish["state"] == "running":
+        return dict(_publish)
+    _publish.update(
+        state="running",
+        step="start",
+        message="Připravuji zveřejnění…",
+        commit_url=None,
+    )
+    _publish_task = asyncio.create_task(publish_job())
+    return dict(_publish)
+
+
+@api.get("/publish/status")
+def publish_status():
+    return dict(_publish)
 
 
 @api.get("/{resource}")
@@ -815,12 +1123,20 @@ def _startup_checks() -> list[str]:
             f"{DIST_DIR} does not exist — the admin app has not been built,\n"
             "    so /admin/ will 404. Build it with:  cd mariadmin && npm run build"
         )
+    if not (BASE_DIR / ".git").exists():
+        problems.append(
+            f"{BASE_DIR} is not a git checkout — drafts and publishing both\n"
+            "    depend on one. Set SITE_ROOT to the repository."
+        )
     return problems
 
 
-if __name__ == "__main__":
-    import sys
+def _startup_notes() -> list[str]:
+    """Things worth saying out loud even when nothing is wrong."""
+    return [f"Publishing to {PUBLISH_REMOTE}/{PUBLISH_BRANCH} from {BASE_DIR}."]
 
+
+if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "hash-password":
         import getpass
 
@@ -834,6 +1150,8 @@ if __name__ == "__main__":
 
     import uvicorn
 
+    for note in _startup_notes():
+        print(f"  · {note}")
     for problem in _startup_checks():
         print(f"  ! {problem}")
 

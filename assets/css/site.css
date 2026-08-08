@@ -1160,6 +1160,27 @@ main > section.band:last-of-type {
   border-bottom-color: var(--line);
 }
 
+/* And the same sentence for the reader without script, because `is-stuck` is
+   set by onScroll() and the rule above is the only thing on the page that ever
+   paints this bar. Transparent-at-rest is a scripted flourish that depends on
+   knowing you are at the top; with no script the bar never learns you have
+   left, so it stays glass over whatever the page puts under it. Measured on
+   /partneri at 1440x900 scrolled to the foot, sampling the ground between the
+   glyphs of `.nav__link` (rgb(183,175,162)): 9.06:1 with script, **1.43:1
+   without** — over a photograph whose p95 is white, 2.17:1. That is not a
+   degraded masthead, it is an unreadable one.
+
+   The `html.js` gate is already how this sheet asks the question — the reveal
+   animations, the batch controls and the drawer all hang off it — so the
+   answer belongs in the same idiom rather than in a second mechanism. The cost
+   is that the homepage's transparent bar over the hero is a scripted effect
+   only. That is the correct trade: the effect is decoration, the contrast is
+   not. */
+html:not(.js) .nav {
+  background: var(--ink);
+  border-bottom-color: var(--line);
+}
+
 .nav__in {
   width: 100%;
   max-width: var(--wide);
@@ -1418,7 +1439,14 @@ main > section.band:last-of-type {
   justify-content: safe center;
   padding: var(--nav-h) var(--gutter) 3rem;
   clip-path: inset(0 0 100% 0);
-  transition: clip-path 0.44s var(--ease);
+  /* `visibility` stepped at 0s but held for the length of the wipe, which is
+     the idiom `.nav__mark` uses a few hundred lines down for exactly the same
+     reason. Without it the drawer opened in 0.44s and closed in none: on the
+     way out `visibility` flipped to `hidden` on the same frame the class left,
+     so the clip-path wipe played on an invisible box and the panel simply
+     vanished. A panel that arrives with a gesture and leaves with a cut reads
+     as two different components. */
+  transition: clip-path 0.44s var(--ease), visibility 0s linear 0.44s;
   visibility: hidden;
   overflow-y: auto;
 }
@@ -1426,6 +1454,8 @@ main > section.band:last-of-type {
 .is-menu .menu {
   clip-path: inset(0 0 0 0);
   visibility: visible;
+  /* Immediate on the way in — the wipe needs something to wipe. */
+  transition: clip-path 0.44s var(--ease), visibility 0s;
 }
 
 .menu__list {
@@ -2098,19 +2128,38 @@ main > section.band:last-of-type {
        at full strength when the viewport cut it mid-word, which looks like a
        failed fade rather than an honest edge.
 
-       Stays 44 at every width, and the dead strip above is now the whole
-       bleed at every width, so the two have stopped resembling each other
-       entirely — which is right, because they answer different questions. The
-       dead strip says where the keyboard stops, and it has to cover the whole
-       peek or focus parks in it, however wide the screen makes that peek. The
-       fade says where the eye stops reading, and that is a distance in
-       millimetres, not a fraction of the page margin: at 1920 the peek is 208
-       and fading all of it would dim a whole plate to say one word. At
-       390 the peek is 49.8px of which 44 already fades — taking it to the
-       full peek moved almost nothing, and at 620 it moved the peek a step
-       dimmer, which is a cost paid by the one thing on the strip whose job is
-       to say there is more. */
-      #000 calc(100% - max(2.75rem, var(--gutter) * 0.8)),
+       44 at every width, and the dead strip above is now the whole bleed at
+       every width, so the two have stopped resembling each other entirely —
+       which is right, because they answer different questions. The dead strip
+       says where the keyboard stops, and it has to cover the whole peek or
+       focus parks in it, however wide the screen makes that peek. The fade
+       says where the eye stops reading, and that is a distance in millimetres,
+       not a fraction of the page margin: at 1920 the peek is 176 and fading
+       all of it would dim a whole plate to say one word. At 390 the peek is
+       49.8px of which 44 already fades — taking it to the full peek moved
+       almost nothing, and at 620 it moved the peek a step dimmer, which is a
+       cost paid by the one thing on the strip whose job is to say there is
+       more.
+
+       This paragraph argued for a constant and then wrote `max(2.75rem,
+       var(--gutter) * 0.8)`, which is a constant only up to 1100px and the
+       gutter's fraction above it: measured, 51.2 at 1280, 57.6 at 1440, 67.2
+       at 1680 and 70.4 from 1760 up. The `max()` was doing the exact thing the
+       prose says not to do. Worst at 2560, where the grid happens to leave no
+       peek at all — plate 4 ends at 2544 and plate 5 starts off-screen — so
+       the fade had nothing to soften and spent itself dimming the last 54.4px
+       of a whole, uncut picture. At a flat 2.75rem that is 28px, and at every
+       width from 1024 to 1920 the fade now starts in a gap between plates
+       rather than on ink.
+
+       It cannot be made exactly right, and should not be chased: the peek is
+       "a consequence of the grid meeting the screen edge" by the deliberate
+       choice recorded at .reel__item below, so it ranges from 0 to 176 and no
+       fixed distance can always be shorter than it. At 700 and 760 the peek
+       falls to 19 and 21.3 and the fade still reaches 9px and 6px into the
+       plate before it. That is the price of a strip whose seams register with
+       the page's columns, and the columns are worth more. */
+      #000 calc(100% - 2.75rem),
     rgb(0 0 0 / 0%) 100%
   );
 }
@@ -4583,6 +4632,45 @@ body.is-lb .nav {
     display: block;
   }
 
+  /* Below this rung the burger is the whole of the navigation — the rule above
+     has just taken `.nav__links` away — and the burger is a button that calls
+     script. Without script it is a live 44x44 control, `aria-expanded="false"`,
+     not disabled, that does nothing at all when tapped: measured at 390, the
+     attribute stays "false", `body.is-menu` never lands, and `.menu` stays
+     `visibility: hidden; clip-path: inset(0 0 100% 0)`. The header then offers
+     zero links, and the first navigation on the page is the footer rozcestník
+     at document y 6062 of 6817 — 89% of the way down. Every other no-script
+     path on this site is deliberately whole (all reveals render, all 87 works
+     render, a lightbox opener degrades to its own image); the header was the
+     one place that wasn't.
+
+     So: take the control that lies away, and let the panel it would have
+     opened stand in the flow instead. That is what an unstyled page is — a
+     list of links at the top — and this list is already drawn in the site's
+     own language, so nothing new has to be designed for a state nobody sees.
+     The top padding stays `var(--nav-h)`: the bar above is `position: fixed`
+     either way, and this is now the first thing in the flow under it. */
+  html:not(.js) .burger {
+    display: none;
+  }
+
+  html:not(.js) .menu {
+    position: static;
+    visibility: visible;
+    clip-path: none;
+    padding-bottom: 2rem;
+  }
+
+  /* And the entrance has to be undone, or the fallback is worse than the bug
+     it fixes. `.menu__link` rests at `opacity: 0; transform: translateY(1rem)`
+     and is animated in by `.is-menu .menu__link` — a class only script sets.
+     Promoting the drawer into the flow without this line yields a navigation
+     block containing eight invisible links. */
+  html:not(.js) .menu__link {
+    opacity: 1;
+    transform: none;
+  }
+
   .works,
   .people {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -4880,25 +4968,51 @@ body.is-lb .nav {
 /* The homepage hero *is* the wordmark, at 430px. Repeating the same artwork
    in the header 200px above it spends the most valuable space on the site
    saying the same thing twice; the header mark fades in once the hero's own
-   has scrolled away. */
-.home .nav:not(.is-stuck) .nav__mark {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition:
-    opacity 0.45s var(--ease),
-    visibility 0s linear 0.45s;
-}
+   has scrolled away.
 
-/* Except with the menu open, where the hero it defers to is covered: the
-   header was left holding a close cross and nothing else. */
-body.is-menu.home .nav:not(.is-stuck) .nav__mark {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transition:
-    opacity 0.45s var(--ease),
-    visibility 0s;
+   Gated on `.js`, because "fades in once the hero has scrolled away" is a
+   sentence only script can finish. `is-stuck` never arrives without it, so
+   this rule was not deferring to the hero, it was deleting the mark: measured
+   on / with scripting off at y=0 *and* y=2000, at 1440 and at 390, the header
+   mark is opacity 0 / visibility hidden / pointer-events none at every one —
+   the wordmark and the link home never appear at all. Unconditional here,
+   conditional there is the wrong way round: the fade is the special case.
+
+   And wrapped in `@media screen`, for the same reason one step further out:
+   "once the hero has scrolled away" is a sentence about a viewport, and print
+   has no scroll position. `is-stuck` can no more arrive on paper than it can
+   without script, so on paper this rule was not deferring to the hero either —
+   it was deleting the letterhead. Measured under print emulation at 794x1000:
+   / printed its mark at visibility hidden, opacity 0, while /cenik, /galerie
+   and /404 printed theirs visible at opacity 1. All four reserve the same
+   51.64px band and `.nav { border-bottom }` rules it either way, so the home
+   page printed a hairline under a blank strip — a letterhead with the letter
+   head taken out, on the one sheet whose first line should name the salon.
+
+   As a screen rule and not as a counter-rule inside `@media print`: the
+   selector below is five classes deep, so anything restating the opposite down
+   there has to match that depth to win, and would keep matching it only for as
+   long as nobody touches either one. Scoping states the same thing once. */
+@media screen {
+  .js .home .nav:not(.is-stuck) .nav__mark {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.45s var(--ease),
+      visibility 0s linear 0.45s;
+  }
+
+  /* Except with the menu open, where the hero it defers to is covered: the
+     header was left holding a close cross and nothing else. */
+  body.is-menu.home .nav:not(.is-stuck) .nav__mark {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+      opacity 0.45s var(--ease),
+      visibility 0s;
+  }
 }
 
 /* There used to be a third exception here, restoring the mark below 900px on
@@ -4988,7 +5102,13 @@ body.is-menu.home .nav:not(.is-stuck) .nav__mark {
   .reel__hint,
   .reel__rule,
   .foot__map,
-  .foot__social {
+  .foot__social,
+  /* The film grain, which exists to stop large flats of ink reading as flat
+     digital black. There is no ink here and paper has its own tooth; what a
+     printer would make of a fixed, viewport-sized overlay at 5% on `overlay`
+     blend is a grey wash across every sheet, and only for the reader who has
+     background graphics switched on — which is to say, unpredictably. */
+  body::after {
     display: none !important;
   }
 
@@ -5011,6 +5131,31 @@ body.is-menu.home .nav:not(.is-stuck) .nav__mark {
     opacity: 1 !important;
     transform: none !important;
     clip-path: none !important;
+  }
+
+  /* The same argument one mechanism further along. The rule above restores
+     what the scroll observer would have revealed; this restores what a pointer
+     would have. `.person__logo` rests at `opacity: 0` and is brought in by
+     `.person:hover` — a gesture a sheet of paper does not have, so all six
+     partner logos on /partneri printed as blank space inside the photographs
+     they belong to. A partner's own mark is the content of a partners page,
+     not furniture for a device: the distinction this block already draws
+     between a scroll cue (gone) and a batched work (restored) puts it firmly
+     on the restored side. 0.95 rather than 1 to match the hovered value
+     exactly, so paper and screen show the same thing. */
+  .person__logo {
+    opacity: 0.95;
+    transform: none;
+  }
+
+  /* And the settled frame, not the frame the settle began on. `animation: none`
+     above stops heroSettle from running, which leaves the hero photograph at
+     its opening `scale(1.06)` — 865px of image in an 816px sheet, cropping 6%
+     more than the composition asks for. `.hero__art` clips it, so nothing
+     bleeds off the paper; it is simply the wrong crop. The end state of a
+     disabled animation is the state worth printing. */
+  .hero__art img {
+    transform: none;
   }
 
   /* Sticky in a paged medium pins the head to the top of the *page box*, so it

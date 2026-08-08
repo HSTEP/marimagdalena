@@ -65,35 +65,97 @@
     if (e.target.closest("a")) setMenu(false);
   });
 
+  /* The drawer belongs to the burger, and past 960 there is no burger — the
+     media query that declares it stops applying. A drawer opened on a phone
+     and then carried past the rung (rotating a tablet, dragging a desktop
+     window wider, a browser leaving a split view) became a full-screen ink
+     panel whose only close control had been removed from the page. Measured:
+     opened at 390 then resized to 1024, 1440 and 1920 leaves visibility
+     visible, clip-path inset(0px), burger display none and body overflow
+     hidden. Escape still closed it and the desktop links sat above it at
+     z-index 50, so it was degraded rather than sealed — but a panel with no
+     visible exit is not a state worth leaving reachable. Same 960 as the CSS,
+     read from the same kind of query rather than restated as a number here. */
+  matchMedia("(width > 960px)").addEventListener("change", (e) => {
+    if (e.matches) setMenu(false);
+  });
+
   /* ----------------------------------------------------------- reel index */
   /* The strip's counter was a hard-coded "01 — 09" printed under a control
-     whose whole purpose is to move. Report the leftmost frame actually in
-     view, so the readout is worth the line it occupies. */
+     whose whole purpose is to move. Report the frame the reader is looking at,
+     so the readout is worth the line it occupies.
+
+     This compared two numbers measured from different origins. `.reel` is
+     `position: static`, so a plate's `offsetParent` is `body.home` and
+     `offsetLeft` is the distance from the page's left edge; `scrollLeft` is
+     the distance from the strip's own padding box. Testing
+     `offsetLeft + offsetWidth > scrollLeft` therefore overstates every plate's
+     position by `frames[0].offsetLeft` — 20px at 390, 51 at 1024, 72 at 1440,
+     208 at 1920, 496 at 2560 — and picks the plate one place too early
+     wherever that displacement exceeds the gap, which it does at every width.
+     Measured at five rest positions across eleven widths, the readout named a
+     plate that was not on screen in 42 of 55 of them; it was right at
+     `scrollLeft: 0` and essentially nowhere else, which is to say it was right
+     until the reader touched the thing it describes. At 1440 dragged to the
+     end the strip shows plates 7, 8 and 9 and the counter read "06".
+
+     Read in viewport coordinates instead, against the strip's content box.
+     That box is the viewing region `scroll-padding-inline-end` already
+     declares in the stylesheet (sec. 9), so the counter and the keyboard now
+     agree about where the strip begins and ends.
+
+     The plate holding most of that region, ties to the leftmost — not the
+     leftmost plate with any ink in it. The two agree everywhere except the
+     last rest position below 620, where the strip cannot scroll far enough to
+     bring plate 9 to the start: plate 9 fills the screen, plate 8 hangs on as
+     a 30px sliver at the left, and "leftmost in view" names the sliver. The
+     ties clause is what keeps the desktop honest, where three whole plates are
+     equally in view and the first of them is the answer.
+
+     So the ceiling is deliberate and varies with how much is on screen: the
+     counter reaches 09 at or below 620, 08 from 700 to 960, and 07 at 1024 and
+     up, where reaching the end means plates 7, 8 and 9 are all in view at
+     once. "07 / 09" under a strip showing the last three of nine is a position,
+     not a shortfall.
+
+     Recomputed on resize as well as on scroll: both the plate count and the
+     browser's own correction to `scrollLeft` change with the width. */
   const reel = $(".reel");
   const reelIndex = $("[data-reel-index]");
+  const frames = reel ? $$(".reel__item", reel) : [];
 
-  if (reel && reelIndex) {
-    const frames = $$(".reel__item", reel);
+  if (reel && reelIndex && frames.length) {
     let reelTicking = false;
 
     const updateReel = () => {
-      const edge = reel.scrollLeft + 1;
-      let i = frames.findIndex((f) => f.offsetLeft + f.offsetWidth > edge);
-      if (i < 0) i = frames.length - 1;
-      reelIndex.textContent = String(i + 1).padStart(2, "0");
       reelTicking = false;
+      const box = reel.getBoundingClientRect();
+      const cs = getComputedStyle(reel);
+      const left = box.left + reel.clientLeft + parseFloat(cs.paddingLeft);
+      const right = left + reel.clientWidth - parseFloat(cs.paddingLeft)
+        - parseFloat(cs.paddingRight);
+
+      let best = 0;
+      let widest = -1;
+      frames.forEach((f, i) => {
+        const b = f.getBoundingClientRect();
+        const shown = Math.min(b.right, right) - Math.max(b.left, left);
+        if (shown > widest + 0.5) {
+          best = i;
+          widest = shown;
+        }
+      });
+      reelIndex.textContent = String(best + 1).padStart(2, "0");
     };
 
-    reel.addEventListener(
-      "scroll",
-      () => {
-        if (!reelTicking) {
-          reelTicking = true;
-          requestAnimationFrame(updateReel);
-        }
-      },
-      { passive: true }
-    );
+    const tickReel = () => {
+      if (reelTicking) return;
+      reelTicking = true;
+      requestAnimationFrame(updateReel);
+    };
+
+    reel.addEventListener("scroll", tickReel, { passive: true });
+    addEventListener("resize", tickReel, { passive: true });
     updateReel();
   }
 
@@ -133,6 +195,11 @@
   let group = [];
   let cursor = 0;
   let opener = null;
+  /* close() cannot finish its own work synchronously: the dialog fades for
+     0.45s and only then may it be hidden and its src dropped. That pending
+     teardown has to be cancellable, because the reader can be back inside the
+     window before it fires. See open() and close() below. */
+  let closeTimer = null;
 
   /* A batched item counts as part of the set even while it is waiting its
      turn to render, so the viewer walks the whole catalogue — all 87 works,
@@ -239,6 +306,21 @@
     };
 
     const open = (i, from) => {
+      /* First, and before anything reads or writes lb.hidden. A close still
+         inside its 0.45s fade has a teardown booked that sets lb.hidden = true
+         and strips the image src; nothing used to cancel it, so reopening
+         inside that window let the timer dismantle a dialog that was now open.
+         What the reader was left with was not a closed lightbox: the page
+         stayed under `body.is-lb` with `overflow: hidden`, all five children of
+         <body> still inert from setInert() below, and the dialog itself
+         display:none — 0 focusable controls, no scrolling, and Escape bailing
+         at `if (lb.hidden) return`. Dead until reload. Measured on the keyboard
+         path (Enter, Escape, Enter with a 3.7ms gap) on /galerie and /obrazy;
+         reproduced at every reopen delay up to ~450ms and clean from 460ms.
+         The gesture is "close — no, wait": Escape restores focus to the opener,
+         so the very next Enter reopens, and there is no 450ms in a human hand. */
+      clearTimeout(closeTimer);
+      closeTimer = null;
       opener = from;
       lb.hidden = false;
       document.body.classList.add("is-lb");
@@ -267,7 +349,11 @@
     const close = () => {
       lb.classList.remove("is-open");
       document.body.classList.remove("is-lb");
-      setTimeout(() => {
+      /* Kept in a handle so open() can cancel it, and cleared here too so a
+         second close cannot leave two bookings against one dialog. */
+      clearTimeout(closeTimer);
+      closeTimer = setTimeout(() => {
+        closeTimer = null;
         lb.hidden = true;
         lbImg.removeAttribute("src");
       }, 450);

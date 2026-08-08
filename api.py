@@ -71,7 +71,9 @@ import media as media_module
 BASE_DIR = Path(os.environ.get("SITE_ROOT", Path(__file__).resolve().parent)).resolve()
 IMAGES_DIR = BASE_DIR / "images"
 DATA_DIR = BASE_DIR / "src" / "data"
-DIST_DIR = BASE_DIR / "dist"
+# Where `npm run build` puts the app. The container builds it in an earlier
+# stage and copies it somewhere else entirely, hence the override.
+DIST_DIR = Path(os.environ.get("ADMIN_DIST") or BASE_DIR / "mariadmin" / "dist").resolve()
 ASSETS_DIR = BASE_DIR / "assets"
 
 # Server-side working state, gitignored: the pending log and the thumbnail
@@ -375,6 +377,34 @@ def record_image_path(resource: Resource, record: dict[str, Any]) -> str | None:
     return record.get("image") or None
 
 
+def with_image(resource: Resource, record: dict[str, Any]) -> dict[str, Any]:
+    """Attach the two things the app needs to draw a record's photograph.
+
+    ``image_v`` changes whenever the file's contents do. Swapping a photograph
+    keeps its filename on purpose — that is what keeps the derivative slugs and
+    the file's git history continuous — so nothing in the thumbnail URL would
+    otherwise change, and the browser would go on drawing the old picture from
+    its own cache until the day-long ``max-age`` ran out. She would replace a
+    photograph, see no change, and conclude the app was broken.
+
+    Modification time rather than a digest: this runs on every list request, and
+    hashing 166 MB of sources to answer one is not a trade worth making. The
+    value is never written down anywhere, so it costing nothing but a cache miss
+    on a fresh clone is fine.
+    """
+    path = record_image_path(resource, record)
+    record["image_path"] = path
+    record["image_v"] = None
+    if path:
+        try:
+            record["image_v"] = str((BASE_DIR / path).stat().st_mtime_ns)
+        except OSError:
+            # The file is missing. The app draws a broken tile either way; there
+            # is nothing useful to version.
+            pass
+    return record
+
+
 # --------------------------------------------------------------------------- #
 # Thumbnails
 # --------------------------------------------------------------------------- #
@@ -526,12 +556,59 @@ BODY_MODEL: dict[Resource, type[BaseModel]] = {
 }
 
 # What a change is called in the banner and in the commit message.
-LABEL = {
-    Resource.paintings: "obraz",
-    Resource.galerie: "fotku v galerii",
-    Resource.projekty: "projekt",
-    Resource.vystavy: "výstavu",
+#
+# Written out rather than assembled from a verb and a noun: Czech agrees the
+# participle with the noun's gender, so "Přidán" and "Přidána" are both right
+# and both wrong depending on the word after them. Twenty-odd sentences is a
+# small price for never showing her "Upraven výstavu".
+#
+# `photo` and `photo_new` are the same endpoint: swapping a photograph and
+# giving one to a record that had none are different events, and calling the
+# second "Vyměněna fotka" describes a swap that never happened.
+WORDING = {
+    Resource.paintings: {
+        "added": "Přidán obraz",
+        "updated": "Upraven obraz",
+        "deleted": "Smazán obraz",
+        "photo": "Vyměněna fotka u obrazu",
+        "photo_new": "Přidána fotka k obrazu",
+        "reorder": "Změněno pořadí obrazů",
+    },
+    Resource.galerie: {
+        "added": "Přidána fotka do galerie",
+        "updated": "Upravena fotka v galerii",
+        "deleted": "Smazána fotka z galerie",
+        "photo": "Vyměněna fotka v galerii",
+        "photo_new": "Přidána fotka do galerie",
+        "reorder": "Změněno pořadí fotek v galerii",
+    },
+    Resource.projekty: {
+        "added": "Přidán projekt",
+        "updated": "Upraven projekt",
+        "deleted": "Smazán projekt",
+        "photo": "Vyměněna fotka u projektu",
+        "photo_new": "Přidána fotka k projektu",
+        "reorder": "Změněno pořadí projektů",
+    },
+    Resource.vystavy: {
+        "added": "Přidána výstava",
+        "updated": "Upravena výstava",
+        "deleted": "Smazána výstava",
+        "photo": "Vyměněna fotka u výstavy",
+        "photo_new": "Přidána fotka k výstavě",
+        "reorder": "Změněno pořadí výstav",
+    },
 }
+
+
+def named(resource: Resource, verb: str, record: dict[str, Any]) -> str:
+    """One line for the banner: what happened, and to which record.
+
+    Gallery photographs have no title, so naming one would produce a dangling
+    colon; there the sentence stands on its own.
+    """
+    title = str(record.get("title") or "").strip()
+    return f"{WORDING[resource][verb]}: {title}" if title else WORDING[resource][verb]
 
 
 # --------------------------------------------------------------------------- #
@@ -912,7 +989,7 @@ def list_items(resource: Resource):
     for record in records:
         # The app should not have to know that paintings store a bare filename
         # while projects store a path.
-        record["image_path"] = record_image_path(resource, record)
+        with_image(resource, record)
     return records
 
 
@@ -925,9 +1002,8 @@ def create_item(resource: Resource, body: dict[str, Any]):
     record = {"id": next_id(records), **fields}
     records.append(record)
     save_records(resource, renumber(records))
-    note_pending(f"Přidán {LABEL[resource]}: {fields.get('title') or 'bez názvu'}")
-    record["image_path"] = record_image_path(resource, record)
-    return record
+    note_pending(named(resource, "added", record))
+    return with_image(resource, record)
 
 
 @api.post("/{resource}/photo", status_code=201)
@@ -951,9 +1027,8 @@ async def create_item_with_photo(resource: Resource, image: UploadFile = File(..
 
     records.append(record)
     save_records(resource, renumber(records))
-    note_pending(f"Přidána fotka: {LABEL[resource]}")
-    record["image_path"] = record_image_path(resource, record)
-    return record
+    note_pending(named(resource, "added", record))
+    return with_image(resource, record)
 
 
 @api.post("/{resource}/reorder")
@@ -969,7 +1044,7 @@ def reorder(resource: Resource, body: ReorderIn):
     ordered = [by_id.pop(item_id) for item_id in body.ids if item_id in by_id]
     leftovers = sorted(by_id.values(), key=lambda r: r.get("order", 1 << 30))
     save_records(resource, renumber(ordered + leftovers))
-    note_pending(f"Změněno pořadí: {LABEL[resource]}")
+    note_pending(WORDING[resource]["reorder"])
     return {"ok": True, "count": len(ordered) + len(leftovers)}
 
 
@@ -1016,17 +1091,15 @@ async def replace_image(resource: Resource, item_id: int, image: UploadFile = Fi
             pass
 
     save_records(resource, records)
-    note_pending(f"Vyměněna fotka: {LABEL[resource]}")
-    record["image_path"] = record_image_path(resource, record)
-    return record
+    note_pending(named(resource, "photo" if old_path else "photo_new", record))
+    return with_image(resource, record)
 
 
 @api.get("/{resource}/{item_id}")
 def get_item(resource: Resource, item_id: int):
     records = load_records(resource)
     record = records[find_index(records, item_id)]
-    record["image_path"] = record_image_path(resource, record)
-    return record
+    return with_image(resource, record)
 
 
 @api.put("/{resource}/{item_id}")
@@ -1039,11 +1112,8 @@ def update_item(resource: Resource, item_id: int, body: dict[str, Any]):
     records[index].update(fields)
     records[index]["id"] = item_id
     save_records(resource, records)
-    note_pending(
-        f"Upraven {LABEL[resource]}: {records[index].get('title') or 'bez názvu'}"
-    )
-    records[index]["image_path"] = record_image_path(resource, records[index])
-    return records[index]
+    note_pending(named(resource, "updated", records[index]))
+    return with_image(resource, records[index])
 
 
 @api.delete("/{resource}/{item_id}", status_code=204)
@@ -1060,7 +1130,7 @@ def delete_item(resource: Resource, item_id: int):
             pass
 
     save_records(resource, renumber(records))
-    note_pending(f"Smazán {LABEL[resource]}: {record.get('title') or 'bez názvu'}")
+    note_pending(named(resource, "deleted", record))
     return Response(status_code=204)
 
 

@@ -297,6 +297,14 @@
     addEventListener("keydown", (e) => {
       if (document.body.classList.contains("is-menu") && e.key === "Escape") {
         setMenu(false);
+        /* The drawer takes focus when it opens and the nav behind it goes
+           inert, so on Escape there was nowhere for focus to fall but BODY —
+           and from BODY the next Tab restarts at the top of the document.
+           Dismissing a menu should not cost you your place. The lightbox in
+           this same file already restores to its opener; this is that, for
+           the control that owns the drawer. After setMenu(false), because the
+           burger is inside the region setInert() was just holding. */
+        burger?.focus();
         return;
       }
       if (lb.hidden) return;

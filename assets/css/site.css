@@ -626,14 +626,18 @@ h4 {
   border-color: var(--gold);
 }
 
-/* Drop cap, set in the display serif and optically aligned to the text edge. */
-@media (width <= 620px) {
-  .prose--cap > p:first-of-type::first-letter {
-    font-size: 2.9em;
-    line-height: 0.82;
-  }
-}
+/* Drop cap, set in the display serif and optically aligned to the text edge.
 
+   A `@media (width <= 620px)` copy of this rule used to stand above it asking
+   for 2.9em/0.82. Same selector, same specificity, declared first — so it lost
+   the cascade to this rule at every width, and the phone has always rendered
+   3.9em. It was the only defeated declaration in the sheet.
+
+   Deleted rather than moved below, because the render it lost to is the better
+   one. A drop cap indents whole line boxes: at 390 both sizes indent two, but
+   only 3.9em fills them — its ink runs from line 1's ascender to line 2's
+   baseline. At 2.9em the cap still clears two lines and reaches barely past
+   the first, leaving a hole under itself and an indent it hasn't earned. */
 .prose--cap > p:first-of-type::first-letter {
   float: left;
   font-family: var(--serif);
@@ -1518,6 +1522,23 @@ a.plate:hover > img,
   display: inline-flex;
   align-items: center;
   gap: 0.85rem;
+  transition: color 0.35s;
+}
+
+/* The one link on the site that answered nothing under the cursor: its box
+   diffed 0.000% between rest and hover at 2x, against 3.181% for a .nav__link
+   measured the same way, and a stylesheet walk for rules matching it at
+   :hover returned []. It was skipped because it reads as a caption — but it
+   is the only control the first screen offers a mouse, and at rest --fg-3 is
+   exactly the colour of the "Hair & Art Salon" label facing it across the
+   hero foot, which is not a link. The affordance had to come from somewhere.
+
+   --gold, not a lift to --fg: this is a micro-cap link on ink, and .qlink is
+   the site's answer for that. Colour only. The line already carries a gold
+   traveller, so anything drawn there under the cursor would arrive into an
+   animation instead of on top of one. */
+.scroll-cue:hover {
+  color: var(--gold);
 }
 
 .scroll-cue__line {
@@ -1876,12 +1897,22 @@ a.plate:hover > img,
   /* The same expression the mask below fades over, declared as "not viewing
      region" so the keyboard agrees with the eye about where the strip ends.
      Chrome scrolls a focused element into view only when it is *entirely*
-     outside the scrollport, and the peek leaves just enough showing: tabbing
-     the strip parked every fourth plate at 10% visible with `scrollLeft` still
-     0, drawing the focus ring as a gold sliver at the screen edge. Snap rest
-     positions are unaffected — `scroll-snap-align: start` resolves against
-     `scroll-padding-inline-start` — and `scroll-padding` never affects
-     layout, so the bleed, the mask and the peek are all untouched. */
+     outside the viewing region, and the peek leaves just enough showing:
+     tabbing the strip parked every fourth plate at 10% visible with
+     `scrollLeft` still 0, drawing the focus ring as a gold sliver at the
+     screen edge. Snap rest positions are unaffected — `scroll-snap-align:
+     start` resolves against `scroll-padding-inline-start` — and
+     `scroll-padding` never affects layout, so the bleed, the mask and the
+     peek are all untouched.
+
+     This holds only where the dead strip is at least as wide as the peek, and
+     that is a claim about two numbers that are set independently. Above 620
+     the plate is a count of the strip's own columns, so the peek is whatever
+     the twelfth column leaves — 0 at 1440 and 1024, 0.1 of a plate at 760 —
+     and 44px covers it. Below 620 the plate is 78vw and the peek is
+     0.17W − 16, which passes 44 at 353px wide and reaches 89.4 at 620. The
+     ≤620 block at the foot of this section restates the strip for that band;
+     what is written here is true above it. */
   scroll-padding-inline-end: max(2.75rem, var(--gutter) * 0.8);
   scroll-snap-type: x mandatory;
   padding-bottom: 1.5rem;
@@ -1896,7 +1927,17 @@ a.plate:hover > img,
     /* A minimum in absolute terms: --gutter is 20px on a phone, so 0.8 of it
        faded over 16px — short enough that the next frame's caption was still
        at full strength when the viewport cut it mid-word, which looks like a
-       failed fade rather than an honest edge. */
+       failed fade rather than an honest edge.
+
+       Stays 44 below 620, where the dead strip above no longer is. The two
+       were only ever equal because the desktop plate is a count of columns
+       and left almost no peek; they answer different questions. The dead
+       strip says where the keyboard stops, and it has to cover the whole peek
+       or focus parks in it. The fade says where the eye stops reading, and at
+       390 the peek is 49.8px of which 44 already fades — taking it to the
+       full peek moved almost nothing, and at 620 it moved the peek a step
+       dimmer, which is a cost paid by the one thing on the strip whose job is
+       to say there is more. */
       #000 calc(100% - max(2.75rem, var(--gutter) * 0.8)),
     rgb(0 0 0 / 0%) 100%
   );
@@ -1944,8 +1985,28 @@ a.plate:hover > img,
    230px tile chosen to protect the desktop strip. One work per screen with a
    peek is the point of a reel. */
 @media (width <= 620px) {
+  .reel {
+    /* Declared once because the dead strip below is the arithmetic complement
+       of it. Two literals drift; one token cannot. */
+    --plate: 78vw;
+    /* 78vw leaves a peek of 0.17W − 16 — 49.8 at 390, 89.4 at 620 — against a
+       dead strip fixed at 44, so from 353px up the browser could see part of
+       the next plate and called it visible. Tabbing the strip then moved
+       nothing: plates 1, 3, 5, 7 took focus at 16.3–18.4% visible with
+       `scrollLeft` unchanged, the 2px gold ring a hairline at the screen
+       edge. 360 escaped only because 43.2 happens to fall under 44.
+
+       `scroll-padding` percentages resolve against the scrollport, so this
+       leaves a viewing region exactly one plate wide: no plate can be
+       "already visible" without being flush, and mandatory snap has nowhere
+       to land but `start`. It is the same statement as the line above — the
+       strip ends where the plate does — written in the terms this band sizes
+       its plate in. */
+    scroll-padding-inline-end: calc(100% - var(--plate));
+  }
+
   .reel__item {
-    flex: 0 0 78vw;
+    flex: 0 0 var(--plate);
   }
 }
 
@@ -3226,7 +3287,11 @@ a.plate:hover > img,
   font-size: var(--t-h3);
 }
 
-.price colgroup ~ tbody td,
+/* `.price colgroup ~ tbody td` used to lead this list. The pricelist macro has
+   never emitted a colgroup — `grep -c colgroup` over all eight built pages
+   returns 0 — so half the selector matched nothing, and the cells it named are
+   set by `.price td` below. A selector kept for a markup shape that was never
+   built reads as a rule doing work it isn't. */
 .price th {
   font-family: var(--sans);
   font-weight: 400;

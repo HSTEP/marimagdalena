@@ -3,6 +3,7 @@
 "alpha": false,
 "color": "#2e2217",
 "h": 6720,
+"hash": "185df20a864af16c4629d0ffd40f9c34",
 "sources": [
 {
 "url": "images/_d/bg-1c5a1096-480.webp",
@@ -21,13 +22,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056584:6134447",
 "w": 4480
 },
 "images/bg/1C5A1120.jpg": {
 "alpha": false,
 "color": "#33291e",
 "h": 6720,
+"hash": "887574383e2909872680aa3f72a16663",
 "sources": [
 {
 "url": "images/_d/bg-1c5a1120-480.webp",
@@ -46,13 +47,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056584:5782305",
 "w": 4480
 },
 "images/bg/1C5A1152.jpg": {
 "alpha": false,
 "color": "#674e3b",
 "h": 6342,
+"hash": "dabbf26525d243c6d4298660166fd4a8",
 "sources": [
 {
 "url": "images/_d/bg-1c5a1152-480.webp",
@@ -71,13 +72,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:2195619",
 "w": 4228
 },
 "images/bg/1C5A1173.jpg": {
 "alpha": false,
 "color": "#3b2f1f",
 "h": 7720,
+"hash": "f658c48523bdd3bf9944c04aa7c09fdb",
 "sources": [
 {
 "url": "images/_d/bg-1c5a1173-480.webp",
@@ -96,13 +97,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:8234445",
 "w": 5480
 },
 "images/galerie/10_centered_dsc00248re.JPG": {
 "alpha": false,
 "color": "#a4676c",
 "h": 5128,
+"hash": "0df89c583d966776411e4b8d9277006d",
 "sources": [
 {
 "url": "images/_d/galerie-10_centered_dsc00248re-480.webp",
@@ -121,13 +122,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:2017320",
 "w": 5128
 },
 "images/galerie/11_centered_dsc00216.JPG": {
 "alpha": false,
 "color": "#85615e",
 "h": 5304,
+"hash": "02c700d8cb1f593c6d71cd5baa7c8b53",
 "sources": [
 {
 "url": "images/_d/galerie-11_centered_dsc00216-480.webp",
@@ -146,13 +147,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:2378459",
 "w": 5304
 },
 "images/galerie/12_centered_dsc01768.JPG": {
 "alpha": false,
 "color": "#b5a9a3",
 "h": 2668,
+"hash": "295fffccadb38c2b28b86d71484ae1aa",
 "sources": [
 {
 "url": "images/_d/galerie-12_centered_dsc01768-480.webp",
@@ -171,13 +172,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:507918",
 "w": 2668
 },
 "images/galerie/13_centered_cz_dsc09492.JPG": {
 "alpha": false,
 "color": "#7c7b6b",
 "h": 5128,
+"hash": "8c0a3d3d8d21a4230270627aa4f2ec71",
 "sources": [
 {
 "url": "images/_d/galerie-13_centered_cz_dsc09492-480.webp",
@@ -196,13 +197,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:1946864",
 "w": 5128
 },
 "images/galerie/14_centered_1x1-product-londa-2.PNG": {
 "alpha": false,
 "color": "#887a7f",
 "h": 1500,
+"hash": "9a74336038b57a54a5bc81eab4e6afa6",
 "sources": [
 {
 "url": "images/_d/galerie-14_centered_1x1-product-londa-2-480.webp",
@@ -221,13 +222,13 @@
 "w": 1500
 }
 ],
-"stamp": "1786056585:3022397",
 "w": 1500
 },
 "images/galerie/15_centered_cz_dsc09733re.JPG": {
 "alpha": false,
 "color": "#6f6f60",
 "h": 1366,
+"hash": "5fb697a0a40beb2cc07e1319fd196317",
 "sources": [
 {
 "url": "images/_d/galerie-15_centered_cz_dsc09733re-480.webp",
@@ -246,13 +247,13 @@
 "w": 1366
 }
 ],
-"stamp": "1786056585:193077",
 "w": 1366
 },
 "images/galerie/16_centered_4h1a4291.JPG": {
 "alpha": false,
 "color": "#87867e",
 "h": 2668,
+"hash": "9eaceba19c50c2a5fc337b709606e83a",
 "sources": [
 {
 "url": "images/_d/galerie-16_centered_4h1a4291-480.webp",
@@ -271,13 +272,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:1068990",
 "w": 2668
 },
 "images/galerie/17_centered_dsc00433re.JPG": {
 "alpha": false,
 "color": "#795d62",
 "h": 5209,
+"hash": "e997f091d2a8eaa6bf4e0296a66b4476",
 "sources": [
 {
 "url": "images/_d/galerie-17_centered_dsc00433re-480.webp",
@@ -296,13 +297,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:2125640",
 "w": 5209
 },
 "images/galerie/18_centered_dsc01913.JPG": {
 "alpha": false,
 "color": "#978d85",
 "h": 2668,
+"hash": "4f674dff9c40c4cdf637e7e3a7da9c93",
 "sources": [
 {
 "url": "images/_d/galerie-18_centered_dsc01913-480.webp",
@@ -321,13 +322,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:504519",
 "w": 2668
 },
 "images/galerie/18_centered_dsc02450.JPG": {
 "alpha": false,
 "color": "#b2b4a7",
 "h": 2668,
+"hash": "2f3dc3c32b57b695d52a4d43420b1a94",
 "sources": [
 {
 "url": "images/_d/galerie-18_centered_dsc02450-480.webp",
@@ -346,13 +347,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:414128",
 "w": 2668
 },
 "images/galerie/19_centered_dsc01739.JPG": {
 "alpha": false,
 "color": "#c8b5ab",
 "h": 2668,
+"hash": "c40813d35eb7f97c359878bac6a8068f",
 "sources": [
 {
 "url": "images/_d/galerie-19_centered_dsc01739-480.webp",
@@ -371,13 +372,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:347074",
 "w": 2668
 },
 "images/galerie/1_centered_cz_dsc09937re.JPG": {
 "alpha": false,
 "color": "#ab988f",
 "h": 1366,
+"hash": "360011ddeb2b089bb75d18a2ec6a1250",
 "sources": [
 {
 "url": "images/_d/galerie-1_centered_cz_dsc09937re-480.webp",
@@ -396,13 +397,13 @@
 "w": 1366
 }
 ],
-"stamp": "1786056585:136431",
 "w": 1366
 },
 "images/galerie/20_centered_4h1a4161.JPG": {
 "alpha": false,
 "color": "#8d8b88",
 "h": 2668,
+"hash": "7e2ef965e5cd56d21ecfa8adb971110e",
 "sources": [
 {
 "url": "images/_d/galerie-20_centered_4h1a4161-480.webp",
@@ -421,13 +422,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:859288",
 "w": 2668
 },
 "images/galerie/21_centered_1x1-product-londa-3.PNG": {
 "alpha": false,
 "color": "#6f747b",
 "h": 1500,
+"hash": "4c02d96f0c8c725079afbbe0606229a7",
 "sources": [
 {
 "url": "images/_d/galerie-21_centered_1x1-product-londa-3-480.webp",
@@ -446,13 +447,13 @@
 "w": 1500
 }
 ],
-"stamp": "1786056585:3852911",
 "w": 1500
 },
 "images/galerie/2_centered_1x1-product-londa-6.PNG": {
 "alpha": false,
 "color": "#b0a1a4",
 "h": 1500,
+"hash": "6773ec3f6341d1fb964df8141e652ec7",
 "sources": [
 {
 "url": "images/_d/galerie-2_centered_1x1-product-londa-6-480.webp",
@@ -471,13 +472,13 @@
 "w": 1500
 }
 ],
-"stamp": "1786056585:3579983",
 "w": 1500
 },
 "images/galerie/3_centered_06.JPG": {
 "alpha": false,
 "color": "#6a7062",
 "h": 5304,
+"hash": "1e8e3e3ebcb200280ed981e69caac717",
 "sources": [
 {
 "url": "images/_d/galerie-3_centered_06-480.webp",
@@ -496,13 +497,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:3023069",
 "w": 5304
 },
 "images/galerie/4_centered_4h1a4442.JPG": {
 "alpha": false,
 "color": "#8f8b87",
 "h": 2668,
+"hash": "0ff25a79f665e732fd6e6e1fafbb69d7",
 "sources": [
 {
 "url": "images/_d/galerie-4_centered_4h1a4442-480.webp",
@@ -521,13 +522,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:724234",
 "w": 2668
 },
 "images/galerie/5_centered_dsc00390re.JPG": {
 "alpha": false,
 "color": "#8c4d58",
 "h": 5108,
+"hash": "6cf2f86ed44df8ad482db10f5a7fb168",
 "sources": [
 {
 "url": "images/_d/galerie-5_centered_dsc00390re-480.webp",
@@ -546,13 +547,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:1705914",
 "w": 5108
 },
 "images/galerie/6_centered_1x1-product-londa-1.PNG": {
 "alpha": false,
 "color": "#a58f91",
 "h": 1500,
+"hash": "ac165363e64365ddd3fa22ebad6b3152",
 "sources": [
 {
 "url": "images/_d/galerie-6_centered_1x1-product-londa-1-480.webp",
@@ -571,13 +572,13 @@
 "w": 1500
 }
 ],
-"stamp": "1786056585:4169958",
 "w": 1500
 },
 "images/galerie/7_centered_dsc00196.JPG": {
 "alpha": false,
 "color": "#9f6d6d",
 "h": 5128,
+"hash": "2c31c96662400b21928dfd8c9e55ba77",
 "sources": [
 {
 "url": "images/_d/galerie-7_centered_dsc00196-480.webp",
@@ -596,13 +597,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056585:2223890",
 "w": 5128
 },
 "images/galerie/9_centered_1x1-product-londa-4.PNG": {
 "alpha": false,
 "color": "#9b9798",
 "h": 1500,
+"hash": "60305e6189793d943d9efc5f505bfbe9",
 "sources": [
 {
 "url": "images/_d/galerie-9_centered_1x1-product-londa-4-480.webp",
@@ -621,13 +622,13 @@
 "w": 1500
 }
 ],
-"stamp": "1786056585:3340123",
 "w": 1500
 },
 "images/loga/irina.png": {
 "alpha": true,
 "color": "#080707",
 "h": 1646,
+"hash": "a96a42333d488e508624de6fb5403609",
 "sources": [
 {
 "url": "images/_d/loga-irina-480.webp",
@@ -646,13 +647,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056586:138419",
 "w": 3295
 },
 "images/loga/irinaf.jpg": {
 "alpha": false,
 "color": "#6b6356",
 "h": 1600,
+"hash": "74e658d0ae20e43f1d697e39044d89cc",
 "sources": [
 {
 "url": "images/_d/loga-irinaf-480.webp",
@@ -667,13 +668,13 @@
 "w": 1200
 }
 ],
-"stamp": "1786056586:652037",
 "w": 1200
 },
 "images/loga/jirka.png": {
 "alpha": true,
 "color": "#0a0908",
 "h": 204,
+"hash": "2d10fe5ef7310a341db20f87c593a519",
 "sources": [
 {
 "url": "images/_d/loga-jirka-480.webp",
@@ -684,13 +685,13 @@
 "w": 700
 }
 ],
-"stamp": "1786056586:17739",
 "w": 700
 },
 "images/loga/jirkaf.jpg": {
 "alpha": false,
 "color": "#2f2f2f",
 "h": 2147,
+"hash": "25040d4bc974857ad6d02419cf81d47d",
 "sources": [
 {
 "url": "images/_d/loga-jirkaf-480.webp",
@@ -709,13 +710,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056586:269802",
 "w": 1920
 },
 "images/loga/lenka.png": {
 "alpha": true,
 "color": "#d3cac7",
 "h": 530,
+"hash": "1fee0b48b7e07184127f4125c3b0b655",
 "sources": [
 {
 "url": "images/_d/loga-lenka-480.webp",
@@ -730,13 +731,13 @@
 "w": 1256
 }
 ],
-"stamp": "1786056586:797965",
 "w": 1256
 },
 "images/loga/lenkaf.jpg": {
 "alpha": false,
 "color": "#b0a27a",
 "h": 1198,
+"hash": "f191b7f30b02246e529a130d072ee0d1",
 "sources": [
 {
 "url": "images/_d/loga-lenkaf-480.webp",
@@ -751,26 +752,26 @@
 "w": 892
 }
 ],
-"stamp": "1786056586:303271",
 "w": 892
 },
 "images/loga/lida.png": {
 "alpha": true,
 "color": "#d4d4d3",
 "h": 68,
+"hash": "96f02462de659d2259c668e0a87ecbdc",
 "sources": [
 {
 "url": "images/_d/loga-lida-255.webp",
 "w": 255
 }
 ],
-"stamp": "1786056586:10953",
 "w": 255
 },
 "images/loga/lidaf.png": {
 "alpha": true,
 "color": "#52463d",
 "h": 793,
+"hash": "b80ed50f40757d4fdef71158d7d7b69d",
 "sources": [
 {
 "url": "images/_d/loga-lidaf-480.webp",
@@ -785,13 +786,13 @@
 "w": 840
 }
 ],
-"stamp": "1786056586:1114776",
 "w": 840
 },
 "images/loga/michaela.png": {
 "alpha": true,
 "color": "#151107",
 "h": 1622,
+"hash": "edd527e737b868538bb3dc6d80585876",
 "sources": [
 {
 "url": "images/_d/loga-michaela-480.webp",
@@ -810,13 +811,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056586:280456",
 "w": 3475
 },
 "images/loga/nausovaf.png": {
 "alpha": true,
 "color": "#423637",
 "h": 1876,
+"hash": "beeef95bdd07eab2e18a8266bc9b6d6b",
 "sources": [
 {
 "url": "images/_d/loga-nausovaf-480.webp",
@@ -835,13 +836,13 @@
 "w": 1878
 }
 ],
-"stamp": "1786056586:5632586",
 "w": 1878
 },
 "images/loga/renata.png": {
 "alpha": true,
 "color": "#d7d7d7",
 "h": 396,
+"hash": "20d9293d0e095c0f3319b361d4ecb67f",
 "sources": [
 {
 "url": "images/_d/loga-renata-480.webp",
@@ -856,13 +857,13 @@
 "w": 1280
 }
 ],
-"stamp": "1786056586:70143",
 "w": 1280
 },
 "images/loga/renataf.jpg": {
 "alpha": false,
 "color": "#7b5444",
 "h": 960,
+"hash": "0fc9cbe6a7eee120a9140d990a9e368a",
 "sources": [
 {
 "url": "images/_d/loga-renataf-480.webp",
@@ -873,26 +874,26 @@
 "w": 720
 }
 ],
-"stamp": "1786056586:51808",
 "w": 720
 },
 "images/loga/slavka.jpg": {
 "alpha": false,
 "color": "#685c5b",
 "h": 630,
+"hash": "51e7a386e50aa82a9440946b46b2ce7c",
 "sources": [
 {
 "url": "images/_d/loga-slavka-473.webp",
 "w": 473
 }
 ],
-"stamp": "1786056586:64132",
 "w": 473
 },
 "images/logo_b.png": {
 "alpha": true,
 "color": "#0a0908",
 "h": 778,
+"hash": "07f793c0f80f287c925b7ff386f5b9ed",
 "sources": [
 {
 "url": "images/_d/logo_b-480.webp",
@@ -911,13 +912,13 @@
 "w": 1790
 }
 ],
-"stamp": "1786056586:167470",
 "w": 1790
 },
 "images/logo_w.png": {
 "alpha": true,
 "color": "#2c2615",
 "h": 766,
+"hash": "93b607bf370421e3ace36efe2513be08",
 "sources": [
 {
 "url": "images/_d/logo_w-480.webp",
@@ -936,30 +937,13 @@
 "w": 1784
 }
 ],
-"stamp": "1786056586:93391",
 "w": 1784
-},
-"images/me01.png": {
-"alpha": true,
-"color": "#564231",
-"h": 743,
-"sources": [
-{
-"url": "images/_d/me01-480.webp",
-"w": 480
-},
-{
-"url": "images/_d/me01-519.webp",
-"w": 519
-}
-],
-"stamp": "1786056586:469110",
-"w": 519
 },
 "images/obrazy/1.jpg": {
 "alpha": false,
 "color": "#9c8d84",
 "h": 900,
+"hash": "f2273cb98f847a15de16d36c8873fd92",
 "sources": [
 {
 "url": "images/_d/obrazy-1-480.webp",
@@ -974,13 +958,13 @@
 "w": 900
 }
 ],
-"stamp": "1786056586:105590",
 "w": 900
 },
 "images/obrazy/10.jpg": {
 "alpha": false,
 "color": "#635949",
 "h": 1241,
+"hash": "5d8cb2dd87cb227157fb031f66991e47",
 "sources": [
 {
 "url": "images/_d/obrazy-10-480.webp",
@@ -995,13 +979,13 @@
 "w": 945
 }
 ],
-"stamp": "1786056586:147010",
 "w": 945
 },
 "images/obrazy/11.jpg": {
 "alpha": false,
 "color": "#a3926c",
 "h": 937,
+"hash": "16bc82f15102c0d08e70037928f5bc6a",
 "sources": [
 {
 "url": "images/_d/obrazy-11-480.webp",
@@ -1016,13 +1000,13 @@
 "w": 945
 }
 ],
-"stamp": "1786056586:154208",
 "w": 945
 },
 "images/obrazy/12.jpg": {
 "alpha": false,
 "color": "#a9956a",
 "h": 684,
+"hash": "eeb7804cffe657e50348d5b863316fb6",
 "sources": [
 {
 "url": "images/_d/obrazy-12-480.webp",
@@ -1033,13 +1017,13 @@
 "w": 716
 }
 ],
-"stamp": "1786056586:74749",
 "w": 716
 },
 "images/obrazy/13.jpg": {
 "alpha": false,
 "color": "#a39884",
 "h": 903,
+"hash": "99b1cc11f60ed12797d6f3a2cf317832",
 "sources": [
 {
 "url": "images/_d/obrazy-13-480.webp",
@@ -1054,13 +1038,13 @@
 "w": 945
 }
 ],
-"stamp": "1786056586:102804",
 "w": 945
 },
 "images/obrazy/14.jpg": {
 "alpha": false,
 "color": "#b2a4a1",
 "h": 730,
+"hash": "aefa2ecff801b9765f800b9d440178c5",
 "sources": [
 {
 "url": "images/_d/obrazy-14-480.webp",
@@ -1071,13 +1055,13 @@
 "w": 730
 }
 ],
-"stamp": "1786056586:60380",
 "w": 730
 },
 "images/obrazy/15.jpg": {
 "alpha": false,
 "color": "#8d7d64",
 "h": 1728,
+"hash": "337f48dd68871c6a8b005b3925e3dfbb",
 "sources": [
 {
 "url": "images/_d/obrazy-15-480.webp",
@@ -1096,13 +1080,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:191701",
 "w": 1290
 },
 "images/obrazy/16.jpg": {
 "alpha": false,
 "color": "#a2aaa7",
 "h": 960,
+"hash": "3a97e6033d51844edbd49ef5eaa7554f",
 "sources": [
 {
 "url": "images/_d/obrazy-16-480.webp",
@@ -1113,13 +1097,13 @@
 "w": 722
 }
 ],
-"stamp": "1786056586:87298",
 "w": 722
 },
 "images/obrazy/17.jpg": {
 "alpha": false,
 "color": "#716f62",
 "h": 960,
+"hash": "80eac785a9c627f07eed8b5024148944",
 "sources": [
 {
 "url": "images/_d/obrazy-17-480.webp",
@@ -1134,13 +1118,13 @@
 "w": 960
 }
 ],
-"stamp": "1786056586:129951",
 "w": 960
 },
 "images/obrazy/18.png": {
 "alpha": true,
 "color": "#596363",
 "h": 1631,
+"hash": "c69f5392bdd6b677e640f5f76a11a8aa",
 "sources": [
 {
 "url": "images/_d/obrazy-18-480.webp",
@@ -1155,13 +1139,13 @@
 "w": 1080
 }
 ],
-"stamp": "1786056586:2460259",
 "w": 1080
 },
 "images/obrazy/19.jpg": {
 "alpha": false,
 "color": "#645953",
 "h": 960,
+"hash": "06c775df584d09e9e857576f995506b4",
 "sources": [
 {
 "url": "images/_d/obrazy-19-480.webp",
@@ -1172,13 +1156,13 @@
 "w": 628
 }
 ],
-"stamp": "1786056586:69404",
 "w": 628
 },
 "images/obrazy/2.jpg": {
 "alpha": false,
 "color": "#57544e",
 "h": 494,
+"hash": "7d55e708cecbd48847af2d142eb2f241",
 "sources": [
 {
 "url": "images/_d/obrazy-2-480.webp",
@@ -1189,13 +1173,13 @@
 "w": 710
 }
 ],
-"stamp": "1786056586:59285",
 "w": 710
 },
 "images/obrazy/20.jpg": {
 "alpha": false,
 "color": "#93857a",
 "h": 640,
+"hash": "aee669d3d6ac2de9a8a0bab64feae775",
 "sources": [
 {
 "url": "images/_d/obrazy-20-480.webp",
@@ -1206,13 +1190,13 @@
 "w": 523
 }
 ],
-"stamp": "1786056586:61442",
 "w": 523
 },
 "images/obrazy/21.jpg": {
 "alpha": false,
 "color": "#a2988f",
 "h": 943,
+"hash": "8d776a2a32d9822756a91f3dfd9dbd0c",
 "sources": [
 {
 "url": "images/_d/obrazy-21-480.webp",
@@ -1227,13 +1211,13 @@
 "w": 945
 }
 ],
-"stamp": "1786056586:108926",
 "w": 945
 },
 "images/obrazy/22.jpg": {
 "alpha": false,
 "color": "#8e8780",
 "h": 730,
+"hash": "b5bdb1cf73ac74068e97bb12a33a8ca0",
 "sources": [
 {
 "url": "images/_d/obrazy-22-480.webp",
@@ -1244,13 +1228,13 @@
 "w": 730
 }
 ],
-"stamp": "1786056586:90339",
 "w": 730
 },
 "images/obrazy/23.jpg": {
 "alpha": false,
 "color": "#3f5f77",
 "h": 852,
+"hash": "e0bc97d5f6cf0011b5c35b16f60486ea",
 "sources": [
 {
 "url": "images/_d/obrazy-23-480.webp",
@@ -1265,13 +1249,13 @@
 "w": 960
 }
 ],
-"stamp": "1786056586:84484",
 "w": 960
 },
 "images/obrazy/24.jpg": {
 "alpha": false,
 "color": "#6b6a5a",
 "h": 889,
+"hash": "d6d4c4698f0fc233063f3b8bfbff1873",
 "sources": [
 {
 "url": "images/_d/obrazy-24-480.webp",
@@ -1286,13 +1270,13 @@
 "w": 945
 }
 ],
-"stamp": "1786056586:103666",
 "w": 945
 },
 "images/obrazy/25.jpg": {
 "alpha": false,
 "color": "#6e5b43",
 "h": 943,
+"hash": "ab292853ca4ce9550fbf9906b8b423ef",
 "sources": [
 {
 "url": "images/_d/obrazy-25-480.webp",
@@ -1307,13 +1291,13 @@
 "w": 945
 }
 ],
-"stamp": "1786056586:112395",
 "w": 945
 },
 "images/obrazy/26.png": {
 "alpha": true,
 "color": "#82776c",
 "h": 960,
+"hash": "93b7283645feb5c2c2f6ff177a0200bc",
 "sources": [
 {
 "url": "images/_d/obrazy-26-480.webp",
@@ -1328,13 +1312,13 @@
 "w": 896
 }
 ],
-"stamp": "1786056586:1605352",
 "w": 896
 },
 "images/obrazy/27.jpg": {
 "alpha": false,
 "color": "#a4a099",
 "h": 1850,
+"hash": "8e4f53df5e629af2210be497f601b181",
 "sources": [
 {
 "url": "images/_d/obrazy-27-480.webp",
@@ -1353,13 +1337,13 @@
 "w": 1536
 }
 ],
-"stamp": "1786056586:231136",
 "w": 1536
 },
 "images/obrazy/28.jpg": {
 "alpha": false,
 "color": "#533934",
 "h": 704,
+"hash": "210fa59ae5786ec8bc53ce944e1ca39b",
 "sources": [
 {
 "url": "images/_d/obrazy-28-480.webp",
@@ -1374,13 +1358,13 @@
 "w": 945
 }
 ],
-"stamp": "1786056586:71636",
 "w": 945
 },
 "images/obrazy/29.jpg": {
 "alpha": false,
 "color": "#877e6e",
 "h": 1743,
+"hash": "3707a76c08485505ec028a3133a07cae",
 "sources": [
 {
 "url": "images/_d/obrazy-29-480.webp",
@@ -1399,13 +1383,13 @@
 "w": 1536
 }
 ],
-"stamp": "1786056586:176992",
 "w": 1536
 },
 "images/obrazy/3.jpg": {
 "alpha": false,
 "color": "#9a9a8f",
 "h": 544,
+"hash": "579f1bb6eeb094020aa26ef2efa49691",
 "sources": [
 {
 "url": "images/_d/obrazy-3-480.webp",
@@ -1416,13 +1400,13 @@
 "w": 716
 }
 ],
-"stamp": "1786056586:68948",
 "w": 716
 },
 "images/obrazy/30.jpg": {
 "alpha": false,
 "color": "#545552",
 "h": 1244,
+"hash": "30cac96fa7cbada051fea05162a98e9e",
 "sources": [
 {
 "url": "images/_d/obrazy-30-480.webp",
@@ -1441,13 +1425,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:134677",
 "w": 1290
 },
 "images/obrazy/31.jpg": {
 "alpha": false,
 "color": "#515f66",
 "h": 1496,
+"hash": "4b9404d863fbf5c3ccbf785e0736607e",
 "sources": [
 {
 "url": "images/_d/obrazy-31-480.webp",
@@ -1466,13 +1450,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:221613",
 "w": 1290
 },
 "images/obrazy/32.jpg": {
 "alpha": false,
 "color": "#968782",
 "h": 1748,
+"hash": "0f083fb4c1e8f45a8fb2962661aeab8e",
 "sources": [
 {
 "url": "images/_d/obrazy-32-480.webp",
@@ -1491,13 +1475,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:299776",
 "w": 1290
 },
 "images/obrazy/33.jpg": {
 "alpha": false,
 "color": "#4b4942",
 "h": 1442,
+"hash": "4134992d23c8b4212138e029d9514166",
 "sources": [
 {
 "url": "images/_d/obrazy-33-480.webp",
@@ -1516,13 +1500,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:177332",
 "w": 1290
 },
 "images/obrazy/34.jpg": {
 "alpha": false,
 "color": "#565650",
 "h": 1958,
+"hash": "061ca85636debe7ad5ab7824e1d9c6aa",
 "sources": [
 {
 "url": "images/_d/obrazy-34-480.webp",
@@ -1541,13 +1525,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:186937",
 "w": 1290
 },
 "images/obrazy/35.jpg": {
 "alpha": false,
 "color": "#464434",
 "h": 1652,
+"hash": "368df2ae92f6d5ffef17f655007f11fe",
 "sources": [
 {
 "url": "images/_d/obrazy-35-480.webp",
@@ -1566,13 +1550,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:242070",
 "w": 1290
 },
 "images/obrazy/36.jpg": {
 "alpha": false,
 "color": "#bdb9aa",
 "h": 1496,
+"hash": "413c0385816cf7b6302540ccb0946609",
 "sources": [
 {
 "url": "images/_d/obrazy-36-480.webp",
@@ -1591,13 +1575,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:138635",
 "w": 1290
 },
 "images/obrazy/37.jpg": {
 "alpha": false,
 "color": "#a88a79",
 "h": 1196,
+"hash": "ae72748d115a672b5a407b87bfe38c5f",
 "sources": [
 {
 "url": "images/_d/obrazy-37-480.webp",
@@ -1616,13 +1600,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:169725",
 "w": 1290
 },
 "images/obrazy/38.jpg": {
 "alpha": false,
 "color": "#938173",
 "h": 857,
+"hash": "be6f0a9810c6a7fd4b4e45d243dcd7f9",
 "sources": [
 {
 "url": "images/_d/obrazy-38-480.webp",
@@ -1637,13 +1621,13 @@
 "w": 857
 }
 ],
-"stamp": "1786056586:126801",
 "w": 857
 },
 "images/obrazy/39.jpg": {
 "alpha": false,
 "color": "#888175",
 "h": 1292,
+"hash": "b9aab3a4cb086b7824abcc9a29db5f2b",
 "sources": [
 {
 "url": "images/_d/obrazy-39-480.webp",
@@ -1662,13 +1646,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:204037",
 "w": 1290
 },
 "images/obrazy/4.jpg": {
 "alpha": false,
 "color": "#a8a497",
 "h": 939,
+"hash": "3612f96839207bff779444248c8cd0f2",
 "sources": [
 {
 "url": "images/_d/obrazy-4-480.webp",
@@ -1683,13 +1667,13 @@
 "w": 945
 }
 ],
-"stamp": "1786056586:134198",
 "w": 945
 },
 "images/obrazy/40.jpg": {
 "alpha": false,
 "color": "#716758",
 "h": 1290,
+"hash": "9888f6ec0d003f9f15fdf2d6dd968131",
 "sources": [
 {
 "url": "images/_d/obrazy-40-480.webp",
@@ -1708,13 +1692,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:169236",
 "w": 1290
 },
 "images/obrazy/41.jpg": {
 "alpha": false,
 "color": "#807b6a",
 "h": 1344,
+"hash": "7c1a8c65dee1c85febce862a492ed59e",
 "sources": [
 {
 "url": "images/_d/obrazy-41-480.webp",
@@ -1733,13 +1717,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:184418",
 "w": 1290
 },
 "images/obrazy/42.jpg": {
 "alpha": false,
 "color": "#564b42",
 "h": 1842,
+"hash": "ebc2e9721bb61cabc4704f02addca3c0",
 "sources": [
 {
 "url": "images/_d/obrazy-42-480.webp",
@@ -1758,13 +1742,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:189497",
 "w": 1290
 },
 "images/obrazy/43.jpg": {
 "alpha": false,
 "color": "#646142",
 "h": 1394,
+"hash": "54513bc6b21c1d5486ee07f32b0a5070",
 "sources": [
 {
 "url": "images/_d/obrazy-43-480.webp",
@@ -1783,13 +1767,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:241098",
 "w": 1290
 },
 "images/obrazy/44.png": {
 "alpha": true,
 "color": "#5d6052",
 "h": 1518,
+"hash": "5a5161445140f71870c0d188593f58e8",
 "sources": [
 {
 "url": "images/_d/obrazy-44-480.webp",
@@ -1808,13 +1792,13 @@
 "w": 1519
 }
 ],
-"stamp": "1786056586:2659726",
 "w": 1519
 },
 "images/obrazy/45.jpg": {
 "alpha": false,
 "color": "#403c3e",
 "h": 1554,
+"hash": "647300c02539623a0c436e1f2c7208c4",
 "sources": [
 {
 "url": "images/_d/obrazy-45-480.webp",
@@ -1833,13 +1817,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:130308",
 "w": 1290
 },
 "images/obrazy/46.jpg": {
 "alpha": false,
 "color": "#5d5b58",
 "h": 1260,
+"hash": "0f145676d8da6a1d1c07bccf8e46e07a",
 "sources": [
 {
 "url": "images/_d/obrazy-46-480.webp",
@@ -1858,13 +1842,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:106634",
 "w": 1290
 },
 "images/obrazy/47.jpg": {
 "alpha": false,
 "color": "#8f7d6e",
 "h": 916,
+"hash": "178f5baa17b6ac0ac5b286aeb9e68419",
 "sources": [
 {
 "url": "images/_d/obrazy-47-480.webp",
@@ -1879,13 +1863,13 @@
 "w": 1093
 }
 ],
-"stamp": "1786056586:126440",
 "w": 1093
 },
 "images/obrazy/48.jpg": {
 "alpha": false,
 "color": "#aaa69d",
 "h": 1776,
+"hash": "79afa0cb98658010f49344d8f8356ddc",
 "sources": [
 {
 "url": "images/_d/obrazy-48-480.webp",
@@ -1904,13 +1888,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:216169",
 "w": 1290
 },
 "images/obrazy/49.jpg": {
 "alpha": false,
 "color": "#756e51",
 "h": 1650,
+"hash": "59603f7f4a9feec5d46441eb938fdd9b",
 "sources": [
 {
 "url": "images/_d/obrazy-49-480.webp",
@@ -1929,13 +1913,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:247934",
 "w": 1290
 },
 "images/obrazy/5.jpg": {
 "alpha": false,
 "color": "#84928d",
 "h": 960,
+"hash": "088cbdcad0892ca2f6ceac37d3371a65",
 "sources": [
 {
 "url": "images/_d/obrazy-5-480.webp",
@@ -1946,13 +1930,13 @@
 "w": 714
 }
 ],
-"stamp": "1786056586:103371",
 "w": 714
 },
 "images/obrazy/50.jpg": {
 "alpha": false,
 "color": "#776a4d",
 "h": 1290,
+"hash": "834732f30d9ff5ee3f601b220e93113c",
 "sources": [
 {
 "url": "images/_d/obrazy-50-480.webp",
@@ -1971,13 +1955,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:180841",
 "w": 1290
 },
 "images/obrazy/51.jpg": {
 "alpha": false,
 "color": "#6c6455",
 "h": 1290,
+"hash": "9daa36a9b40ab3f017b2c2fa73f13a25",
 "sources": [
 {
 "url": "images/_d/obrazy-51-480.webp",
@@ -1996,13 +1980,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:183209",
 "w": 1290
 },
 "images/obrazy/52.jpg": {
 "alpha": false,
 "color": "#8a7a6a",
 "h": 1242,
+"hash": "f96e9b822e5582b0dccdf524d2c6a7e1",
 "sources": [
 {
 "url": "images/_d/obrazy-52-480.webp",
@@ -2021,13 +2005,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:162444",
 "w": 1290
 },
 "images/obrazy/53.jpg": {
 "alpha": false,
 "color": "#606459",
 "h": 1836,
+"hash": "54de284cf3dedb8c426f5ead3d862a50",
 "sources": [
 {
 "url": "images/_d/obrazy-53-480.webp",
@@ -2046,13 +2030,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:238943",
 "w": 1290
 },
 "images/obrazy/54.jpg": {
 "alpha": false,
 "color": "#808568",
 "h": 1290,
+"hash": "878d93ff4197792b71c20760eceb3cf9",
 "sources": [
 {
 "url": "images/_d/obrazy-54-480.webp",
@@ -2071,13 +2055,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:194991",
 "w": 1290
 },
 "images/obrazy/55.jpg": {
 "alpha": false,
 "color": "#9e897d",
 "h": 1824,
+"hash": "c514ddef09c0615fa07c8957f08c3c9a",
 "sources": [
 {
 "url": "images/_d/obrazy-55-480.webp",
@@ -2096,13 +2080,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:205139",
 "w": 1290
 },
 "images/obrazy/56.jpg": {
 "alpha": false,
 "color": "#938474",
 "h": 1137,
+"hash": "6d2dafc511554709e8e644e8a88b959b",
 "sources": [
 {
 "url": "images/_d/obrazy-56-480.webp",
@@ -2117,13 +2101,13 @@
 "w": 1140
 }
 ],
-"stamp": "1786056586:170957",
 "w": 1140
 },
 "images/obrazy/57.jpg": {
 "alpha": false,
 "color": "#b38879",
 "h": 1548,
+"hash": "11991632b19fd2d469ddf2a5696a857b",
 "sources": [
 {
 "url": "images/_d/obrazy-57-480.webp",
@@ -2142,13 +2126,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:203483",
 "w": 1290
 },
 "images/obrazy/58.jpg": {
 "alpha": false,
 "color": "#a5a3a5",
 "h": 1290,
+"hash": "9315f4d1a6fb4483327977e72e199707",
 "sources": [
 {
 "url": "images/_d/obrazy-58-480.webp",
@@ -2167,13 +2151,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:190728",
 "w": 1290
 },
 "images/obrazy/59.jpg": {
 "alpha": false,
 "color": "#787874",
 "h": 960,
+"hash": "741b0e725b62b26d25142ef00e9db0a0",
 "sources": [
 {
 "url": "images/_d/obrazy-59-480.webp",
@@ -2188,13 +2172,13 @@
 "w": 918
 }
 ],
-"stamp": "1786056586:101091",
 "w": 918
 },
 "images/obrazy/6.jpg": {
 "alpha": false,
 "color": "#a29882",
 "h": 939,
+"hash": "36ac904a01d40f674e103a5b7c1ba28a",
 "sources": [
 {
 "url": "images/_d/obrazy-6-480.webp",
@@ -2209,13 +2193,13 @@
 "w": 945
 }
 ],
-"stamp": "1786056586:164373",
 "w": 945
 },
 "images/obrazy/60.jpg": {
 "alpha": false,
 "color": "#797875",
 "h": 1145,
+"hash": "3401ed5651246572d141990764715f78",
 "sources": [
 {
 "url": "images/_d/obrazy-60-480.webp",
@@ -2230,13 +2214,13 @@
 "w": 1171
 }
 ],
-"stamp": "1786056586:158101",
 "w": 1171
 },
 "images/obrazy/61.jpg": {
 "alpha": false,
 "color": "#85846b",
 "h": 1136,
+"hash": "3cd58f58e6e8e717948f10af73994d42",
 "sources": [
 {
 "url": "images/_d/obrazy-61-480.webp",
@@ -2251,13 +2235,13 @@
 "w": 912
 }
 ],
-"stamp": "1786056586:130716",
 "w": 912
 },
 "images/obrazy/62.jpeg": {
 "alpha": false,
 "color": "#8c7460",
 "h": 1600,
+"hash": "ec8da55bace8024d7b629cf2cf6dbb19",
 "sources": [
 {
 "url": "images/_d/obrazy-62-480.webp",
@@ -2272,13 +2256,13 @@
 "w": 1260
 }
 ],
-"stamp": "1786056586:213968",
 "w": 1260
 },
 "images/obrazy/63.jpeg": {
 "alpha": false,
 "color": "#766d52",
 "h": 1290,
+"hash": "117addb945d937b8a7e22777f54032bc",
 "sources": [
 {
 "url": "images/_d/obrazy-63-480.webp",
@@ -2297,13 +2281,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:217618",
 "w": 1290
 },
 "images/obrazy/64.jpg": {
 "alpha": false,
 "color": "#695b4d",
 "h": 1836,
+"hash": "f3ad941e26a27a55419e5f60cf8ee65f",
 "sources": [
 {
 "url": "images/_d/obrazy-64-480.webp",
@@ -2322,13 +2306,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:246332",
 "w": 1290
 },
 "images/obrazy/65.jpg": {
 "alpha": false,
 "color": "#8a7764",
 "h": 1344,
+"hash": "6ad35cdf571ba8818ed9e4002488f83d",
 "sources": [
 {
 "url": "images/_d/obrazy-65-480.webp",
@@ -2347,13 +2331,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:161197",
 "w": 1290
 },
 "images/obrazy/66.jpg": {
 "alpha": false,
 "color": "#6a5733",
 "h": 1824,
+"hash": "70c751edf71d5e44ca221ac9724b790f",
 "sources": [
 {
 "url": "images/_d/obrazy-66-480.webp",
@@ -2372,13 +2356,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:192711",
 "w": 1290
 },
 "images/obrazy/67.jpeg": {
 "alpha": false,
 "color": "#6a7176",
 "h": 1600,
+"hash": "02c496c4fa3edf4aba891d864bc6533d",
 "sources": [
 {
 "url": "images/_d/obrazy-67-480.webp",
@@ -2393,13 +2377,13 @@
 "w": 1039
 }
 ],
-"stamp": "1786056586:157747",
 "w": 1039
 },
 "images/obrazy/68.jpeg": {
 "alpha": false,
 "color": "#3d4652",
 "h": 1129,
+"hash": "789202c5ea1d7bc67fe8615cfe78027a",
 "sources": [
 {
 "url": "images/_d/obrazy-68-480.webp",
@@ -2414,13 +2398,13 @@
 "w": 1118
 }
 ],
-"stamp": "1786056586:224877",
 "w": 1118
 },
 "images/obrazy/69.jpeg": {
 "alpha": false,
 "color": "#55615d",
 "h": 1085,
+"hash": "122b284898b4b5936755d781beb5f05d",
 "sources": [
 {
 "url": "images/_d/obrazy-69-480.webp",
@@ -2435,13 +2419,13 @@
 "w": 1088
 }
 ],
-"stamp": "1786056586:181131",
 "w": 1088
 },
 "images/obrazy/7.jpg": {
 "alpha": false,
 "color": "#a79f95",
 "h": 595,
+"hash": "8c3798701787e8045ee9cf0b2e8d6dcf",
 "sources": [
 {
 "url": "images/_d/obrazy-7-480.webp",
@@ -2452,13 +2436,13 @@
 "w": 716
 }
 ],
-"stamp": "1786056586:76997",
 "w": 716
 },
 "images/obrazy/70.jpeg": {
 "alpha": false,
 "color": "#897e6b",
 "h": 1032,
+"hash": "b1b9a32867661f54c07b0b3de1fd0785",
 "sources": [
 {
 "url": "images/_d/obrazy-70-480.webp",
@@ -2477,13 +2461,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:133488",
 "w": 1290
 },
 "images/obrazy/72.jpeg": {
 "alpha": false,
 "color": "#9d988f",
 "h": 1134,
+"hash": "1ac5871154a6ef67b1119c2f01c23d10",
 "sources": [
 {
 "url": "images/_d/obrazy-72-480.webp",
@@ -2498,13 +2482,13 @@
 "w": 1135
 }
 ],
-"stamp": "1786056586:138073",
 "w": 1135
 },
 "images/obrazy/73.jpeg": {
 "alpha": false,
 "color": "#516171",
 "h": 1151,
+"hash": "ffea3326fbc2f37376d43868fcb89d6f",
 "sources": [
 {
 "url": "images/_d/obrazy-73-480.webp",
@@ -2519,13 +2503,13 @@
 "w": 1161
 }
 ],
-"stamp": "1786056586:160340",
 "w": 1161
 },
 "images/obrazy/74.jpeg": {
 "alpha": false,
 "color": "#4e4a39",
 "h": 1531,
+"hash": "00fc4e4151a4ff18ff0aee456e776cd5",
 "sources": [
 {
 "url": "images/_d/obrazy-74-480.webp",
@@ -2540,13 +2524,13 @@
 "w": 1013
 }
 ],
-"stamp": "1786056586:133093",
 "w": 1013
 },
 "images/obrazy/75.jpeg": {
 "alpha": false,
 "color": "#a69d97",
 "h": 1277,
+"hash": "6940963b71dbe6d17de2f7b08f64730f",
 "sources": [
 {
 "url": "images/_d/obrazy-75-480.webp",
@@ -2565,13 +2549,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:206056",
 "w": 1290
 },
 "images/obrazy/76.jpeg": {
 "alpha": false,
 "color": "#937f76",
 "h": 1631,
+"hash": "ef3a292bef3c223f7b90870bf6b3d22e",
 "sources": [
 {
 "url": "images/_d/obrazy-76-480.webp",
@@ -2586,13 +2570,13 @@
 "w": 1217
 }
 ],
-"stamp": "1786056586:271148",
 "w": 1217
 },
 "images/obrazy/77.jpeg": {
 "alpha": false,
 "color": "#53616b",
 "h": 1539,
+"hash": "2b07b963a085fe8e7217be4b61b2c86d",
 "sources": [
 {
 "url": "images/_d/obrazy-77-480.webp",
@@ -2607,13 +2591,13 @@
 "w": 1003
 }
 ],
-"stamp": "1786056586:242784",
 "w": 1003
 },
 "images/obrazy/78.jpeg": {
 "alpha": false,
 "color": "#6c5950",
 "h": 1004,
+"hash": "af8a022ad7de5bad435cfafebcf9c020",
 "sources": [
 {
 "url": "images/_d/obrazy-78-480.webp",
@@ -2624,13 +2608,13 @@
 "w": 669
 }
 ],
-"stamp": "1786056586:127333",
 "w": 669
 },
 "images/obrazy/79.jpeg": {
 "alpha": false,
 "color": "#8d877d",
 "h": 1180,
+"hash": "040f3dc7d9341e08e3ea427fb6b1a26e",
 "sources": [
 {
 "url": "images/_d/obrazy-79-480.webp",
@@ -2645,13 +2629,13 @@
 "w": 890
 }
 ],
-"stamp": "1786056586:157684",
 "w": 890
 },
 "images/obrazy/8.jpg": {
 "alpha": false,
 "color": "#b3ada3",
 "h": 960,
+"hash": "de3b662d8e0782fe17ed884e61ba04ad",
 "sources": [
 {
 "url": "images/_d/obrazy-8-480.webp",
@@ -2666,13 +2650,13 @@
 "w": 879
 }
 ],
-"stamp": "1786056586:93381",
 "w": 879
 },
 "images/obrazy/80.jpeg": {
 "alpha": false,
 "color": "#5b4633",
 "h": 1573,
+"hash": "3190eaa532dc7058a5dfc5ce07ce36e2",
 "sources": [
 {
 "url": "images/_d/obrazy-80-480.webp",
@@ -2687,13 +2671,13 @@
 "w": 1043
 }
 ],
-"stamp": "1786056586:202389",
 "w": 1043
 },
 "images/obrazy/81.jpeg": {
 "alpha": false,
 "color": "#9c948a",
 "h": 1556,
+"hash": "f5036690c480460ea1f0b1b03f857696",
 "sources": [
 {
 "url": "images/_d/obrazy-81-480.webp",
@@ -2708,13 +2692,13 @@
 "w": 1096
 }
 ],
-"stamp": "1786056586:335347",
 "w": 1096
 },
 "images/obrazy/82.jpeg": {
 "alpha": false,
 "color": "#696c59",
 "h": 1361,
+"hash": "0e9d3c597bd138d44488e4671a0740c3",
 "sources": [
 {
 "url": "images/_d/obrazy-82-480.webp",
@@ -2729,13 +2713,13 @@
 "w": 944
 }
 ],
-"stamp": "1786056586:247650",
 "w": 944
 },
 "images/obrazy/84.jpeg": {
 "alpha": false,
 "color": "#68664d",
 "h": 1673,
+"hash": "831058b23a1b89a1c44e9e1070dd7ba1",
 "sources": [
 {
 "url": "images/_d/obrazy-84-480.webp",
@@ -2750,13 +2734,13 @@
 "w": 1109
 }
 ],
-"stamp": "1786056586:340367",
 "w": 1109
 },
 "images/obrazy/85.jpeg": {
 "alpha": false,
 "color": "#595552",
 "h": 1180,
+"hash": "009e06013426aba68a5d1e19909ad104",
 "sources": [
 {
 "url": "images/_d/obrazy-85-480.webp",
@@ -2771,13 +2755,13 @@
 "w": 1173
 }
 ],
-"stamp": "1786056586:288352",
 "w": 1173
 },
 "images/obrazy/86.png": {
 "alpha": true,
 "color": "#6a5e52",
 "h": 1790,
+"hash": "878983ba7c79fa2daf892815ffa390d4",
 "sources": [
 {
 "url": "images/_d/obrazy-86-480.webp",
@@ -2792,13 +2776,13 @@
 "w": 1182
 }
 ],
-"stamp": "1786056586:2708993",
 "w": 1182
 },
 "images/obrazy/87.jpeg": {
 "alpha": false,
 "color": "#b58d4e",
 "h": 1160,
+"hash": "a34a005f6fe7b8d4d10cce8a08383106",
 "sources": [
 {
 "url": "images/_d/obrazy-87-480.webp",
@@ -2813,13 +2797,13 @@
 "w": 1223
 }
 ],
-"stamp": "1786056586:193303",
 "w": 1223
 },
 "images/obrazy/88.jpeg": {
 "alpha": false,
 "color": "#6c6453",
 "h": 1224,
+"hash": "dd8fe3dceaee147b6cfeab8e1f0bdd27",
 "sources": [
 {
 "url": "images/_d/obrazy-88-480.webp",
@@ -2838,13 +2822,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:155696",
 "w": 1290
 },
 "images/obrazy/89.jpeg": {
 "alpha": false,
 "color": "#7e8691",
 "h": 1224,
+"hash": "9564cc90c0d635116606569206791ab8",
 "sources": [
 {
 "url": "images/_d/obrazy-89-480.webp",
@@ -2859,13 +2843,13 @@
 "w": 1049
 }
 ],
-"stamp": "1786056586:145918",
 "w": 1049
 },
 "images/obrazy/9.jpg": {
 "alpha": false,
 "color": "#b7ae9b",
 "h": 960,
+"hash": "275a7572a6780545328b5190ba191278",
 "sources": [
 {
 "url": "images/_d/obrazy-9-480.webp",
@@ -2876,13 +2860,13 @@
 "w": 739
 }
 ],
-"stamp": "1786056586:91334",
 "w": 739
 },
 "images/projekty/WhatsApp Image 2025-04-04 at 5.03.47 PM.jpeg": {
 "alpha": false,
 "color": "#615756",
 "h": 1426,
+"hash": "c199f4b6eb6f1477e5ea70feb1d74aa4",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-04-at-5-03-47-pm-480.webp",
@@ -2901,13 +2885,13 @@
 "w": 1440
 }
 ],
-"stamp": "1786056586:76931",
 "w": 1440
 },
 "images/projekty/WhatsApp Image 2025-04-04 at 5.08.08 PM(1).jpeg": {
 "alpha": false,
 "color": "#826361",
 "h": 2015,
+"hash": "12bbf1ef74f6fe2ea75567cf2943eeeb",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-04-at-5-08-08-pm-1-480.webp",
@@ -2926,26 +2910,26 @@
 "w": 1691
 }
 ],
-"stamp": "1786056586:415756",
 "w": 1691
 },
 "images/projekty/WhatsApp Image 2025-04-04 at 5.30.54 PM.jpeg": {
 "alpha": false,
 "color": "#87705c",
 "h": 597,
+"hash": "6a8a6447ea8f365fa1dcb4ffeaf43ec7",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-04-at-5-30-54-pm-477.webp",
 "w": 477
 }
 ],
-"stamp": "1786056586:44583",
 "w": 477
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 1.17.22 PM.jpeg": {
 "alpha": false,
 "color": "#7a9ea9",
 "h": 1527,
+"hash": "ad3f17bbb73af14cd535ada1b625fc86",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-1-17-22-pm-480.webp",
@@ -2960,13 +2944,13 @@
 "w": 1080
 }
 ],
-"stamp": "1786056586:240585",
 "w": 1080
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 1.33.17 PM.jpeg": {
 "alpha": false,
 "color": "#7d6d69",
 "h": 2048,
+"hash": "3923d0e015021dc2acb669ffcb578b16",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-1-33-17-pm-480.webp",
@@ -2985,13 +2969,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056586:355987",
 "w": 2048
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 1.40.53 PM.jpeg": {
 "alpha": false,
 "color": "#82766f",
 "h": 1080,
+"hash": "86a6d279c8a389ff0f0b250242f8aa3f",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-1-40-53-pm-480.webp",
@@ -3010,13 +2994,13 @@
 "w": 1440
 }
 ],
-"stamp": "1786056586:274770",
 "w": 1440
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 1.48.54 PM.jpeg": {
 "alpha": false,
 "color": "#665a52",
 "h": 2048,
+"hash": "bd1baada9f576a0512597608ea7eaa03",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-1-48-54-pm-480.webp",
@@ -3035,26 +3019,26 @@
 "w": 1365
 }
 ],
-"stamp": "1786056586:240004",
 "w": 1365
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 1.57.11 PM.jpeg": {
 "alpha": false,
 "color": "#646567",
 "h": 700,
+"hash": "16e59eb09a15829a8da2ee342d31a77c",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-1-57-11-pm-448.webp",
 "w": 448
 }
 ],
-"stamp": "1786056586:44082",
 "w": 448
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 2.01.14 PM.jpeg": {
 "alpha": false,
 "color": "#95877c",
 "h": 999,
+"hash": "700c7eaa227194cdea4e8ee1f2f40894",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-2-01-14-pm-480.webp",
@@ -3069,13 +3053,13 @@
 "w": 945
 }
 ],
-"stamp": "1786056586:79949",
 "w": 945
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 2.19.38 PM.jpeg": {
 "alpha": false,
 "color": "#a28b67",
 "h": 2048,
+"hash": "4a15d2f0b8d25fa8884804db2b356238",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-2-19-38-pm-480.webp",
@@ -3094,13 +3078,13 @@
 "w": 1365
 }
 ],
-"stamp": "1786056586:325329",
 "w": 1365
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 2.27.54 PM.jpeg": {
 "alpha": false,
 "color": "#c1aaa5",
 "h": 1958,
+"hash": "6e46045a2e7e3004c5f6a74c8f4093b3",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-2-27-54-pm-480.webp",
@@ -3119,13 +3103,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056586:214113",
 "w": 2048
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 2.31.37 PM.jpeg": {
 "alpha": false,
 "color": "#bca4b5",
 "h": 1814,
+"hash": "f410c0a4bc5d123618a702415a4f1c0f",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-2-31-37-pm-480.webp",
@@ -3144,13 +3128,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:185436",
 "w": 1290
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 2.37.32 PM.jpeg": {
 "alpha": false,
 "color": "#958b7a",
 "h": 960,
+"hash": "d52f01f36393a75788f233b1f890b735",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-2-37-32-pm-480.webp",
@@ -3161,13 +3145,13 @@
 "w": 720
 }
 ],
-"stamp": "1786056586:69923",
 "w": 720
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 2.41.20 PM.jpeg": {
 "alpha": false,
 "color": "#64483c",
 "h": 1796,
+"hash": "3befcd4eae386bd2fd450b4787c22003",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-2-41-20-pm-480.webp",
@@ -3186,13 +3170,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:188349",
 "w": 1290
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 2.43.52 PM.jpeg": {
 "alpha": false,
 "color": "#4e3e29",
 "h": 960,
+"hash": "b26c0c3304251d728656a614c6748cff",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-2-43-52-pm-480.webp",
@@ -3207,13 +3191,13 @@
 "w": 959
 }
 ],
-"stamp": "1786056586:44889",
 "w": 959
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 2.50.42 PM.jpeg": {
 "alpha": false,
 "color": "#e8c3c6",
 "h": 960,
+"hash": "0e50fdda70610a49e5f998cad2cdde9b",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-2-50-42-pm-480.webp",
@@ -3224,13 +3208,13 @@
 "w": 634
 }
 ],
-"stamp": "1786056586:52613",
 "w": 634
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 2.53.32 PM.jpeg": {
 "alpha": false,
 "color": "#c4bd6b",
 "h": 1024,
+"hash": "2e4d44cfa5ad7932f9bc2cb489d7f820",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-2-53-32-pm-480.webp",
@@ -3241,13 +3225,13 @@
 "w": 712
 }
 ],
-"stamp": "1786056586:92118",
 "w": 712
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 2.57.01 PM.jpeg": {
 "alpha": false,
 "color": "#8b9078",
 "h": 1799,
+"hash": "c8ac1321f0158ec899a7686607a63d66",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-2-57-01-pm-480.webp",
@@ -3266,13 +3250,13 @@
 "w": 1440
 }
 ],
-"stamp": "1786056586:211478",
 "w": 1440
 },
 "images/projekty/WhatsApp Image 2025-04-05 at 3.10.50 PM.jpeg": {
 "alpha": false,
 "color": "#d7d6d1",
 "h": 534,
+"hash": "5d0faa95f301835f100e0d34fa2db096",
 "sources": [
 {
 "url": "images/_d/projekty-whatsapp-image-2025-04-05-at-3-10-50-pm-480.webp",
@@ -3283,13 +3267,13 @@
 "w": 534
 }
 ],
-"stamp": "1786056586:52709",
 "w": 534
 },
 "images/projekty/WotRweb.png": {
 "alpha": true,
 "color": "#7a9faa",
 "h": 1240,
+"hash": "8353fdfbdbda820ed2612fe4a61fac29",
 "sources": [
 {
 "url": "images/_d/projekty-wotrweb-480.webp",
@@ -3304,13 +3288,13 @@
 "w": 877
 }
 ],
-"stamp": "1786056586:1465954",
 "w": 877
 },
 "images/projekty/behanismarimagdalenou.png": {
 "alpha": true,
 "color": "#a09086",
 "h": 1518,
+"hash": "2986ef6ee85771402b960834a5127adc",
 "sources": [
 {
 "url": "images/_d/projekty-behanismarimagdalenou-480.webp",
@@ -3325,13 +3309,13 @@
 "w": 1075
 }
 ],
-"stamp": "1786056586:1580446",
 "w": 1075
 },
 "images/projekty/bikercats.png": {
 "alpha": true,
 "color": "#5d5a5a",
 "h": 1192,
+"hash": "1c2f0e6514570e35697a5ea2a68c3647",
 "sources": [
 {
 "url": "images/_d/projekty-bikercats-480.webp",
@@ -3346,13 +3330,13 @@
 "w": 1192
 }
 ],
-"stamp": "1786056586:2387504",
 "w": 1192
 },
 "images/projekty/charitativnikalendar.png": {
 "alpha": true,
 "color": "#6e6258",
 "h": 1604,
+"hash": "80f4cf4d04d04badb6513ff1f323afc1",
 "sources": [
 {
 "url": "images/_d/projekty-charitativnikalendar-480.webp",
@@ -3371,13 +3355,13 @@
 "w": 1282
 }
 ],
-"stamp": "1786056586:3945406",
 "w": 1282
 },
 "images/projekty/dresscode.jpg": {
 "alpha": false,
 "color": "#66523d",
 "h": 943,
+"hash": "0a6ebe3d5fab79c516e71c3b90349ae7",
 "sources": [
 {
 "url": "images/_d/projekty-dresscode-480.webp",
@@ -3392,13 +3376,13 @@
 "w": 945
 }
 ],
-"stamp": "1786056586:177106",
 "w": 945
 },
 "images/projekty/fashionartshow.png": {
 "alpha": true,
 "color": "#b7a895",
 "h": 4961,
+"hash": "3feb000c069ccfb51a7eff297cedad88",
 "sources": [
 {
 "url": "images/_d/projekty-fashionartshow-480.webp",
@@ -3417,13 +3401,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056586:10457353",
 "w": 3508
 },
 "images/projekty/fashionweek.png": {
 "alpha": true,
 "color": "#54423c",
 "h": 1310,
+"hash": "fca728a33ebba92c090beed5400eb8ad",
 "sources": [
 {
 "url": "images/_d/projekty-fashionweek-480.webp",
@@ -3442,13 +3426,13 @@
 "w": 1748
 }
 ],
-"stamp": "1786056586:3296121",
 "w": 1748
 },
 "images/projekty/focenismodninavrharkoumichaelounausovou.png": {
 "alpha": true,
 "color": "#423637",
 "h": 1876,
+"hash": "beeef95bdd07eab2e18a8266bc9b6d6b",
 "sources": [
 {
 "url": "images/_d/projekty-focenismodninavrharkoumichaelounausovou-480.webp",
@@ -3467,13 +3451,13 @@
 "w": 1878
 }
 ],
-"stamp": "1786056586:5632586",
 "w": 1878
 },
 "images/projekty/jaroslavaprochazkova.png": {
 "alpha": true,
 "color": "#ae8e83",
 "h": 1420,
+"hash": "ce552e0afd235c45a0d9377d3aa78fe8",
 "sources": [
 {
 "url": "images/_d/projekty-jaroslavaprochazkova-480.webp",
@@ -3492,13 +3476,13 @@
 "w": 1420
 }
 ],
-"stamp": "1786056586:4182563",
 "w": 1420
 },
 "images/projekty/keepsmileandbeauty.png": {
 "alpha": true,
 "color": "#807d7a",
 "h": 1712,
+"hash": "4c9c10fab8788fc8847903a2267f60e6",
 "sources": [
 {
 "url": "images/_d/projekty-keepsmileandbeauty-480.webp",
@@ -3517,13 +3501,13 @@
 "w": 1712
 }
 ],
-"stamp": "1786056586:4554747",
 "w": 1712
 },
 "images/projekty/klinika.png": {
 "alpha": true,
 "color": "#7d7471",
 "h": 598,
+"hash": "2b45be55e651fe22484f9054719dc362",
 "sources": [
 {
 "url": "images/_d/projekty-klinika-480.webp",
@@ -3534,13 +3518,13 @@
 "w": 495
 }
 ],
-"stamp": "1786056586:463641",
 "w": 495
 },
 "images/projekty/kvetinovy_workshop.jpg": {
 "alpha": false,
 "color": "#82766f",
 "h": 1080,
+"hash": "9d99286f3994759862e56fd0d360d126",
 "sources": [
 {
 "url": "images/_d/projekty-kvetinovy_workshop-480.webp",
@@ -3559,13 +3543,13 @@
 "w": 1440
 }
 ],
-"stamp": "1786056586:287496",
 "w": 1440
 },
 "images/projekty/kytky_koksina.jpg": {
 "alpha": false,
 "color": "#3b4240",
 "h": 2048,
+"hash": "84dcfddce9591dc6e858d40bf8b062b0",
 "sources": [
 {
 "url": "images/_d/projekty-kytky_koksina-480.webp",
@@ -3584,13 +3568,13 @@
 "w": 1365
 }
 ],
-"stamp": "1786056586:595981",
 "w": 1365
 },
 "images/projekty/masarik.png": {
 "alpha": true,
 "color": "#5b534d",
 "h": 1656,
+"hash": "104f43667c8d037cf85cc71c5760b48f",
 "sources": [
 {
 "url": "images/_d/projekty-masarik-480.webp",
@@ -3609,13 +3593,13 @@
 "w": 1324
 }
 ],
-"stamp": "1786056586:3606420",
 "w": 1324
 },
 "images/projekty/navstevadetizmaterskeskolky.png": {
 "alpha": true,
 "color": "#5f5b55",
 "h": 1622,
+"hash": "2f38f30e84919dac5a36fbc971ffc882",
 "sources": [
 {
 "url": "images/_d/projekty-navstevadetizmaterskeskolky-480.webp",
@@ -3634,13 +3618,13 @@
 "w": 1624
 }
 ],
-"stamp": "1786056586:4001664",
 "w": 1624
 },
 "images/projekty/reprezentacniplesmestadobrany.png": {
 "alpha": true,
 "color": "#936b52",
 "h": 1928,
+"hash": "26f73c0eaec2026a48688e9d1007a880",
 "sources": [
 {
 "url": "images/_d/projekty-reprezentacniplesmestadobrany-480.webp",
@@ -3659,13 +3643,13 @@
 "w": 1542
 }
 ],
-"stamp": "1786056586:5911456",
 "w": 1542
 },
 "images/projekty/sportujavyhraj.jpg": {
 "alpha": false,
 "color": "#807f8c",
 "h": 1734,
+"hash": "a0bfdf26685acb3be9da29267d3cd4ce",
 "sources": [
 {
 "url": "images/_d/projekty-sportujavyhraj-480.webp",
@@ -3684,13 +3668,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056586:327419",
 "w": 2048
 },
 "images/projekty/trendvision.png": {
 "alpha": true,
 "color": "#e6d8db",
 "h": 1818,
+"hash": "0379271cfee75528f22191240060f1ff",
 "sources": [
 {
 "url": "images/_d/projekty-trendvision-480.webp",
@@ -3709,13 +3693,13 @@
 "w": 1814
 }
 ],
-"stamp": "1786056586:2028286",
 "w": 1814
 },
 "images/projekty/wellagoldsalon.png": {
 "alpha": true,
 "color": "#787365",
 "h": 1446,
+"hash": "382c783c7061d74c12a0fae21edb23d2",
 "sources": [
 {
 "url": "images/_d/projekty-wellagoldsalon-480.webp",
@@ -3734,13 +3718,13 @@
 "w": 1450
 }
 ],
-"stamp": "1786056586:3729448",
 "w": 1450
 },
 "images/projekty/zmanazerkykadernici.png": {
 "alpha": true,
 "color": "#d4cace",
 "h": 1796,
+"hash": "8a0b206ba1db60c313b9b4ac85923ed3",
 "sources": [
 {
 "url": "images/_d/projekty-zmanazerkykadernici-480.webp",
@@ -3759,13 +3743,13 @@
 "w": 1448
 }
 ],
-"stamp": "1786056586:4323147",
 "w": 1448
 },
 "images/vystavy/WhatsApp Image 2025-04-01 at 8.08.25 PM.jpeg": {
 "alpha": false,
 "color": "#695b4d",
 "h": 1836,
+"hash": "f3ad941e26a27a55419e5f60cf8ee65f",
 "sources": [
 {
 "url": "images/_d/vystavy-whatsapp-image-2025-04-01-at-8-08-25-pm-480.webp",
@@ -3784,13 +3768,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:246332",
 "w": 1290
 },
 "images/vystavy/WhatsApp Image 2025-04-01 at 8.13.28 PM.jpeg": {
 "alpha": false,
 "color": "#917859",
 "h": 2048,
+"hash": "7446246c5080b670c507b82014df9252",
 "sources": [
 {
 "url": "images/_d/vystavy-whatsapp-image-2025-04-01-at-8-13-28-pm-480.webp",
@@ -3809,13 +3793,13 @@
 "w": 1370
 }
 ],
-"stamp": "1786056586:246391",
 "w": 1370
 },
 "images/vystavy/andelicek.jpeg": {
 "alpha": false,
 "color": "#625958",
 "h": 1918,
+"hash": "f20f8d50351319e74e85c883e9827e9c",
 "sources": [
 {
 "url": "images/_d/vystavy-andelicek-480.webp",
@@ -3834,13 +3818,13 @@
 "w": 1290
 }
 ],
-"stamp": "1786056586:568047",
 "w": 1290
 },
 "images/vystavy/chotesov.jpg": {
 "alpha": false,
 "color": "#58563a",
 "h": 1914,
+"hash": "6438b08227f9b8474c1330aed77968a3",
 "sources": [
 {
 "url": "images/_d/vystavy-chotesov-480.webp",
@@ -3855,13 +3839,13 @@
 "w": 1280
 }
 ],
-"stamp": "1786056586:382845",
 "w": 1280
 },
 "images/vystavy/dnesice.jpeg": {
 "alpha": false,
 "color": "#827967",
 "h": 2048,
+"hash": "4f5ba9a9481b2cc2080b82db485278c7",
 "sources": [
 {
 "url": "images/_d/vystavy-dnesice-480.webp",
@@ -3880,13 +3864,13 @@
 "w": 1536
 }
 ],
-"stamp": "1786056586:714814",
 "w": 1536
 },
 "images/vystavy/kavarna.png": {
 "alpha": false,
 "color": "#c2bcb0",
 "h": 1600,
+"hash": "033ed990e229482f32e129364a648a4f",
 "sources": [
 {
 "url": "images/_d/vystavy-kavarna-480.webp",
@@ -3901,13 +3885,13 @@
 "w": 1131
 }
 ],
-"stamp": "1786056586:2881446",
 "w": 1131
 },
 "images/vystavy/leconsulat.jpg": {
 "alpha": false,
 "color": "#a07964",
 "h": 756,
+"hash": "4a7915261df6fe389a43f88aae9b9f92",
 "sources": [
 {
 "url": "images/_d/vystavy-leconsulat-480.webp",
@@ -3922,13 +3906,13 @@
 "w": 1134
 }
 ],
-"stamp": "1786056586:72355",
 "w": 1134
 },
 "images/vystavy/nausova.jpg": {
 "alpha": false,
 "color": "#895b54",
 "h": 1558,
+"hash": "c6a0402b3a85ffd97bf7bb314c1bc012",
 "sources": [
 {
 "url": "images/_d/vystavy-nausova-480.webp",
@@ -3943,13 +3927,13 @@
 "w": 1119
 }
 ],
-"stamp": "1786056586:198395",
 "w": 1119
 },
 "images/vystavy/parkhotel.jpg": {
 "alpha": false,
 "color": "#9e836a",
 "h": 2048,
+"hash": "7f44d9a499148e08421562d0897ecfbf",
 "sources": [
 {
 "url": "images/_d/vystavy-parkhotel-480.webp",
@@ -3964,13 +3948,13 @@
 "w": 1178
 }
 ],
-"stamp": "1786056586:308682",
 "w": 1178
 },
 "images/vystavy/vecirek.jpg": {
 "alpha": false,
 "color": "#594d4b",
 "h": 1543,
+"hash": "8d57285abc29ff619abb34a70e8fb4d2",
 "sources": [
 {
 "url": "images/_d/vystavy-vecirek-480.webp",
@@ -3989,13 +3973,13 @@
 "w": 1920
 }
 ],
-"stamp": "1786056586:326785",
 "w": 1920
 },
 "images/vystavy/vit.jpg": {
 "alpha": false,
 "color": "#dfddd5",
 "h": 2048,
+"hash": "a9031e83219c994f91cada69e4e2e321",
 "sources": [
 {
 "url": "images/_d/vystavy-vit-480.webp",
@@ -4014,7 +3998,6 @@
 "w": 1448
 }
 ],
-"stamp": "1786056586:319076",
 "w": 1448
 }
 }

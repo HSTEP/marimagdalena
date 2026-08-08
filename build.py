@@ -796,6 +796,11 @@ if __name__ == "__main__":
     print(f"  - Wrote sitemap.xml ({len(public_pages)} urls) and robots.txt")
 
     media.save()
+    # After rendering, so images reached only through a template's `img()`
+    # count as used and survive.
+    forgotten, deleted = media.prune()
+    if forgotten or deleted:
+        print(f"  - Pruned {forgotten} unused image(s), {deleted} derivative file(s)")
     if media.missing:
         print(f"\nMissing image sources ({len(media.missing)}):")
         for m in sorted(media.missing):

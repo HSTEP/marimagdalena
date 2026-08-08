@@ -6,18 +6,34 @@ WebP derivatives plus the intrinsic size and an average colour, so templates can
 render `<img>` tags that never shift layout and always download a sensible byte
 count.
 
-Results are cached in ``images/_d/manifest.json`` keyed by source mtime+size, so
-a rebuild after a content edit only touches what actually changed.
+Results are cached in ``images/_d/manifest.json``, keyed by the source's
+content hash.  Everything recorded there is derived from the bytes of the
+image, so the file is identical on every machine and a fresh clone rebuilds
+nothing.  It was keyed on mtime+size, which git does not preserve: every
+clone looked entirely stale and re-encoded all 177 images to arrive back at
+byte-identical output.  Hashing the lot costs about 0.2 s.
 """
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
+import tempfile
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 from PIL import Image, ImageOps
+
+# Photographs off an iPhone arrive as HEIC, which Pillow cannot open unaided.
+# Registered at module level so the ProcessPoolExecutor children, which
+# re-import this module, get the opener too.
+try:
+    import pillow_heif
+
+    pillow_heif.register_heif_opener()
+except ImportError:  # pragma: no cover - the site still builds without it
+    pass
 
 BASE_DIR = Path(__file__).resolve().parent
 DERIVED_DIRNAME = "_d"
@@ -73,9 +89,12 @@ def _render_one(job):
             h = max(1, round(height * w / width))
             name = f"{slug}-{w}.webp"
             dest = out_dir / name
-            if not dest.exists():
-                resized = im.resize((w, h), Image.LANCZOS)
-                resized.save(dest, "WEBP", quality=WEBP_QUALITY, method=WEBP_METHOD)
+            # Written unconditionally.  This used to skip whenever the file
+            # was already there, which meant a photograph swapped for another
+            # one under the same name kept its old derivatives for ever —
+            # `stale()` is what decides whether we get here at all.
+            resized = im.resize((w, h), Image.LANCZOS)
+            resized.save(dest, "WEBP", quality=WEBP_QUALITY, method=WEBP_METHOD)
             sources.append({"w": w, "url": f"images/{DERIVED_DIRNAME}/{name}"})
 
     return rel_path, {
@@ -96,6 +115,10 @@ class Media:
         self.manifest_path = self.out_dir / "manifest.json"
         self.manifest = self._load_manifest()
         self.missing: set[str] = set()
+        self.used: set[str] = set()
+        # Sources whose hash has already been checked this run, so a page with
+        # 87 `img()` calls doesn't hash the same file 87 times.
+        self._checked: set[str] = set()
 
     def _load_manifest(self) -> dict:
         if self.manifest_path.is_file():
@@ -106,29 +129,49 @@ class Media:
         return {}
 
     def save(self):
-        self.manifest_path.write_text(
-            json.dumps(self.manifest, indent=0, sort_keys=True), encoding="utf-8"
-        )
+        """Write the manifest atomically.
+
+        A torn manifest costs a full re-encode of every image, and the API
+        writes to this tree while a build may be reading it.
+        """
+        payload = json.dumps(self.manifest, indent=0, sort_keys=True)
+        fd, tmp = tempfile.mkstemp(dir=self.out_dir, prefix=".manifest-")
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as handle:
+                handle.write(payload)
+            os.replace(tmp, self.manifest_path)
+        except BaseException:
+            Path(tmp).unlink(missing_ok=True)
+            raise
 
     @staticmethod
-    def _stamp(path: Path) -> str:
-        st = path.stat()
-        return f"{int(st.st_mtime)}:{st.st_size}"
+    def _hash(path: Path) -> str:
+        digest = hashlib.blake2b(digest_size=16)
+        with open(path, "rb") as handle:
+            for chunk in iter(lambda: handle.read(1 << 20), b""):
+                digest.update(chunk)
+        return digest.hexdigest()
 
     def _normalise(self, rel_path: str) -> str:
         return str(rel_path).replace("\\", "/").lstrip("./")
 
     def stale(self, rel_paths) -> list[str]:
-        """Which of these need (re)encoding?"""
+        """Which of these need (re)encoding?
+
+        Decided purely on content: an image whose bytes hash to what the
+        manifest recorded is done, whatever its mtime says.
+        """
         todo = []
         for rel in rel_paths:
             rel = self._normalise(rel)
+            self.used.add(rel)
             src = BASE_DIR / rel
             if not src.is_file():
                 self.missing.add(rel)
                 continue
             entry = self.manifest.get(rel)
-            if entry and entry.get("stamp") == self._stamp(src):
+            self._checked.add(rel)
+            if entry and entry.get("hash") == self._hash(src):
                 continue
             todo.append(rel)
         return todo
@@ -143,7 +186,7 @@ class Media:
         done = 0
         with ProcessPoolExecutor(max_workers=workers) as pool:
             for rel, data in pool.map(_render_one, jobs, chunksize=4):
-                data["stamp"] = self._stamp(BASE_DIR / rel)
+                data["hash"] = self._hash(BASE_DIR / rel)
                 self.manifest[rel] = data
                 done += 1
                 if done % 25 == 0:
@@ -153,15 +196,58 @@ class Media:
 
     def get(self, rel_path: str):
         rel = self._normalise(rel_path)
-        entry = self.manifest.get(rel)
-        if entry:
-            return entry
+        self.used.add(rel)
         src = BASE_DIR / rel
+        entry = self.manifest.get(rel)
+        if entry and rel in self._checked:
+            return entry
         if not src.is_file():
             self.missing.add(rel)
             return None
-        # Referenced by a template but not pre-scanned — do it inline.
+        self._checked.add(rel)
+        if entry and entry.get("hash") == self._hash(src):
+            return entry
+        # Either never derived, or derived from different bytes.  A template
+        # can name an image the data scan never sees, so this is the only
+        # staleness check some images ever get.
         _, data = _render_one((rel, self.widths, str(self.out_dir)))
-        data["stamp"] = self._stamp(src)
+        data["hash"] = self._hash(src)
         self.manifest[rel] = data
         return data
+
+    def prune(self) -> tuple[int, int]:
+        """Forget images the site no longer uses, and delete their derivatives.
+
+        Nothing removed an entry before, so a deleted painting left its ladder
+        in ``images/_d`` for ever — committed, and served to nobody.  The same
+        goes for a width that drops off the ladder when an image is replaced
+        by a narrower one.
+
+        Only safe to call once everything has been asked for, so it belongs
+        after rendering rather than after ``build()``: templates reach images
+        through ``get()`` that the data scan never sees.
+        """
+        if not self.used:
+            # Nothing asked for anything.  Far more likely a caller ordering
+            # mistake than a site with no images, and the cost of being wrong
+            # here is a full re-encode, so decline.
+            return (0, 0)
+
+        dropped = [rel for rel in self.manifest if rel not in self.used]
+        for rel in dropped:
+            del self.manifest[rel]
+
+        keep = {
+            Path(source["url"]).name
+            for entry in self.manifest.values()
+            for source in entry.get("sources", [])
+        }
+        removed = 0
+        for path in self.out_dir.glob("*.webp"):
+            if path.name not in keep:
+                path.unlink()
+                removed += 1
+
+        if dropped or removed:
+            self.save()
+        return (len(dropped), removed)

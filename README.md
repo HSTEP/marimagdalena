@@ -22,9 +22,13 @@ The system consists of three main components:
     -   `media.py` derives responsive WebP versions of every referenced image
         into `images/_d/`, recording intrinsic size and average colour so pages
         never reflow while loading. Results are cached in
-        `images/_d/manifest.json` and keyed by source mtime+size, so a rebuild
-        only re-encodes what changed. Run `python build.py --images-only` to
-        regenerate derivatives without rendering.
+        `images/_d/manifest.json`, keyed by the source's content hash, so a
+        rebuild only re-encodes what actually changed and a fresh clone
+        re-encodes nothing. Derivatives of images the site no longer
+        references are deleted at the end of a full build. Run
+        `python build.py --images-only` to regenerate derivatives without
+        rendering (this skips the pruning, which needs the render to know
+        which images the templates reach).
 
 3.  **Admin Interface (`mariadmin/`)**:
     -   A **React** application (using `react-admin`, `vite`, `mui`).

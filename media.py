@@ -35,7 +35,9 @@ try:
 except ImportError:  # pragma: no cover - the site still builds without it
     pass
 
-BASE_DIR = Path(__file__).resolve().parent
+# Kept in step with build.py: paths here are relative to the checkout being
+# built, which is not necessarily the one this file lives in.
+BASE_DIR = Path(os.environ.get("SITE_ROOT") or Path(__file__).resolve().parent).resolve()
 DERIVED_DIRNAME = "_d"
 
 # Width ladder.  Covers a 400 px phone at 3x through a 2560 px desktop at 1x.

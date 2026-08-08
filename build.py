@@ -23,7 +23,10 @@ from markupsafe import Markup, escape
 from media import Media
 
 # --- Configuration ---
-BASE_DIR = Path(__file__).resolve().parent
+# The checkout to build. Defaults to wherever this file sits, which is right
+# for every local run; ``SITE_ROOT`` exists so the server can be pointed at a
+# checkout it does not live inside.
+BASE_DIR = Path(os.environ.get("SITE_ROOT") or Path(__file__).resolve().parent).resolve()
 SRC_DIR = BASE_DIR / "src"
 OUTPUT_DIR = BASE_DIR
 TEMPLATES_DIR = SRC_DIR

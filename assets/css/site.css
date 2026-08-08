@@ -543,8 +543,15 @@ h4 {
   color: var(--fg-3);
 }
 
+/* --accent, not --gold, for the same reason the focus ring takes it: these two
+   are the accent worn as type. On screen the swap moves nothing — all 26 nodes
+   these selectors match across the eight pages sit on ink, where --accent is
+   the gold, and none is inside the .on-paper footer. In print it is the whole
+   fix: the print block remaps --gold to --gold-deep and leaves the accent
+   alone, so seven nodes printed 3.45:1 on white — six page numerals and the
+   404's own heading. They now follow the alias to paper-ink like the rest. */
 .label--gold {
-  color: var(--gold);
+  color: var(--accent);
 }
 
 .num {
@@ -552,7 +559,7 @@ h4 {
   font-style: italic;
   font-size: var(--t-small);
   font-variation-settings: var(--serif-text);
-  color: var(--gold);
+  color: var(--accent);
   letter-spacing: 0.06em;
   line-height: var(--lh-note);
 }
@@ -686,6 +693,22 @@ h4 {
 /* The rhythm belongs to the page, not to a class someone has to remember.
    The full-bleed quote plate carried no .bay class, so its top gap was
    exactly zero and the button above it sat 3px off the photograph. */
+/* The one element on the page that is both full-bleed and an ancestor of
+   everything in it. Declared a query container so that a component nested
+   inside a capped .shell can still ask how wide the screen is — .reel's bleed
+   is the only caller, and the alternatives were a percentage that resolves
+   against the wrong box and a viewport unit that counts the scrollbar. An
+   inline-size container measures its content box, which is the layout
+   viewport, scrollbar already subtracted.
+
+   Safe on this element specifically: `container-type` brings layout
+   containment, which would make main the containing block for any fixed
+   descendant, and main has none — the masthead, the drawer, the lightbox, the
+   cursor peek and the scrim are all siblings of it. */
+main {
+  container-type: inline-size;
+}
+
 main > section + section {
   padding-top: var(--bay);
 }
@@ -1408,6 +1431,29 @@ a.plate:hover > img,
   column-gap: var(--gap);
   align-items: stretch;
   isolation: isolate;
+
+  /* Where the page's left margin actually is. --gutter alone is the viewport's
+     margin, and the two are the same number only up to --wide: past 1680 the
+     shell stops growing and the page margin becomes (W - 1680)/2 + gutter,
+     while --gutter stays pinned at its 88px cap. The hero was the one band on
+     the site anchored to the viewport, so at 1920 its eyebrow, wordmark,
+     headline and both buttons opened 120px left of where every other section
+     opens, and .hero__foot closed 120px right of where the masthead's phone
+     number ends. At 2560 that gap is 440. Both are visible ink on the first
+     screen. The interior was never wrong — this grid's second track reduces
+     to W/2 + gap/2, which is the real column seven at any width, capped or
+     not. Only the margins diverged.
+
+     Declared on .hero and not on :root, and that is not tidiness. The 100%
+     here resolves at each point of use, against the used element's containing
+     block — so this token means "the page margin" only for boxes whose
+     containing block is the full-bleed hero, which is exactly the three uses
+     below. Inside a .shell child the same expression resolves against the
+     capped measure and quietly returns the wrong number: substituted into
+     .quote it moves the column-seven seam from 944 to 892, and into .reel it
+     yields 88 where 208 was wanted. Scoping it here is what keeps it from
+     being reached for somewhere it does not hold. */
+  --edge: calc(var(--gutter) + max(0px, (100% - var(--wide)) / 2));
 }
 
 .hero__art {
@@ -1455,12 +1501,22 @@ a.plate:hover > img,
   grid-area: 1 / 1 / 2 / 3;
   z-index: 2;
   align-self: center;
-  padding: calc(var(--nav-h) + 3rem) 0 4.5rem var(--gutter);
-  /* The gutter is inside the box, so a bare 41rem cap subtracted it from the
-     measure instead of clearing it — and because the gutter grows with the
-     viewport, the text ran 604.8px wide at 1024 and 572px at 1680, narrowing
-     by 32.8px as the screen gained 656. */
-  max-width: calc(41rem + var(--gutter));
+  /* Bottom was 4.5rem = 72px against a .hero__foot standing 3.2rem of rule
+     plus 1.6rem of offset = 76.8px off the floor, so on any viewport short
+     enough for the body to reach its own padding the two overlapped by a
+     saturating 4.78px — measured identical at 1366, 1440 and 1920 for every
+     height at or under 690, which is a laptop with a browser on it. The
+     scroll cue's 1px hairline came to rest directly under the gold button,
+     one pixel of horizontal overlap: a rule appearing to hang off a control
+     that is not attached to it. 4.8rem only makes them touch (+0.02px), so
+     the clearance is 6.4rem — 72 + 4.78 + 25.6, where 25.6 is 1.6rem, the
+     same offset the foot already holds itself off the floor by. */
+  padding: calc(var(--nav-h) + 3rem) 0 6.4rem var(--edge);
+  /* The left margin is inside the box, so a bare 41rem cap subtracted it from
+     the measure instead of clearing it — and because that margin grows with
+     the viewport, the text ran 604.8px wide at 1024 and 572px at 1680,
+     narrowing by 32.8px as the screen gained 656. */
+  max-width: calc(41rem + var(--edge));
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1503,8 +1559,8 @@ a.plate:hover > img,
 
 .hero__foot {
   position: absolute;
-  left: var(--gutter);
-  right: var(--gutter);
+  left: var(--edge);
+  right: var(--edge);
   bottom: 1.6rem;
   z-index: 2;
   display: flex;
@@ -1885,14 +1941,47 @@ a.plate:hover > img,
   display: flex;
   gap: var(--gap);
   /* The strip's own copy of the page column, so a plate can be sized in
-     columns rather than in vw. The bleed is margin plus padding, so under
-     border-box the content width a percentage resolves against is still the
-     shell's own measure — the twelve columns divide out of it directly. */
+     columns rather than in vw. Every bleed below is margin plus padding of the
+     same length, so under border-box the content width a percentage resolves
+     against is still the shell's own measure — the twelve columns divide out
+     of it directly, and adding room for a focus ring cannot move a plate. */
   --rcol: calc((100% - 11 * var(--gap)) / 12);
+
+  /* The distance from the shell's right margin out to the screen. Was
+     var(--gutter), which is that distance only up to --wide: above 1680 the
+     shell stops growing and the page margin becomes (W - 1680)/2 + gutter,
+     so the strip stopped 120px short of the screen at 1920 and 440px short at
+     2560 — a peeking plate fading out into a column of flat ink, which
+     contradicts the one thing the fade is there to say.
+
+     100cqw, and not the two obvious alternatives. 100% is the shell's capped
+     measure here, so it returns 88 where 208 was wanted — the same
+     point-of-use trap that keeps --edge scoped to .hero. 100vw includes the
+     classic scrollbar this page asks for, so it overshoots by its width and
+     pushes the document into horizontal overflow, which `body { overflow-x:
+     hidden }` would then hide rather than fix. A query container's inline size
+     is a content box, so it is the layout viewport: main carries
+     `container-type: inline-size` for this. */
+  --bleed: calc(var(--gutter) + max(0px, (100cqw - var(--wide)) / 2));
+
+  /* 2px of outline at 3px of offset. A scrollport clips at its padding box,
+     and the plates sit flush to this one's top and left, so the whole of both
+     ring edges was cut and what remained — two edges, down and to the right —
+     read as a drop shadow on a system that has none. The room is added as
+     padding and taken back as margin, so nothing moves; the two scroll
+     paddings below keep the keyboard's idea of the strip aligned to the eye's
+     after the origin shifts. */
+  --ring: 5px;
+
   /* Bleeds past the content margin: cut at the gutter, the peeking card
      read as a clipped image instead of an invitation to scroll. */
-  margin-right: calc(var(--gutter) * -1);
-  padding-right: var(--gutter);
+  margin-right: calc(var(--bleed) * -1);
+  padding-right: var(--bleed);
+  margin-left: calc(var(--ring) * -1);
+  padding-left: var(--ring);
+  margin-top: calc(var(--ring) * -1);
+  padding-top: var(--ring);
+  scroll-padding-inline-start: var(--ring);
   overflow-x: auto;
   /* The same expression the mask below fades over, declared as "not viewing
      region" so the keyboard agrees with the eye about where the strip ends.
@@ -1906,14 +1995,21 @@ a.plate:hover > img,
      peek are all untouched.
 
      This holds only where the dead strip is at least as wide as the peek, and
-     that is a claim about two numbers that are set independently. Above 620
-     the plate is a count of the strip's own columns, so the peek is whatever
-     the twelfth column leaves — 0 at 1440 and 1024, 0.1 of a plate at 760 —
-     and 44px covers it. Below 620 the plate is 78vw and the peek is
-     0.17W − 16, which passes 44 at 353px wide and reaches 89.4 at 620. The
-     ≤620 block at the foot of this section restates the strip for that band;
-     what is written here is true above it. */
-  scroll-padding-inline-end: max(2.75rem, var(--gutter) * 0.8);
+     that used to be a claim about two numbers set independently: a strip of
+     max(2.75rem, gutter * 0.8) against a peek of whatever the twelfth column
+     happened to leave. It was true by arithmetic and only up to --wide, where
+     the peek starts growing with the screen and the strip does not — 208px of
+     peek against 70 of strip at 1920.
+
+     It is now true by construction. The dead strip is the bleed, so the
+     viewing region is exactly the content box, which above 620 is exactly
+     three plates and two gaps. A focused plate at rest fills it; the next one
+     begins a full gap past its right edge and is therefore entirely outside
+     it, at every width, whatever the bleed has grown to. Below 620 the plate
+     is 78vw and does not divide the measure, so the ≤620 block at the foot of
+     this section restates the strip for that band; what is written here is
+     true above it. */
+  scroll-padding-inline-end: var(--bleed);
   scroll-snap-type: x mandatory;
   padding-bottom: 1.5rem;
   scrollbar-width: thin;
@@ -1929,11 +2025,14 @@ a.plate:hover > img,
        at full strength when the viewport cut it mid-word, which looks like a
        failed fade rather than an honest edge.
 
-       Stays 44 below 620, where the dead strip above no longer is. The two
-       were only ever equal because the desktop plate is a count of columns
-       and left almost no peek; they answer different questions. The dead
-       strip says where the keyboard stops, and it has to cover the whole peek
-       or focus parks in it. The fade says where the eye stops reading, and at
+       Stays 44 at every width, and the dead strip above is now the whole
+       bleed at every width, so the two have stopped resembling each other
+       entirely — which is right, because they answer different questions. The
+       dead strip says where the keyboard stops, and it has to cover the whole
+       peek or focus parks in it, however wide the screen makes that peek. The
+       fade says where the eye stops reading, and that is a distance in
+       millimetres, not a fraction of the page margin: at 1920 the peek is 208
+       and fading all of it would dim a whole plate to say one word. At
        390 the peek is 49.8px of which 44 already fades — taking it to the
        full peek moved almost nothing, and at 620 it moved the peek a step
        dimmer, which is a cost paid by the one thing on the strip whose job is
@@ -2001,8 +2100,13 @@ a.plate:hover > img,
        "already visible" without being flush, and mandatory snap has nowhere
        to land but `start`. It is the same statement as the line above — the
        strip ends where the plate does — written in the terms this band sizes
-       its plate in. */
-    scroll-padding-inline-end: calc(100% - var(--plate));
+       its plate in.
+
+       Less --ring, because the scrollport now starts that far left of where a
+       plate comes to rest. Without it the viewing region ends 5px short of
+       the plate holding focus and the browser nudges the strip by 5px every
+       time it is tabbed into. */
+    scroll-padding-inline-end: calc(100% - var(--plate) - var(--ring));
   }
 
   .reel__item {
@@ -3086,6 +3190,20 @@ a.plate:hover > img,
   text-transform: uppercase;
   line-height: var(--lh-micro);
   color: var(--fg-3);
+  /* One of the nine roles is long enough to wrap, and greedy wrapping broke it
+     in the one place a role must not break: "Floristika · LB Design" set as
+     "FLORISTIKA · LB" / "DESIGN" at 320 and 360, which splits a two-word studio
+     name across lines and orphans half of it — the reader parses two roles
+     where there is one. Balancing takes the shorter longest line, and here that
+     is the break between the two units rather than inside the second: FLORISTIKA
+     / · LB DESIGN. Every other role is one line, where this is inert, and the
+     same declaration is already on .label, which is what these micro-caps are.
+
+     It leaves the separator leading the second line rather than hanging off the
+     first, which is the opposite of what the index labels do. Fixing that means
+     a no-break space between "LB" and "Design", and that is a word in the
+     partners data, not a value in this sheet. */
+  text-wrap: balance;
 }
 
 /* The ninth card's role slot holds the address, which is not a job title: set
@@ -3574,7 +3692,19 @@ a.plate:hover > img,
   /* Percentages in a track list resolve against the content box, and this grid
      has a gutter's worth of right padding — so a plain 50% measured half of
      1368, not half of 1440, and landed 36px short. Add the padding back before
-     halving. */
+     halving.
+
+     --gutter here and not .hero's --edge, though this band is full-bleed too
+     and its text box does overhang the measure above 1680. Two reasons. The
+     seam is right as it stands: the same reduction that puts the hero's photo
+     on column seven puts this one's on column six and the type on column
+     seven, at any width. And the same percentage that makes the line above
+     necessary would break the substitution — --edge's 100% resolves against
+     this element's content box in the track list but against its parent in the
+     padding, so the two uses disagree by a gutter and the seam moves from 944
+     to 892 at 1920. The overhang is real and carries no ink: every child of
+     .quote__in sets text-align: start, the blockquote caps at 600px, and the
+     rightmost ink at 2560 is 1896 against a measure ending at 2032. */
   grid-template-columns:
     calc((100% + var(--gutter) - var(--gap)) / 2) minmax(0, 1fr);
   gap: 0 var(--gap);
@@ -3786,15 +3916,24 @@ a.plate:hover > img,
    structure on hairlines, and the box read as a broken embed. */
 .foot__map {
   position: relative;
-  overflow: hidden;
   width: 100%;
 }
 
 /* The ratio is reserved only once the embed is actually in the DOM. Held
    unconditionally it padded the on-demand placeholder — an address and a
-   button — out to a fixed box with empty space below it. */
+   button — out to a fixed box with empty space below it.
+
+   `overflow: hidden` moved here for the same reason and one this rule already
+   implies: there is nothing to clip until there is an iframe. Held
+   unconditionally it clipped the placeholder's own button. The focus ring is
+   2px drawn at 3px offset, so it lives 5px outside the border box, and the
+   button sits flush to this box's left and bottom edges — the whole of both
+   ring edges was cut, on every page, at every width. What survived was a 2px
+   dark rule down and to the right of the control: a drop shadow, on a system
+   whose census returns zero of them. */
 .foot__map:has(iframe) {
   aspect-ratio: 4 / 3;
+  overflow: hidden;
 }
 
 .foot__map iframe {
@@ -4664,6 +4803,15 @@ body.is-menu.home .nav:not(.is-stuck) .nav__mark {
     /* The lit gold is a screen value; on paper it reads as dirty yellow at
        small sizes, so the dim one carries the accent. */
     --gold: var(--gold-deep);
+    /* The remap above is enough for gold as decoration and not enough for gold
+       as type: --accent follows --gold down to --gold-deep, which measures
+       3.45:1 on white — under the 4.5:1 small type owes. Seven nodes printed
+       there, the page numeral on six pages and the 404's own heading.
+
+       .on-paper says the same thing on screen for the same reason, and this is
+       the same ground. The only other consumers of --accent are ::selection, a
+       focus ring and a hover, none of which a sheet of paper has. */
+    --accent: var(--paper-ink);
   }
 
   body,

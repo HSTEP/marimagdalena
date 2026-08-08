@@ -711,11 +711,25 @@ if __name__ == "__main__":
 
     galerie_images = []
     galerie_dir = IMAGES_DIR / "galerie"
-    if galerie_dir.is_dir():
+    galerie_data = load_and_sort_data(DATA_DIR / "galerie.json")
+    if galerie_data:
+        # Records whose file has since been deleted would render as a hole in
+        # the page, so drop them here rather than at `img()`.
+        galerie_files = [
+            record["filename"]
+            for record in galerie_data
+            if record.get("filename") and (galerie_dir / record["filename"]).is_file()
+        ]
+        galerie_images = [f"images/galerie/{name}" for name in galerie_files]
+        print(f"Loaded {len(galerie_images)} galerie images.")
+    elif galerie_dir.is_dir():
+        # Fallback for a checkout predating the migration. The order lives in a
+        # number baked into each filename, which two files already collide on,
+        # so the tie is broken by whatever order the filesystem lists them in.
         galerie_files = [f for f in os.listdir(galerie_dir) if (galerie_dir / f).is_file()]
         galerie_files.sort(key=get_galerie_sort_key, reverse=True)
         galerie_images = [f"images/galerie/{name}" for name in galerie_files]
-        print(f"Found {len(galerie_images)} galerie images.")
+        print(f"Found {len(galerie_images)} galerie images (no galerie.json).")
     else:
         print(f"Warning: Galerie directory not found: {galerie_dir}")
 

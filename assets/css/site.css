@@ -1019,7 +1019,20 @@ a.plate:hover > img,
   display: flex;
   flex-wrap: wrap;
   gap: 1.4rem 2.2rem;
-  align-items: baseline;
+  /* `end`, not `baseline`. Baseline alignment plus the `.cta ~ .qlink` padding
+     below equalises the two *drawn* edges only while both children share a
+     font-size, which every pair on the site did except one: the index
+     endnote's 11px button beside its 14px phone number, where the half-leading
+     differs by exactly 1.45px. That put the button's bottom border and the
+     link's underline — two hairlines, 35.19px apart across the gap — 1.45px
+     out of register at 1920, 1440, 1180, 1024, 900, 620 and 390, which is the
+     "one stepped line" failure the note below spends twenty lines preventing.
+
+     It is not a trade. Aligning the boxes puts the drawn edges at 0.00 on
+     every pair on every page, and the type bottoms on that one pair improve
+     too, 1.00px to 0.45px. Everything already flush stays byte-identical,
+     because `end` and `baseline` agree whenever the sizes match. */
+  align-items: end;
   min-width: 0;
 }
 
@@ -1968,12 +1981,32 @@ a.plate:hover > img,
      growth — sat 108px short of the right margin, flush with nothing. The
      620 breakpoint that hid the rule was written to stop that, and it cannot:
      it removes the thing that was doing the aligning. With no floor the rule
-     absorbs whatever is left, down to nothing, and the action stays on the
-     margin until the line genuinely cannot hold both. */
+     absorbs whatever is left, down to nothing, and the action holds the right
+     margin from 620 all the way to 526 — 85.6px of rule, then 31.6, then 6.4,
+     then 1.0, tapering out rather than breaking. */
   min-width: 0;
   height: 1px;
   background: var(--hair);
   align-self: baseline;
+}
+
+/* At 524 the action finally wraps to its own line, and the rule inherits the
+   whole remaining measure: 0.98px at 526, 236.16px at 524. From there down it
+   runs from the hint to the right margin with the button sitting on the line
+   below it, connecting the count to nothing — a stray rule, and a second
+   hairline weight floating 70px above the button's own border.
+
+   So it stops painting rather than stops existing. `display: none` is the
+   wrong instrument here and was the previous answer's mistake: the element
+   has to keep occupying the slack, and removing it lets the action fall back
+   to the start of its line — measured 21.6 to 25.2px off the right margin at
+   524–532, which undoes the taper above. 33rem is one step above the wrap so
+   the only widths it takes are the ones where the painted rule is already
+   under 3px. */
+@media (width <= 33rem) {
+  .reel__rule {
+    background: none;
+  }
 }
 
 /* Two counters survive the cull — this one and the lightbox's — because each
@@ -3210,6 +3243,25 @@ a.plate:hover > img,
      where two hairline weights meet, which is exactly the distinction the two
      weights exist to draw. */
   border-bottom: 1px solid var(--hair-strong);
+}
+
+/* Tracking is appended to the last glyph's advance, so a right-aligned tracked
+   micro-cap stops 0.17em short of the edge it is aligned to. The eleven rows of
+   figures under these heads are tabular and register on their column to 0.00px
+   across all three tiers; the heads naming those columns sat 1.66–2.00px left
+   of them at every width, which on a page whose whole argument is that the
+   figures line up is the one misalignment a reader can actually see.
+
+   A zero-width pseudo is the available instrument: negative margin is ignored
+   on a table cell and negative padding is invalid. It pulls the line box back
+   by the trailing track so the ink, rather than the advance, lands on the
+   column. Measured after: the three tier heads register at 0.00 at 1440, 1024
+   and 760. The two CENA heads overshoot by ~1px because A carries more right
+   side bearing than É — that residue is the typeface, not the layout, and
+   0.90–1.10px is better than the 2.00px it replaces. */
+.price th::after {
+  content: "";
+  margin-left: calc(var(--track-caps) * -1);
 }
 
 .price th:first-child {

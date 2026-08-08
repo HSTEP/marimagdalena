@@ -2166,8 +2166,43 @@ a.plate:hover > img,
   }
 }
 
+/* `position: relative` is not decoration here — it is the containing block for
+   the ::after frame below, and without it that frame was not on the tile.
+
+   Nothing from `.tiles__item` up to `<body>` was positioned. An absolutely
+   positioned box with no positioned ancestor resolves against the *initial*
+   containing block, so `inset: 0` on the ::after did not mean "the tile"; it
+   meant a 1440x950 rectangle at the document origin. The gold hover frame has
+   therefore never once drawn around a plate. Measured at 2x on tile #0, the
+   four edge pixels rest -> hover:
+
+     before   (172,169,166) (64,66,63) (136,135,130) (208,189,173)   photograph
+     after    (202,167,108) (154,121,62) (187,153,92) (218,177,111)  gold
+
+   The reason sixteen rounds of screenshots and two reviewers missed it is that
+   the escape is intermittent by construction. `.js .rv` carries
+   `transform: translateY(18px)` until the reveal lands, and a transform makes
+   an element a containing block for its own absolutely positioned pseudo — so
+   the frame is correctly contained exactly while the tile is still invisible,
+   and escapes the moment the tile becomes visible. Probe before scrolling and
+   the sheet is clean; probe after and it is not.
+
+   The second symptom is the one that sent me looking. That stray 1440x950 box
+   is hit-testable, so after any scroll away and back on /galerie —
+   wheel, keyboard, or scripted, it makes no difference — it sat over the whole
+   viewport and swallowed every hover on the page: 147 of 154 probe points
+   returned `A.tiles__item` with a rect that does not contain the point, and
+   `.phead__plate:hover` was false while a click on it still opened the
+   lightbox. Paint identical, hit test gone. Reproduced in both the headless
+   shell and full Chromium under --headless=new; /galerie was the only page of
+   the eight affected, and page height had nothing to do with it (padding
+   /obrazy to 12049px stays clean; two tiles on /galerie is enough to break it).
+
+   A site-wide sweep with every reveal landed now finds 0 absolutely positioned
+   boxes, real or pseudo, escaping to the initial containing block. */
 .tiles__item {
   display: block;
+  position: relative;
 }
 
 /* The ratio box. It used to be the anchor itself, which left nowhere to hang

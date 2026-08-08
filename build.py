@@ -425,6 +425,19 @@ def video_embed(url):
 # --------------------------------------------------------------------------- #
 # Template helpers
 # --------------------------------------------------------------------------- #
+def bust(url: str, data: dict) -> str:
+    """Append a content version to a derivative URL.
+
+    A derivative is named after its source file, and replacing a photograph
+    through the admin keeps that name — that is the whole point of replacing
+    it. So the URL is identical before and after, and a browser that has the
+    old picture cached goes on showing it. The version makes the URL change
+    whenever the bytes do.
+    """
+    version = (data.get("hash") or "")[:8]
+    return f"{url}?v={version}" if version else url
+
+
 def make_img_helper(media: Media):
     def img(path, alt="", sizes="100vw", cls="", loading="lazy", cover=False,
             width_attr=True, fetchpriority=None):
@@ -433,9 +446,13 @@ def make_img_helper(media: Media):
             return Markup("")
         data = media.get(path)
         if not data:
-            return Markup("")
-        srcset = ", ".join(f"{s['url']} {s['w']}w" for s in data["sources"])
-        fallback = data["sources"][-1]["url"] if data["sources"] else path
+            # Loud on purpose. This returned an empty string, so an image the
+            # build could not read became an invisible hole in the page —
+            # exactly what happens to an iPhone HEIC without pillow-heif, and
+            # nothing anywhere said so. `--strict` turns this into a failure.
+            return Markup(f"<!-- MISSING IMAGE: {escape(path)} -->")
+        srcset = ", ".join(f"{bust(s['url'], data)} {s['w']}w" for s in data["sources"])
+        fallback = bust(data["sources"][-1]["url"], data) if data["sources"] else path
         classes = " ".join(c for c in ["ph", "is-cover" if cover else "", cls] if c)
         attrs = [
             f'class="{escape(classes)}"',
@@ -465,7 +482,7 @@ def make_big_helper(media: Media):
         data = media.get(path)
         if not data or not data["sources"]:
             return path
-        return data["sources"][-1]["url"]
+        return bust(data["sources"][-1]["url"], data)
 
     return big
 
@@ -802,9 +819,15 @@ if __name__ == "__main__":
     if forgotten or deleted:
         print(f"  - Pruned {forgotten} unused image(s), {deleted} derivative file(s)")
     if media.missing:
-        print(f"\nMissing image sources ({len(media.missing)}):")
+        print(f"\nMissing image sources ({len(media.missing)}):", file=sys.stderr)
         for m in sorted(media.missing):
-            print(f"  ! {m}")
+            print(f"  ! {m}", file=sys.stderr)
+        # The publish pipeline builds with --strict: better to refuse to
+        # publish than to push a page with a hole where a painting should be.
+        if "--strict" in sys.argv:
+            raise SystemExit(
+                f"\nRefusing to finish: {len(media.missing)} image(s) could not be read."
+            )
 
     end_time = time.time()
     print(

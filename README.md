@@ -107,6 +107,16 @@ Use the `img()` helper rather than a raw `<img>`, so the picture gets a
 `big(path)` returns the largest derivative (used for lightbox links) and
 `ratio(path)` the intrinsic aspect ratio (used to size frames without cropping).
 
+Derivative URLs carry a `?v=` content version. A derivative is named after its
+source file, so replacing a photograph keeps the URL identical and a browser
+holding the old picture would go on showing it; the version changes whenever
+the bytes do.
+
+An image the build cannot read renders as an `<!-- MISSING IMAGE: … -->`
+comment and is listed on stderr, rather than vanishing silently. Build with
+`python build.py --strict` to exit non-zero instead — this is what the publish
+pipeline uses, so a page with a hole in it is never pushed.
+
 ### Content coming from the admin
 The admin JSON is edited by hand as well as by the app, so `build.py` repairs
 and normalises it on the way through rather than trusting it:

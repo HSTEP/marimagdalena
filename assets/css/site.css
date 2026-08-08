@@ -480,6 +480,12 @@ h4 {
   font-family: var(--sans);
   font-size: var(--t-micro);
   font-weight: 400;
+  /* A .label is sans, so it has no optical size to set — but when one lands on
+     a heading element (404's h1) the h1..h4 rule's `--vf-h2` still applies, and
+     the site then has one node claiming display opsz at micro-cap size. Inert,
+     because Jost carries no opsz axis; stated anyway, so the opsz census reads
+     what the design actually intends. */
+  font-variation-settings: normal;
   /* Both from --track-caps' policy, which was argued here first: 0.26em is
      display tracking, and at 11px on strings carrying háčky and čárky
      ("TÁHNĚTE DO STRANY", "REPORTÁŽ Z VÝSTAVY") the accents floated clear of
@@ -638,6 +644,18 @@ main > section + section {
 
 main > section:last-of-type {
   padding-bottom: var(--bay);
+}
+
+/* The 404 plate is the page, not a section that ended. It is already sized to
+   the viewport and its scrim is `inset: 0`, so --bay bought no visible space —
+   it only displaced the stack that `place-items: center` had been asked to
+   centre, upward, in the same direction the fixed masthead was already pushing
+   it. At 1440 the content started 24px *above* the bar's lower edge with 210px
+   of empty plate under it; at 360×640 the display numeral cleared the bar by
+   7.7px. Reserve the masthead instead, so the box being centred is the field
+   the reader can actually see. */
+main > section.band:last-of-type {
+  padding-block: var(--nav-h) 0;
 }
 
 /* A page header is not a section that ended — the content under it is part of
@@ -1103,6 +1121,31 @@ a.plate:hover > img,
   letter-spacing: var(--track-caps);
   line-height: var(--lh-micro);
   white-space: nowrap;
+  position: relative;
+}
+
+/* It was the one item in the masthead that did not answer the pointer, and it
+   is the row's only conversion action. It borrows .nav__link's gesture rather
+   than a colour change: the links go grey → bone because they start grey, and
+   this one is already gold, so there is nowhere for it to brighten to without
+   inventing a third gold the palette does not have. Same rule, same easing,
+   same origin — one hover vocabulary for one row. */
+.nav__call::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.5rem;
+  height: 1px;
+  width: 100%;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: 100% 50%;
+  transition: transform 0.5s var(--ease);
+}
+
+.nav__call:hover::after {
+  transform: scaleX(1);
+  transform-origin: 0 50%;
 }
 
 .nav__call svg {
@@ -1532,7 +1575,14 @@ a.plate:hover > img,
 .atelier__fig {
   grid-column: 8 / span 5;
   align-self: start;
-  margin-top: clamp(0rem, 3vw, 3.5rem);
+  /* Keyed to the type it hangs beside, the way .idx__thumb is, not to the
+     viewport. At 3vw the drop grew from 29.4px at 980 to 50.4px at 1680 while
+     --t-body stayed a flat 1.0625rem, so the picture's top floated between the
+     prose lines everywhere and landed on one at exactly one width, by
+     accident. One line of the column plus the cap offset puts it on line two
+     at every width: 0.471 of --t-body is the distance from the line box top to
+     the cap line, the same measurement 0.435 makes for --t-h4 above. */
+  margin-top: calc(var(--t-body) * (var(--lh-text) + 0.471));
 }
 
 .atelier__fig img {
@@ -1711,6 +1761,19 @@ a.plate:hover > img,
 .reel__item {
   flex: 0 0 calc(var(--rcol) * 4 + var(--gap) * 3);
   scroll-snap-align: start;
+}
+
+/* Six columns once .works goes two-up, so the teaser never shows the work
+   smaller than the index it teases. Above 960 the reel's four columns and the
+   gallery's three-up tile are the same width; below it the gallery jumps to
+   two-up and the reel, still at four, fell to 0.65 of it — a curated selection
+   set smaller than the exhaustive list of the same objects. The rung is 960
+   rather than a number of its own, so the two step together: at 961 both are
+   274.2, at 960 both are 421.4. */
+@media (620px < width <= 960px) {
+  .reel__item {
+    flex: 0 0 calc(var(--rcol) * 6 + var(--gap) * 5);
+  }
 }
 
 /* 26vw bottoms out on the clamp floor below ~885px, so a phone inherited a
@@ -3312,26 +3375,39 @@ a.plate:hover > img,
   min-width: 0;
 }
 
+/* Four ticks, not three. The Instagram handle is a 29-character token with no
+   break opportunity, and at 17px Jost plus the ↗ glyph it has a max-content
+   width of 254.03px — which three ticks only clear above about 1214. Below
+   that it ran out of its own column and, by 1024, sat under the email address
+   in the next one. Same failure class as the masthead: an unbreakable token in
+   an uncompressible track, hidden by `overflow-x: hidden` because the element
+   reports no scroll overflow of its own.
+   `overflow-wrap: anywhere` was the smaller fix and also zeroes it, but
+   `.foot__map-links a` is the same class and "Hair & Styling" is joined with
+   no-break spaces into one 98px token, which `anywhere` shatters mid-word. */
 .foot__col--wide {
-  grid-column: 3 / span 3;
+  grid-column: 3 / span 4;
 }
 
 .foot__col--contact {
-  grid-column: 6 / span 3;
+  grid-column: 7 / span 3;
 }
 
 /* Runs to the last column, not to the eleventh: stopping at `span 3` left the
    twelfth column empty while the credit rule below ran flush to the margin,
    so the footer ended 223px short of its own bottom rule. */
 .foot__col--nav {
-  grid-column: 9 / -1;
+  grid-column: 10 / -1;
 }
 
-/* One column. Two sub-columns inside a 2/12 grid cell gave each label ~85px,
-   and "Hair & Styling" needs ~95px — so it overlapped "Partneři" outright
-   below about 1300px. A single stack of eight is also the same order of
-   height as the map plate beside it, so it fills the footer rather than
-   cutting the L-shaped hole the two-column version was meant to avoid. */
+/* Two sub-columns of four. This was a single stack of eight for exactly as
+   long as the column was two ticks wide: at 2/12 each label got ~85px and
+   "Hair & Styling" — 98px, joined with no-break spaces, so unbreakable —
+   overlapped "Partneři" below about 1300. The column is three ticks now and
+   the two lists clear each other at every width down to the burger, though
+   the alley between them closes from --gap to 12.88px at 962. A stack of
+   eight also ran 240px below the other columns and left that much dead
+   paper beside it. */
 .foot__map-links {
   display: grid;
   /* The parent is a flex column with align-items:flex-start, so this grid
@@ -3782,6 +3858,25 @@ body.is-lb .nav {
   }
 }
 
+/* The four-across footer keeps its 2/4/3/3 allocation down to the burger
+   rung. Flattened to four equal thirds it put the Instagram handle back in a
+   track too narrow for it — the wordmark is the one child here that can give,
+   because it is an image sized `min(210px, 100%)` and simply draws smaller. */
+@media (960px < width <= 1180px) {
+  .foot__mark {
+    grid-column: 1 / span 2;
+  }
+
+  .foot__col--wide {
+    grid-column: span 4;
+  }
+
+  .foot__col--contact,
+  .foot__col--nav {
+    grid-column: span 3;
+  }
+}
+
 @media (width <= 960px) {
   :root {
     --nav-h: 4.25rem;
@@ -4103,4 +4198,134 @@ body.is-menu.home .nav:not(.is-stuck) .nav__mark {
 
 .nav__mark {
   transition: opacity 0.45s var(--ease);
+}
+
+/* ------------------------------------------------------------- 24. print */
+/* The ceník is the one page anyone prints, and printed it was unusable: the
+   masthead is `position: fixed`, so the gold wordmark stamped itself over the
+   repeated table head on every sheet; the sticky `thead` printed on top of its
+   own rows; and the ink ground prints as nothing at all, because browsers drop
+   backgrounds by default and the headings are near-white. Nothing here is a
+   new design — the paper ground is the site's own, taken from .on-paper. */
+@media print {
+  :root {
+    --fg: var(--paper-ink);
+    --fg-2: var(--paper-2);
+    --fg-3: var(--paper-3);
+    --bg: #fff;
+    --hair: var(--paper-line);
+    --hair-strong: var(--paper-line-strong);
+    /* .on-paper remaps the --fg family and stops, which is right on screen:
+       a paper section never reaches for raw bone. Print is the one context
+       where the whole document turns paper while ink-scoped components keep
+       their own colour, and those speak bone directly — .hero__motto and
+       .works__name both resolve to #efeae1, which measured 1.2:1 on white and
+       printed as nothing. Bone is the ink ground's text; on paper that is
+       paper-ink, so the family maps across with the rest. The only two
+       non-text consumers, .burger span's bar and .lb__x, are display:none
+       here, so nothing that paints a surface is touched. */
+    --bone: var(--paper-ink);
+    --bone-2: var(--paper-2);
+    --bone-3: var(--paper-3);
+    /* The lit gold is a screen value; on paper it reads as dirty yellow at
+       small sizes, so the dim one carries the accent. */
+    --gold: var(--gold-deep);
+  }
+
+  body,
+  .on-paper {
+    background: #fff;
+    color: var(--paper-ink);
+  }
+
+  @page {
+    margin: 16mm 14mm;
+  }
+
+  /* Out of flow means once per sheet, forever. Static prints it once, where
+     the reader expects a letterhead. */
+  .nav,
+  .nav.is-stuck {
+    position: static;
+    height: auto;
+    background: none;
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  /* Screen furniture: a drag hint, a scroll cue, a "show more" button and a
+     map you have to ask for are all instructions for a device this is not. */
+  .menu,
+  .burger,
+  .lb,
+  .peek,
+  .nav__links,
+  .scroll-cue,
+  .works__more,
+  .reel__hint,
+  .reel__rule,
+  .foot__map,
+  .foot__social {
+    display: none !important;
+  }
+
+  /* The reveal observer never runs before the print snapshot, so anything
+     below the first screen would print as blank paper. The transitions have to
+     go with it: left running, the snapshot catches whatever opacity each tile
+     happened to be passing through on its way to 1. */
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .js .rv,
+  .js .rv-clip,
+  .js .rv-clip img,
+  .rv,
+  .rv-clip {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+
+  /* Sticky in a paged medium pins the head to the top of the *page box*, so it
+     overprinted its own first rows. */
+  [data-cols="3"] thead,
+  .price__aside {
+    position: static;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  .price__row,
+  .price__group,
+  .svc__row,
+  .arch__item,
+  .idx__row {
+    break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  /* A horizontal drag strip cannot be paged. Let it set as a block of plates
+     rather than clipping eight of nine at the sheet edge. */
+  .reel {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: visible;
+    mask-image: none;
+    margin-right: 0;
+    padding-right: 0;
+  }
+
+  a {
+    text-decoration: none;
+  }
 }

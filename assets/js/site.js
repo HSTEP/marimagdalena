@@ -9,6 +9,20 @@
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* An overlay that covers the page has to take the page's tab stops with it.
+     Both overlays here are body children, so the rest of the body is the part
+     that goes inert — cheaper and less brittle than enumerating focusables,
+     and it takes assistive tech with it rather than only the Tab key. Pass the
+     elements that must stay live; the drawer keeps the masthead, because the
+     burger is its close control. */
+  const setInert = (keep, on) => {
+    const live = Array.isArray(keep) ? keep : [keep];
+    [...document.body.children].forEach((el) => {
+      if (live.includes(el) || el.tagName === "SCRIPT") return;
+      el.inert = on;
+    });
+  };
+
   /* ------------------------------------------------------------ sticky nav */
   /* The gold reading-progress bar that used to be driven from here is gone.
      It is a long-form-article convention on a five-screen site, and it put a
@@ -41,6 +55,7 @@
   const setMenu = (open) => {
     document.body.classList.toggle("is-menu", open);
     burger?.setAttribute("aria-expanded", String(open));
+    if (menu && nav) setInert([menu, nav], open);
   };
 
   burger?.addEventListener("click", () =>
@@ -226,10 +241,21 @@
     const open = (i, from) => {
       opener = from;
       lb.hidden = false;
-      requestAnimationFrame(() => lb.classList.add("is-open"));
       document.body.classList.add("is-lb");
       show(i);
-      $("[data-lb-close]", lb).focus();
+      /* Everything else goes inert, because the dialog says aria-modal="true"
+         and that has to be true of the DOM as well as of the attribute. */
+      setInert(lb, true);
+      requestAnimationFrame(() => {
+        lb.classList.add("is-open");
+        /* Focus only once .is-open has landed. .lb is `visibility: hidden`
+           until then, and a visibility-hidden element cannot take focus — the
+           call used to sit before this frame, so it silently did nothing,
+           focus stayed on the thumbnail, and the Tab trap below (which only
+           engages when focus is already inside) never engaged either. Twelve
+           tabs walked the gallery behind the overlay. */
+        $("[data-lb-close]", lb).focus();
+      });
     };
 
     const close = () => {
@@ -239,6 +265,9 @@
         lb.hidden = true;
         lbImg.removeAttribute("src");
       }, 450);
+      /* Clear inert before restoring focus: the opener is one of the elements
+         that was made inert, and an inert element cannot be focused. */
+      setInert(lb, false);
       opener?.focus();
       opener = null;
     };
@@ -269,8 +298,14 @@
       else if (e.key === "ArrowLeft") show(cursor - 1);
       else if (e.key === "ArrowRight") show(cursor + 1);
       else if (e.key === "Tab") {
-        // Trap focus inside the dialog.
-        const focusables = $$("button", lb);
+        // Trap focus inside the dialog. Links as well as buttons: .lb__ask is
+        // an <a>, so collecting only buttons made the viewer's one commercial
+        // action unreachable — Tab from the next-chevron wrapped straight back
+        // to the close button and skipped it.
+        const focusables = $$("button, a[href]", lb).filter(
+          (el) => !el.hidden && el.offsetParent !== null
+        );
+        if (!focusables.length) return;
         const first = focusables[0];
         const last = focusables[focusables.length - 1];
         if (e.shiftKey && document.activeElement === first) {

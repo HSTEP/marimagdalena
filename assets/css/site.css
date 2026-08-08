@@ -1659,6 +1659,16 @@ a.plate:hover > img,
   margin-right: calc(var(--gutter) * -1);
   padding-right: var(--gutter);
   overflow-x: auto;
+  /* The same expression the mask below fades over, declared as "not viewing
+     region" so the keyboard agrees with the eye about where the strip ends.
+     Chrome scrolls a focused element into view only when it is *entirely*
+     outside the scrollport, and the peek leaves just enough showing: tabbing
+     the strip parked every fourth plate at 10% visible with `scrollLeft` still
+     0, drawing the focus ring as a gold sliver at the screen edge. Snap rest
+     positions are unaffected — `scroll-snap-align: start` resolves against
+     `scroll-padding-inline-start` — and `scroll-padding` never affects
+     layout, so the bleed, the mask and the peek are all untouched. */
+  scroll-padding-inline-end: max(2.75rem, var(--gutter) * 0.8);
   scroll-snap-type: x mandatory;
   padding-bottom: 1.5rem;
   scrollbar-width: thin;
@@ -3518,6 +3528,12 @@ a.plate:hover > img,
   gap: 0.7rem;
   color: var(--bone-2);
   font-size: var(--t-micro);
+  /* The one 11px node on the site that was not on --lh-micro: it inherited the
+     1.75 body leading, making the sheet's "one leading per role" invariant 14
+     pairs instead of 13. Nothing moves — the label, the glyph and the counter
+     all centre on 33.5 either way — but the next person to touch this control
+     inherits the exception. */
+  line-height: var(--lh-micro);
   font-weight: 400;
   letter-spacing: var(--track-caps);
   text-transform: uppercase;
@@ -3676,10 +3692,21 @@ body.is-lb .nav {
     scroll-behavior: auto;
   }
 
+  /* The delay needs zeroing as well as the duration. `.menu__link` carries
+     `animation-delay: calc(0.06s + var(--i) * 0.028s)`, which survived this
+     block untouched: a reduce user opening the drawer got a blank ink field
+     for 20ms and then an eight-step staggered pop-in over a quarter second —
+     precisely the effect the query exists to suppress. It settled correctly,
+     which is why probes taken after it had settled saw nothing wrong.
+
+     `transition-delay` does not need the same treatment: the 79 nodes that
+     carry one are all `.rv`/`.rv-clip`, and `.js .rv` sets their final state
+     directly under reduce, so no transition ever fires. */
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
+    animation-delay: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
@@ -3694,6 +3721,31 @@ body.is-lb .nav {
 
 /* ---------------------------------------------------------- 23. responsive */
 @media (width <= 1180px) {
+  /* The masthead row cannot compress: the wordmark is `flex: none`, every link
+     is `nowrap`, and the number is sixteen characters. So it did not — it
+     overflowed, breaking the content margin at 1144 and crossing the viewport
+     at 1056, where `overflow-x: hidden` guillotined the phone number without
+     leaving a scrollbar to show for it. At 1024, the most common laptop width
+     on the site, the bar read `+420 607 067 7`: a truncated number that looks
+     like a whole one, on the single most actionable item on the page.
+     `nowrap` also meant the element reported `scrollWidth == clientWidth`, so
+     it measured as fitting from the inside.
+
+     The tell that it was over-constrained rather than merely tight: the
+     wordmark-to-links clearance sat at exactly 32.0px — the `.nav__in` gap —
+     from 1120 down, because `margin-left: auto` goes inert once a flex row
+     has no free space left to distribute.
+
+     The separator and the number give way first, and the seven destinations
+     stay. Dropping the whole row to the burger here would have been the
+     smaller edit and it closes the same band, but it costs eight visible
+     destinations across 961–1060 to save one that the footer already carries
+     on every page at every width, and the drawer carries again below 960. */
+  .nav__sep,
+  .nav__call {
+    display: none;
+  }
+
   .works {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -3748,8 +3800,8 @@ body.is-lb .nav {
     grid-column: 1 / -1 !important;
   }
 
-  .nav__links,
-  .nav__call {
+  /* `.nav__call` is a child of `.nav__links` and is already hidden at 1180. */
+  .nav__links {
     display: none;
   }
 

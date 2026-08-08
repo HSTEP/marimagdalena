@@ -84,6 +84,18 @@
   --wide: 1680px;
   --prose: 62ch;
 
+  /* How much room a focus ring needs outside the box it rings: the 2px stroke
+     plus the 3px offset declared at :focus-visible. .reel worked this out for
+     itself when its scrollport was shaving the top and left edges off every
+     plate's ring; it is not a property of that component, it is a property of
+     the ring, and two more places need it. Measured: 50 of 440 keyboard stops
+     across eight pages at 1440x900 and 390x844 had between 4.5 and 5.4px of
+     ring below the fold after the browser scrolled them into view, because
+     html declares scroll-padding-top for the masthead and nothing for the
+     edge the ring is actually cut on. Worst offenders are the picture grids,
+     where the ring is the only thing saying which plate has focus. */
+  --ring: 5px;
+
   /* Rhythm */
   --bay: clamp(5.5rem, 11vw, 11rem);
   --bay-sm: clamp(3.5rem, 7vw, 6rem);
@@ -373,6 +385,13 @@ html {
      actually scrolls. --nav-h, not --nav-h-stuck: the bar is still 76 tall
      when the target lands near the top of the page. Costs no layout. */
   scroll-padding-top: var(--nav-h);
+  /* And the same statement for the other end of the same scroller. The bottom
+     of the window clips nothing structural, so this was easy to miss: the
+     element itself lands flush and looks correct, and only the ring — the part
+     that is painted outside the box, and the only part that says "this one" —
+     falls off the screen. +1 so the outer edge of the stroke clears rather
+     than touches. Costs no layout, like the line above it. */
+  scroll-padding-bottom: calc(var(--ring) + 1px);
   scrollbar-color: var(--gold-deep) var(--ink-deep);
 }
 
@@ -651,7 +670,18 @@ h4 {
   font-size: 3.9em;
   line-height: 0.78;
   padding: 0.06em 0.06em 0 0;
-  margin-left: -0.06em;
+  /* A measurement, not a round number. This pull exists to cancel the Z's left
+     side bearing so the cap's ink lands on the measure the paragraph beside it
+     starts on, and -0.06em is 3.98px of correction for a bearing that is 1.0.
+     Measured by scanning the gold at dpr 4 with the margin neutralised: the
+     cap's box lands exactly on the text edge and its ink 1.00-1.25px inside,
+     i.e. 0.0151-0.0189em. As authored the ink hung 2.75px outside the measure
+     at 1024, 1440 and 1920 alike — on the one hard vertical the eye checks a
+     text block against, and in gold, at 66px. -0.017em splits the two readings
+     and leaves at most 0.13px either way. ::first-letter's computed style is
+     not usable here; Chromium reports the paragraph's own 17px and bone, not
+     the 66px gold that is plainly on the screen. */
+  margin-left: -0.017em;
   margin-right: 0.02em;
   color: var(--gold);
   font-variation-settings: "opsz" var(--opsz-display);
@@ -869,7 +899,12 @@ main > section.band:last-of-type {
   transition: transform 1.4s var(--ease);
 }
 
-a.plate:hover > img,
+/* .plate--zoom alone. `a.plate:hover > img` used to lead this selector and
+   matched nothing on any of the eight pages: .plate is only ever a <span> or a
+   <figure>, and the zoom is carried by the modifier, not by the element being
+   a link. A rule describing a markup shape that was never built is the same
+   thing as the colgroup note further down — dead, and worth deleting rather
+   than leaving for the next reader to verify. */
 .plate--zoom:hover > img {
   transform: scale(1.035);
 }
@@ -1163,11 +1198,28 @@ a.plate:hover > img,
     width 0.5s var(--ease),
     opacity 0.45s var(--ease),
     visibility 0s;
-  width: clamp(118px, 12vw, 158px);
+  /* 150 and 122, not 158 and 130, and the cap is the focus ring's. The mark is
+     Tab stop 1 on seven of the eight pages — every page but the homepage,
+     where it is visibility:hidden until the bar sticks — so it is the first
+     thing a keyboard reader is shown, and it is 3.6px from the top of the
+     window. The ring wants 5. Measured at dpr 2: the top stroke painted on
+     device rows 0-1 of the 4 a 2px stroke owes, across the mark's full width;
+     the other three edges were whole. Nothing clips it — it is simply drawn at
+     a negative y.
+
+     The mark's aspect is 2.3304:1 and it centres in a bar whose content box is
+     75 tall (63 stuck), so the headroom is (75 - w/2.3304)/2 and the ring fits
+     at w <= 151.5 (123.5 stuck). The alternative was a taller --nav-h, which
+     is a 13% taller masthead plus its knock-ons into scroll-padding-top, the
+     /cenik sticky thead offset and the hero's top padding — a lot of page
+     moved to buy 1.4px. This costs 5% of the wordmark above 1250, where it is
+     at its largest and least needs the width. Below 1250 both clamps were
+     already under the cap and nothing moves at all. */
+  width: clamp(118px, 12vw, 150px);
 }
 
 .nav.is-stuck .nav__mark {
-  width: clamp(104px, 10vw, 130px);
+  width: clamp(104px, 10vw, 122px);
 }
 
 /* No hover, deliberately. Two reviewers have now measured this as the one
@@ -1229,6 +1281,20 @@ a.plate:hover > img,
 
 .nav__link.is-active::after {
   transform: scaleX(1);
+}
+
+/* The active link lit gold and then stopped listening. `.is-active` and
+   `:hover` are both (0,2,0), `.is-active` is declared second, so it won the
+   colour outright; and the underline was already at scaleX(1), so that had
+   nowhere to travel either. Measured at dpr 2 on /galerie, /cenik and /obrazy
+   with a real pointer: colour rgb(227,166,60) -> rgb(227,166,60), ::after
+   matrix unchanged, whole-crop pixel maxdelta 0, against 216 for every other
+   link in the same bar. One dead item in a row of seven reads as broken
+   rather than as styled, and it is the item most likely to be tested, because
+   it names where the reader already is. To bone like the rest — the underline
+   stays lit throughout, which is the correct report for the current page. */
+.nav__link.is-active:hover {
+  color: var(--bone);
 }
 
 .nav__sep {
@@ -1394,6 +1460,14 @@ a.plate:hover > img,
 .is-menu .menu__link {
   animation: rise 0.4s var(--ease) forwards;
   animation-delay: calc(0.06s + var(--i) * 0.028s);
+}
+
+/* The same gold the desktop bar marks the current page in, and nothing else:
+   no underline to light, because these rows already have the hairline between
+   them and a second horizontal 2px below the first would be the loudest thing
+   on the screen. At h2 in the serif, colour alone carries it. */
+.menu__link.is-active {
+  color: var(--gold);
 }
 
 
@@ -1964,16 +2038,15 @@ a.plate:hover > img,
      `container-type: inline-size` for this. */
   --bleed: calc(var(--gutter) + max(0px, (100cqw - var(--wide)) / 2));
 
-  /* 2px of outline at 3px of offset. A scrollport clips at its padding box,
-     and the plates sit flush to this one's top and left, so the whole of both
-     ring edges was cut and what remained — two edges, down and to the right —
-     read as a drop shadow on a system that has none. The room is added as
-     padding and taken back as margin, so nothing moves; the two scroll
-     paddings below keep the keyboard's idea of the strip aligned to the eye's
-     after the origin shifts. */
-  --ring: 5px;
+  /* --ring is the ring's own clearance, declared at :root. A scrollport clips
+     at its padding box, and the plates sit flush to this one's top and left,
+     so the whole of both ring edges was cut and what remained — two edges,
+     down and to the right — read as a drop shadow on a system that has none.
+     The room is added as padding and taken back as margin, so nothing moves;
+     the two scroll paddings below keep the keyboard's idea of the strip
+     aligned to the eye's after the origin shifts.
 
-  /* Bleeds past the content margin: cut at the gutter, the peeking card
+     Bleeds past the content margin: cut at the gutter, the peeking card
      read as a clipped image instead of an invitation to scroll. */
   margin-right: calc(var(--bleed) * -1);
   padding-right: var(--bleed);
@@ -3439,9 +3512,17 @@ a.plate:hover > img,
    on a table cell and negative padding is invalid. It pulls the line box back
    by the trailing track so the ink, rather than the advance, lands on the
    column. Measured after: the three tier heads register at 0.00 at 1440, 1024
-   and 760. The two CENA heads overshoot by ~1px because A carries more right
-   side bearing than É — that residue is the typeface, not the layout, and
-   0.90–1.10px is better than the 2.00px it replaces. */
+   and 760 — and at 340 and up, which is where the claim now stops. Below 331.5
+   the middle head is wider than the third of the row it names and hung off it
+   by up to 1.97px; that is a track problem, not a tracking one, and it is
+   answered where the three-tier row sets its alignment.
+
+   The two CENA heads no longer overshoot. This used to record ~1px of residue
+   from A's right side bearing against É's; re-measured against their own
+   columns at 760, 1024, 1440 and 1920 it is -0.01px at all four, so the pseudo
+   does its whole job and this paragraph was understating it. Measure the ink,
+   not the advance: a Range rect carries the trailing track and will report
+   1.86px of overhang on a head that ends exactly on its column. */
 .price th::after {
   content: "";
   margin-left: calc(var(--track-caps) * -1);
@@ -3634,6 +3715,32 @@ a.plate:hover > img,
   [data-cols="3"] th:nth-child(2) {
     text-align: left;
   }
+
+  /* And the middle tier centres, which is the half of that argument that was
+     missing. Spanning the measure fixed where the block of figures sat; it did
+     not fix its rhythm. Left, right, right put the three figures at 20, 249.6
+     and 370 at 390px wide — ink gaps of 119.6 and 65.4, 1.83:1, three columns
+     that read as two columns and a straggler. Centred, both gaps are 92.5.
+
+     It also settles the heads, and structurally rather than by measurement.
+     Each `tr` is its own grid, so the head row and the figure rows only
+     register because their tracks are identical thirds — which stops being
+     enough when a head is wider than its track. POLODLOUHE's advance is 89.70
+     against an 85.88 track at 320, so right-aligned it hung 1.97px off the
+     column of figures it names (break-even is W = 331.5; every width from 340
+     up was already at 0.00). Centred, head and figures share a centre line at
+     every width by construction, and the 320 overhang becomes 0.98px of
+     symmetric bleed into a 21px gap. The ::after that pulls back the trailing
+     track still does its job here: it takes the trailing space out of the line
+     box, so what centres is the ink.
+
+     Cost: the two surcharge rows carry a 51px figure where the price rows
+     carry 55px, so their centres differ by 2px where right alignment made all
+     twelve flush. 2px of stagger against 27px of gap correction. */
+  [data-cols="3"] td:nth-child(3),
+  [data-cols="3"] th:nth-child(3) {
+    text-align: center;
+  }
 }
 
 /* -------------------------------------------------------------- 18. quotes */
@@ -3704,7 +3811,10 @@ a.plate:hover > img,
      padding, so the two uses disagree by a gutter and the seam moves from 944
      to 892 at 1920. The overhang is real and carries no ink: every child of
      .quote__in sets text-align: start, the blockquote caps at 600px, and the
-     rightmost ink at 2560 is 1896 against a measure ending at 2032. */
+     rightmost ink at 2560 is 1890 — 142px of slack inside a measure that ends
+     at 2032, not the 136 this said before two reviewers re-measured it. The
+     seam is on the column-six tick either way; the slack is the margin by
+     which the overhang stays latent. */
   grid-template-columns:
     calc((100% + var(--gutter) - var(--gap)) / 2) minmax(0, 1fr);
   gap: 0 var(--gap);
@@ -4060,6 +4170,37 @@ a.plate:hover > img,
 
 /* ------------------------------------------------------------ 21. lightbox */
 .lb {
+  /* The page margin, not the gutter — the same alias .hero declares and .reel
+     computes from its container. --gutter is the page margin only up to
+     --wide; above 1680 the shell stops growing and the margin becomes
+     (W - 1680)/2 + gutter, and the four pieces of chrome in here never learned
+     that. Measured on /galerie against the shell's own ink edges: 0.00px at
+     1280, 1440 and 1680, then 10 at 1700, 40 at 1760, 120 at 1920 and 440 at
+     2560. The plate does not drift with them — .lb__img is max-width:1500
+     centred, which at 2560 lands on 530..2030 against a measure of 528..2032 —
+     so the counter and the title ended up 440px to the left of the picture
+     they caption, on a black screen with nothing else on it to explain why.
+     This is the site's primary way of looking at the work, and it was the one
+     place a wide screen could watch the grid stop applying.
+
+     100% is safe here where it is not at :root: .lb is fixed to inset:0, and
+     the three consumers below resolve their percentages against either its
+     content box or .lb__stage's padding box, both of which are the viewport.
+     body.is-lb takes the scrollbar out, so there is no gap between that and
+     100vw either. */
+  --edge: calc(var(--gutter) + max(0px, (100% - var(--wide)) / 2));
+
+  /* How far a chevron's box must start left of the vertical its ink should
+     land on. Two corrections, and the rule only ever made the first: half the
+     slack between the 1.6rem glyph and its clamp(3rem,6vw,4.5rem) hit box,
+     plus the glyph's own inset inside its viewBox. _icons.html draws the
+     chevron from x=8 of 24 at stroke-width 1.2, so its ink starts 8 - 0.6 =
+     7.4 units in, which at 1.6rem is 7.89px. Measured via getBBox and the
+     viewBox scale, and independently in lit pixels at dpr 2: the chevron ink
+     sat at 79.89 against a counter at 72.00 at 1440, and 95.89 against 88.00
+     at 1920 and 2560 — 7.89px at every width, always the same way. A hit box
+     centred on a vertical is not a glyph centred on it. */
+  --chev-in: calc((clamp(3rem, 6vw, 4.5rem) - 1.6rem) / 2 + 1.6rem * 7.4 / 24);
   position: fixed;
   inset: 0;
   z-index: 90;
@@ -4121,7 +4262,7 @@ a.plate:hover > img,
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  padding: 0.85rem var(--gutter);
+  padding: 0.85rem var(--edge);
   border-bottom: 1px solid var(--line);
 }
 
@@ -4214,15 +4355,16 @@ a.plate:hover > img,
   height: 1.6rem;
 }
 
-/* Offset so that the chevron itself — not its invisible hit box — lands on the
-   gutter, level with the left edge of the counter and the right edge of the
-   close button. */
+/* Offset so that the chevron itself — not its invisible hit box, and not its
+   viewBox either — lands on the page margin, level with the left edge of the
+   counter and the right edge of the close button. Both corrections live in
+   --chev-in; the vertical they land on is --edge. */
 .lb__nav--prev {
-  left: calc(var(--gutter) - (clamp(3rem, 6vw, 4.5rem) - 1.6rem) / 2);
+  left: calc(var(--edge) - var(--chev-in));
 }
 
 .lb__nav--next {
-  right: calc(var(--gutter) - (clamp(3rem, 6vw, 4.5rem) - 1.6rem) / 2);
+  right: calc(var(--edge) - var(--chev-in));
 }
 
 .lb__nav--prev:hover {
@@ -4241,7 +4383,7 @@ a.plate:hover > img,
   display: flex;
   align-items: baseline;
   gap: 1.2rem;
-  padding: 0.85rem var(--gutter);
+  padding: 0.85rem var(--edge);
   border-top: 1px solid var(--line);
 }
 
@@ -4894,6 +5036,22 @@ body.is-menu.home .nav:not(.is-stuck) .nav__mark {
   h2,
   h3 {
     break-after: avoid;
+  }
+
+  /* The batch reveal says of itself, at site.js:149, that the full set stays
+     in the document "so it works without JS, prints, and is indexable". Two of
+     those three were true. It hides the tail with the `hidden` attribute,
+     which lands on the UA rule reinforced at :461 and follows the document
+     into the paged medium: measured under print emulation, 43 of /obrazy's 87
+     paintings and 5 of /projekty's 7 year-chapters did not print. A reader who
+     prints the catalogue gets the first screen of it.
+
+     Needs to outrank the !important at :461, and does on specificity. Not the
+     two [data-more] boxes though — a "show the rest" button on a sheet of
+     paper is the one thing here that genuinely should not print, and it
+     already doesn't. */
+  [data-batch-item][hidden] {
+    display: block !important;
   }
 
   /* A horizontal drag strip cannot be paged. Let it set as a block of plates

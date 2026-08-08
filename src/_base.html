@@ -88,7 +88,14 @@
     <ul class="menu__list">
       {% for item in nav %}
       <li class="menu__item">
-        <a class="menu__link" style="--i:{{ loop.index0 }}" href="{{ item.href }}"
+        {# "You are here", which this list did not say. The desktop bar marks
+           the current page in gold with its underline lit and sets
+           aria-current on it; below the burger breakpoint that is the only
+           navigation there is, and it marked nothing — eight identical links,
+           one of which is the page you are standing on. #}
+        <a class="menu__link{% if item.slug == page %} is-active{% endif %}"
+           style="--i:{{ loop.index0 }}" href="{{ item.href }}"
+           {% if item.slug == page %}aria-current="page"{% endif %}
            {% if item.external %}target="_blank" rel="noopener"{% endif %}>
           {# No ordinal. Eight gold figures ran down the left of this list
              numbering a navigation — and nothing anywhere refers to "04".

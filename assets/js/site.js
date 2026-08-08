@@ -386,10 +386,43 @@
       raf = active || Math.abs(target.x - at.x) > 0.5 ? requestAnimationFrame(loop) : null;
     };
 
+    /* The preview is centred on the cursor, and the cursor is free to be one
+       pixel from the edge of the screen. Unclamped it was: at 1440x900 the box
+       ran to -33 at the left end of a row and to 1472 at the right end, 11.3%
+       of it off-screen at either end, and on the second row 23.3% of it below
+       the fold. The reader is pointing at a title and being shown three
+       quarters of the picture, cut on a hard vertical, which is exactly what
+       the plate components spend their rules avoiding.
+
+       Bounds, not repositioning: the box stays centred on the pointer until
+       that would push it off, then it stops. offsetWidth/offsetHeight and not
+       getBoundingClientRect, because the rect is the transformed box and the
+       resting state is scale(0.94) — the clamp would then let in 6% of the box
+       it is supposed to be keeping out. Measured every move rather than once,
+       because the row sets its own aspect-ratio a few lines below and the
+       height changes with it: 430px on row 0 and 410 on row 1 at 1440.
+
+       The top bound is the masthead's, not the window's. The bar is fixed,
+       opaque once stuck and z-index 50 against the preview's 40, so anything
+       clamped to y=0 would be sliding under it — the same defect as the fold,
+       with something drawn on top of it instead of nothing. */
+    const place = (x, y) => {
+      const halfW = peek.offsetWidth / 2;
+      const halfH = peek.offsetHeight / 2;
+      const pad = 12;
+      const nav = $(".nav");
+      const top = (nav ? nav.getBoundingClientRect().bottom : 0) + pad + halfH;
+      const left = pad + halfW;
+      const right = document.documentElement.clientWidth - pad - halfW;
+      const bottom = document.documentElement.clientHeight - pad - halfH;
+      // max() second so a preview too tall for the gap it is in stays put
+      // rather than inverting.
+      target.x = Math.min(Math.max(x, left), Math.max(left, right));
+      target.y = Math.min(Math.max(y, top), Math.max(top, bottom));
+    };
+
     scope.addEventListener("pointermove", (e) => {
       const row = e.target.closest("[data-peek-src]");
-      target.x = e.clientX;
-      target.y = e.clientY;
 
       if (row) {
         const src = row.dataset.peekSrc;
@@ -400,6 +433,13 @@
           // preview takes each item's own proportions rather than cropping.
           if (row.dataset.peekRatio) peek.style.aspectRatio = row.dataset.peekRatio;
         }
+      }
+
+      // After the aspect-ratio above, so the clamp measures the box the reader
+      // is about to be shown rather than the previous row's.
+      place(e.clientX, e.clientY);
+
+      if (row) {
         if (!active) {
           at.x = target.x;
           at.y = target.y;

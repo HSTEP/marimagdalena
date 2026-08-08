@@ -1,0 +1,28 @@
+# Generated files, committed because GitHub Pages serves them directly.
+#
+# Merging a branch that touched a template against one that touched content
+# conflicts in the rendered output every time, and resolving it by hand is
+# always wrong: the answer is not a blend of the two sides, it is whatever
+# `python build.py` produces from the merged sources. The `generated` driver
+# resolves to either side without complaint so the merge completes; then you
+# re-run the build and commit the real answer.
+#
+# The driver has to be declared per clone (it is a command, so git will not
+# take it from a repository file). Once:
+#
+#   git config merge.generated.name "generated — rebuild after merging"
+#   git config merge.generated.driver true
+#
+# Without that config git falls back to the normal merge and you get ordinary
+# conflicts, which is inconvenient but not dangerous.
+
+/*.html          merge=generated
+/sitemap.xml     merge=generated
+/robots.txt      merge=generated
+
+# Keyed by content hash, so both sides are internally consistent and neither
+# is mergeable. Same rule: take a side, rebuild.
+/images/_d/manifest.json merge=generated linguist-generated
+
+# Derivatives are binary; never try to diff or merge them textually.
+/images/_d/*.webp binary

@@ -7,3 +7,14 @@ node_modules
 __pycache__/
 *.pyc
 .venv
+
+# The admin's compiled bundle. Built into the container image, never committed.
+/dist/
+
+# Server-side working state: the pending-changes log the publish banner reads,
+# and the on-the-fly thumbnail cache. Local to whichever machine is running,
+# and deliberately outside the publish allowlist.
+/.mari/
+
+# Half-written manifests, if a build dies between the temp file and os.replace.
+/images/_d/.manifest-*

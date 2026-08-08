@@ -343,6 +343,17 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* The masthead is fixed and opaque, so the top 64-76px of the scrollport is
+     not viewing region — but only the eye knew that. Anything the browser
+     scrolled to itself parked underneath it: Shift+Tab back up a page put 44
+     controls at 1440, 48 at 1024 and 34 at 390 under the bar with their focus
+     ring sliced off, and six of them entirely behind it — including /404's
+     "Zpět na úvod", the one recovery action that page has. The reel already
+     declares its own dead strip this way (scroll-padding-inline-end, sec. 9);
+     this is the same statement for the document's own scroller, on the axis it
+     actually scrolls. --nav-h, not --nav-h-stuck: the bar is still 76 tall
+     when the target lands near the top of the page. Costs no layout. */
+  scroll-padding-top: var(--nav-h);
   scrollbar-color: var(--gold-deep) var(--ink-deep);
 }
 
@@ -2647,9 +2658,20 @@ a.plate:hover > img,
 }
 
 /* -------------------------------------------------------------- 16. people */
+/* On the site's ladder, not its own. .people and .works are the same object —
+   4:5 frame, --gap gutter, name over a micro-cap role — and they sat at
+   different sizes everywhere except 1440 and 1680, because this grid was the
+   one component tracked by auto-fill instead of by the breakpoints. Measured
+   against /obrazy: the portraits ran 1.368x the paintings from 1181 to 1438
+   and 1.539x across the whole 961-1180 laptop band, so the two pages showed
+   the same component at two scales one click apart in the nav. auto-fill also
+   opened a one-column window at 681-684, where 2x300 + 16 missed the 615.63px
+   track by 0.37px: one portrait per screen, and scrollHeight went 3158 -> 8193
+   -> 3127 across four pixels. Explicit ticks put it back on 1180/960 with the
+   rest of the site — ratio 1.000 at every width, and the window is gone. */
 .people {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: clamp(2rem, 4vw, 3.4rem) var(--gap);
 }
 
@@ -2670,8 +2692,8 @@ a.plate:hover > img,
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  /* Tracks come from the 960 rung now; this keeps only its tighter gutter. */
   .people {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.6rem var(--gap);
   }
 
@@ -3565,9 +3587,30 @@ a.plate:hover > img,
   display: none;
 }
 
+/* Opacity fades in; visibility does not. The rule above transitions both, and
+   for 0.45s after the class lands the transitioned value of `visibility` is
+   still `hidden` — so the `.focus()` that open() fires on the close button was
+   refused, silently, because a visibility-hidden element cannot take focus.
+   The dialog opened with focus left on the thumbnail behind it and the Tab
+   trap never engaged, since it only engages once focus is already inside.
+   Dropping visibility from the transition on the way IN makes the element
+   focusable in the same frame; the base rule still carries it on the way OUT,
+   so the close still fades for its full 0.45s instead of vanishing. Measured
+   identical fade-in to before, 0.00 -> 0.64 -> 0.90 -> 0.98 -> 1.00.
+
+   Hoisting the class out of the rAF in JS also lands focus, and was measured:
+   it puts the class in the same tick as `hidden = false`, so there is no
+   starting style to animate from and the viewer pops open at opacity 1. This
+   is the fix that keeps the fade.
+
+   Why fourteen rounds missed it: every probe ran under prefers-reduced-motion,
+   where the transition collapses to 0.001ms and visibility resolves inside the
+   frame — so focus landed correctly in exactly the configuration nobody
+   defaults to. */
 .lb.is-open {
   opacity: 1;
   visibility: visible;
+  transition: opacity 0.45s var(--ease);
 }
 
 /* Same height as the foot, and the foot the same as this. Both were sized by
@@ -3822,7 +3865,8 @@ body.is-lb .nav {
     display: none;
   }
 
-  .works {
+  .works,
+  .people {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
@@ -3904,7 +3948,8 @@ body.is-lb .nav {
     display: block;
   }
 
-  .works {
+  .works,
+  .people {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -4085,6 +4130,7 @@ body.is-lb .nav {
     grid-column: span 6;
   }
 
+
   /* Back to two columns here: the overlap that forced a single stack only
      happens in the 2/12 cell the site map gets on desktop, and eight stacked
      links cost ~190px of extra scroll on the device that can least afford it. */
@@ -4094,6 +4140,27 @@ body.is-lb .nav {
 
   .foot__map:has(iframe) {
     aspect-ratio: 16 / 9;
+  }
+}
+
+/* Two columns over three rows, and the tall one set the height of the row it
+   shared: ATELIÉR ended 198.3px above where ROZCESTNÍK could start, because
+   ROZCESTNÍK had to wait for SPOJENÍ beside it. A hole punched in the left
+   column and the right half of the last row left empty — the footer read as
+   two disconnected halves. Letting the contact column span both rows lets the
+   site map follow its own column instead of its tallest neighbour: one 35.2px
+   row gap where 233.5px used to be, both columns bottoming out together, and
+   the block 713.6 -> 515.4 at 960.
+
+   Scoped above 620 rather than left in the rule above it. Below that the
+   footer is 12-span and single-file, where the geometry came out identical
+   either way — but `grid-row: span 2` still opened a fifth row track to do
+   nothing in, and a track that exists for no reason is the kind of thing that
+   gets read as intent later. */
+@media (620px < width <= 960px) {
+  .foot__col--contact {
+    grid-row: span 2;
+    align-self: start;
   }
 }
 

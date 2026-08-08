@@ -248,12 +248,18 @@
       setInert(lb, true);
       requestAnimationFrame(() => {
         lb.classList.add("is-open");
-        /* Focus only once .is-open has landed. .lb is `visibility: hidden`
-           until then, and a visibility-hidden element cannot take focus — the
-           call used to sit before this frame, so it silently did nothing,
-           focus stayed on the thumbnail, and the Tab trap below (which only
-           engages when focus is already inside) never engaged either. Twelve
-           tabs walked the gallery behind the overlay. */
+        /* Focus once .is-open has landed — a visibility-hidden element cannot
+           take focus, and before this frame existed the call silently did
+           nothing: focus stayed on the thumbnail, the Tab trap below (which
+           only engages when focus is already inside) never engaged, and twelve
+           tabs walked the gallery behind the overlay.
+
+           The frame alone is not enough, and this comment used to claim it
+           was. `visibility` was in .lb's transition, so it stayed `hidden` for
+           0.45s after the class landed and the call kept no-opping for anyone
+           not on prefers-reduced-motion. What makes the line below work is
+           .lb.is-open dropping visibility from the transition (site.css,
+           sec. 20) — keep the two together. */
         $("[data-lb-close]", lb).focus();
       });
     };

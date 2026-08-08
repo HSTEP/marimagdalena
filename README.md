@@ -8,11 +8,20 @@ The system consists of three main components:
 
 1.  **Backend (`api.py`)**:
     -   A FastAPI application running on Python.
-    -   Serves as the central control unit.
-    -   Manages data stored in `src/data/*.json`.
-    -   Handles image uploads and reordering.
-    -   Triggers the site build process (`build.py`) automatically upon changes.
-    -   Serves the generated static website and the admin interface.
+    -   Every endpoint lives under `/api`, behind a session cookie. It serves
+        the admin app at `/admin/`, plus `/images` and `/assets`; `/` redirects
+        to the admin. It does **not** serve the generated site — GitHub Pages
+        does that, and a second copy would only ever disagree with the first.
+    -   Manages `src/data/*.json` and the files under `images/`, writing both
+        atomically (temp file, then `os.replace`) so a build never reads a
+        half-written file.
+    -   **Mutations do not build.** Editing changes the working tree and
+        nothing else; the site is rebuilt once, at publish time. Every mutation
+        firing its own unsynchronised build was how `manifest.json` got
+        corrupted and how a page could render with no paintings in it.
+    -   **Drafts are the working tree.** "Unpublished" means the checkout
+        differs from `HEAD`, so undo is `git checkout` and history is `git log`.
+        There is no second store to fall out of step.
 
 2.  **Static Site Generator (`build.py` + `media.py`)**:
     -   A Python script that generates the public-facing static website.
@@ -31,27 +40,49 @@ The system consists of three main components:
         which images the templates reach).
 
 3.  **Admin Interface (`mariadmin/`)**:
-    -   A **React** application (using `react-admin`, `vite`, `mui`).
-    -   Provides a user-friendly GUI to manage Paintings, Projects, and Exhibitions.
-    -   Communicates with `api.py` to fetch and update data.
+    -   A **React** application built with **Vite**.
+    -   Being rewritten as a phone-first, four-tab app in Czech — Obrazy,
+        Galerie, Projekty, Výstavy — for the artist to run herself. The
+        `react-admin` version still in this directory predates the endpoints
+        above and does not talk to them; it will not work until that rewrite
+        lands.
 
 ## 🚀 Quick Start
 
-### 1. Start the API/Backend
-This command starts the backend server, which serves both the public site and the admin interface.
+### 1. Set a password
+There are no accounts — one shared password, hashed with `hashlib.scrypt`:
+```bash
+python3 api.py hash-password        # prompts, prints scrypt$…
+export MARI_PASSWORD_HASH='scrypt$…'
+export SESSION_SECRET="$(python3 -c 'import secrets;print(secrets.token_hex(32))')"
+```
+`SESSION_SECRET` must be a fixed value: leave it out and one is generated at
+startup, which signs cookies fine but logs everybody out on every restart.
+Over plain HTTP on localhost also set `MARI_INSECURE_COOKIE=1`, since the
+cookie is otherwise `Secure` and the browser will not send it back.
+
+| variable | meaning |
+| --- | --- |
+| `MARI_PASSWORD_HASH` | scrypt hash from `hash-password`; without it nobody can log in |
+| `SESSION_SECRET` | signs the session cookie |
+| `MARI_INSECURE_COOKIE` | drops `Secure` for local HTTP development |
+| `SITE_ROOT` | the checkout to edit and build; defaults to the file's own directory |
+
+### 2. Start the API/Backend
 ```bash
 python3 api.py
 ```
-*   Public Site: `http://localhost:8000/`
-*   Admin Interface: `http://localhost:8000/admin/` (or similar, served from `dist`)
+*   Admin Interface: `http://localhost:8000/admin/` (served from `mariadmin/dist`)
+*   The public site is at www.marimagdalena.cz, built by `build.py` and hosted
+    by GitHub Pages from the repository root.
 
-### 2. Manual Rebuild
+### 3. Manual Rebuild
 If you manually edit data or templates, you can trigger a rebuild:
 ```bash
 python3 build.py
 ```
 
-### 3. Develop Admin App
+### 4. Develop Admin App
 To work on the React Admin interface:
 ```bash
 cd mariadmin
@@ -64,7 +95,8 @@ npm run dev
 -   `api.py`: Backend server and logic.
 -   `build.py`: Static site generator script.
 -   `media.py`: Responsive image derivation.
--   `src/data/`: JSON data files (`paintings.json`, `projekty.json`, `vystavy.json`).
+-   `src/data/`: JSON data files (`paintings.json`, `galerie.json`,
+    `projekty.json`, `vystavy.json`). One file per admin tab.
 -   `src/*.html`: Jinja2 page templates. Files starting with `_` are partials
     and are never rendered on their own:
     -   `_base.html` — the shared layout (head, nav, menu, footer, lightbox).
@@ -78,6 +110,32 @@ npm run dev
 -   `images/`: Uploaded images and static assets.
 -   `images/_d/`: **Generated.** Responsive derivatives; commit these, the
     static host serves them directly.
+-   `.mari/`: **Machine-local, gitignored.** The pending-changes log the
+    publish banner reads, and the on-the-fly thumbnail cache.
+
+## 🔌 API
+
+Everything is under `/api` and everything except `/api/login` requires the
+session cookie. `resource` is one of `paintings`, `galerie`, `projekty`,
+`vystavy` — an enum, so an unknown one is a 422 rather than a write to an
+arbitrary directory.
+
+| route | does |
+| --- | --- |
+| `POST /api/login`, `POST /api/logout`, `GET /api/me` | one shared password, rate-limited to 5 attempts a minute per address; the cookie lasts a year so a phone never sees the login screen twice |
+| `GET/POST /api/{resource}` | list (by `order`) and create |
+| `GET/PUT/DELETE /api/{resource}/{id}` | one record; `PUT` merges only the fields sent, so a form that submits `sold` alone cannot blank the title |
+| `POST /api/{resource}/photo` | create straight from a photograph, title left empty — the camera-roll path |
+| `PUT /api/{resource}/{id}/image` | swap the photograph, keeping the record and the filename |
+| `POST /api/{resource}/reorder` | `{ids: […]}`; ids not mentioned keep their order and go last, so a stale list cannot drop a painting |
+| `GET /api/thumb?path=…&w=…` | small JPEG for the grid, from `images/_d/` when a derivative already fits, otherwise cached under `.mari/thumbs/` |
+| `GET /api/pending` | how many unpublished changes there are, and a Czech sentence for each |
+
+Uploads are opened with Pillow and rejected if that fails, so a `.php` named
+`.jpg` never lands on disk. JPEG, PNG and WebP are stored as they arrive;
+anything else — an iPhone's HEIC — is re-encoded to JPEG with the EXIF
+rotation applied, because the browser cannot display the original. Names are
+sanitised and diacritics folded, so `Šárka.jpg` becomes `sarka.jpg`.
 
 ## 🛠 How to Make Changes
 

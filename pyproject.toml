@@ -6,6 +6,9 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.103.2",
+    # Signs the admin's session cookie. It arrives transitively today, but the
+    # import in api.py is direct and must not depend on someone else's choice.
+    "itsdangerous>=2.1.0",
     "jinja2>=3.1.6",
     "pillow>=10.0.0",
     # iPhone photographs arrive as HEIC, which Pillow cannot open on its own.

@@ -59,6 +59,24 @@
   --bg: var(--ink);
   --hair: var(--line);
   --hair-strong: var(--line-strong);
+  /* The accent was the one ground-dependent value with no alias, so it was the
+     one that never learned which ground it was on. --gold is sampled from the
+     wordmark and chosen against ink, where it measures 9.22:1; inherited raw
+     onto paper it is 1.78:1, a pale wash on a pale sheet. Three things reached
+     for it directly and all three land in the footer: the focus ring (120 of
+     the site's 340 rings, every one inside .on-paper), .foot__link:hover (11
+     links x 8 pages), and ::selection's highlight. None of them is a resting
+     state, which is why fifteen rounds of screenshots never saw it — a sheet
+     that never hovers and never tabs cannot photograph this class of defect.
+
+     --gold-deep is not the escape: 2.86:1 on paper, still under the 3:1 a
+     focus ring owes. A third gold would be, and the census says there are two.
+     So the accent stops being a pigment and becomes a relationship, like every
+     other alias in this block: the lit thing against the ground it is on. On
+     ink that is gold. On paper it is ink, which is also what .foot__social a
+     already hovered to long before this was written — the footer had the right
+     answer in one component and the wrong one in the other two. */
+  --accent: var(--gold);
 
   /* Measure */
   --gutter: clamp(1.25rem, 5vw, 5.5rem);
@@ -324,6 +342,7 @@
   --bg: var(--paper);
   --hair: var(--paper-line);
   --hair-strong: var(--paper-line-strong);
+  --accent: var(--paper-ink);
   background: var(--bg);
   color: var(--fg);
 }
@@ -434,13 +453,27 @@ table {
   width: 100%;
 }
 
+/* --bg, not --ink: on paper the highlight is now ink, so the text on it has to
+   be the sheet. ::selection resolves custom properties from the element it
+   originates on, so both flip together — measured rgb(227,166,60)/rgb(11,10,8)
+   on an ink node and rgb(20,17,13)/rgb(239,233,223) on a footer one. Before
+   this the footer's highlight was gold at 1.78:1 against the paper around it:
+   dragging a selection across an address barely marked it. */
 ::selection {
-  background: var(--gold);
-  color: var(--ink);
+  background: var(--accent);
+  color: var(--bg);
 }
 
+/* Was `2px solid var(--gold)`, one value over two grounds. It is the ring's
+   whole job to be seen, and on paper it measured 1.78:1 against the sheet it
+   was drawn on — under the 3:1 a non-text indicator owes, on 120 of the site's
+   340 focus targets. Now 9.22:1 on ink and 15.59:1 on paper.
+
+   outline-offset stays 3px, and that offset is why .cta--gold is not a third
+   case: the ring is painted outside the border box, so a gold button's ring
+   sits on the ink behind it, not on the button. */
 :focus-visible {
-  outline: 2px solid var(--gold);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -850,6 +883,31 @@ a.plate:hover > img,
   line-height: var(--lh-micro);
   color: var(--fg);
   position: relative;
+  /* `position: relative` with z-index auto is not a stacking context, so the
+     fill below — z-index: -1 — was not painting inside this button. It went
+     into the nearest real context's negative layer, which is the root's, and
+     from there it is behind every opaque background between the button and the
+     page. Measured at 2x, interior pixel, rest -> hover:
+
+       plain .cta on ink   (12,11,9)      -> (227,167,61)   fills
+       .cta--gold, hero    (227,167,61)   -> (227,167,61)   dead
+       .cta--gold, /404    (227,167,61)   -> (227,167,61)   dead
+       plain .cta in .foot (239,233,223)  -> (239,233,223)  dead
+
+     Two of the three variants had no hover at all. .cta--gold was hidden by
+     its own `background: var(--gold)` — a child at z-index -1 paints behind
+     its parent's background — so the bone inversion it declares has never once
+     been seen, on the "Objednat se" button that is the site's primary action.
+     The footer's was hidden by .foot's paper ground one level up. Both looked
+     correct in every screenshot, because a screenshot does not hover.
+
+     A stacking context paints its own background first and its negative-z
+     descendants immediately after, so isolating the button puts the fill back
+     between the two where it was always meant to be. .band four sections down
+     already isolates for exactly this reason, with exactly this comment
+     missing. After: gold -> bone on both gold buttons, paper -> gold in the
+     footer, and the plain ink one unchanged. */
+  isolation: isolate;
   overflow: hidden;
   transition: color 0.5s var(--ease), border-color 0.5s var(--ease);
 }
@@ -1034,10 +1092,34 @@ a.plate:hover > img,
   gap: 2rem;
 }
 
+/* One transition list, because there can only be one. Section 23 used to
+   declare a second `.nav__mark { transition: opacity 0.45s var(--ease) }` for
+   the homepage fade — same selector, same specificity, later in the file, so
+   it replaced this one wholesale rather than adding to it. Measured on /index:
+   `transitionProperty` was `opacity` alone. The width step that shrinks the
+   mark 158px -> 130px when the masthead sticks has therefore never eased; it
+   has been snapping, on every page, since the day the fade was written.
+
+   `visibility` is the third entry and the reason B1 is closed. The homepage
+   rule hides the mark with `opacity: 0` and `pointer-events: none`, which
+   takes it out of the picture and out of the mouse's reach but leaves it in
+   the sequential focus order — so the first Tab on the site's most-visited
+   page moved focus to a target that paints nothing. (`opacity: 0` establishes
+   a stacking context and applies to the element's whole rendering, so the
+   focus ring is computed and then painted into nothing: sampling the 200x90
+   box around the mark after one Tab returns eight distinct colours, all ink,
+   not one gold pixel.) `visibility: hidden` removes an element from that order
+   as well; stepped at 0s with a 0.45s delay it changes nothing about how the
+   fade looks, because it only lands after the opacity has finished arriving at
+   zero. Tab 1 on / is now the first nav link at >=961 and the burger below it,
+   both visible, both already carrying the 9.22:1 ring. */
 .nav__mark {
   display: block;
   flex: none;
-  transition: width 0.5s var(--ease);
+  transition:
+    width 0.5s var(--ease),
+    opacity 0.45s var(--ease),
+    visibility 0s;
   width: clamp(118px, 12vw, 158px);
 }
 
@@ -2669,10 +2751,18 @@ a.plate:hover > img,
    track by 0.37px: one portrait per screen, and scrollHeight went 3158 -> 8193
    -> 3127 across four pixels. Explicit ticks put it back on 1180/960 with the
    rest of the site — ratio 1.000 at every width, and the window is gone. */
+/* The row gap is the reference's, not its own. The tracks were put on the
+   site's ladder last round and the gutter was already --gap, but the vertical
+   half was left running clamp(2rem, 4vw, 3.4rem) against /obrazy's
+   clamp(2rem, 3vw, 2.8rem) — so the same object, one click apart in the nav,
+   opened 33% airier between rows across the whole laptop band (47.2px against
+   35.4px at 1180) and then, thanks to a 1.6rem override below 680, 20%
+   tighter on a phone. Not a difference in emphasis: a difference that
+   changes sign halfway down the breakpoint ladder. */
 .people {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(2rem, 4vw, 3.4rem) var(--gap);
+  gap: clamp(2rem, 3vw, 2.8rem) var(--gap);
 }
 
 @media (width <= 680px) {
@@ -2692,10 +2782,12 @@ a.plate:hover > img,
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* Tracks come from the 960 rung now; this keeps only its tighter gutter. */
-  .people {
-    gap: 1.6rem var(--gap);
-  }
+  /* The .people override that used to sit here set a 1.6rem row gap. Its
+     column half was already --gap, identical to the base, so the row gap was
+     its only live effect — and it put the portraits *tighter* than the
+     paintings at the one width where every other measure on the site opens
+     up. The base clamp floors at 2rem, which is exactly what /obrazy
+     measures at 700, 620 and 390. */
 
 }
 
@@ -3502,12 +3594,24 @@ a.plate:hover > img,
   color: var(--fg);
   width: fit-content;
   border-bottom: 1px solid transparent;
-  transition: color 0.35s, border-color 0.35s;
+  /* No `color` in here any more: the hover no longer moves it. */
+  transition: border-color 0.35s;
 }
 
+/* The rule lands, and that is the whole gesture. It used to be a colour change
+   too — to --gold, on paper, which took the link from 15.59:1 to 1.78:1. The
+   one hover on the site that made its target harder to read, and the underline
+   arriving to confirm it was the same invisible gold, so the whole thing read
+   as the word dissolving under the cursor.
+
+   The accent now resolves to ink here, which is what --fg already is, so there
+   is nothing left for `color` to say and it is not said. Rest cannot drop a
+   step to make room for a darkening either: --fg-2 is what .foot__line is set
+   at, and the address sits directly under the instagram handle — matching them
+   would cost the links their affordance to buy a hover nobody asked for. A
+   rule appearing under a word is what paper does. */
 .foot__link:hover {
-  color: var(--gold);
-  border-bottom-color: var(--gold);
+  border-bottom-color: var(--accent);
 }
 
 /* 0.4rem put the top of these boxes 18.39px under the map button's bottom
@@ -3532,10 +3636,18 @@ a.plate:hover > img,
   transition: background-color 0.4s, color 0.4s, border-color 0.4s;
 }
 
+/* This was the one hover on the site that already knew it was on paper — it
+   inverts to ink rather than reaching for the gold that the focus ring and
+   .foot__link:hover were both reaching for, and it was right. But it knew by
+   naming --paper-ink and --paper outright, which is knowing by accident: the
+   two raw ground tokens used for a paint anywhere outside :root, .on-paper and
+   the print block. Written as the aliases it is the same inversion stated as a
+   rule — the ground's text becomes the ground, and the ground becomes the
+   text. Resolves to exactly the same two values here; measured identical. */
 .foot__social a:hover {
-  background: var(--paper-ink);
-  color: var(--paper);
-  border-color: var(--paper-ink);
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
 }
 
 .foot__social svg {
@@ -4243,14 +4355,22 @@ body.is-lb .nav {
    has scrolled away. */
 .home .nav:not(.is-stuck) .nav__mark {
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
+  transition:
+    opacity 0.45s var(--ease),
+    visibility 0s linear 0.45s;
 }
 
 /* Except with the menu open, where the hero it defers to is covered: the
    header was left holding a close cross and nothing else. */
 body.is-menu.home .nav:not(.is-stuck) .nav__mark {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
+  transition:
+    opacity 0.45s var(--ease),
+    visibility 0s;
 }
 
 /* There used to be a third exception here, restoring the mark below 900px on
@@ -4263,9 +4383,9 @@ body.is-menu.home .nav:not(.is-stuck) .nav__mark {
    off on. The burger alone over the photograph is the stronger opening, and
    the mark still arrives on scroll and with the menu open. */
 
-.nav__mark {
-  transition: opacity 0.45s var(--ease);
-}
+/* The `.nav__mark { transition: opacity }` that used to close this section has
+   moved onto the element's own rule in section 5, where it no longer replaces
+   the width transition declared there. */
 
 /* ------------------------------------------------------------- 24. print */
 /* The ceník is the one page anyone prints, and printed it was unusable: the

@@ -537,11 +537,13 @@
         "text": "Galerie"
       }
     ],
-    "title": " Cosmopolitan Flower Day - styling",
+    "title": " Cosmopolitan Flower Day",
     "date": "Červen, 2024",
     "image": "images/projekty/WhatsApp Image 2025-04-05 at 2.57.01 PM.jpeg",
     "id": 39,
-    "order": 2
+    "order": 2,
+    "description": null,
+    "video_url": null
   },
   {
     "links": [

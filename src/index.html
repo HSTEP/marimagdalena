@@ -180,9 +180,13 @@
      edges of the measure: flush right, the section's main action sat 958px
      from the reading axis with a 677px hole between it and the caveat. #}
   <div class="svc__foot rv">
+    {# The number is the action here, the full list the aside: someone who
+       has just read the prices is deciding whether to book. Ranked the other
+       way it was the weakest phone link on the site, at the point where
+       /galerie gives the same pair a gold button. #}
     <div class="actions">
-      <a class="cta" href="cenik.html"><span>Celý ceník</span>{{ ico.arrow() }}</a>
-      <a class="qlink qlink--plain" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
+      <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>{{ site.phone_display }}</span>{{ ico.arrow() }}</a>
+      <a class="qlink" href="cenik.html">Celý ceník</a>
     </div>
     <p class="svc__note">Ceny jsou orientační, konečná cena vždy vychází z konzultace.</p>
   </div>

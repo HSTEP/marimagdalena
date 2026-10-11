@@ -106,6 +106,24 @@
 </section>
 {% endif %}
 
+{# The page's one call to come and see the work closes the chapter of work
+   that can still be bought. After the sold archive it sat 2.1 screens below
+   the last painting for sale (2.5 on a phone), under a wall headed
+   "Prodáno", where it read as an invitation to see what was gone. With
+   nothing for sale it closes the page instead. #}
+{% set studio_close %}
+<section class="shell bay--top">
+  <div class="endnote rv">
+    <p class="endnote__t">Obrazy je možné vidět naživo přímo v ateliéru.</p>
+    <div class="endnote__a">
+      <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>{{ site.phone_display }}</span>{{ ico.arrow() }}</a>
+      <a class="qlink" href="mailto:{{ site.email }}">{{ site.email }}</a>
+    </div>
+  </div>
+</section>
+{% endset %}
+{% if for_sale %}{{ studio_close }}{% endif %}
+
 {% if sold %}
 <section class="shell" id="prodano">
   <div class="sec sec--minor rv">
@@ -144,14 +162,6 @@
 </section>
 {% endif %}
 
-<section class="shell bay--top">
-  <div class="endnote rv">
-    <p class="endnote__t">Obrazy je možné vidět naživo přímo v ateliéru.</p>
-    <div class="endnote__a">
-      <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>{{ site.phone_display }}</span>{{ ico.arrow() }}</a>
-      <a class="qlink" href="mailto:{{ site.email }}">{{ site.email }}</a>
-    </div>
-  </div>
-</section>
+{% if not for_sale %}{{ studio_close }}{% endif %}
 
 {% endblock %}

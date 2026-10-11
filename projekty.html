@@ -5,7 +5,7 @@
 <script>document.documentElement.className = 'js';</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Projekty — Art Connecting | Maří Magdalena</title>
-<meta name="description" content="ART CONNECTING — kulturní platforma propojující výtvarné umění, literaturu, hudbu a tanec v Dobřanech. A další projekty salonu Maří Magdalena.">
+<meta name="description" content="Vytváříme novou kulturní platformu pro vaši realizaci ART CONNECTING.">
 <meta name="author" content="Marie Baštařová">
 <link rel="canonical" href="https://www.marimagdalena.cz/projekty.html">
 <meta name="theme-color" content="#0b0a08">
@@ -14,7 +14,7 @@
 <meta property="og:locale" content="cs_CZ">
 <meta property="og:site_name" content="Maří Magdalena">
 <meta property="og:title" content="Projekty — Art Connecting | Maří Magdalena">
-<meta property="og:description" content="ART CONNECTING — kulturní platforma propojující výtvarné umění, literaturu, hudbu a tanec v Dobřanech. A další projekty salonu Maří Magdalena.">
+<meta property="og:description" content="Vytváříme novou kulturní platformu pro vaši realizaci ART CONNECTING.">
 <meta property="og:url" content="https://www.marimagdalena.cz/projekty.html">
 <meta property="og:image" content="https://www.marimagdalena.cz/images/_d/projekty-kvetinovy_workshop-1440.webp?v=9d99286f">
 <meta property="og:image:width" content="1440">
@@ -25,7 +25,9 @@
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/jost-normal-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bodoni-moda-normal-latin.woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/jost-normal-latin-ext.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/bodoni-moda-normal-latin-ext.woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/site.min.css?v=0ad0285e">
 
 <script type="application/ld+json">
 {
@@ -53,17 +55,25 @@
 }
 </script>
 
-<script data-goatcounter="https://marimagdalena.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JWQK0C4N5N"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-JWQK0C4N5N');
+  if (/(^|\.)marimagdalena\.cz$/.test(location.hostname)) {
+    for (const src of ['https://gc.zgo.at/count.js', 'https://www.googletagmanager.com/gtag/js?id=G-JWQK0C4N5N']) {
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = src;
+      if (src.includes('zgo')) s.dataset.goatcounter = 'https://marimagdalena.goatcounter.com/count';
+      document.head.append(s);
+    }
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', 'G-JWQK0C4N5N');
+  }
 </script>
 </head>
 
 <body>
+<a class="skip" href="#main">Přeskočit na obsah</a>
 
 <header class="nav" data-nav>
   <div class="nav__in">
@@ -172,13 +182,10 @@ target="_blank" rel="noopener">
     </ul>
   </nav>
   <div class="menu__foot">
-    <a class="cta cta--gold" href="tel:+420607067778"><span>Objednat se</span><svg class="cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" width="15" height="15" aria-hidden="true">
-  <path d="M4 12h15m-5.5-6L19.5 12l-6 6"/>
-</svg>
-</a>
+    <a class="cta cta--gold" href="tel:+420607067778"><span>Objednat se</span></a>
     <a class="qlink qlink--plain" href="tel:+420607067778">+420 607 067 778</a>
     <a class="qlink qlink--plain" href="mailto:marie@marimagdalena.cz">marie@marimagdalena.cz</a>
-    <p class="label"><a href="https://maps.google.com/?q=C%C3%ADsa%C5%99e+Karla+1139+Dob%C5%99any" target="_blank" rel="noopener">Císaře Karla 1139 · Dobřany</a></p>
+    <p class="label"><a href="https://maps.google.com/?q=C%C3%ADsa%C5%99e+Karla+1139+Dob%C5%99any" target="_blank" rel="noopener">Císaře Karla 1139, Dobřany</a></p>
   </div>
 </div>
 
@@ -186,13 +193,9 @@ target="_blank" rel="noopener">
 
 <section class="shell phead">
   <div class="phead__grid">
-    <div class="phead__meta">
-      <span class="num">Platforma</span>
-    </div>
     <h1 class="phead__title">Art Connecting</h1>
     <p class="phead__lede lede">
-      Vytváříme novou kulturní platformu pro vaši realizaci&nbsp;— propojujeme
-      výtvarné umění, mluvené slovo, hudbu a tanec.
+      Vytváříme novou kulturní platformu pro vaši realizaci.
     </p>
   </div>
 </section>
@@ -200,7 +203,7 @@ target="_blank" rel="noopener">
 <section class="shell bay--top">
   <div class="grid">
     <figure class="poster rv-clip" style="grid-column: 1 / span 4">
-      <img class="ph" src="images/_d/vystavy-vit-1448.webp?v=a9031e83" srcset="images/_d/vystavy-vit-480.webp?v=a9031e83 480w, images/_d/vystavy-vit-800.webp?v=a9031e83 800w, images/_d/vystavy-vit-1280.webp?v=a9031e83 1280w, images/_d/vystavy-vit-1448.webp?v=a9031e83 1448w" sizes="(max-width:960px) 92vw, 30vw" width="1448" height="2048" alt="Plakát Art Connecting — 8. května 2024, kostel sv. Mikuláše v Dobřanech" loading="eager" decoding="async" style="background-color:#dfddd5">
+      <img class="ph" src="images/_d/vystavy-vit-1448.webp?v=a9031e83" srcset="images/_d/vystavy-vit-480.webp?v=a9031e83 480w, images/_d/vystavy-vit-800.webp?v=a9031e83 800w, images/_d/vystavy-vit-1280.webp?v=a9031e83 1280w, images/_d/vystavy-vit-1448.webp?v=a9031e83 1448w" sizes="(max-width:960px) 92vw, 30vw" width="1448" height="2048" alt="Plakát Art Connecting — 8. května 2024, kostel sv. Mikuláše v Dobřanech" loading="eager" decoding="async" style="background-color:#dfddd5" fetchpriority="high">
       <figcaption class="cap">
         <span class="cap__t">Art Connecting</span>
         <span class="cap__m cap__date">8. května 2024</span>
@@ -221,30 +224,30 @@ target="_blank" rel="noopener">
         z vás.
       </p>
       <p>
-        Naše první akce proběhla ve středu 8. května v Dobřanském kostele sv.
-        Mikuláše od 17&nbsp;hodin. Navázali jsme tím na úspěšnou Fashion Art Show,
+        Naše první akce proběhne ve středu 8. května v Dobřanském kostele sv.
+        Mikuláše od 17&nbsp;hodin. Navazujeme tím na úspěšnou Fashion Art Show,
         která se uskutečnila v roce 2019 v kostele sv. Víta v Dobřanech. Na
-        programu bylo prolínání výtvarného umění, mluveného slova, hudby a zpěvu.
-        Výstava obrazů Marie Baštařové, výtvarnice a iniciátorky projektu, byla
+        programu je prolínání výtvarného umění, mluveného slova, hudby a zpěvu.
+        Výstava obrazů Marie Baštařové, výtvarnice a iniciátorky projektu, bude
         doprovázena hrou na klavír česko-makedonské pianistky a pedagožky,
         umělecké ředitelky a předsedkyně spolku ICL Emy Jedličky Gogové a jejími
-        hosty — Innou Aslamas (koncertní pianistka, pedagožka, vedoucí klavírního
-        oddělení brněnské Konzervatoře), Vierou Gulázsi Maňáskovou (sopranistka)
-        a Kateřinou Oškerovou Machovskou (altistka). Obohacením akce byla promoce
+        hosty: Innou Aslamas (koncertní pianistka, pedagožka, vedoucí klav. odd.
+        brněnské Konzervatoře), Vierou Gulázsi Maňáskovou (sopranistka)
+        a Kateřinou Oškerovou Machovskou (altistka). Obohacením akce bude promoce
         a autorské čtení sbírky básní Zuzany Fryčkové (místní pedagožka, hudební
         interpretka a básnířka).
       </p>
       <p>
-        S Evou Šimandlovou (pedagožka, kytaristka) připravujeme projekt
-        v Mariánské Týnici, vzniká zde prostor pro další výstavu vašich
-        uměleckých děl. Budeme rádi, když se připojíte — obrátit se můžete na
+        Dne 22. června připravujeme s Evou Šimandlovou (pedagožka, kytaristka)
+        projekt v Mariánské Týnici, vzniká zde prostor pro další výstavu vašich
+        uměleckých děl, budeme rádi, když se připojíte. Můžete obrátit na
         <a href="mailto:artconnecting@email.cz">artconnecting@email.cz</a>.
       </p>
       <p>
         Zároveň věříme, že tímto projektem přispějeme nejen ke kulturnímu rozvoji
         našeho města, ale i k zachování a obnově národních památek a hodnot České
         republiky a Evropského kulturního dědictví, protože výtěžek
-        z dobrovolného vstupného věnujeme na obnovu dobřanských varhan.
+        z dobrovolného vstupného budeme věnovat na obnovu dobřanských varhan.
       </p>
       <p class="prose__sign">Realizační tým ART CONNECTING</p>
     </div>
@@ -253,12 +256,7 @@ target="_blank" rel="noopener">
 
 <section class="shell bay--sm">
   <div class="sec rv">
-    <div class="sec__meta">
-      <span class="label">Archiv</span>
-      <span class="label">Projekty</span>
-    </div>
-    <h2 class="sec__title">Co jsme dosud uspořádali</h2>
-    <p class="sec__note">Focení, workshopy, přehlídky a setkání&nbsp;— od roku 2019 do dneška.</p>
+    <h2 class="sec__title">Projekty</h2>
   </div>
 
   <div class="arch" data-batch="2">
@@ -337,12 +335,12 @@ target="_blank" rel="noopener">
                style="--d:45ms" aria-labelledby="projekt-2-2">
         <a class="arch__field"
            href="images/_d/projekty-whatsapp-image-2025-04-05-at-2-50-42-pm-634.webp?v=0e50fdda" data-lb-item
-           data-title="Focení s Irynou Bidasovou" data-tag="květen 2023">
-          <img class="ph" src="images/_d/projekty-whatsapp-image-2025-04-05-at-2-50-42-pm-634.webp?v=0e50fdda" srcset="images/_d/projekty-whatsapp-image-2025-04-05-at-2-50-42-pm-480.webp?v=0e50fdda 480w, images/_d/projekty-whatsapp-image-2025-04-05-at-2-50-42-pm-634.webp?v=0e50fdda 634w" sizes="(max-width:620px) 44vw, (max-width:1100px) 46vw, 30vw" width="634" height="960" alt="Focení s Irynou Bidasovou" loading="lazy" decoding="async" style="background-color:#e8c3c6">
+           data-title="Focení s Irynou Bidašovou" data-tag="květen 2023">
+          <img class="ph" src="images/_d/projekty-whatsapp-image-2025-04-05-at-2-50-42-pm-634.webp?v=0e50fdda" srcset="images/_d/projekty-whatsapp-image-2025-04-05-at-2-50-42-pm-480.webp?v=0e50fdda 480w, images/_d/projekty-whatsapp-image-2025-04-05-at-2-50-42-pm-634.webp?v=0e50fdda 634w" sizes="(max-width:620px) 44vw, (max-width:1100px) 46vw, 30vw" width="634" height="960" alt="Focení s Irynou Bidašovou" loading="lazy" decoding="async" style="background-color:#e8c3c6">
         </a>
 
         <div class="arch__meta">
-<p class="arch__date">květen 2023</p>          <h4 class="arch__title" id="projekt-2-2">Focení s Irynou Bidasovou</h4>
+<p class="arch__date">květen 2023</p>          <h4 class="arch__title" id="projekt-2-2">Focení s Irynou Bidašovou</h4>
         </div>
       </article>
       <article class="arch__item rv"
@@ -384,12 +382,12 @@ target="_blank" rel="noopener">
                style="--d:45ms" aria-labelledby="projekt-3-2">
         <a class="arch__field"
            href="images/_d/projekty-whatsapp-image-2025-04-05-at-2-37-32-pm-720.webp?v=d52f01f3" data-lb-item
-           data-title="Pracovní stáž Studio Wella Praha" data-tag="Řijen 2022">
+           data-title="Pracovní stáž Studio Wella Praha" data-tag="říjen 2022">
           <img class="ph" src="images/_d/projekty-whatsapp-image-2025-04-05-at-2-37-32-pm-720.webp?v=d52f01f3" srcset="images/_d/projekty-whatsapp-image-2025-04-05-at-2-37-32-pm-480.webp?v=d52f01f3 480w, images/_d/projekty-whatsapp-image-2025-04-05-at-2-37-32-pm-720.webp?v=d52f01f3 720w" sizes="(max-width:620px) 44vw, (max-width:1100px) 46vw, 30vw" width="720" height="960" alt="Pracovní stáž Studio Wella Praha" loading="lazy" decoding="async" style="background-color:#958b7a">
         </a>
 
         <div class="arch__meta">
-<p class="arch__date">Řijen 2022</p>          <h4 class="arch__title" id="projekt-3-2">Pracovní stáž Studio Wella Praha</h4>
+<p class="arch__date">říjen 2022</p>          <h4 class="arch__title" id="projekt-3-2">Pracovní stáž Studio Wella Praha</h4>
           <div class="arch__links">
             <a class="qlink" href="https://www.instagram.com/studiowellapraha/?hl=cs" target="_blank" rel="noopener noreferrer"
                aria-describedby="projekt-3-2">Studio Wella Praha</a>
@@ -954,25 +952,22 @@ target="_blank" rel="noopener">
 
   <div class="works__more" data-more hidden>
     <button class="cta" type="button" data-more-btn>
-      <span>Starší projekty</span><svg class="cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" width="15" height="15" aria-hidden="true">
-  <path d="M4 12h15m-5.5-6L19.5 12l-6 6"/>
-</svg>
-
+      <span>Starší projekty</span>
     </button>
   </div>
 </section>
 
 </main>
 
-<footer class="foot on-paper">
+<footer class="foot">
   <div class="shell">
     <div class="foot__grid">
       <div class="foot__mark">
-        <img class="ph" src="images/_d/logo_b-1790.webp?v=07f793c0" srcset="images/_d/logo_b-480.webp?v=07f793c0 480w, images/_d/logo_b-800.webp?v=07f793c0 800w, images/_d/logo_b-1280.webp?v=07f793c0 1280w, images/_d/logo_b-1790.webp?v=07f793c0 1790w" sizes="210px" width="1790" height="778" alt="Maří Magdalena" loading="lazy" decoding="async">
+        <img class="ph" src="images/_d/logo_w-1784.webp?v=93b607bf" srcset="images/_d/logo_w-480.webp?v=93b607bf 480w, images/_d/logo_w-800.webp?v=93b607bf 800w, images/_d/logo_w-1280.webp?v=93b607bf 1280w, images/_d/logo_w-1784.webp?v=93b607bf 1784w" sizes="210px" width="1784" height="766" alt="Maří Magdalena" loading="lazy" decoding="async">
       </div>
 
       <div class="foot__col foot__col--wide">
-        <p class="label">Ateliér</p>
+        <p class="label">Salon</p>
         <p class="foot__line">
           Hair &amp; Art Salon Maří Magdalena<br>
           Marie Baštařová
@@ -985,7 +980,7 @@ target="_blank" rel="noopener">
       </div>
 
       <div class="foot__col foot__col--contact">
-        <p class="label">Spojení</p>
+        <p class="label">Kontakt</p>
         <a class="foot__link" href="tel:+420607067778">+420 607 067 778</a>
         <a class="foot__link" href="mailto:marie@marimagdalena.cz">marie@marimagdalena.cz</a>
         <a class="foot__line foot__addr" href="https://maps.google.com/?q=C%C3%ADsa%C5%99e+Karla+1139+Dob%C5%99any" target="_blank" rel="noopener">Císaře Karla 1139<br>334 41 Dobřany</a>
@@ -993,10 +988,7 @@ target="_blank" rel="noopener">
         <div class="foot__map" data-map data-src="https://maps.google.com/maps?width=600&amp;height=420&amp;hl=cs&amp;q=C%C3%ADsa%C5%99e%20Karla%201139%20Dobrany+(Kade%C5%99nictv%C3%AD%20Ma%C5%99%C3%AD%20Magdalena)&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
              data-title="Mapa — Císaře Karla 1139, Dobřany">
           <div class="foot__map-ph">
-            <button class="cta" type="button" data-map-load><span>Zobrazit mapu</span><svg class="cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" width="15" height="15" aria-hidden="true">
-  <path d="M4 12h15m-5.5-6L19.5 12l-6 6"/>
-</svg>
-</button>
+            <button class="cta" type="button" data-map-load><span>Zobrazit mapu</span></button>
           </div>
         </div>
         <div class="foot__social">
@@ -1014,7 +1006,7 @@ target="_blank" rel="noopener">
       </div>
 
       <div class="foot__col foot__col--nav">
-        <p class="label">Rozcestník</p>
+        <p class="label">Stránky</p>
         <div class="foot__map-links">
           <a class="foot__link" href="index.html">Salon</a>
           <a class="foot__link" href="galerie.html">Hair&nbsp;&amp;&nbsp;Styling</a>
@@ -1034,8 +1026,8 @@ target="_blank" rel="noopener">
 
     <div class="foot__bar">
       <p class="label">© 2026 Maří Magdalena</p>
-      <p class="label">Logo — Slávka Štrbová</p>
-      <p class="label">Web — <a href="https://github.com/HSTEP/marimagdalena" target="_blank" rel="noopener">Štěpán Havlovic</a></p>
+      <p class="label">Autorka loga: Slávka Štrbová</p>
+      <p class="label">Web: <a href="https://github.com/HSTEP/marimagdalena" target="_blank" rel="noopener">Štěpán Havlovic</a></p>
     </div>
   </div>
 </footer>

@@ -4,32 +4,27 @@
 
 {% block title %}Partneři | {{ site.name }}{% endblock %}
 {% block canonical %}partneri.html{% endblock %}
-{% block description %}Fotografové, návrhářky, floristky a výtvarnice, se kterými salon Maří Magdalena spolupracuje na proměnách, výstavách a projektech.{% endblock %}
+{% block description %}Partneři salonu Maří Magdalena: {{ partners|map(attribute='name')|join(', ') }}.{% endblock %}
 
 {% block content %}
 
 <section class="shell phead">
   <div class="phead__grid">
-    <div class="phead__meta">
-      <span class="num">Lidé</span>
-    </div>
     <h1 class="phead__title">Partneři</h1>
-    <p class="phead__lede lede">
-      Nic z toho nevzniká samo. Fotografové, návrhářky, floristky
-      a výtvarnice, bez kterých by proměny ani výstavy nedávaly smysl.
-    </p>
   </div>
 </section>
 
 <section class="shell bay--top">
   <div class="people">
     {% for p in partners %}
-    <a class="person rv" href="{{ p.url }}" target="_blank" rel="noopener noreferrer"
+    {% set tag = 'a' if p.url else 'div' %}
+    <{{ tag }} class="person rv"{% if p.url %} href="{{ p.url }}" target="_blank" rel="noopener noreferrer"{% endif %}
        style="--d:{{ (loop.index0 % 12) * 25 }}ms">
       {# The name below names the card; the portrait's alt repeated it. #}
       <div class="person__art" aria-hidden="true">
         {{ img(p.photo, alt=p.name, sizes='(max-width:620px) 44vw, (max-width:1180px) 44vw, 30vw', cover=true,
-               loading='eager' if loop.index0 < 2 else 'lazy') }}
+               loading='eager' if loop.index0 < 2 else 'lazy',
+               fetchpriority='high' if loop.first else none) }}
         {% if p.logo %}
         {# Through the responsive helper like every other picture: the raw file
            was up to 1920px wide for a mark drawn at 70px on a phone. #}
@@ -38,27 +33,10 @@
       </div>
       <div class="person__body">
         <span class="person__name">{{ p.name }}</span>
-        <span class="person__role">{{ p.role }}{% if p.studio %} · {{ p.studio }}{% endif %}</span>
+        {% if p.role or p.studio %}<span class="person__role">{{ p.role or p.studio }}</span>{% endif %}
       </div>
-    </a>
+    </{{ tag }}>
     {% endfor %}
-
-    {# Same two parts as a partner card — plate, then ruled caption — so it
-       registers with the row instead of hanging in the band between the
-       photographs and their names. Short enough to fit the plate at every
-       width: "Chcete spolupracovat?" needed auto-hyphenation to survive a
-       167px phone card, and a hyphenated Bodoni display line is a worse
-       answer than a shorter sentence. #}
-    <a class="person person--call rv" href="mailto:{{ site.email }}"
-       style="--d:{{ (partners|length % 12) * 25 }}ms">
-      <div class="person__art person__art--call">
-        <span class="person__ask">Chcete se přidat?</span>
-      </div>
-      <div class="person__body">
-        <span class="person__name">Napište nám</span>
-        <span class="person__role">{{ site.email }}</span>
-      </div>
-    </a>
   </div>
 </section>
 

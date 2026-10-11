@@ -5,19 +5,15 @@
 
 {% block title %}Projekty — Art Connecting | {{ site.name }}{% endblock %}
 {% block canonical %}projekty.html{% endblock %}
-{% block description %}ART CONNECTING — kulturní platforma propojující výtvarné umění, literaturu, hudbu a tanec v Dobřanech. A další projekty salonu Maří Magdalena.{% endblock %}
+{% block description %}Vytváříme novou kulturní platformu pro vaši realizaci ART CONNECTING.{% endblock %}
 
 {% block content %}
 
 <section class="shell phead">
   <div class="phead__grid">
-    <div class="phead__meta">
-      <span class="num">Platforma</span>
-    </div>
     <h1 class="phead__title">Art Connecting</h1>
     <p class="phead__lede lede">
-      Vytváříme novou kulturní platformu pro vaši realizaci&nbsp;— propojujeme
-      výtvarné umění, mluvené slovo, hudbu a tanec.
+      Vytváříme novou kulturní platformu pro vaši realizaci.
     </p>
   </div>
 </section>
@@ -29,7 +25,7 @@
     <figure class="poster rv-clip" style="grid-column: 1 / span 4">
       {{ img('images/vystavy/vit.jpg',
              alt='Plakát Art Connecting — 8. května 2024, kostel sv. Mikuláše v Dobřanech',
-             sizes='(max-width:960px) 92vw, 30vw', loading='eager') }}
+             sizes='(max-width:960px) 92vw, 30vw', loading='eager', fetchpriority='high') }}
       <figcaption class="cap">
         <span class="cap__t">Art Connecting</span>
         <span class="cap__m cap__date">8. května 2024</span>
@@ -49,31 +45,34 @@
         a pomáhat zviditelnit vaše malé i velké projekty. Může se přidat každý
         z vás.
       </p>
+      {# The announcement as the live site prints it, in its own future
+         tense: the poster beside it dates it to 8 May 2024, and rewriting it
+         as a report would claim things only the organisers can confirm. #}
       <p>
-        Naše první akce proběhla ve středu 8. května v Dobřanském kostele sv.
-        Mikuláše od 17&nbsp;hodin. Navázali jsme tím na úspěšnou Fashion Art Show,
+        Naše první akce proběhne ve středu 8. května v Dobřanském kostele sv.
+        Mikuláše od 17&nbsp;hodin. Navazujeme tím na úspěšnou Fashion Art Show,
         která se uskutečnila v roce 2019 v kostele sv. Víta v Dobřanech. Na
-        programu bylo prolínání výtvarného umění, mluveného slova, hudby a zpěvu.
-        Výstava obrazů Marie Baštařové, výtvarnice a iniciátorky projektu, byla
+        programu je prolínání výtvarného umění, mluveného slova, hudby a zpěvu.
+        Výstava obrazů Marie Baštařové, výtvarnice a iniciátorky projektu, bude
         doprovázena hrou na klavír česko-makedonské pianistky a pedagožky,
         umělecké ředitelky a předsedkyně spolku ICL Emy Jedličky Gogové a jejími
-        hosty — Innou Aslamas (koncertní pianistka, pedagožka, vedoucí klavírního
-        oddělení brněnské Konzervatoře), Vierou Gulázsi Maňáskovou (sopranistka)
-        a Kateřinou Oškerovou Machovskou (altistka). Obohacením akce byla promoce
+        hosty: Innou Aslamas (koncertní pianistka, pedagožka, vedoucí klav. odd.
+        brněnské Konzervatoře), Vierou Gulázsi Maňáskovou (sopranistka)
+        a Kateřinou Oškerovou Machovskou (altistka). Obohacením akce bude promoce
         a autorské čtení sbírky básní Zuzany Fryčkové (místní pedagožka, hudební
         interpretka a básnířka).
       </p>
       <p>
-        S Evou Šimandlovou (pedagožka, kytaristka) připravujeme projekt
-        v Mariánské Týnici, vzniká zde prostor pro další výstavu vašich
-        uměleckých děl. Budeme rádi, když se připojíte — obrátit se můžete na
+        Dne 22. června připravujeme s Evou Šimandlovou (pedagožka, kytaristka)
+        projekt v Mariánské Týnici, vzniká zde prostor pro další výstavu vašich
+        uměleckých děl, budeme rádi, když se připojíte. Můžete obrátit na
         <a href="mailto:artconnecting@email.cz">artconnecting@email.cz</a>.
       </p>
       <p>
         Zároveň věříme, že tímto projektem přispějeme nejen ke kulturnímu rozvoji
         našeho města, ale i k zachování a obnově národních památek a hodnot České
         republiky a Evropského kulturního dědictví, protože výtěžek
-        z dobrovolného vstupného věnujeme na obnovu dobřanských varhan.
+        z dobrovolného vstupného budeme věnovat na obnovu dobřanských varhan.
       </p>
       {# A colophon, not a label. Set in tracked micro-caps at the foot of the
          column with nothing under it, it read as a heading whose list had
@@ -88,12 +87,7 @@
     {# One eyebrow grammar across the site: grey micro-caps in a section head,
        gold italic serif in a page head. "Archiv" was gold italic here and grey
        caps on /obrazy — the same word, the same slot, two clicks apart. #}
-    <div class="sec__meta">
-      <span class="label">Archiv</span>
-      <span class="label">Projekty</span>
-    </div>
-    <h2 class="sec__title">Co jsme dosud uspořádali</h2>
-    <p class="sec__note">Focení, workshopy, přehlídky a setkání&nbsp;— od roku 2019 do dneška.</p>
+    <h2 class="sec__title">Projekty</h2>
   </div>
 
   {% if projekty %}
@@ -177,7 +171,7 @@
 
   <div class="works__more" data-more hidden>
     <button class="cta" type="button" data-more-btn>
-      <span>Starší projekty</span>{{ ico.arrow() }}
+      <span>Starší projekty</span>
     </button>
   </div>
   {% else %}

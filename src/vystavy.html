@@ -5,20 +5,13 @@
 
 {% block title %}Výstavy | {{ site.name }}{% endblock %}
 {% block canonical %}vystavy.html{% endblock %}
-{% block description %}Přehled výstav a kulturních večerů, na kterých se salon Maří Magdalena a Marie Baštařová podílely.{% endblock %}
+{% block description %}Výstavy: {{ vystavy[:4]|map(attribute='title')|map('striptags')|join(', ') }}.{% endblock %}
 
 {% block content %}
 
 <section class="shell phead">
   <div class="phead__grid">
-    <div class="phead__meta">
-      <span class="num">Kalendář</span>
-    </div>
     <h1 class="phead__title">Výstavy</h1>
-    <p class="phead__lede lede">
-      Obrazy nezůstávají jen v ateliéru. Kostely, kavárny, hotely
-      i galerie&nbsp;— místa, kde byla díla k vidění.
-    </p>
   </div>
 </section>
 
@@ -76,7 +69,8 @@
                  sizes=('(max-width:620px) 90vw, (max-width:960px) 24vw, 28vw' if loop.index0 % 4 == 0
                         else '(max-width:620px) 40vw, (max-width:960px) 24vw, 28vw'),
                  cover=not is_doc,
-                 loading='eager' if chapter.first and loop.first else 'lazy') }}
+                 loading='eager' if chapter.first and loop.first else 'lazy',
+                 fetchpriority='high' if chapter.first and loop.first else none) }}
         </a>
         {% endif %}
         <div class="xcat__text">
@@ -108,15 +102,6 @@
   {% else %}
   <p class="lede">Žádné výstavy k zobrazení.</p>
   {% endif %}
-</section>
-
-<section class="shell bay--top">
-  <div class="endnote rv">
-    <p class="endnote__t">Chystáte výstavu, koncert nebo večer, kam by se obrazy hodily?</p>
-    <div class="endnote__a">
-      <a class="cta cta--gold" href="mailto:{{ site.email }}"><span>{{ site.email }}</span>{{ ico.arrow() }}</a>
-    </div>
-  </div>
 </section>
 
 {% endblock %}

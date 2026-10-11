@@ -10,7 +10,7 @@
 <script>document.documentElement.className = 'js';</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}{{ site.name }} — {{ site.tagline }}, {{ site.city }}{% endblock %}</title>
-<meta name="description" content="{% block description %}Kadeřnický salon a umělecká galerie Marie Baštařové v Dobřanech. Střih, barva, styling, proměny — a autorské obrazy vystavené přímo v ateliéru.{% endblock %}">
+<meta name="description" content="{% block description %}Maří Magdalena je kadeřnický salon v Dobřanech, který v roce 2011 otevřela Marie Baštařová. V salonu se také nachází umělecká galerie, kde si můžete prohlédnout autorská díla.{% endblock %}">
 <meta name="author" content="{{ site.person }}">
 <link rel="canonical" href="{{ site.url }}/{% block canonical %}{% endblock %}">
 <meta name="theme-color" content="#0b0a08">
@@ -48,7 +48,11 @@
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/jost-normal-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bodoni-moda-normal-latin.woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/site.css">
+{# Czech: ř, š, ž, ě live in the latin-ext subsets, which every page needs. #}
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/jost-normal-latin-ext.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/bodoni-moda-normal-latin-ext.woff2" crossorigin>
+{# site.min.css is site.css without its notes, written by build.py. #}
+<link rel="stylesheet" href="assets/css/site.min.css?v={{ css_version }}">
 
 <script type="application/ld+json">
 {
@@ -81,17 +85,27 @@
 </script>
 {% endif %}
 
-<script data-goatcounter="https://marimagdalena.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JWQK0C4N5N"></script>
+{# Counted on the real domain only, so previews and staging copies of the
+   site never show up in the salon's statistics. #}
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-JWQK0C4N5N');
+  if (/(^|\.)marimagdalena\.cz$/.test(location.hostname)) {
+    for (const src of ['https://gc.zgo.at/count.js', 'https://www.googletagmanager.com/gtag/js?id=G-JWQK0C4N5N']) {
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = src;
+      if (src.includes('zgo')) s.dataset.goatcounter = 'https://marimagdalena.goatcounter.com/count';
+      document.head.append(s);
+    }
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', 'G-JWQK0C4N5N');
+  }
 </script>
 </head>
 
 <body{% if page == "salon" %} class="home"{% endif %}>
+<a class="skip" href="#main">Přeskočit na obsah</a>
 
 <header class="nav" data-nav>
   <div class="nav__in">
@@ -152,10 +166,10 @@
     </ul>
   </nav>
   <div class="menu__foot">
-    <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>Objednat se</span>{{ ico.arrow() }}</a>
+    <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>Objednat se</span></a>
     <a class="qlink qlink--plain" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
     <a class="qlink qlink--plain" href="mailto:{{ site.email }}">{{ site.email }}</a>
-    <p class="label"><a href="{{ site.maps_link }}" target="_blank" rel="noopener">{{ site.street }} · {{ site.city }}</a></p>
+    <p class="label"><a href="{{ site.maps_link }}" target="_blank" rel="noopener">{{ site.street }}, {{ site.city }}</a></p>
   </div>
 </div>
 
@@ -163,15 +177,15 @@
 {% block content %}{% endblock %}
 </main>
 
-<footer class="foot on-paper">
+<footer class="foot">
   <div class="shell">
     <div class="foot__grid">
       <div class="foot__mark">
-        {{ img(site.logo_dark, alt=site.name, sizes='210px') }}
+        {{ img(site.logo_gold, alt=site.name, sizes='210px') }}
       </div>
 
       <div class="foot__col foot__col--wide">
-        <p class="label">Ateliér</p>
+        <p class="label">Salon</p>
         <p class="foot__line">
           {{ site.tagline }} {{ site.name }}<br>
           {{ site.person }}
@@ -188,7 +202,7 @@
          in a slot that carried its own hairline rule while the other columns
          did not, so its heading hung 22px below every other heading. #}
       <div class="foot__col foot__col--contact">
-        <p class="label">Spojení</p>
+        <p class="label">Kontakt</p>
         <a class="foot__link" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
         <a class="foot__link" href="mailto:{{ site.email }}">{{ site.email }}</a>
         {# The address opens the map: directions were three taps and an embed
@@ -202,7 +216,7 @@
         <div class="foot__map" data-map data-src="{{ site.maps }}"
              data-title="Mapa — {{ site.street }}, {{ site.city }}">
           <div class="foot__map-ph">
-            <button class="cta" type="button" data-map-load><span>Zobrazit mapu</span>{{ ico.arrow() }}</button>
+            <button class="cta" type="button" data-map-load><span>Zobrazit mapu</span></button>
           </div>
         </div>
         <div class="foot__social">
@@ -212,7 +226,7 @@
       </div>
 
       <div class="foot__col foot__col--nav">
-        <p class="label">Rozcestník</p>
+        <p class="label">Stránky</p>
         {# Two columns of four. A single stack of eight ran 240px below the
            other columns and left that much dead paper beside it. #}
         <div class="foot__map-links">
@@ -225,8 +239,8 @@
 
     <div class="foot__bar">
       <p class="label">© {{ build_year }} {{ site.name }}</p>
-      <p class="label">Logo — Slávka Štrbová</p>
-      <p class="label">Web — <a href="https://github.com/HSTEP/marimagdalena" target="_blank" rel="noopener">Štěpán Havlovic</a></p>
+      <p class="label">Autorka loga: Slávka Štrbová</p>
+      <p class="label">Web: <a href="https://github.com/HSTEP/marimagdalena" target="_blank" rel="noopener">Štěpán Havlovic</a></p>
     </div>
   </div>
 </footer>

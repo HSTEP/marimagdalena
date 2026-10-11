@@ -9,6 +9,7 @@ Templates whose name starts with ``_`` are partials and are never rendered on
 their own.
 """
 
+import hashlib
 import json
 import os
 import re
@@ -137,13 +138,14 @@ def looks_like_url(value):
 TEXT_FIXES = [
     # A proper noun typed lower-case: "Večer pro klášter chotěšov".
     (re.compile(r"\bchotěšov\b"), "Chotěšov"),
-    # Her own site and domain spell it without diacritics
-    # (irynabidasova.com), and "s" takes the instrumental case.
-    (re.compile(r"\bs\s+Iryna\s+Bidašová\b"), "s Irynou Bidasovou"),
-    (re.compile(r"\bIryna\s+Bidašová\b"), "Iryna Bidasova"),
+    # "s" takes the instrumental case. Her surname keeps its háček: her own
+    # logo spells it Bidašová, only the domain drops it.
+    (re.compile(r"\bs\s+Iryna\s+Bidašová\b"), "s Irynou Bidašovou"),
+    # "Řijen, 2022": the month is říjen.
+    (re.compile(r"\bŘijen\b"), "Říjen"),
 ]
 
-TEXT_FIELDS = ("title", "description")
+TEXT_FIELDS = ("title", "description", "date")
 
 
 def repair_text(records):
@@ -538,38 +540,39 @@ def collect_image_paths(paintings, projekty, vystavy, galerie_images, partners):
     return {p for p in paths if p}
 
 
+# Names as each partner's own logo spells them. The live page showed only
+# photographs and logos, so no card carries a profession the partner did not
+# state. A url of None renders the card without a link: the domains marked
+# below no longer resolve.
 PARTNERS = [
     {
         "name": "Jirka Krejčík",
-        "role": "Fotograf",
-        "url": "http://jirkakrejcik.cz",
+        "url": None,  # jirkakrejcik.cz — no longer resolves
         "photo": "images/loga/jirkaf.jpg",
         "logo": "images/loga/jirka.png",
     },
     {
         "name": "Lydie Bernklauová",
-        "role": "Floristika",
         "studio": "LB Design",
         "url": "https://www.instagram.com/lydie_bernklauova/",
         "photo": "images/loga/lidaf.png",
         "logo": "images/loga/lida.png",
     },
     {
-        "name": "Iryna Bidasova",
-        "role": "Výtvarnice",
+        "name": "Iryna Bidašová",
         "url": "https://www.irynabidasova.com",
         "photo": "images/loga/irinaf.jpg",
         "logo": "images/loga/irina.png",
     },
     {
         "name": "Michaela Naušová",
-        "role": "Módní návrhářka",
-        "url": "http://michaelanausova.com",
+        "url": None,  # michaelanausova.com — no longer resolves
         "photo": "images/loga/nausovaf.png",
         "logo": "images/loga/michaela.png",
     },
     {
         "name": "Slávka Štrbová",
+        # The live footer's own credit.
         "role": "Autorka loga",
         "url": (
             "https://domazlicky.denik.cz/lide-odvedle/slavka-strbova-lasku-k-malovani-"
@@ -579,15 +582,13 @@ PARTNERS = [
         "logo": None,
     },
     {
-        "name": "Lenka Koščo",
-        "role": "Fotografka",
-        "url": "https://www.lenkakosco.cz",
+        "name": "Lenka Kosco",
+        "url": None,  # lenkakosco.cz — no longer resolves
         "photo": "images/loga/lenkaf.jpg",
         "logo": "images/loga/lenka.png",
     },
     {
-        "name": "Renata Divišková",
-        "role": "Výtvarnice",
+        "name": "Renata Divíšková",
         "studio": "RED",
         "url": "https://www.instagram.com/red_renata_diviskova_art/",
         "photo": "images/loga/renataf.jpg",
@@ -595,15 +596,15 @@ PARTNERS = [
     },
 ]
 
-# Headline services. The "from" price of each is the cheapest row of the matching
-# group in PRICING below — keep the two in step when prices change.
+# Homepage rows: (price-list group, row) pairs looked up in PRICING below, so
+# the "od" figure is always the cheapest price that row actually lists.
 SERVICES = [
-    ("Střih", "Konzultace, mytí, střih a foukaná. Dámský i pánský.", "od 490 Kč"),
-    ("Barva & melír", "Odrost, celá barva, melír s tónováním, stahování barvy.", "od 1 790 Kč"),
-    ("Regenerace", "Malibu C, kolagen, keratin, botox, metal detox, Wella plex.", "od 1 790 Kč"),
-    ("Účes", "Společenské a svatební účesy.", "od 990 Kč"),
-    ("Líčení", "Večerní a svatební líčení.", "od 990 Kč"),
-    ("Fotoportrét", "Celodenní proměna zakončená focením v ateliéru.", "3 990 Kč"),
+    ("Pánské", "Střih bez mytí"),
+    ("Dámské", "Střih, péče, mytí, foukání"),
+    ("Dámské", "Barva (odrost) + střih"),
+    ("Dámské", "Melír + tónování + střih"),
+    ("Líčení, účesy, fotoportrét", "Společenský účes"),
+    ("Líčení, účesy, fotoportrét", "Fotoportrét"),
 ]
 
 # Price list, previously duplicated inline across two templates.
@@ -634,7 +635,7 @@ PRICING = [
         ],
     },
     {
-        "title": "Proměny & focení",
+        "title": "Líčení, účesy, fotoportrét",
         "columns": [],
         "rows": [
             ("Večerní líčení", ["990 Kč"]),
@@ -645,6 +646,29 @@ PRICING = [
         ],
     },
 ]
+
+
+def price_value(text):
+    return int(re.sub(r"\D", "", text))
+
+
+def service_rows(services, pricing):
+    """(row, group, price) for each SERVICES entry, priced from PRICING."""
+    rows = []
+    for group_title, label in services:
+        group = next(g for g in pricing if g["title"] == group_title)
+        prices = next(p for name, p in group["rows"] if name == label)
+        low = min(prices, key=price_value)
+        rows.append((label, group_title, low if len(prices) == 1 else f"od {low}"))
+    return rows
+
+
+def minify_css(text):
+    """Strip comments and blank runs. The source stylesheet is mostly design
+    notes, and every byte of it blocked first paint."""
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
+    text = re.sub(r"[ \t]+\n", "\n", text)
+    return re.sub(r"\n{2,}", "\n", text).strip() + "\n"
 
 
 # --------------------------------------------------------------------------- #
@@ -766,7 +790,7 @@ if __name__ == "__main__":
         plates=PLATES,
         partners=PARTNERS,
         pricing=PRICING,
-        services=SERVICES,
+        services=service_rows(SERVICES, PRICING),
         img=make_img_helper(media),
         big=make_big_helper(media),
         feature=make_feature_helper(media),
@@ -781,6 +805,11 @@ if __name__ == "__main__":
         cz_title=cz_title,
         build_year=time.strftime("%Y"),
     )
+
+    css_src = BASE_DIR / "assets" / "css" / "site.css"
+    css_min = minify_css(css_src.read_text(encoding="utf-8"))
+    (BASE_DIR / "assets" / "css" / "site.min.css").write_text(css_min, encoding="utf-8")
+    env.globals["css_version"] = hashlib.sha1(css_min.encode()).hexdigest()[:8]
 
     print(f"Rendering templates from '{TEMPLATES_DIR}' to '{OUTPUT_DIR}'...")
     rendered_files = 0

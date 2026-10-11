@@ -114,8 +114,10 @@
      a resting link underline, the rule off the hero eyebrow, the reel's
      scrollbar. The footer link was hovering to the dim gold while every other
      hover went to the lit one: the same word in two voices. */
-  --gold: #e3a63c;
-  --gold-deep: #b5802a;
+  /* The logo's own gold, sampled from images/logo_w.png. A second, warmer
+     gold on the buttons beside it read as a mismatch. */
+  --gold: #c9a94a;
+  --gold-deep: #9c8338;
 
   /* Paper ground */
   --paper: #efe9df;
@@ -262,7 +264,8 @@
   --t-lede: clamp(1.2rem, 1.35vw, 1.3rem);
   --t-body: 1.0625rem;
   --t-small: 0.875rem;
-  --t-micro: 0.6875rem;
+  /* 13px floor: an 11px label is unreadable on a phone. */
+  --t-micro: 0.8125rem;
 
   /* And what each step is *set* at. Leading was the last per-component
      decision left in the file. A census of rendered (size, leading) pairs at
@@ -375,7 +378,7 @@
 
      No display variant. Every one of these renders at --t-micro; a second token
      would only be a place for the fifth value to hide. */
-  --track-caps: 0.17em;
+  --track-caps: 0.02em;
 
   /* How a picture is quieted, once. There were four recipes for one content
      class and they were chosen by which page a picture landed on rather than
@@ -506,7 +509,7 @@ body {
   color: var(--bone);
   /* 350, not 300. Jost's Light on a near-black ground was already at the edge
      of legible before the smoothing below was taken off it. */
-  font: 350 var(--t-body) / var(--lh-text) var(--sans);
+  font: 400 var(--t-body) / var(--lh-text) var(--sans);
   font-synthesis-weight: none;
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
@@ -672,7 +675,7 @@ h4 {
      ("TÁHNĚTE DO STRANY", "REPORTÁŽ Z VÝSTAVY") the accents floated clear of
      their letters and the word stopped reading as one word. */
   letter-spacing: var(--track-caps);
-  text-transform: uppercase;
+  text-transform: none;
   /* Set for the single-line desktop case at 1. These strings wrap on a phone,
      where the acute on a capital Y ran straight into the line above. */
   line-height: var(--lh-micro);
@@ -914,8 +917,6 @@ main > section.band:last-of-type {
      title is short and the note runs to two lines, box alignment put the
      note's first line clear above the heading. */
   align-items: baseline;
-  padding-top: 1.1rem;
-  border-top: 1px solid var(--hair-strong);
   margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
 }
 
@@ -1105,7 +1106,7 @@ main > section.band:last-of-type {
   font-size: var(--t-micro);
   font-weight: 400;
   letter-spacing: var(--track-caps);
-  text-transform: uppercase;
+  text-transform: none;
   line-height: var(--lh-micro);
   color: var(--fg);
   position: relative;
@@ -1212,7 +1213,7 @@ main > section.band:last-of-type {
   font-size: var(--t-micro);
   font-weight: 400;
   letter-spacing: var(--track-caps);
-  text-transform: uppercase;
+  text-transform: none;
   line-height: var(--lh-micro);
   color: var(--fg-2);
   padding-bottom: 0.5rem;
@@ -1439,7 +1440,7 @@ html:not(.js) .nav {
   font-size: var(--t-micro);
   font-weight: 400;
   letter-spacing: var(--track-caps);
-  text-transform: uppercase;
+  text-transform: none;
   line-height: var(--lh-micro);
   color: var(--bone-2);
   padding-block: 0.5rem;
@@ -1789,11 +1790,13 @@ html:not(.js) .nav {
    meets the photo's left edge at full ink only at the top, and lower down
    16-48% of the picture showed through, a step of up to 14 levels (29 in
    the landscape layout) that drew the photograph's box on the first screen. */
+/* The left fade is eased over two fifths of the plate: stopped at 12%, it
+   ended in a visible vertical edge against the backdrop's violet. */
 .hero__art::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, var(--ink), rgb(11 10 8 / 0%) 12%),
+  background: linear-gradient(to right, var(--ink) 0%, rgb(11 10 8 / 72%) 9%, rgb(11 10 8 / 38%) 19%, rgb(11 10 8 / 14%) 29%, rgb(11 10 8 / 0%) 40%),
     linear-gradient(
       100deg,
       var(--ink) 0%,
@@ -2728,7 +2731,7 @@ html:not(.js) .nav {
   font-size: var(--t-micro);
   font-weight: 400;
   letter-spacing: var(--track-caps);
-  text-transform: uppercase;
+  text-transform: none;
   line-height: var(--lh-micro);
   color: var(--fg-2);
   white-space: nowrap;
@@ -3020,8 +3023,11 @@ html:not(.js) .nav {
    only thing tying a wall label to its picture — said nothing. */
 .xcat__list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(2.6rem, 5vw, 4.4rem) calc(var(--gap) * 3);
+  /* Three across, each caption under its own picture. Captions hung at the
+     foot of a column beside the plate left a dead band the height of a
+     portrait between every pair of records. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(2.6rem, 5vw, 4.4rem) calc(var(--gap) * 1.5);
   padding-top: clamp(1.6rem, 3vw, 2.4rem);
 }
 
@@ -3030,16 +3036,16 @@ html:not(.js) .nav {
    label opens on its fourth. */
 .xcat__item {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  column-gap: clamp(0.9rem, 1.1vw, 1.1rem);
-  align-items: stretch;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.1rem clamp(0.9rem, 1.1vw, 1.1rem);
+  align-content: start;
 }
 
 /* `start`, not the row's stretch: stretched to a label taller than itself,
    the plate's 4:5 turned the extra height into extra width and grew over its
    own title — three links on one record was enough. */
 .xcat__plate {
-  grid-column: 1 / span 4;
+  grid-column: 1 / -1;
   align-self: start;
   display: block;
   position: relative;
@@ -3078,10 +3084,10 @@ html:not(.js) .nav {
    hollow cards. Four and two puts the plate at the gallery wall's own scale
    (390px at 1366) and the last link still lands on the plate's edge. */
 .xcat__text {
-  grid-column: 5 / span 2;
+  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: flex-start;
   min-width: 0;
 }
@@ -3166,8 +3172,13 @@ html:not(.js) .nav {
    onto it) and the links standing on its foot. Two records to a row while a
    label still gets 200px, one below that. */
 @media (max-width: 960px) {
+  .xcat__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .xcat__item {
     grid-template-columns: repeat(12, minmax(0, 1fr));
+    row-gap: 0;
   }
 
   .xcat__plate {
@@ -3394,8 +3405,10 @@ html:not(.js) .nav {
    the centre of the first row of the archive. The template renders it after
    the year's pictures; it used to be moved there by `order: 1`, which left
    Tab and a screen reader going through the year in another order. */
+/* It takes an ordinary cell, so the dense flow puts it in the gap a short
+   last row leaves instead of opening a row of its own beside an empty slot. */
 .arch__item--bare {
-  grid-column: 1 / -1;
+  justify-content: flex-start;
 }
 
 .arch__item--bare .arch__meta {
@@ -3639,7 +3652,7 @@ html:not(.js) .nav {
   font-size: var(--t-micro);
   font-weight: 400;
   letter-spacing: var(--track-caps);
-  text-transform: uppercase;
+  text-transform: none;
   line-height: var(--lh-micro);
   color: var(--fg-3);
   /* One of the nine roles is long enough to wrap, and greedy wrapping broke it
@@ -3911,7 +3924,7 @@ html:not(.js) .nav {
   font-weight: 400;
   font-size: var(--t-micro);
   letter-spacing: var(--track-caps);
-  text-transform: uppercase;
+  text-transform: none;
   line-height: var(--lh-micro);
   color: var(--fg-3);
   text-align: right;
@@ -4422,8 +4435,12 @@ html:not(.js) .nav {
 }
 
 /* -------------------------------------------------------------- 20. footer */
+/* On the page's own ink: a cream footer under a dark site read as a
+   different site's. A rule marks where the page ends. */
 .foot {
   padding-top: clamp(3.5rem, 7vw, 6rem);
+  border-top: 1px solid var(--hair);
+  background: var(--ink-deep);
 }
 
 .foot__grid {
@@ -4613,6 +4630,9 @@ html:not(.js) .nav {
   border-bottom: 1px solid transparent;
   /* No `color` in here any more: the hover no longer moves it. */
   transition: border-color 0.35s;
+  /* 44px tall to a finger, without changing the column's rhythm. */
+  padding-block: 0.6rem;
+  margin-block: -0.6rem;
 }
 
 /* The rule lands, and that is the whole gesture. It used to be a colour change
@@ -4815,7 +4835,7 @@ html:not(.js) .nav {
   line-height: var(--lh-micro);
   font-weight: 400;
   letter-spacing: var(--track-caps);
-  text-transform: uppercase;
+  text-transform: none;
   transition: color 0.3s;
 }
 
@@ -5597,7 +5617,7 @@ body.is-lb .nav {
   }
 
   .hero__art::after {
-    background: linear-gradient(to right, var(--ink), rgb(11 10 8 / 0%) 12%),
+    background: linear-gradient(to right, var(--ink) 0%, rgb(11 10 8 / 72%) 9%, rgb(11 10 8 / 38%) 19%, rgb(11 10 8 / 14%) 29%, rgb(11 10 8 / 0%) 40%),
       linear-gradient(
         100deg,
         var(--ink) 0%,
@@ -6195,4 +6215,21 @@ body.is-lb .nav {
   .foot__col--nav {
     display: none;
   }
+}
+
+/* ------------------------------------------------------------ skip link */
+.skip {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.7rem 1rem;
+  background: var(--gold);
+  color: var(--ink);
+  font-size: var(--t-small);
+  transform: translateY(-200%);
+}
+
+.skip:focus-visible {
+  transform: none;
 }

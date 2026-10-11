@@ -131,7 +131,7 @@
   const reelIndex = $("[data-reel-index]");
   const frames = reel ? $$(".reel__item", reel) : [];
 
-  if (reel && reelIndex && frames.length) {
+  if (reel && frames.length) {
     let reelTicking = false;
 
     const updateReel = () => {
@@ -152,7 +152,7 @@
           widest = shown;
         }
       });
-      reelIndex.textContent = String(best + 1).padStart(2, "0");
+      if (reelIndex) reelIndex.textContent = String(best + 1).padStart(2, "0");
     };
 
     const tickReel = () => {

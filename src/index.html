@@ -6,13 +6,11 @@
 
 <section class="hero">
   <div class="hero__art">
-    {{ img(plates.hero, alt='Marie Baštařová v ateliéru salonu Maří Magdalena',
+    {{ img(plates.hero, alt=site.person,
            sizes='(max-width:960px) 100vw, 55vw', loading='eager', fetchpriority='high') }}
   </div>
 
   <div class="hero__body">
-    <p class="label hero__eyebrow">{{ site.city }} &nbsp;·&nbsp; od&nbsp;{{ site.founded }}</p>
-
     {# The wordmark is this page's title — it is the salon's name, set at the
        largest size on the site, and it was the only page-opening name on the
        site that was not a heading. .hero__title is display:contents, so the
@@ -23,37 +21,24 @@
              sizes='(max-width:960px) 60vw, 430px', loading='eager', fetchpriority='high') }}
     </h1>
 
-    {# "založeném" is a locative and agrees with nothing in this sentence; the
-       participle qualifies "ideálu", which takes the genitive "založeného".
-       This is the owner's own wording and the largest type on the site — the
-       correction is a single inflection, but it needs her sign-off. #}
+    {# The owner's motto exactly as the live site sets it. "založeném" would
+       read "založeného" in standard Czech; that is hers to change, not ours. #}
     <p class="hero__motto serif-it">
-      Renesance ideálu krásy založeného na&nbsp;uznání individuality,
-      která z každého z nás dělá to, co chce.
+      Renesance ideálu krásy založeném na&nbsp;uznání individuality,
+      která z každého z nás dělá to co chce.
     </p>
 
     <div class="actions">
-      <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>Objednat se</span>{{ ico.arrow() }}</a>
-      <a class="qlink" href="obrazy.html">Obrazy v ateliéru</a>
+      <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>Objednat se</span></a>
+      <a class="qlink" href="obrazy.html">Obrazy</a>
     </div>
-  </div>
-
-  <div class="hero__foot">
-    <a class="scroll-cue label" href="#atelier">
-      <span class="scroll-cue__line" aria-hidden="true"></span>
-      <span>Dále</span>
-    </a>
-    <p class="label">Hair&nbsp;&amp;&nbsp;Art&nbsp;Salon</p>
   </div>
 </section>
 
 
 <section class="shell bay" id="atelier">
   <div class="sec rv">
-    <div class="sec__meta">
-      <span class="label">O&nbsp;salonu</span>
-    </div>
-    <h2 class="sec__title">Kadeřnictví,<br>které je zároveň ateliérem</h2>
+    <h2 class="sec__title">O&nbsp;salonu</h2>
     <p class="sec__note"><a class="addr" href="{{ site.maps_link }}" target="_blank" rel="noopener">{{ site.street }}, {{ site.city }}</a></p>
   </div>
 
@@ -86,12 +71,11 @@
 
     <figure class="atelier__fig rv-clip" style="--d:180ms">
       <span class="plate" style="display:block; aspect-ratio:4/5">
-        {{ img(plates.salon, alt='Marie Baštařová, zakladatelka salonu Maří Magdalena',
+        {{ img(plates.salon, alt=site.person,
                sizes='(max-width:960px) 100vw, 40vw', cover=true) }}
       </span>
       <figcaption class="cap">
         <span class="cap__t">{{ site.person }}</span>
-        <span class="cap__m label">Zakladatelka</span>
       </figcaption>
     </figure>
   </div>
@@ -110,11 +94,8 @@
      under this heading being the widest run on the page — not from a third
      heading size that appears nowhere else on the site. #}
   <div class="sec rv">
-    <div class="sec__meta">
-      <span class="label">Galerie</span>
-    </div>
-    <h2 class="sec__title">Obrazy visí přímo<br>v prostorách salonu</h2>
-    <p class="sec__note">Autorská tvorba {{ site.person_gen }}. Vybrané kusy jsou k prodeji.</p>
+    <h2 class="sec__title">Obrazy</h2>
+    <p class="sec__note">V prostorách salonu si můžete prohlédnout autorské obrazy {{ site.person_gen }}.</p>
   </div>
 
   <div class="reel rv">
@@ -135,21 +116,8 @@
     {% endfor %}
   </div>
 
-  {# The counter used to be the constant string "01 — 09" sitting under a strip
-     you drag: a readout that never read anything. It now tracks the reel, and
-     it is set the way the lightbox counter is set — gold italic figures — so
-     the same readout does not appear in two typographic voices.
-
-     The rule is its own element rather than a ::after on a flexed counter:
-     flexing the counter made " / 09" an anonymous flex item and the row gap
-     opened an 18px hole after the figures, which read as a broken template
-     string. One row rather than three: the strip's own metadata, then the
-     rule carrying the eye to the action, in the direction the strip moves. #}
   <div class="reel__meta rv" data-reel-meta>
-    <span class="num reel__count"><span data-reel-index>01</span> / {{ '%02d'|format(paintings[:9]|length) }}</span>
-    <span class="label reel__hint">Táhněte do strany</span>
-    <span class="reel__rule" aria-hidden="true"></span>
-    <a class="cta" href="obrazy.html"><span>Všechny obrazy</span>{{ ico.arrow() }}</a>
+    <a class="cta" href="obrazy.html"><span>Všechny obrazy</span></a>
   </div>
 </section>
 
@@ -158,17 +126,16 @@
   {# Minor rank. What a salon charges is a utility list, not the reason anyone
      came here — it does not deserve the same size as the gallery. #}
   <div class="sec sec--minor rv">
-    <div class="sec__meta">
-      <span class="label">Služby</span>
-    </div>
-    <h2 class="sec__title">Co u nás zařídíme</h2>
+    <h2 class="sec__title">Ceník</h2>
   </div>
 
   <div class="svc rv">
-    {% for name, desc, price in services %}
+    {# Rows of the price list itself, named as it names them, with the
+       cheapest figure of each row: nothing here is typed twice. #}
+    {% for name, group, price in services %}
     <div class="svc__row">
       <span class="svc__name">{{ name }}</span>
-      <span class="svc__desc">{{ desc }}</span>
+      <span class="svc__desc">{{ group }}</span>
       <span class="svc__price">{{ price }}</span>
     </div>
     {% endfor %}
@@ -185,10 +152,9 @@
        way it was the weakest phone link on the site, at the point where
        /galerie gives the same pair a gold button. #}
     <div class="actions">
-      <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>{{ site.phone_display }}</span>{{ ico.arrow() }}</a>
+      <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>{{ site.phone_display }}</span></a>
       <a class="qlink" href="cenik.html">Celý ceník</a>
     </div>
-    <p class="svc__note">Ceny jsou orientační, konečná cena vždy vychází z konzultace.</p>
   </div>
 </section>
 
@@ -199,17 +165,10 @@
    flat ground where contrast is not a negotiation. #}
 <section class="quote">
   <figure class="quote__art rv-clip">
-    {{ img(plates.atelier, alt='Ateliér salonu Maří Magdalena',
+    {{ img(plates.atelier, alt=site.person,
            sizes='(max-width:900px) 100vw, 42vw', cover=true) }}
   </figure>
   <div class="quote__in rv">
-    {# Grey, like every other section eyebrow. The site declares two eyebrow
-       species — grey micro-caps in a section head, gold italic serif in a page
-       head — and a gold micro-cap is neither, so the homepage was running
-       three vocabularies for one slot: grey caps under a gold rule in the
-       hero, gold caps here, grey caps over a full-width hairline in the
-       sections below. Two is a system. #}
-    <p class="label">Londa Professional · Mezinárodní artistický tým</p>
     {# Cut to one sentence: the full paragraph runs as body copy on
        /galerie, and the same 40 words in two typographic registers on
        adjacent pages reads as duplicated content, not emphasis. #}
@@ -218,18 +177,14 @@
       jsem se podílela na&nbsp;vytváření nové kolekce a trendů.
     </blockquote>
     <p class="prose__sign">— {{ site.person }}</p>
-    <a class="qlink" href="galerie.html">Kolekce Color&nbsp;Tune</a>
+    <a class="qlink" href="galerie.html">Hair&nbsp;&amp;&nbsp;Styling</a>
   </div>
 </section>
 
 
 <section class="shell bay--sm">
   <div class="sec sec--minor rv">
-    <div class="sec__meta">
-      <span class="label">Dění</span>
-    </div>
     <h2 class="sec__title">Výstavy a projekty</h2>
-    <p class="sec__note">Salon je zároveň kulturním prostorem&nbsp;— pořádáme výstavy, setkání a workshopy.</p>
   </div>
 
   {# Newest record with an image big enough to run at this size — see

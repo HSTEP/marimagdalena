@@ -7,7 +7,7 @@
 
 {% block title %}Obrazy — {{ site.person }} | {{ site.name }}{% endblock %}
 {% block canonical %}obrazy.html{% endblock %}
-{% block description %}Autorské obrazy Marie Baštařové vystavené v ateliéru Maří Magdalena v Dobřanech. {{ paintings|length }} děl, {{ for_sale|length }} k prodeji.{% endblock %}
+{% block description %}V prostorách salonu si můžete prohlédnout autorské obrazy Marie Baštařové.{% endblock %}
 
 {% block content %}
 
@@ -16,19 +16,10 @@
    y 626 of an 800px screen — the page about the work opened on 18% work. #}
 <section class="shell phead phead--ledger">
   <div class="phead__grid">
-    <div class="phead__meta">
-      {# "87 děl" stood in a second slot here. Six page headers on this site;
-         five name a category and this one also declared its row count, which
-         made the header a record summary. /galerie's second slot holds "Londa
-         Professional" — a name, something you could not have guessed. A
-         tally of what is directly below is not that. #}
-      <span class="num">Galerie</span>
-    </div>
     <h1 class="phead__title">Obrazy</h1>
     <p class="phead__lede lede">
       V prostorách salonu si můžete prohlédnout autorské obrazy
-      {{ site.person_gen }}&nbsp;— a odnést si je domů. Náhledy ukazují díla
-      zasazená do interiéru.
+      {{ site.person_gen }}.
     </p>
   </div>
 </section>
@@ -74,15 +65,15 @@
       <div class="works__fig" aria-hidden="true">
         {# The first row is the page's first screen, and lazy it queued behind
            the rest of the wall: on 3G the first painting arrived at 9.4s.
-           Eager, but not fetchpriority=high: the paintings sit under the
-           ledger head, and high priority let them crowd out the stylesheet,
-           putting the page's first paint 0.7s later on 3G. #}
+           The first is the page's largest paint, so it asks for high
+           priority; the stylesheet is small enough now not to lose to it. #}
         {# Every fifth work, and a lone last one, hangs across a phone
            (site.css, the 620px .works rule), so it asks for the larger file. #}
         {% set across = loop.index % 5 == 0 or (loop.last and loop.index % 5 in [1, 3]) %}
         {{ img(painting.url, alt=painting.title,
                sizes=('(max-width:620px) 90vw, 31vw' if across else '(max-width:620px) 46vw, 31vw'),
-               loading='eager' if loop.index0 < 3 else 'lazy') }}
+               loading='eager' if loop.index0 < 3 else 'lazy',
+               fetchpriority='high' if loop.first else none) }}
       </div>
       {# The title used to live in a hover overlay, so on a phone — where the
          work is actually for sale — every tile was anonymous, and the only
@@ -101,7 +92,7 @@
      document, so this control simply never appears. #}
   <div class="works__more" data-more hidden>
     <button class="cta" type="button" data-more-btn>
-      <span>Zobrazit další</span>{{ ico.arrow() }}
+      <span>Zobrazit další</span>
     </button>
   </div>
 </section>
@@ -115,9 +106,8 @@
 {% set studio_close %}
 <section class="shell bay--top">
   <div class="endnote rv">
-    <p class="endnote__t">Obrazy je možné vidět naživo přímo v ateliéru.</p>
     <div class="endnote__a">
-      <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>{{ site.phone_display }}</span>{{ ico.arrow() }}</a>
+      <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>{{ site.phone_display }}</span></a>
       <a class="qlink" href="mailto:{{ site.email }}">{{ site.email }}</a>
     </div>
   </div>
@@ -157,7 +147,7 @@
 
   <div class="works__more" data-more hidden>
     <button class="cta" type="button" data-more-btn>
-      <span>Zobrazit další</span>{{ ico.arrow() }}
+      <span>Zobrazit další</span>
     </button>
   </div>
 </section>

@@ -5,7 +5,7 @@
 <script>document.documentElement.className = 'js';</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Maří Magdalena — Hair &amp; Art Salon, Dobřany</title>
-<meta name="description" content="Kadeřnický salon a umělecká galerie Marie Baštařové v Dobřanech. Střih, barva, styling, proměny — a autorské obrazy vystavené přímo v ateliéru.">
+<meta name="description" content="Maří Magdalena je kadeřnický salon v Dobřanech, který v roce 2011 otevřela Marie Baštařová. V salonu se také nachází umělecká galerie, kde si můžete prohlédnout autorská díla.">
 <meta name="author" content="Marie Baštařová">
 <link rel="canonical" href="https://www.marimagdalena.cz/">
 <meta name="theme-color" content="#0b0a08">
@@ -14,7 +14,7 @@
 <meta property="og:locale" content="cs_CZ">
 <meta property="og:site_name" content="Maří Magdalena">
 <meta property="og:title" content="Maří Magdalena — Hair &amp; Art Salon, Dobřany">
-<meta property="og:description" content="Kadeřnický salon a umělecká galerie Marie Baštařové v Dobřanech. Střih, barva, styling, proměny — a autorské obrazy vystavené přímo v ateliéru.">
+<meta property="og:description" content="Maří Magdalena je kadeřnický salon v Dobřanech, který v roce 2011 otevřela Marie Baštařová. V salonu se také nachází umělecká galerie, kde si můžete prohlédnout autorská díla.">
 <meta property="og:url" content="https://www.marimagdalena.cz/">
 <meta property="og:image" content="https://www.marimagdalena.cz/images/_d/vystavy-leconsulat-1134.webp?v=4a791526">
 <meta property="og:image:width" content="1134">
@@ -25,7 +25,9 @@
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/jost-normal-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bodoni-moda-normal-latin.woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/jost-normal-latin-ext.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/bodoni-moda-normal-latin-ext.woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/site.min.css?v=0ad0285e">
 
 <script type="application/ld+json">
 {
@@ -56,17 +58,25 @@
 { "@context": "https://schema.org", "@type": "WebSite", "name": "Ma\u0159\u00ed Magdalena", "url": "https://www.marimagdalena.cz/" }
 </script>
 
-<script data-goatcounter="https://marimagdalena.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JWQK0C4N5N"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-JWQK0C4N5N');
+  if (/(^|\.)marimagdalena\.cz$/.test(location.hostname)) {
+    for (const src of ['https://gc.zgo.at/count.js', 'https://www.googletagmanager.com/gtag/js?id=G-JWQK0C4N5N']) {
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = src;
+      if (src.includes('zgo')) s.dataset.goatcounter = 'https://marimagdalena.goatcounter.com/count';
+      document.head.append(s);
+    }
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', 'G-JWQK0C4N5N');
+  }
 </script>
 </head>
 
 <body class="home">
+<a class="skip" href="#main">Přeskočit na obsah</a>
 
 <header class="nav" data-nav>
   <div class="nav__in">
@@ -175,13 +185,10 @@ target="_blank" rel="noopener">
     </ul>
   </nav>
   <div class="menu__foot">
-    <a class="cta cta--gold" href="tel:+420607067778"><span>Objednat se</span><svg class="cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" width="15" height="15" aria-hidden="true">
-  <path d="M4 12h15m-5.5-6L19.5 12l-6 6"/>
-</svg>
-</a>
+    <a class="cta cta--gold" href="tel:+420607067778"><span>Objednat se</span></a>
     <a class="qlink qlink--plain" href="tel:+420607067778">+420 607 067 778</a>
     <a class="qlink qlink--plain" href="mailto:marie@marimagdalena.cz">marie@marimagdalena.cz</a>
-    <p class="label"><a href="https://maps.google.com/?q=C%C3%ADsa%C5%99e+Karla+1139+Dob%C5%99any" target="_blank" rel="noopener">Císaře Karla 1139 · Dobřany</a></p>
+    <p class="label"><a href="https://maps.google.com/?q=C%C3%ADsa%C5%99e+Karla+1139+Dob%C5%99any" target="_blank" rel="noopener">Císaře Karla 1139, Dobřany</a></p>
   </div>
 </div>
 
@@ -189,46 +196,30 @@ target="_blank" rel="noopener">
 
 <section class="hero">
   <div class="hero__art">
-    <img class="ph" src="images/_d/bg-1c5a1152-1920.webp?v=dabbf265" srcset="images/_d/bg-1c5a1152-480.webp?v=dabbf265 480w, images/_d/bg-1c5a1152-800.webp?v=dabbf265 800w, images/_d/bg-1c5a1152-1280.webp?v=dabbf265 1280w, images/_d/bg-1c5a1152-1920.webp?v=dabbf265 1920w" sizes="(max-width:960px) 100vw, 55vw" width="4228" height="6342" alt="Marie Baštařová v ateliéru salonu Maří Magdalena" loading="eager" decoding="async" style="background-color:#674e3b" fetchpriority="high">
+    <img class="ph" src="images/_d/bg-1c5a1152-1920.webp?v=dabbf265" srcset="images/_d/bg-1c5a1152-480.webp?v=dabbf265 480w, images/_d/bg-1c5a1152-800.webp?v=dabbf265 800w, images/_d/bg-1c5a1152-1280.webp?v=dabbf265 1280w, images/_d/bg-1c5a1152-1920.webp?v=dabbf265 1920w" sizes="(max-width:960px) 100vw, 55vw" width="4228" height="6342" alt="Marie Baštařová" loading="eager" decoding="async" style="background-color:#674e3b" fetchpriority="high">
   </div>
 
   <div class="hero__body">
-    <p class="label hero__eyebrow">Dobřany &nbsp;·&nbsp; od&nbsp;2011</p>
-
     <h1 class="hero__title">
       <img class="ph hero__mark" src="images/_d/logo_w-1784.webp?v=93b607bf" srcset="images/_d/logo_w-480.webp?v=93b607bf 480w, images/_d/logo_w-800.webp?v=93b607bf 800w, images/_d/logo_w-1280.webp?v=93b607bf 1280w, images/_d/logo_w-1784.webp?v=93b607bf 1784w" sizes="(max-width:960px) 60vw, 430px" width="1784" height="766" alt="Maří Magdalena — Hair &amp; Art Salon" loading="eager" decoding="async" fetchpriority="high">
     </h1>
 
     <p class="hero__motto serif-it">
-      Renesance ideálu krásy založeného na&nbsp;uznání individuality,
-      která z každého z nás dělá to, co chce.
+      Renesance ideálu krásy založeném na&nbsp;uznání individuality,
+      která z každého z nás dělá to co chce.
     </p>
 
     <div class="actions">
-      <a class="cta cta--gold" href="tel:+420607067778"><span>Objednat se</span><svg class="cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" width="15" height="15" aria-hidden="true">
-  <path d="M4 12h15m-5.5-6L19.5 12l-6 6"/>
-</svg>
-</a>
-      <a class="qlink" href="obrazy.html">Obrazy v ateliéru</a>
+      <a class="cta cta--gold" href="tel:+420607067778"><span>Objednat se</span></a>
+      <a class="qlink" href="obrazy.html">Obrazy</a>
     </div>
-  </div>
-
-  <div class="hero__foot">
-    <a class="scroll-cue label" href="#atelier">
-      <span class="scroll-cue__line" aria-hidden="true"></span>
-      <span>Dále</span>
-    </a>
-    <p class="label">Hair&nbsp;&amp;&nbsp;Art&nbsp;Salon</p>
   </div>
 </section>
 
 
 <section class="shell bay" id="atelier">
   <div class="sec rv">
-    <div class="sec__meta">
-      <span class="label">O&nbsp;salonu</span>
-    </div>
-    <h2 class="sec__title">Kadeřnictví,<br>které je zároveň ateliérem</h2>
+    <h2 class="sec__title">O&nbsp;salonu</h2>
     <p class="sec__note"><a class="addr" href="https://maps.google.com/?q=C%C3%ADsa%C5%99e+Karla+1139+Dob%C5%99any" target="_blank" rel="noopener">Císaře Karla 1139, Dobřany</a></p>
   </div>
 
@@ -258,11 +249,10 @@ target="_blank" rel="noopener">
 
     <figure class="atelier__fig rv-clip" style="--d:180ms">
       <span class="plate" style="display:block; aspect-ratio:4/5">
-        <img class="ph is-cover" src="images/_d/bg-1c5a1096-1920.webp?v=185df20a" srcset="images/_d/bg-1c5a1096-480.webp?v=185df20a 480w, images/_d/bg-1c5a1096-800.webp?v=185df20a 800w, images/_d/bg-1c5a1096-1280.webp?v=185df20a 1280w, images/_d/bg-1c5a1096-1920.webp?v=185df20a 1920w" sizes="(max-width:960px) 100vw, 40vw" width="4480" height="6720" alt="Marie Baštařová, zakladatelka salonu Maří Magdalena" loading="lazy" decoding="async" style="background-color:#2e2217">
+        <img class="ph is-cover" src="images/_d/bg-1c5a1096-1920.webp?v=185df20a" srcset="images/_d/bg-1c5a1096-480.webp?v=185df20a 480w, images/_d/bg-1c5a1096-800.webp?v=185df20a 800w, images/_d/bg-1c5a1096-1280.webp?v=185df20a 1280w, images/_d/bg-1c5a1096-1920.webp?v=185df20a 1920w" sizes="(max-width:960px) 100vw, 40vw" width="4480" height="6720" alt="Marie Baštařová" loading="lazy" decoding="async" style="background-color:#2e2217">
       </span>
       <figcaption class="cap">
         <span class="cap__t">Marie Baštařová</span>
-        <span class="cap__m label">Zakladatelka</span>
       </figcaption>
     </figure>
   </div>
@@ -271,11 +261,8 @@ target="_blank" rel="noopener">
 
 <section class="shell bay">
   <div class="sec rv">
-    <div class="sec__meta">
-      <span class="label">Galerie</span>
-    </div>
-    <h2 class="sec__title">Obrazy visí přímo<br>v prostorách salonu</h2>
-    <p class="sec__note">Autorská tvorba Marie Baštařové. Vybrané kusy jsou k prodeji.</p>
+    <h2 class="sec__title">Obrazy</h2>
+    <p class="sec__note">V prostorách salonu si můžete prohlédnout autorské obrazy Marie Baštařové.</p>
   </div>
 
   <div class="reel rv">
@@ -390,94 +377,76 @@ target="_blank" rel="noopener">
   </div>
 
   <div class="reel__meta rv" data-reel-meta>
-    <span class="num reel__count"><span data-reel-index>01</span> / 09</span>
-    <span class="label reel__hint">Táhněte do strany</span>
-    <span class="reel__rule" aria-hidden="true"></span>
-    <a class="cta" href="obrazy.html"><span>Všechny obrazy</span><svg class="cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" width="15" height="15" aria-hidden="true">
-  <path d="M4 12h15m-5.5-6L19.5 12l-6 6"/>
-</svg>
-</a>
+    <a class="cta" href="obrazy.html"><span>Všechny obrazy</span></a>
   </div>
 </section>
 
 
 <section class="shell bay--sm">
   <div class="sec sec--minor rv">
-    <div class="sec__meta">
-      <span class="label">Služby</span>
-    </div>
-    <h2 class="sec__title">Co u nás zařídíme</h2>
+    <h2 class="sec__title">Ceník</h2>
   </div>
 
   <div class="svc rv">
     <div class="svc__row">
-      <span class="svc__name">Střih</span>
-      <span class="svc__desc">Konzultace, mytí, střih a foukaná. Dámský i pánský.</span>
-      <span class="svc__price">od 490 Kč</span>
+      <span class="svc__name">Střih bez mytí</span>
+      <span class="svc__desc">Pánské</span>
+      <span class="svc__price">490 Kč</span>
     </div>
     <div class="svc__row">
-      <span class="svc__name">Barva &amp; melír</span>
-      <span class="svc__desc">Odrost, celá barva, melír s tónováním, stahování barvy.</span>
+      <span class="svc__name">Střih, péče, mytí, foukání</span>
+      <span class="svc__desc">Dámské</span>
+      <span class="svc__price">od 1 590 Kč</span>
+    </div>
+    <div class="svc__row">
+      <span class="svc__name">Barva (odrost) + střih</span>
+      <span class="svc__desc">Dámské</span>
       <span class="svc__price">od 1 790 Kč</span>
     </div>
     <div class="svc__row">
-      <span class="svc__name">Regenerace</span>
-      <span class="svc__desc">Malibu C, kolagen, keratin, botox, metal detox, Wella plex.</span>
-      <span class="svc__price">od 1 790 Kč</span>
+      <span class="svc__name">Melír + tónování + střih</span>
+      <span class="svc__desc">Dámské</span>
+      <span class="svc__price">od 2 590 Kč</span>
     </div>
     <div class="svc__row">
-      <span class="svc__name">Účes</span>
-      <span class="svc__desc">Společenské a svatební účesy.</span>
-      <span class="svc__price">od 990 Kč</span>
-    </div>
-    <div class="svc__row">
-      <span class="svc__name">Líčení</span>
-      <span class="svc__desc">Večerní a svatební líčení.</span>
-      <span class="svc__price">od 990 Kč</span>
+      <span class="svc__name">Společenský účes</span>
+      <span class="svc__desc">Líčení, účesy, fotoportrét</span>
+      <span class="svc__price">990 Kč</span>
     </div>
     <div class="svc__row">
       <span class="svc__name">Fotoportrét</span>
-      <span class="svc__desc">Celodenní proměna zakončená focením v ateliéru.</span>
+      <span class="svc__desc">Líčení, účesy, fotoportrét</span>
       <span class="svc__price">3 990 Kč</span>
     </div>
   </div>
 
   <div class="svc__foot rv">
     <div class="actions">
-      <a class="cta cta--gold" href="tel:+420607067778"><span>+420 607 067 778</span><svg class="cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" width="15" height="15" aria-hidden="true">
-  <path d="M4 12h15m-5.5-6L19.5 12l-6 6"/>
-</svg>
-</a>
+      <a class="cta cta--gold" href="tel:+420607067778"><span>+420 607 067 778</span></a>
       <a class="qlink" href="cenik.html">Celý ceník</a>
     </div>
-    <p class="svc__note">Ceny jsou orientační, konečná cena vždy vychází z konzultace.</p>
   </div>
 </section>
 
 
 <section class="quote">
   <figure class="quote__art rv-clip">
-    <img class="ph is-cover" src="images/_d/bg-1c5a1173-1920.webp?v=f658c485" srcset="images/_d/bg-1c5a1173-480.webp?v=f658c485 480w, images/_d/bg-1c5a1173-800.webp?v=f658c485 800w, images/_d/bg-1c5a1173-1280.webp?v=f658c485 1280w, images/_d/bg-1c5a1173-1920.webp?v=f658c485 1920w" sizes="(max-width:900px) 100vw, 42vw" width="5480" height="7720" alt="Ateliér salonu Maří Magdalena" loading="lazy" decoding="async" style="background-color:#3b2f1f">
+    <img class="ph is-cover" src="images/_d/bg-1c5a1173-1920.webp?v=f658c485" srcset="images/_d/bg-1c5a1173-480.webp?v=f658c485 480w, images/_d/bg-1c5a1173-800.webp?v=f658c485 800w, images/_d/bg-1c5a1173-1280.webp?v=f658c485 1280w, images/_d/bg-1c5a1173-1920.webp?v=f658c485 1920w" sizes="(max-width:900px) 100vw, 42vw" width="5480" height="7720" alt="Marie Baštařová" loading="lazy" decoding="async" style="background-color:#3b2f1f">
   </figure>
   <div class="quote__in rv">
-    <p class="label">Londa Professional · Mezinárodní artistický tým</p>
     <blockquote class="quote__q serif-it">
       Jako členka Mezinárodního artistického týmu LONDA Professional
       jsem se podílela na&nbsp;vytváření nové kolekce a trendů.
     </blockquote>
     <p class="prose__sign">— Marie Baštařová</p>
-    <a class="qlink" href="galerie.html">Kolekce Color&nbsp;Tune</a>
+    <a class="qlink" href="galerie.html">Hair&nbsp;&amp;&nbsp;Styling</a>
   </div>
 </section>
 
 
 <section class="shell bay--sm">
   <div class="sec sec--minor rv">
-    <div class="sec__meta">
-      <span class="label">Dění</span>
-    </div>
     <h2 class="sec__title">Výstavy a projekty</h2>
-    <p class="sec__note">Salon je zároveň kulturním prostorem&nbsp;— pořádáme výstavy, setkání a workshopy.</p>
   </div>
 
   <div class="grid">
@@ -506,15 +475,15 @@ target="_blank" rel="noopener">
 
 </main>
 
-<footer class="foot on-paper">
+<footer class="foot">
   <div class="shell">
     <div class="foot__grid">
       <div class="foot__mark">
-        <img class="ph" src="images/_d/logo_b-1790.webp?v=07f793c0" srcset="images/_d/logo_b-480.webp?v=07f793c0 480w, images/_d/logo_b-800.webp?v=07f793c0 800w, images/_d/logo_b-1280.webp?v=07f793c0 1280w, images/_d/logo_b-1790.webp?v=07f793c0 1790w" sizes="210px" width="1790" height="778" alt="Maří Magdalena" loading="lazy" decoding="async">
+        <img class="ph" src="images/_d/logo_w-1784.webp?v=93b607bf" srcset="images/_d/logo_w-480.webp?v=93b607bf 480w, images/_d/logo_w-800.webp?v=93b607bf 800w, images/_d/logo_w-1280.webp?v=93b607bf 1280w, images/_d/logo_w-1784.webp?v=93b607bf 1784w" sizes="210px" width="1784" height="766" alt="Maří Magdalena" loading="lazy" decoding="async">
       </div>
 
       <div class="foot__col foot__col--wide">
-        <p class="label">Ateliér</p>
+        <p class="label">Salon</p>
         <p class="foot__line">
           Hair &amp; Art Salon Maří Magdalena<br>
           Marie Baštařová
@@ -527,7 +496,7 @@ target="_blank" rel="noopener">
       </div>
 
       <div class="foot__col foot__col--contact">
-        <p class="label">Spojení</p>
+        <p class="label">Kontakt</p>
         <a class="foot__link" href="tel:+420607067778">+420 607 067 778</a>
         <a class="foot__link" href="mailto:marie@marimagdalena.cz">marie@marimagdalena.cz</a>
         <a class="foot__line foot__addr" href="https://maps.google.com/?q=C%C3%ADsa%C5%99e+Karla+1139+Dob%C5%99any" target="_blank" rel="noopener">Císaře Karla 1139<br>334 41 Dobřany</a>
@@ -535,10 +504,7 @@ target="_blank" rel="noopener">
         <div class="foot__map" data-map data-src="https://maps.google.com/maps?width=600&amp;height=420&amp;hl=cs&amp;q=C%C3%ADsa%C5%99e%20Karla%201139%20Dobrany+(Kade%C5%99nictv%C3%AD%20Ma%C5%99%C3%AD%20Magdalena)&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
              data-title="Mapa — Císaře Karla 1139, Dobřany">
           <div class="foot__map-ph">
-            <button class="cta" type="button" data-map-load><span>Zobrazit mapu</span><svg class="cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" width="15" height="15" aria-hidden="true">
-  <path d="M4 12h15m-5.5-6L19.5 12l-6 6"/>
-</svg>
-</button>
+            <button class="cta" type="button" data-map-load><span>Zobrazit mapu</span></button>
           </div>
         </div>
         <div class="foot__social">
@@ -556,7 +522,7 @@ target="_blank" rel="noopener">
       </div>
 
       <div class="foot__col foot__col--nav">
-        <p class="label">Rozcestník</p>
+        <p class="label">Stránky</p>
         <div class="foot__map-links">
           <a class="foot__link" href="index.html">Salon</a>
           <a class="foot__link" href="galerie.html">Hair&nbsp;&amp;&nbsp;Styling</a>
@@ -576,8 +542,8 @@ target="_blank" rel="noopener">
 
     <div class="foot__bar">
       <p class="label">© 2026 Maří Magdalena</p>
-      <p class="label">Logo — Slávka Štrbová</p>
-      <p class="label">Web — <a href="https://github.com/HSTEP/marimagdalena" target="_blank" rel="noopener">Štěpán Havlovic</a></p>
+      <p class="label">Autorka loga: Slávka Štrbová</p>
+      <p class="label">Web: <a href="https://github.com/HSTEP/marimagdalena" target="_blank" rel="noopener">Štěpán Havlovic</a></p>
     </div>
   </div>
 </footer>

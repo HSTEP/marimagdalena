@@ -1533,6 +1533,17 @@ html:not(.js) .nav {
    this one is already gold, so there is nowhere for it to brighten to without
    inventing a third gold the palette does not have. Same rule, same easing,
    same origin — one hover vocabulary for one row. */
+/* A 44px band to click, centred on the line, as .qlink::after gives the
+   quiet links: with a mouse the number was a 143×16 target, the smallest
+   way to call on the site, on the row every page opens with. */
+.nav__call::before {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 2.75rem;
+  transform: translateY(-50%);
+}
+
 .nav__call::after {
   content: "";
   position: absolute;
@@ -5497,6 +5508,33 @@ body.is-lb .nav {
 
   .hero .actions {
     column-gap: 1.25rem;
+  }
+}
+
+/* The same screen with the reader's text enlarged. In em, so it follows
+   their font setting: at 125% text a 375×667 iPhone is 18.75em × 33.35em
+   and lands here, at the default size only phones under 360×544 do. With
+   Safari's toolbars showing (375×553, 375×627) the gold "Objednat se" sat
+   at y 595-659, below or across the fold, and the drawer's own gold button
+   began below the screen. A shorter plate and a step-down motto bring the
+   button to y 466-529 with her face still in the crop; tighter drawer rows
+   bring the drawer's to 545-609. */
+@media (max-width: 22.5em) and (max-height: 34em) {
+  .hero__art {
+    min-height: max(28svh, 9rem);
+  }
+
+  .hero__motto {
+    font-size: var(--t-h5);
+    font-variation-settings: var(--vf-h5);
+  }
+
+  .menu__link {
+    padding-block: 0.45rem;
+  }
+
+  .menu__foot {
+    margin-top: 1.2rem;
   }
 }
 

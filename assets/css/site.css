@@ -6063,4 +6063,67 @@ body.is-lb .nav {
   a {
     text-decoration: none;
   }
+
+  /* The shading laid over the hero photograph and the 404 band is a
+     gradient, and with background graphics off (every browser's default)
+     it printed as a solid white sheet over the picture: the homepage hero
+     came out as an empty box. The photographs print without it. */
+  .hero__art::after,
+  .band::before {
+    display: none;
+  }
+
+  figure,
+  .works__item,
+  .tiles__item {
+    break-inside: avoid;
+  }
+
+  /* Ceník on two sheets, not four. The masthead prints in the flow as a
+     letterhead, so the space the page heads keep for it on screen was
+     reserved twice, and the tables kept their screen spacing: sheet 1 was
+     55% blank and sheet 4 held the end of the address and the site map.
+     The site map does not print; the address, phone and prices do. */
+  @page {
+    margin: 12mm 14mm;
+  }
+
+  :root {
+    --nav-h: 0px;
+  }
+
+  .phead + section {
+    padding-top: 0;
+  }
+
+  .price {
+    gap: 1.4rem;
+  }
+
+  .price__group {
+    padding-top: 0.6rem;
+  }
+
+  .price tr,
+  .price td,
+  .price tbody th {
+    padding-block: 0.4rem;
+  }
+
+  .price__close {
+    padding-top: 1.4rem;
+  }
+
+  .price__close,
+  .foot__grid {
+    break-inside: avoid;
+  }
+
+  .foot {
+    padding-top: 1.4rem;
+  }
+
+  .foot__col--nav {
+    display: none;
+  }
 }

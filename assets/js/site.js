@@ -663,6 +663,14 @@
     collectLightbox();
   }
 
+  /* --------------------------------------------------------------- print */
+  /* Lazy pictures below the fold were never fetched, so a printed /obrazy
+     had twelve sheets of empty frames. Asked to print, every picture loads;
+     a browser that snapshots before they arrive gets them on the next print. */
+  addEventListener("beforeprint", () => {
+    $$('img[loading="lazy"]').forEach((i) => (i.loading = "eager"));
+  });
+
   /* --------------------------------------------------------- partner marks */
   /* Which ground did each logo bring? Read from its corners: transparent,
      light paper or black. The stylesheet picks the filter that drops that

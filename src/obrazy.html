@@ -1,6 +1,7 @@
 {% extends "_base.html" %}
 {% import "_icons.html" as ico %}
 {% set page = 'obrazy' %}
+{% set og_wish = 'images/obrazy/85.jpeg' %}
 {% set for_sale = paintings|rejectattr('sold')|list %}
 {% set sold = paintings|selectattr('sold')|list %}
 

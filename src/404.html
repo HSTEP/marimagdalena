@@ -1,6 +1,10 @@
 {% extends "_base.html" %}
 {% import "_icons.html" as ico %}
 {% set page = none %}
+{# Served at any missing path, including nested ones (/cenik/): without
+   this every relative URL resolved under the bad folder, the page came up
+   unstyled and "Zpět na úvod" led to another 404. #}
+{% block base %}<base href="/">{% endblock %}
 
 {% block title %}Stránka nenalezena | {{ site.name }}{% endblock %}
 {% block description %}Tuhle stránku se nám nepodařilo najít.{% endblock %}

@@ -416,14 +416,13 @@
         back.style.zIndex = "1";
         label(el);
         front.classList.add("is-ready");
+        // A dissolve, both ways at once: pictures of different proportions
+        // must not show the outgoing one's edges around the incoming one.
+        // The outgoing plate is reused only once its fade has finished — a
+        // plate given a new src while still visible goes blank.
+        back.classList.remove("is-ready");
         clearTimeout(settle);
-        const old = back;
-        // The plate underneath is retired once the fade has finished, and only
-        // then reused — a plate given a new src while still visible goes blank.
-        settle = setTimeout(() => {
-          if (old !== front) old.classList.remove("is-ready");
-          onShown?.();
-        }, 320);
+        settle = setTimeout(() => onShown?.(), 320);
       };
       plate.decode().then(swap, swap);
     };

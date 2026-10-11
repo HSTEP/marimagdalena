@@ -82,7 +82,12 @@
   --gutter: clamp(1.25rem, 5vw, 5.5rem);
   --gap: clamp(1rem, 2.2vw, 2rem);
   --wide: 1680px;
-  --prose: 62ch;
+  /* In em, not ch. 1ch is the width of Jost's zero, 0.59em; an average
+     line of Czech in Jost runs about 0.38em a character, so 62ch set 95–98
+     characters to a line of body copy and the ledes ran to 87–101. 27em is
+     459px at --t-body and 525 at --t-lede: 66–71 characters, resolved on each
+     element against its own size. */
+  --prose: 27em;
 
   /* How much room a focus ring needs outside the box it rings: the 2px stroke
      plus the 3px offset declared at :focus-visible. .reel worked this out for
@@ -455,11 +460,23 @@ ol {
   list-style: none;
 }
 
+/* No system tap flash: Android painted every tile, the burger and the
+   lightbox chevrons cyan for a fifth of a second. Pressed states are drawn
+   by the site instead (sec. 22). */
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Components below set `display` on classes, which outranks the UA's
    `[hidden] { display: none }` — without this the filter would mark items
    hidden without hiding them. */
 [hidden] {
   display: none !important;
+}
+
+/* A postcode, a number and its unit: things that do not break. */
+.nowrap {
+  white-space: nowrap;
 }
 
 a {
@@ -896,7 +913,7 @@ main > section.band:last-of-type {
    filter of a `.plate > img` — the quieting filters live on .works__fig and the
    portraits, never here — so it had nothing to time. */
 .plate > img {
-  transition: transform 1.4s var(--ease);
+  transition: transform 1.2s var(--ease);
 }
 
 /* .plate--zoom alone. `a.plate:hover > img` used to lead this selector and
@@ -905,8 +922,13 @@ main > section.band:last-of-type {
    a link. A rule describing a markup shape that was never built is the same
    thing as the colgroup note further down — dead, and worth deleting rather
    than leaving for the next reader to verify. */
+/* One hover for a photograph anywhere on the site: 3% over 1.2s. There were
+   seven — 1.03 to 1.05, 0.9s to 1.4s, plus a gold frame on the /galerie
+   tiles — each component having settled its own. The paintings do not take
+   it: a gallery does not enlarge the work or crop it under the cursor (see
+   .works__item:hover). */
 .plate--zoom:hover > img {
-  transform: scale(1.035);
+  transform: scale(1.03);
 }
 
 /* A portrait photograph in a landscape plate. Filled from the centre, the
@@ -927,13 +949,30 @@ main > section.band:last-of-type {
   border-top: 1px solid var(--hair);
 }
 
+/* One caption for a record or a person, wherever it appears: the name in
+   Bodoni roman at the h5 rung, the date under or beside it in grey Jost
+   sentence case — the treatment /projekty, /vystavy and /partneri give the
+   same records and people. The homepage set "Sasankový ples" italic at body
+   size over a tracked-caps date, and /vystavy set it roman a rung larger over
+   a grey one: the same record in two hands one click apart. Italic is kept
+   for her work and her voice — painting titles, the motto, the quote. */
 .cap__t {
   font-family: var(--serif);
-  font-style: italic;
-  font-size: var(--t-body);
-  font-variation-settings: var(--serif-text);
-  line-height: var(--lh-cap);
+  font-size: var(--t-h5);
+  font-variation-settings: var(--vf-h5);
+  line-height: var(--lh-head);
   color: var(--fg);
+}
+
+.cap__date {
+  margin-top: 0.45rem;
+  color: var(--fg-3);
+  font-size: var(--t-small);
+  line-height: var(--lh-note);
+}
+
+.cap .cap__date {
+  margin-top: 0;
 }
 
 /* No margin-left:auto. Flung to the far edge of a 12-column caption, the role
@@ -1778,11 +1817,11 @@ html:not(.js) .nav {
 }
 
 /* Column seven, where the hero and the quote plate also break. The lede used
-   to sit at 9 / span 4 — 410.9px, which at 19.44px is about 38 characters:
+   to sit at 9 / span 4 — 410.9px, which at 19.44px is about 55 characters:
    a caption measure carrying three lines of body copy, which is why five of
    six ledes wrapped to exactly three lines and read as chopped. Six columns
-   is 632, near enough 58 characters, and `max-width: var(--prose)` on .lede
-   finally has something to cap. The title gives up one column to pay for it
+   is 632, and `max-width: var(--prose)` on .lede caps it at 525 — about 70
+   characters of Czech in Jost. The title gives up one column to pay for it
    and still clears its longest setting — "Art Connecting" inks 546.6 — by
    85px. */
 /* Its own optical crossing, not h2's. `h1,h2,h3,h4` binds every heading to
@@ -1821,6 +1860,16 @@ html:not(.js) .nav {
 .phead--ledger {
   padding-top: calc(var(--nav-h) + clamp(1.6rem, 3vw, 2.6rem));
   padding-bottom: 0;
+}
+
+/* On a phone the ledger head stacks like every other head, so its quieter
+   title bought nothing and cost rank: 27px over 24px chapter heads, where the
+   other five pages open at 37. */
+@media (width <= 760px) {
+  .phead--ledger .phead__title {
+    font-size: var(--t-h1);
+    font-variation-settings: var(--vf-h1);
+  }
 }
 
 /* Back to the h2 crossing, because this one really is set at --t-h2 — the
@@ -1872,7 +1921,7 @@ html:not(.js) .nav {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.9s var(--ease);
+  transition: transform 1.2s var(--ease);
 }
 
 .phead--plate:hover .phead__plate img,
@@ -2354,13 +2403,18 @@ html:not(.js) .nav {
   color: var(--fg-3);
 }
 
-/* "Drag sideways" is an instruction for a thumb. Printed at 1440, where the
-   affordance is a wheel and a cursor, it is a phone's caption left on a
-   desktop. It is a question of the pointer, not of the width: an iPad at
-   1024 moves the strip with a thumb and was told nothing. */
+/* "Drag sideways" is true for every pointer now: a thumb swipes the strip
+   and a mouse drags it (site.js). It was hidden on desktops on the premise
+   that a wheel moves it; a wheel scrolls the page. */
 @media (hover: hover) and (pointer: fine) {
-  .reel__hint {
-    display: none;
+  .reel {
+    cursor: grab;
+  }
+
+  .reel.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    user-select: none;
   }
 }
 
@@ -2430,11 +2484,20 @@ html:not(.js) .nav {
 
 .works__fig img {
   width: 100%;
-  transition: transform 1.2s var(--ease), opacity 0.8s;
+  transition: opacity 0.3s var(--ease);
 }
 
-.works__item:hover .works__fig img {
-  transform: scale(1.04);
+/* The painting stays still; its name answers. A zoom cropped 2% off every
+   edge of the canvas the moment a buyer pointed at it. The title takes the
+   underline the masthead's links draw, in the same gold and the same ease. */
+.works__name {
+  background: linear-gradient(var(--gold), var(--gold)) 0 100% / 0 1px no-repeat;
+  padding-bottom: 2px;
+  transition: background-size 0.5s var(--ease);
+}
+
+.works__item:hover .works__name {
+  background-size: 100% 1px;
 }
 
 /* A permanent caption under the frame. A hover overlay names nothing on a
@@ -2614,40 +2677,10 @@ html:not(.js) .nav {
   }
 }
 
-/* `position: relative` is not decoration here — it is the containing block for
-   the ::after frame below, and without it that frame was not on the tile.
-
-   Nothing from `.tiles__item` up to `<body>` was positioned. An absolutely
-   positioned box with no positioned ancestor resolves against the *initial*
-   containing block, so `inset: 0` on the ::after did not mean "the tile"; it
-   meant a 1440x950 rectangle at the document origin. The gold hover frame has
-   therefore never once drawn around a plate. Measured at 2x on tile #0, the
-   four edge pixels rest -> hover:
-
-     before   (172,169,166) (64,66,63) (136,135,130) (208,189,173)   photograph
-     after    (202,167,108) (154,121,62) (187,153,92) (218,177,111)  gold
-
-   The reason sixteen rounds of screenshots and two reviewers missed it is that
-   the escape is intermittent by construction. `.js .rv` carries
-   `transform: translateY(18px)` until the reveal lands, and a transform makes
-   an element a containing block for its own absolutely positioned pseudo — so
-   the frame is correctly contained exactly while the tile is still invisible,
-   and escapes the moment the tile becomes visible. Probe before scrolling and
-   the sheet is clean; probe after and it is not.
-
-   The second symptom is the one that sent me looking. That stray 1440x950 box
-   is hit-testable, so after any scroll away and back on /galerie —
-   wheel, keyboard, or scripted, it makes no difference — it sat over the whole
-   viewport and swallowed every hover on the page: 147 of 154 probe points
-   returned `A.tiles__item` with a rect that does not contain the point, and
-   `.phead__plate:hover` was false while a click on it still opened the
-   lightbox. Paint identical, hit test gone. Reproduced in both the headless
-   shell and full Chromium under --headless=new; /galerie was the only page of
-   the eight affected, and page height had nothing to do with it (padding
-   /obrazy to 12049px stays clean; two tiles on /galerie is enough to break it).
-
-   A site-wide sweep with every reveal landed now finds 0 absolutely positioned
-   boxes, real or pseudo, escaping to the initial containing block. */
+/* Positioned so nothing drawn on the tile can resolve against the page —
+   the gold hover frame that once hung off this element escaped to the
+   initial containing block and swallowed every hover on /galerie. The frame
+   is gone (see .plate--zoom); the anchor stays a containing block. */
 .tiles__item {
   display: block;
   position: relative;
@@ -2672,20 +2705,9 @@ html:not(.js) .nav {
 }
 
 .tiles__item:hover img {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
-.tiles__item::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border: 1px solid transparent;
-  transition: border-color 0.45s;
-}
-
-.tiles__item:hover::after {
-  border-color: rgb(227 166 60 / 55%);
-}
 
 /* ----------------------------------------------------------- 14. catalogue */
 /* Exhibitions, as a catalogue rather than a ledger. Each record is a plate and
@@ -2718,10 +2740,13 @@ html:not(.js) .nav {
   line-height: var(--lh-head);
 }
 
+/* A label sits a third as far from its own plate as from the next record's.
+   On the page's gap both distances were 31.7px at 1440, so nearness — the
+   only thing tying a wall label to its picture — said nothing. */
 .xcat__list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(2.6rem, 5vw, 4.4rem) var(--gap);
+  gap: clamp(2.6rem, 5vw, 4.4rem) calc(var(--gap) * 3);
   padding-top: clamp(1.6rem, 3vw, 2.4rem);
 }
 
@@ -2731,7 +2756,7 @@ html:not(.js) .nav {
 .xcat__item {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  column-gap: var(--gap);
+  column-gap: clamp(0.9rem, 1.1vw, 1.1rem);
   align-items: stretch;
 }
 
@@ -2752,7 +2777,7 @@ html:not(.js) .nav {
 }
 
 .xcat__plate:hover img {
-  transform: scale(1.035);
+  transform: scale(1.03);
 }
 
 /* A poster is never cropped and never zoomed: the type on it is part of it.
@@ -2788,9 +2813,9 @@ html:not(.js) .nav {
 
 .xcat__title {
   font-family: var(--serif);
-  font-size: var(--t-h4);
+  font-size: var(--t-h5);
   line-height: var(--lh-head);
-  font-variation-settings: var(--vf-h4);
+  font-variation-settings: var(--vf-h5);
   text-wrap: balance;
   transition: color 0.4s;
 }
@@ -2826,7 +2851,6 @@ html:not(.js) .nav {
   letter-spacing: 0.01em;
   font-size: var(--t-small);
   font-family: var(--serif);
-  font-style: italic;
   font-variation-settings: var(--serif-text);
   line-height: var(--lh-note);
   border-bottom-color: transparent;
@@ -2851,7 +2875,7 @@ html:not(.js) .nav {
   }
 
   .xcat__title {
-    margin-top: calc(var(--t-h4) * -0.2);
+    margin-top: calc(var(--t-h5) * -0.2);
   }
 
   .xcat__links {
@@ -3061,7 +3085,7 @@ html:not(.js) .nav {
 }
 
 .arch__field:not(.arch__field--video) img {
-  transition: transform 1.1s var(--ease);
+  transition: transform 1.2s var(--ease);
 }
 
 .arch__field:hover img {
@@ -3087,7 +3111,11 @@ html:not(.js) .nav {
   line-height: var(--lh-note);
 }
 
+/* The name first and the date under it, as every other record caption on the
+   site sets them. The markup keeps the date first for the archive's reading
+   order in the source; `order` puts the title on top. */
 .arch__title {
+  order: -1;
   font-size: var(--t-h5);
   font-variation-settings: var(--vf-h5);
   line-height: var(--lh-head);
@@ -3240,7 +3268,7 @@ html:not(.js) .nav {
 
 .person:hover .person__art > img:not(.person__logo) {
   filter: none;
-  transform: scale(1.04);
+  transform: scale(1.03);
 }
 
 /* Name over role, not beside it: at three-to-a-row the card is too narrow for
@@ -3366,6 +3394,29 @@ html:not(.js) .nav {
 .person:hover .person__logo {
   opacity: 0.95;
   transform: none;
+}
+
+/* Four of the six logos are opaque files, and brightness(0) invert(1) turns
+   any opaque ground into a white block: a dark mark on white paper became a
+   white rectangle on the photograph. site.js reads each logo's corner and
+   says which ground it brought. On light paper the mark is inverted, so the
+   paper goes black and the screen blend drops it; on black the mark is only
+   greyed, and the black drops the same way. Transparent marks keep the rule
+   above. */
+.person__logo.is-on-light {
+  filter: grayscale(1) invert(1);
+}
+
+.person__logo.is-on-dark {
+  filter: grayscale(1);
+}
+
+/* A touch screen never hovers, so it never saw a partner's mark at all. */
+@media (hover: none) {
+  .person__logo {
+    opacity: 0.95;
+    transform: none;
+  }
 }
 
 /* --------------------------------------------------------------- 17. price */
@@ -3816,6 +3867,16 @@ html:not(.js) .nav {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.6rem 1.8rem;
+}
+
+/* On a phone the sentence and the actions stack, and both start on the
+   margin. Pushed right, the actions sat at x 85 under a flush-left sentence
+   when they fitted on one line and at x 20 when they wrapped — so the close
+   changed sides with the length of a phone number. */
+@media (width <= 760px) {
+  .endnote__a {
+    margin-left: 0;
+  }
 }
 
 /* ------------------------------------------------------- 18b. quote plate */
@@ -4374,13 +4435,15 @@ html:not(.js) .nav {
    are ~1200px wide, so `max-height` alone left a painting smaller on screen
    than the thumbnail it was opened from. */
 .lb__img {
+  /* Both plates in one cell: the incoming one crossfades over the other. */
+  grid-area: 1 / 1;
   width: 100%;
   height: 100%;
   max-width: 1500px;
   object-fit: contain;
   object-position: center;
   opacity: 0;
-  transition: opacity 0.45s var(--ease);
+  transition: opacity 0.3s var(--ease);
 }
 
 .lb__img.is-ready {
@@ -4396,6 +4459,8 @@ html:not(.js) .nav {
    hover shift says the rest. */
 .lb__nav {
   position: absolute;
+  /* Above both plates, which take z-index 1 and 2 as they crossfade. */
+  z-index: 3;
   top: 50%;
   transform: translateY(-50%);
   width: clamp(3rem, 6vw, 4.5rem);
@@ -4519,6 +4584,35 @@ body.is-lb .nav {
 
 .js .rv-clip.is-in img {
   clip-path: inset(0 0 0 0);
+}
+
+/* Pressed: a picture dims at once and recovers as the finger lifts; a
+   button fills. What the tap highlight said, in the site's own terms. */
+:is(.works__item, .tiles__item, .xcat__plate, .arch__field, .phead__plate, .plate--zoom):active img {
+  opacity: 0.85;
+  transition: opacity 0s;
+}
+
+.cta:active::before {
+  transform: scaleY(1);
+  transition-duration: 0.15s;
+}
+
+/* Items in a grid arrive by opacity alone, in 0.6s, staggered by the order
+   they reach the screen together (site.js sets --stagger). A wall of
+   paintings rising 18px tile by tile over a second each read as the page
+   assembling itself in front of the reader; a gallery wall is simply there.
+   Headings and prose keep the rise. */
+.js :is(.works__item, .tiles__item, .xcat__item, .arch__item, .person, .reel, .grid > a).rv {
+  transform: none;
+  transition: opacity 0.6s var(--ease);
+  transition-delay: var(--stagger, 0ms);
+}
+
+/* First seen already well inside the screen: shown, not staged. */
+.js .rv.is-now.is-in,
+.js .rv-clip.is-now.is-in img {
+  transition: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -5264,7 +5358,11 @@ body.is-lb .nav {
    there has to match that depth to win, and would keep matching it only for as
    long as nobody touches either one. Scoping states the same thing once. */
 @media screen {
+  /* At its stuck size while hidden, so it neither grows in view as the bar
+     un-sticks (it snapped 122 → 150 at full opacity, top clipped, then
+     faded) nor shrinks while fading in. */
   .js .home .nav:not(.is-stuck) .nav__mark {
+    width: clamp(104px, 10vw, 122px);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;

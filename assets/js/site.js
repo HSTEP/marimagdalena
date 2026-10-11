@@ -157,6 +157,72 @@
     reel.addEventListener("scroll", tickReel, { passive: true });
     addEventListener("resize", tickReel, { passive: true });
     updateReel();
+
+    /* A mouse can drag the strip. A wheel scrolls the page, not the reel,
+       and dragging a plate started the browser's own link drag, so with a
+       mouse six of the nine works were reachable only by a hairline
+       scrollbar. Past 6px of travel the strip follows the pointer with snap
+       off, the click that ends a drag opens nothing, and on release it eases
+       to the nearest plate. Touch keeps the browser's native swipe. */
+    let drag = null;
+    let dragged = false;
+    const startEdge = () => {
+      const box = reel.getBoundingClientRect();
+      return box.left + reel.clientLeft + parseFloat(getComputedStyle(reel).paddingLeft);
+    };
+    reel.addEventListener("pointerdown", (e) => {
+      dragged = false;
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      drag = { id: e.pointerId, x: e.clientX, left: reel.scrollLeft, moved: false };
+    });
+    reel.addEventListener("pointermove", (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const dx = e.clientX - drag.x;
+      if (!drag.moved) {
+        if (Math.abs(dx) < 6) return;
+        drag.moved = true;
+        reel.setPointerCapture(e.pointerId);
+        reel.classList.add("is-dragging");
+      }
+      reel.scrollLeft = drag.left - dx;
+    });
+    const endDrag = () => {
+      if (!drag) return;
+      const { moved, left } = drag;
+      drag = null;
+      if (!moved) return;
+      dragged = true;
+      const edge = startEdge();
+      // Nearest plate, leaning one plate in the direction of a deliberate pull.
+      const travel = reel.scrollLeft - left;
+      let target = frames[0];
+      let best = Infinity;
+      frames.forEach((f) => {
+        const off = f.getBoundingClientRect().left - edge - Math.sign(travel) * 40;
+        if (Math.abs(off) < best) {
+          best = Math.abs(off);
+          target = f;
+        }
+      });
+      reel.classList.remove("is-dragging");
+      reel.scrollTo({
+        left: reel.scrollLeft + target.getBoundingClientRect().left - edge,
+        behavior: reduced ? "auto" : "smooth",
+      });
+    };
+    reel.addEventListener("pointerup", endDrag);
+    reel.addEventListener("pointercancel", endDrag);
+    reel.addEventListener("dragstart", (e) => e.preventDefault());
+    reel.addEventListener(
+      "click",
+      (e) => {
+        if (!dragged) return;
+        dragged = false;
+        e.preventDefault();
+        e.stopPropagation();
+      },
+      true
+    );
   }
 
   /* -------------------------------------------------------------- reveals */
@@ -169,15 +235,43 @@
     observeReveals = (scope = document) =>
       $$(".rv, .rv-clip", scope).forEach((el) => el.classList.add("is-in"));
   } else {
+    /* A reveal is a courtesy to content arriving at the edge of the screen,
+       and it must never be the reason content is missing. The observer used
+       to wait for 6% of an element to be 8% inside the bottom edge, so a band
+       of 80-150px at the foot of every resting screen stayed blank until the
+       next scroll, and a flick on a phone ran 42-63% of the screen blank while
+       the wipes caught up. It now starts a tenth of a screen early, on the
+       first pixel.
+       Anything first seen already well inside the screen — a flick, an anchor
+       jump, a restored scroll position, a "show more" — is simply shown. And
+       grid items take their stagger from the order they arrive in together,
+       capped at three steps, instead of their position in the markup: the
+       paintings wall staggered by `index % 12`, a sawtooth that had nothing to
+       do with which row was coming into view, and its last tiles waited 275ms
+       for no reason the reader could see. */
+    const GRID = ".works__item, .tiles__item, .xcat__item, .arch__item, .person, .reel, .grid > a.rv";
     const io = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-in");
-          io.unobserve(entry.target);
-        });
+        let step = 0;
+        entries
+          .filter((entry) => entry.isIntersecting)
+          .sort(
+            (a, b) =>
+              a.boundingClientRect.top - b.boundingClientRect.top ||
+              a.boundingClientRect.left - b.boundingClientRect.left
+          )
+          .forEach((entry) => {
+            const el = entry.target;
+            io.unobserve(el);
+            if (entry.boundingClientRect.top < innerHeight * 0.6) {
+              el.classList.add("is-now");
+            } else if (el.matches(GRID)) {
+              el.style.setProperty("--stagger", `${Math.min(step++, 3) * 70}ms`);
+            }
+            el.classList.add("is-in");
+          });
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.06 }
+      { rootMargin: "0px 0px 10% 0px", threshold: 0 }
     );
     observeReveals = (scope = document) => {
       const list = $$(".rv, .rv-clip", scope);
@@ -271,23 +365,31 @@
     const lbAsk = $("[data-lb-ask]", lb);
     const pad = (n) => String(n).padStart(2, "0");
 
-    const show = (i) => {
-      if (!group.length) return;
-      cursor = (i + group.length) % group.length;
-      const el = group[cursor];
-      lbImg.classList.remove("is-ready");
-      const next = new Image();
-      next.onload = () => {
-        lbImg.src = next.src;
-        lbImg.alt = el.dataset.title || "";
-        lbImg.classList.add("is-ready");
-      };
-      next.src = el.getAttribute("href");
+    /* Two plates on one stage, and nothing on the screen changes until the
+       next picture is decoded. The viewer used to set the new title, counter
+       and enquiry at once, fade the old picture to black and load the new one
+       into the same element — so on a phone network the stage sat black for
+       most of a second under a title it did not show yet, and then the
+       *previous* painting faded back in under the new title before being
+       replaced: "Napsat o tomto obraze" under the wrong work, at the one
+       moment the site is selling. Now the incoming plate is decoded behind
+       the current one and crossfades over it, and the words change in the
+       same frame as the picture. A step that is overtaken by a newer one is
+       dropped. If the target's own tile has already loaded, its file goes up
+       at once and the full-size image replaces it when ready, so a tap is
+       answered immediately. */
+    const lbBack = lbImg.cloneNode();
+    lbBack.removeAttribute("data-lb-img");
+    lbImg.after(lbBack);
+    let front = lbImg;
+    let back = lbBack;
+    let request = 0;
+    let settle = null;
+
+    const label = (el) => {
       lbTitle.textContent = el.dataset.title || "";
       lbTag.textContent = el.dataset.tag || "";
       lbCount.textContent = `${pad(cursor + 1)} / ${pad(group.length)}`;
-      // Only paintings carry a sale state, and only unsold ones can be asked
-      // about; exhibition and archive images have nothing to enquire after.
       if (lbAsk) {
         const forSale = el.dataset.state === "sale";
         lbAsk.hidden = !forSale;
@@ -298,7 +400,47 @@
           )}`;
         }
       }
-      // Warm the neighbours so arrowing through feels instant.
+    };
+
+    // Put `src` up as the front plate once it can be painted whole.
+    const present = (src, el, token, onShown) => {
+      const plate = back;
+      plate.classList.remove("is-ready");
+      plate.src = src;
+      plate.alt = el.dataset.title || "";
+      const swap = () => {
+        if (token !== request) return;
+        back = front;
+        front = plate;
+        front.style.zIndex = "2";
+        back.style.zIndex = "1";
+        label(el);
+        front.classList.add("is-ready");
+        clearTimeout(settle);
+        const old = back;
+        // The plate underneath is retired once the fade has finished, and only
+        // then reused — a plate given a new src while still visible goes blank.
+        settle = setTimeout(() => {
+          if (old !== front) old.classList.remove("is-ready");
+          onShown?.();
+        }, 320);
+      };
+      plate.decode().then(swap, swap);
+    };
+
+    const show = (i) => {
+      if (!group.length) return;
+      cursor = (i + group.length) % group.length;
+      const el = group[cursor];
+      const token = ++request;
+      const full = el.getAttribute("href");
+      const tile = el.querySelector("img");
+      const quick = tile && tile.complete && tile.naturalWidth && tile.currentSrc;
+      if (quick && quick !== full) {
+        present(quick, el, token, () => present(full, el, token));
+      } else {
+        present(full, el, token);
+      }
       [1, -1].forEach((d) => {
         const n = group[(cursor + d + group.length) % group.length];
         if (n) new Image().src = n.getAttribute("href");
@@ -355,7 +497,10 @@
       closeTimer = setTimeout(() => {
         closeTimer = null;
         lb.hidden = true;
-        lbImg.removeAttribute("src");
+        [front, back].forEach((plate) => {
+          plate.classList.remove("is-ready");
+          plate.removeAttribute("src");
+        });
       }, 450);
       /* Clear inert before restoring focus: the opener is one of the elements
          that was made inert, and an inert element cannot be focused. */
@@ -453,6 +598,34 @@
 
     collectLightbox();
   }
+
+  /* --------------------------------------------------------- partner marks */
+  /* Which ground did each logo bring? Read from its corners: transparent,
+     light paper or black. The stylesheet picks the filter that drops that
+     ground under the screen blend (site.css, .person__logo). */
+  $$(".person__logo").forEach((logo) => {
+    const classify = () => {
+      try {
+        const c = document.createElement("canvas");
+        const n = (c.width = c.height = 16);
+        const g = c.getContext("2d", { willReadFrequently: true });
+        g.drawImage(logo, 0, 0, n, n);
+        const d = g.getImageData(0, 0, n, n).data;
+        let alpha = 0;
+        let light = 0;
+        [0, n - 1, n * (n - 1), n * n - 1].forEach((p) => {
+          alpha += d[p * 4 + 3];
+          light += 0.2126 * d[p * 4] + 0.7152 * d[p * 4 + 1] + 0.0722 * d[p * 4 + 2];
+        });
+        if (alpha / 4 < 128) return;
+        logo.classList.add(light / 4 > 128 ? "is-on-light" : "is-on-dark");
+      } catch {
+        /* An unreadable image keeps the default treatment. */
+      }
+    };
+    if (logo.complete && logo.naturalWidth) classify();
+    else logo.addEventListener("load", classify, { once: true });
+  });
 
   /* ---------------------------------------------------------- deferred map */
   /* Google's embed is only inserted once someone asks for it, so the footer

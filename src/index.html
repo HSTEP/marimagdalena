@@ -28,7 +28,7 @@
        This is the owner's own wording and the largest type on the site — the
        correction is a single inflection, but it needs her sign-off. #}
     <p class="hero__motto serif-it">
-      Renesance ideálu krásy založeného na uznání individuality,
+      Renesance ideálu krásy založeného na&nbsp;uznání individuality,
       která z každého z nás dělá to, co chce.
     </p>
 
@@ -210,7 +210,7 @@
        adjacent pages reads as duplicated content, not emphasis. #}
     <blockquote class="quote__q serif-it">
       Jako členka Mezinárodního artistického týmu LONDA Professional
-      jsem se podílela na vytváření nové kolekce a trendů.
+      jsem se podílela na&nbsp;vytváření nové kolekce a trendů.
     </blockquote>
     <p class="label">— {{ site.person }}</p>
     <a class="qlink" href="galerie.html">Kolekce Color&nbsp;Tune</a>
@@ -224,7 +224,7 @@
       <span class="label">Dění</span>
     </div>
     <h2 class="sec__title">Výstavy a projekty</h2>
-    <p class="sec__note">Salon je zároveň kulturním prostorem — pořádáme výstavy, setkání a workshopy.</p>
+    <p class="sec__note">Salon je zároveň kulturním prostorem&nbsp;— pořádáme výstavy, setkání a workshopy.</p>
   </div>
 
   {# Newest record with an image big enough to run at this size — see
@@ -243,7 +243,7 @@
         <span class="cap__t">{{ rec.title|striptags }}</span>
         <span class="cap__m label">{{ 'Výstavy' if loop.first else 'Projekty' }}</span>
       </div>
-      <p class="label" style="margin-top:.7rem">{{ cz_date(rec.date) }}</p>
+      <p class="cap__date">{{ cz_date(rec.date) }}</p>
     </a>
     {% endfor %}
   </div>

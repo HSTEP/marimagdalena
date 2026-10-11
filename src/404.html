@@ -8,7 +8,7 @@
 {% block content %}
 
 <section class="band" style="min-height: 100svh">
-  <div class="band__bg">{{ img(plates.atelier, alt='', sizes='100vw') }}</div>
+  <div class="band__bg">{{ img(plates.atelier, alt='', sizes='100vw', loading='eager') }}</div>
   <div class="band__in">
     {# The one inline clamp left in src/, and the only thing on the site that
        rendered at 112px — the size --t-hero declared and nothing used. It

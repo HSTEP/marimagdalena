@@ -27,9 +27,12 @@
     <a class="person rv" href="{{ p.url }}" target="_blank" rel="noopener noreferrer"
        style="--d:{{ (loop.index0 % 12) * 25 }}ms">
       <div class="person__art">
-        {{ img(p.photo, alt=p.name, sizes='(max-width:620px) 92vw, (max-width:1180px) 44vw, 30vw', cover=true) }}
+        {{ img(p.photo, alt=p.name, sizes='(max-width:620px) 44vw, (max-width:1180px) 44vw, 30vw', cover=true,
+               loading='eager' if loop.index0 < 2 else 'lazy') }}
         {% if p.logo %}
-        <img class="person__logo" src="{{ big(p.logo) }}" alt="" loading="lazy" decoding="async">
+        {# Through the responsive helper like every other picture: the raw file
+           was up to 1920px wide for a mark drawn at 70px on a phone. #}
+        {{ img(p.logo, alt='', cls='person__logo', sizes='(max-width:620px) 70px, 130px') }}
         {% endif %}
       </div>
       <div class="person__body">

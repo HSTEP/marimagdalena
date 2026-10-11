@@ -37,7 +37,8 @@
      data-title="Londa Color Tune — Berlín 2023"
      aria-label="Snímek {{ lead[0] }} z kolekce Londa Color Tune">
     {{ img(lead[1], alt='Kolekce Londa Color Tune, Berlín 2023 — snímek ' ~ lead[0],
-           sizes='(max-width:760px) 100vw, 50vw', cover=true) }}
+           sizes='(max-width:760px) 100vw, 50vw', cover=true,
+           loading='eager', fetchpriority='high') }}
   </a>
   {% endif %}
   <div class="phead__grid">
@@ -45,7 +46,7 @@
       <span class="num">Vlasy</span>
       <span class="label">Londa Professional</span>
     </div>
-    <h1 class="phead__title">Hair&nbsp;&amp;&nbsp;Styling</h1>
+    <h1 class="phead__title">Hair&nbsp;&amp; Styling</h1>
     <p class="phead__lede lede">
       Střih, barva, regenerace a proměny spojené s líčením a focením&nbsp;—
       v ateliéru, kde se dá u toho i posedět u klavíru.
@@ -108,7 +109,9 @@
        aria-label="Snímek {{ idx }} z kolekce Londa Color Tune">
       <span class="tiles__fig">
         {{ img(image, alt='Kolekce Londa Color Tune, Berlín 2023 — snímek ' ~ idx,
-               sizes='(max-width:760px) 46vw, 30vw', cover=true) }}
+               sizes='(max-width:760px) ' ~ ('92vw' if loop.index0 % 5 == 4 else '46vw')
+                     ~ ', ' ~ ('44vw' if loop.index0 % 5 >= 3 else '29vw'),
+               cover=true) }}
       </span>
     </a>
     {% endfor %}

@@ -1,4 +1,73 @@
-@import url("../fonts/fonts.css");
+/* The faces, inline. They were an @import of fonts.css, a second
+   render-blocking stylesheet that could only be discovered once this one had
+   arrived, so on a 3G phone every page stayed white for an extra round trip
+   and the homepage motto set in a fallback italic for a second before
+   re-wrapping. The paths are relative to assets/, so they read the same from
+   here as they did from assets/fonts/. */
+@font-face {
+  font-family: 'Bodoni Moda';
+  font-style: italic;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('../fonts/bodoni-moda-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Bodoni Moda';
+  font-style: italic;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('../fonts/bodoni-moda-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Bodoni Moda';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/bodoni-moda-normal-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Bodoni Moda';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/bodoni-moda-normal-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Jost';
+  font-style: italic;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url('../fonts/jost-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Jost';
+  font-style: italic;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url('../fonts/jost-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('../fonts/jost-normal-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('../fonts/jost-normal-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 /* ==========================================================================
    Maří Magdalena — Hair & Art Salon, Dobřany
@@ -1009,7 +1078,10 @@ main > section.band:last-of-type {
 }
 
 /* ------------------------------------------------------------ 6. cta/links */
+/* max-width and the span's wrap: an email address in a button is one
+   unbreakable word, and at a reader's large text it ran 42px off a phone. */
 .cta {
+  max-width: 100%;
   display: inline-flex;
   align-items: center;
   gap: 1.1rem;
@@ -1050,6 +1122,11 @@ main > section.band:last-of-type {
   isolation: isolate;
   overflow: hidden;
   transition: color 0.5s var(--ease), border-color 0.5s var(--ease);
+}
+
+.cta > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .cta::before {
@@ -3945,6 +4022,27 @@ html:not(.js) .nav {
     padding: 0;
   }
 
+  /* At a reader's large text "POLODLOUHÉ" outgrows its third of the row.
+     Filling the track, it could only spill rightward — into "DLOUHÉ", 14px
+     deep at 360 — and its centre walked off the prices under it. Sized to
+     its own words and placed in the track, it spills both ways from the
+     centre it shares with its figures. Nothing moves at the default size. */
+  [data-cols="3"] th {
+    width: max-content;
+  }
+
+  [data-cols="3"] th:nth-child(2) {
+    justify-self: start;
+  }
+
+  [data-cols="3"] th:nth-child(3) {
+    justify-self: center;
+  }
+
+  [data-cols="3"] th:nth-child(4) {
+    justify-self: end;
+  }
+
   /* The block of figures closes on both gutters. Right-aligned in thirds, the
      rightmost price ended on the 370 margin and the leftmost floated at 129 —
      a column of numbers hanging in the middle of a row whose own service name,
@@ -4350,7 +4448,33 @@ html:not(.js) .nav {
   line-height: var(--lh-note);
 }
 
+/* The address opens the map. Quiet at rest — it is still an address — and
+   answering the pointer the way the footer's other links do. */
+.foot__addr {
+  display: block;
+  transition: color 0.35s;
+}
+
+.foot__addr:hover {
+  color: var(--accent);
+}
+
+.addr {
+  text-decoration: underline;
+  text-decoration-color: var(--hair-strong);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: color 0.35s, text-decoration-color 0.35s;
+}
+
+.addr:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
 .foot__link {
+  max-width: 100%;
+  overflow-wrap: anywhere;
   display: inline-flex;
   align-items: baseline;
   gap: .4em;
@@ -4663,8 +4787,12 @@ html:not(.js) .nav {
   border-top: 1px solid var(--line);
 }
 
+/* Gold: it is the one thing in the viewer a reader is meant to act on, and
+   the accent's whole job is to say so. In the secondary grey it was the same
+   colour as the "K prodeji" tag beside it, a caption in a corner. */
 .lb__ask {
   margin-left: auto;
+  color: var(--gold);
 }
 
 .lb__title {
@@ -4800,31 +4928,6 @@ body.is-lb .nav {
 
 /* ---------------------------------------------------------- 23. responsive */
 @media (width <= 1180px) {
-  /* The masthead row cannot compress: the wordmark is `flex: none`, every link
-     is `nowrap`, and the number is sixteen characters. So it did not — it
-     overflowed, breaking the content margin at 1144 and crossing the viewport
-     at 1056, where `overflow-x: hidden` guillotined the phone number without
-     leaving a scrollbar to show for it. At 1024, the most common laptop width
-     on the site, the bar read `+420 607 067 7`: a truncated number that looks
-     like a whole one, on the single most actionable item on the page.
-     `nowrap` also meant the element reported `scrollWidth == clientWidth`, so
-     it measured as fitting from the inside.
-
-     The tell that it was over-constrained rather than merely tight: the
-     wordmark-to-links clearance sat at exactly 32.0px — the `.nav__in` gap —
-     from 1120 down, because `margin-left: auto` goes inert once a flex row
-     has no free space left to distribute.
-
-     The separator and the number give way first, and the seven destinations
-     stay. Dropping the whole row to the burger here would have been the
-     smaller edit and it closes the same band, but it costs eight visible
-     destinations across 961–1060 to save one that the footer already carries
-     on every page at every width, and the drawer carries again below 960. */
-  .nav__sep,
-  .nav__call {
-    display: none;
-  }
-
   .works,
   .people {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -4859,6 +4962,39 @@ body.is-lb .nav {
 
   .foot__col {
     grid-column: span 3;
+  }
+}
+
+/* The masthead's rungs are in em, not px, because its contents are in rem:
+   a reader who sets a larger default font gets a wider wordmark, wider links
+   and a longer number, and a px rung kept the full row past the width it
+   could hold. At 150% text the number read "+420 607 06" at 1440 and the
+   burger sat entirely off a 390 screen. 73.75em, 60em and 22.5em are 1180,
+   960 and 360 at the default 16px, so nothing moves for anyone else. */
+@media (width <= 73.75em) {
+  /* The masthead row cannot compress: the wordmark is `flex: none`, every link
+     is `nowrap`, and the number is sixteen characters. So it did not — it
+     overflowed, breaking the content margin at 1144 and crossing the viewport
+     at 1056, where `overflow-x: hidden` guillotined the phone number without
+     leaving a scrollbar to show for it. At 1024, the most common laptop width
+     on the site, the bar read `+420 607 067 7`: a truncated number that looks
+     like a whole one, on the single most actionable item on the page.
+     `nowrap` also meant the element reported `scrollWidth == clientWidth`, so
+     it measured as fitting from the inside.
+
+     The tell that it was over-constrained rather than merely tight: the
+     wordmark-to-links clearance sat at exactly 32.0px — the `.nav__in` gap —
+     from 1120 down, because `margin-left: auto` goes inert once a flex row
+     has no free space left to distribute.
+
+     The separator and the number give way first, and the seven destinations
+     stay. Dropping the whole row to the burger here would have been the
+     smaller edit and it closes the same band, but it costs eight visible
+     destinations across 961–1060 to save one that the footer already carries
+     on every page at every width, and the drawer carries again below 960. */
+  .nav__sep,
+  .nav__call {
+    display: none;
   }
 }
 
@@ -4898,7 +5034,9 @@ body.is-lb .nav {
   .grid > * {
     grid-column: 1 / -1 !important;
   }
+}
 
+@media (width <= 60em) {
   .nav__links {
     display: none;
   }
@@ -4926,33 +5064,6 @@ body.is-lb .nav {
   .nav__call::after {
     bottom: 0.55rem;
   }
-}
-
-/* Under 360 the wordmark, the number and the burger do not fit in one row
-   (118 + 143 + 44 + gaps against 288 at 320), and the number is the one that
-   can give: it keeps the icon and its 44px target, and the digits stay in the
-   accessible name. */
-@media (width < 360px) {
-  .nav__call {
-    min-width: 2.75rem;
-    justify-content: center;
-  }
-
-  .nav__call-t {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  .nav__call::after {
-    display: none;
-  }
-}
-
-@media (width <= 960px) {
 
   /* Below this rung the burger is the whole of the navigation — the rule above
      has just taken `.nav__links` away — and the burger is a button that calls
@@ -4992,6 +5103,33 @@ body.is-lb .nav {
     opacity: 1;
     transform: none;
   }
+}
+
+/* Under 360 the wordmark, the number and the burger do not fit in one row
+   (118 + 143 + 44 + gaps against 288 at 320), and the number is the one that
+   can give: it keeps the icon and its 44px target, and the digits stay in the
+   accessible name. */
+@media (width < 22.5em) {
+  .nav__call {
+    min-width: 2.75rem;
+    justify-content: center;
+  }
+
+  .nav__call-t {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .nav__call::after {
+    display: none;
+  }
+}
+
+@media (width <= 960px) {
 
   .works,
   .people {
@@ -5235,7 +5373,11 @@ body.is-lb .nav {
   }
 }
 
-/* A phone on its side: 640–932 wide and 375–430 tall. It fell into the
+/* A landscape screen in the tablet band: a phone on its side (640–932 wide,
+   375–430 tall), or a desktop browser zoomed to 150% (1440×900 becomes
+   960×600, 1366×768 becomes 911×512) — which took the upright-tablet layout
+   and showed the crown of her head and no button. Keyed on shape, not on
+   height alone. Both fell into the
    tablet-portrait band above, where every picture is sized from the width,
    so at 844×390 the founder's portrait was 2.4 screens tall, the quote's
    2.7, a reel plate and its title never shared a screen, and the homepage
@@ -5244,18 +5386,7 @@ body.is-lb .nav {
    the screen under the masthead — and the hero goes back to the desktop's
    split, photograph right and type left, because stacked it showed the top
    of her head and no way to book. */
-@media (620px < width <= 960px) and (height <= 500px) {
-  /* A shorter masthead: at 68px it was 17% of every screen. The wordmark
-     steps down with it to keep its focus ring inside the bar. */
-  :root {
-    --nav-h: 3.5rem;
-    --nav-h-stuck: 3.5rem;
-  }
-
-  .nav__mark,
-  .nav.is-stuck .nav__mark {
-    width: 104px;
-  }
+@media (620px < width <= 960px) and (min-aspect-ratio: 4 / 3) {
 
   .hero {
     display: grid;
@@ -5287,14 +5418,6 @@ body.is-lb .nav {
     gap: 0.9rem;
   }
 
-  .hero__mark {
-    width: 170px;
-  }
-
-  .hero__motto {
-    font-size: var(--t-h5);
-    font-variation-settings: var(--vf-h5);
-  }
 
   /* Height-bound plates: the screen under the masthead, less the caption. */
   .atelier__fig .plate {
@@ -5357,6 +5480,31 @@ body.is-lb .nav {
   }
 }
 
+/* The smaller type and the shorter masthead are for a screen that really is
+   short — a phone on its side. A desktop zoomed to 150% (960×600) takes the
+   landscape layout above but keeps its full-size masthead and hero type. */
+@media (620px < width <= 960px) and (height <= 500px) {
+  /* A shorter masthead: at 68px it was 17% of every screen. The wordmark
+     steps down with it to keep its focus ring inside the bar. */
+  :root {
+    --nav-h: 3.5rem;
+    --nav-h-stuck: 3.5rem;
+  }
+
+  .nav__mark,
+  .nav.is-stuck .nav__mark {
+    width: 104px;
+  }
+  .hero__mark {
+    width: 170px;
+  }
+
+  .hero__motto {
+    font-size: var(--t-h5);
+    font-variation-settings: var(--vf-h5);
+  }
+}
+
 /* The viewer on a phone on its side. Two 68px bars took 35% of a 390px
    screen and the work rendered at 203×237 — turning the phone, the natural
    way to see a picture bigger, shrank it to a third of its upright area.
@@ -5375,7 +5523,7 @@ body.is-lb .nav {
   }
 
   .lb__nav--next {
-    right: -1.4rem;
+    right: 0;
   }
 
   .lb__bar {
@@ -5547,6 +5695,36 @@ body.is-lb .nav {
 /* The `.nav__mark { transition: opacity }` that used to close this section has
    moved onto the element's own rule in section 5, where it no longer replaces
    the width transition declared there. */
+
+/* ------------------------------------------------------- forced colours */
+/* Windows High Contrast repaints backgrounds as the page colour, and three
+   things on this site are drawn with a background: the burger's two bars
+   (and the close cross they turn into), the masthead's current-page rule,
+   and nothing else marks the current page in the drawer but gold. The only
+   navigation control on a phone became invisible. Draw them in the system's
+   own colours instead, and let the dark wordmark in the footer turn light
+   when the footer does. */
+@media (forced-colors: active) {
+  .burger span {
+    background: ButtonText;
+  }
+
+  .nav__link::after,
+  .nav__call::after {
+    background: LinkText;
+  }
+
+  .menu__link.is-active span {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+@media (forced-colors: active) and (prefers-color-scheme: dark) {
+  .foot__mark img {
+    filter: invert(1);
+  }
+}
 
 /* ------------------------------------------------------------- 24. print */
 /* The ceník is the one page anyone prints, and printed it was unusable: the

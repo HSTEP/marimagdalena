@@ -75,8 +75,9 @@
      hidden. Escape still closed it and the desktop links sat above it at
      z-index 50, so it was degraded rather than sealed — but a panel with no
      visible exit is not a state worth leaving reachable. Same 960 as the CSS,
-     read from the same kind of query rather than restated as a number here. */
-  matchMedia("(width > 960px)").addEventListener("change", (e) => {
+     read from the same kind of query rather than restated as a number here —
+     in em, like the masthead's rungs (site.css). */
+  matchMedia("(width > 60em)").addEventListener("change", (e) => {
     if (e.matches) setMenu(false);
   });
 

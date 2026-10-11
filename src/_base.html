@@ -64,7 +64,10 @@
 <header class="nav" data-nav>
   <div class="nav__in">
     <a class="nav__mark" href="index.html" aria-label="{{ site.name }} — úvodní strana">
-      {{ img(site.logo_gold, alt=site.name ~ ' — ' ~ site.tagline, sizes='160px', loading='eager') }}
+      {# On the homepage the hero carries the same wordmark larger; asking for
+         the hero's size here lets one file serve both instead of two. #}
+      {{ img(site.logo_gold, alt=site.name ~ ' — ' ~ site.tagline,
+             sizes=('(max-width:960px) 60vw, 430px' if page == 'salon' else '160px'), loading='eager') }}
     </a>
 
     <nav class="nav__links" aria-label="Hlavní navigace">
@@ -120,7 +123,7 @@
     <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>Objednat se</span>{{ ico.arrow() }}</a>
     <a class="qlink qlink--plain" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
     <a class="qlink qlink--plain" href="mailto:{{ site.email }}">{{ site.email }}</a>
-    <p class="label">{{ site.street }} · {{ site.city }}</p>
+    <p class="label"><a href="{{ site.maps_link }}" target="_blank" rel="noopener">{{ site.street }} · {{ site.city }}</a></p>
   </div>
 </div>
 
@@ -156,7 +159,9 @@
         <p class="label">Spojení</p>
         <a class="foot__link" href="tel:{{ site.phone_href }}">{{ site.phone_display }}</a>
         <a class="foot__link" href="mailto:{{ site.email }}">{{ site.email }}</a>
-        <p class="foot__line">{{ site.street }}<br>{{ site.zip }} {{ site.city }}</p>
+        {# The address opens the map: directions were three taps and an embed
+           away, and site.maps_link had been defined and never used. #}
+        <a class="foot__line foot__addr" href="{{ site.maps_link }}" target="_blank" rel="noopener">{{ site.street }}<br>{{ site.zip }} {{ site.city }}</a>
 
         {# The Google embed is loaded on request, not on page load: it sets
            third-party cookies. It lives inside this column rather than in a

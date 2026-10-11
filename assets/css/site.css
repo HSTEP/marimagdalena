@@ -2716,6 +2716,13 @@ html:not(.js) .nav {
   aspect-ratio: 2 / 1;
 }
 
+/* A 2:1 band of a square portrait keeps half its height; hung from the
+   upper third it keeps the face, centred it cut her at the nose. */
+.tiles--plates > :nth-child(5n + 1):last-child img,
+.tiles--plates > :nth-child(5n + 4):last-child img {
+  object-position: 50% 25%;
+}
+
 /* No tablet breakpoint. There used to be one that flattened all seven frames
    to a uniform 2-up, so the sequence — the whole point of the page — existed
    only above 1181px, and it kept the 4/5 ratio on frames 4 and 5 while their

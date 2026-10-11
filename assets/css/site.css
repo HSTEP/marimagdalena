@@ -5051,14 +5051,50 @@ body.is-lb .nav {
      there are none, and the row had 600px of empty bar at 820 with the one
      action a phone is for missing from it. A 44px band so it is a thumb
      target, not a line of caps. */
+  /* 0.7 not 0.75, and the burger's tap box hangs 0.5rem into the margin with
+     its bars drawn flush to the content edge. Wordmark, number and burger need
+     329px and a 360 screen's content box is 320: the row used to make it by
+     spilling 9px into the right margin, which the guard below no longer
+     allows. This finds the 9px without losing the number at 360. */
   .nav__in {
-    gap: 0.75rem;
+    gap: 0.7rem;
   }
 
+  .burger {
+    margin-right: -0.5rem;
+  }
+
+  .burger span {
+    left: 0;
+    right: 0.5rem;
+  }
+
+  /* The digits drop out whole when they don't fit, rather than being cut or
+     pushing the burger off the screen. The number may shrink to its icon, the
+     digits wrap onto a second line as one unbreakable piece, and that line
+     sits below the 44px box and is clipped. Unlike the em rungs this follows
+     the row's real width, so it holds whatever made the number long: Chrome's
+     font setting, a user stylesheet that enlarges the text (the burger sat
+     at x 399-465 on a 390 screen), or a longer number entered in the admin.
+     The digits stay in the link's accessible name. */
   .nav__call {
     display: inline-flex;
     margin-left: auto;
-    min-height: 2.75rem;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-end;
+    height: 2.75rem;
+    min-width: 2.75rem;
+    overflow: hidden;
+  }
+
+  .nav__call-t {
+    line-height: 2.75rem;
+  }
+
+  .nav__call svg {
+    flex: none;
+    margin-block: calc((2.75rem - 0.85rem) / 2);
   }
 
   .nav__call::after {

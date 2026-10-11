@@ -222,6 +222,17 @@
         behavior: reduced ? "auto" : "smooth",
       });
     };
+    /* Tab forward brings each plate in whole; Shift+Tab back from below the
+       strip landed on plate 9 with 16% of it on screen at 390, because the
+       browser only scrolls a focused element until some of it shows. A plate
+       that takes focus while starting left of the viewing region is brought
+       to its start. */
+    reel.addEventListener("focusin", (e) => {
+      const plate = e.target.closest(".reel__item");
+      if (!plate) return;
+      const off = plate.getBoundingClientRect().left - startEdge();
+      if (off < -1) reel.scrollBy({ left: off, behavior: reduced ? "auto" : "smooth" });
+    });
     reel.addEventListener("pointerup", endDrag);
     reel.addEventListener("pointercancel", endDrag);
     reel.addEventListener("dragstart", (e) => e.preventDefault());
@@ -285,6 +296,18 @@
       },
       { rootMargin: "0px 0px 10% 0px", threshold: 0 }
     );
+    /* Focus is a reader asking for that control now. Tabbing onto "Objednat
+       se" on /cenik used to put the ring on a button still at a fraction of
+       its opacity for ~0.4s, and the ring fades with what it surrounds. */
+    document.addEventListener("focusin", (e) => {
+      for (let el = e.target; el && el !== document.body; el = el.parentElement) {
+        if (el.matches(".rv, .rv-clip") && !el.classList.contains("is-in")) {
+          io.unobserve(el);
+          el.classList.add("is-now", "is-in");
+        }
+      }
+    });
+
     observeReveals = (scope = document) => {
       const list = $$(".rv, .rv-clip", scope);
       if (scope !== document && scope.matches?.(".rv, .rv-clip")) list.push(scope);
@@ -355,15 +378,27 @@
       // Newly shown items were display:none when the observer first ran, so
       // hand them back to it — and reveal the first screenful immediately,
       // since the user asked for them and won't scroll up to trigger them.
-      items
-        .filter((i) => !i.hidden && !before.has(i))
-        .forEach((item, index) => {
-          observeReveals(item);
-          if (index === 0) {
-            item.classList.add("is-in");
-            $$(".rv, .rv-clip", item).forEach((el) => el.classList.add("is-in"));
-          }
-        });
+      const fresh = items.filter((i) => !i.hidden && !before.has(i));
+      fresh.forEach((item, index) => {
+        observeReveals(item);
+        if (index === 0) {
+          item.classList.add("is-in");
+          $$(".rv, .rv-clip", item).forEach((el) => el.classList.add("is-in"));
+        }
+      });
+      /* Focus goes to the first thing the press revealed. On /obrazy the
+         button hides itself once the chapter is complete, and focus fell to
+         BODY: the next Tab skipped all eighteen new works for sale. On
+         /projekty the new years appear above a button that stays, so the
+         next Tab went to the footer. A painting is a link and takes focus as
+         it is; a chapter is focused at its year heading. */
+      const first = fresh[0];
+      const target = first && (first.matches("a[href], button") ? first
+        : $("h2, h3, h4", first) || first);
+      if (target) {
+        if (!target.matches("a[href], button")) target.tabIndex = -1;
+        target.focus();
+      }
     });
 
     render();
@@ -392,16 +427,26 @@
        answered immediately. */
     const lbBack = lbImg.cloneNode();
     lbBack.removeAttribute("data-lb-img");
+    /* The plate behind is never the work being shown, so it is never read:
+       with both exposed, the dialog named the outgoing painting and the
+       incoming one side by side, the stale one first about half the time. */
+    lbBack.setAttribute("aria-hidden", "true");
     lbImg.after(lbBack);
     let front = lbImg;
     let back = lbBack;
     let request = 0;
     let settle = null;
 
+    /* The title is a live region, and a step can write it twice — the tile's
+       file first, then the full one — so text is only set when it changes,
+       and each work is announced once. */
+    const put = (node, text) => {
+      if (node.textContent !== text) node.textContent = text;
+    };
     const label = (el) => {
-      lbTitle.textContent = el.dataset.title || "";
-      lbTag.textContent = el.dataset.tag || "";
-      lbCount.textContent = `${pad(cursor + 1)} / ${pad(group.length)}`;
+      put(lbTitle, el.dataset.title || "");
+      put(lbTag, el.dataset.tag || "");
+      put(lbCount, `${pad(cursor + 1)} / ${pad(group.length)}`);
       if (lbAsk) {
         const forSale = el.dataset.state === "sale";
         lbAsk.hidden = !forSale;
@@ -426,6 +471,8 @@
         front = plate;
         front.style.zIndex = "2";
         back.style.zIndex = "1";
+        front.removeAttribute("aria-hidden");
+        back.setAttribute("aria-hidden", "true");
         label(el);
         front.classList.add("is-ready");
         // A dissolve, both ways at once: pictures of different proportions
@@ -651,5 +698,7 @@
     frame.loading = "lazy";
     frame.referrerPolicy = "no-referrer-when-downgrade";
     mapSlot.replaceChildren(frame);
+    // The button is gone, and focus with it, unless it moves to the map.
+    frame.focus();
   });
 })();

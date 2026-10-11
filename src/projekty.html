@@ -105,16 +105,20 @@
   <div class="arch" data-batch="2">
   {% for year, group in projekty_years %}
     <section class="arch__chapter" data-batch-item>
+    {# Under the section's h2: the year is h3, the projects h4. #}
     {% if year %}
-    <div class="arch__year rv">
+    <h3 class="arch__year rv">
       <span class="num">{{ year }}</span>
-    </div>
+    </h3>
     {% endif %}
+    {% set hl = 4 if year else 3 %}
+    {% set chapter = loop %}
     <div class="arch__grid">
     {% for p in group %}
       {% set embed = video_embed(p.video_url) %}
+      {% set rid = 'projekt-' ~ chapter.index ~ '-' ~ loop.index %}
       <article class="arch__item rv{% if embed %} arch__item--wide{% elif not p.image %} arch__item--bare{% endif %}"
-               style="--d:{{ (loop.index0 % 6) * 45 }}ms">
+               style="--d:{{ (loop.index0 % 6) * 45 }}ms" aria-labelledby="{{ rid }}">
         {% if embed %}
         <div class="arch__field arch__field--video">
           <iframe src="{{ embed }}" title="{{ p.title|striptags }}" loading="lazy"
@@ -137,19 +141,21 @@
              of record, and the one field they share was set in opposite
              registers: gold tracked caps here, quiet grey text there. #}
           {% if p.date %}<p class="arch__date">{{ cz_date(p.date) }}</p>{% endif %}
-          <h3 class="arch__title">{{ p.title|safe }}</h3>
+          <h{{ hl }} class="arch__title" id="{{ rid }}">{{ p.title|safe }}</h{{ hl }}>
           {% if p.description %}<p class="arch__note">{{ p.description }}</p>{% endif %}
           {% if p.video_url and not embed %}
           {# Facebook sends X-Frame-Options: deny, so an embed would be a
              permanently blank box. A link in the caption, not a media tile. #}
           <div class="arch__links">
-            <a class="qlink" href="{{ p.video_url }}" target="_blank" rel="noopener noreferrer">Přehrát na {{ link_label('', p.video_url) }}</a>
+            <a class="qlink" href="{{ p.video_url }}" target="_blank" rel="noopener noreferrer"
+               aria-describedby="{{ rid }}">Přehrát na {{ link_label('', p.video_url) }}</a>
           </div>
           {% endif %}
           {% if p.links %}
           <div class="arch__links">
             {% for link in p.links %}
-            <a class="qlink" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link_label(link.text, link.url) }}</a>
+            <a class="qlink" href="{{ link.url }}" target="_blank" rel="noopener noreferrer"
+               aria-describedby="{{ rid }}">{{ link_label(link.text, link.url) }}</a>
             {% endfor %}
           </div>
           {% endif %}

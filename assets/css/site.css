@@ -98,7 +98,11 @@
   --line: rgb(239 234 225 / 13%);
   --line-strong: rgb(239 234 225 / 26%);
 
-  /* Accent — sampled from the wordmark. Two values with two jobs: --gold is
+  /* Accent — the saffron of the dress in the brand shoot, not the wordmark:
+     the wordmark is #c9a94b (hue 45°), the dress #fbaf24-#ffaa28 (hue 36°),
+     and this sits with the dress. Which is the better reason to keep it: in
+     the hero, "Objednat se" is the colour of what she is wearing beside it.
+     Two values with two jobs: --gold is
      the lit one, for anything a reader is meant to act on and for every hover
      on the site; --gold-deep is the dim one, and it only ever draws a line —
      a resting link underline, the rule off the hero eyebrow, the reel's
@@ -377,11 +381,15 @@
      and no brief asks for, which is what two rules written months apart by
      someone not looking at the other one look like.
 
-     The rule is now about subject, not address. Anything documentary — the
-     exhibition record, the people, the map — goes quiet, so the colour on the
-     page belongs to the work. Anything whose colour is its content stays
-     untouched: the paintings, and the hair collection, which is called Color
-     Tune and was the one run being desaturated. */
+     The rule is now about subject, not address. Anything documentary goes
+     quiet, so the colour on the page belongs to the work. Anything whose
+     colour is its content stays untouched: the paintings, and the hair
+     collection, which is called Color Tune and was the one run being
+     desaturated. The people left the token too: /partneri has no work on it
+     to make room for, and its colour is its content — a florist in a flower
+     crown, a painter in front of a poured canvas, an illustrator's coloured
+     pencils. Greyed, the page read as an agency's team grid. What stays quiet
+     is the footer map. */
   --img-quiet: grayscale(1) contrast(1.05);
 
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -2097,8 +2105,13 @@ html:not(.js) .nav {
   }
 }
 
-/* The studio portraits are full-length figures on a black seamless, so an
-   uncropped 2:3 plate is mostly empty ground. Crop to 4:5 and bias upward. */
+/* The studio portraits are full-length figures on a black seamless, cropped
+   from 2:3 to 4:5 — and the crop takes from the top. The empty ground is
+   above her: her head starts 24% down the frame. The bottom 12% is the
+   saffron train pooling across the floor, the shoot's one flowing line and
+   the reason the dress is the site's accent. Hung at 26% the plate kept the
+   ground and cut the train, showing half the dress; from the bottom it shows
+   all of it, with her head 9% below the plate's top at every width. */
 .atelier__fig {
   grid-column: 8 / span 5;
   align-self: start;
@@ -2113,7 +2126,7 @@ html:not(.js) .nav {
 }
 
 .atelier__fig img {
-  object-position: 50% 26%;
+  object-position: 50% 100%;
 }
 
 @media (width <= 960px) {
@@ -2926,7 +2939,17 @@ html:not(.js) .nav {
   border-top: 1px solid var(--hair-strong);
 }
 
-/* Chapter break. The year, set once, in the archive's own gold figures. */
+/* Chapter break. The year, set once, in the archive's own gold figures.
+   A heading in the outline (h2 here, h3 on /projekty) but not in the type:
+   it takes the body's, so the figure inside keeps the weight and tracking
+   it had when this was a div. */
+.xcat__year,
+.arch__year {
+  font: inherit;
+  letter-spacing: inherit;
+  font-variation-settings: inherit;
+}
+
 .xcat__year {
   display: flex;
   align-items: baseline;
@@ -3490,12 +3513,10 @@ html:not(.js) .nav {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: var(--img-quiet);
-  transition: filter 0.9s var(--ease), transform 1.2s var(--ease);
+  transition: transform 1.2s var(--ease);
 }
 
 .person:hover .person__art > img:not(.person__logo) {
-  filter: none;
   transform: scale(1.03);
 }
 
@@ -3788,11 +3809,13 @@ html:not(.js) .nav {
    one column and nothing in the type said which one was the page. The ledger
    head is right to be quiet — that argument stands — but a demoted h1 still
    has to outrank what it governs, and 48 over 32 is the same interval the
-   archive chapters use on /projekty. As an h3 it now simply takes the h3 cut
-   and the h3 leading, and needs to declare neither. */
+   archive chapters use on /projekty. It is an h2 in the outline — the page
+   went h1 to h3 with nothing between — set in the h3 cut and leading. */
 .price__title {
   font-family: var(--serif);
   font-size: var(--t-h3);
+  font-variation-settings: var(--vf-h3);
+  line-height: var(--lh-head);
 }
 
 /* `.price colgroup ~ tbody td` used to lead this list. The pricelist macro has
@@ -3800,7 +3823,10 @@ html:not(.js) .nav {
    returns 0 — so half the selector matched nothing, and the cells it named are
    set by `.price td` below. A selector kept for a markup shape that was never
    built reads as a rule doing work it isn't. */
-.price th {
+/* The column heads only. Each row's service name is a th too (a row header),
+   and is set as the cells it heads: `:where()` keeps this at its old weight
+   so every narrower rule below still overrides it as before. */
+.price :where(thead) th {
   font-family: var(--sans);
   font-weight: 400;
   font-size: var(--t-micro);
@@ -3840,7 +3866,7 @@ html:not(.js) .nav {
    does its whole job and this paragraph was understating it. Measure the ink,
    not the advance: a Range rect carries the trailing track and will report
    1.86px of overhang on a head that ends exactly on its column. */
-.price th::after {
+.price :where(thead) th::after {
   content: "";
   margin-left: calc(var(--track-caps) * -1);
 }
@@ -3850,7 +3876,9 @@ html:not(.js) .nav {
   padding-left: 0;
 }
 
-.price td {
+.price td,
+.price tbody th {
+  font-weight: inherit;
   padding: 0.85rem 0 0.85rem 1.4rem;
   border-bottom: 1px solid var(--hair);
   text-align: right;
@@ -3908,7 +3936,8 @@ html:not(.js) .nav {
    with the name column fixed above, `table-layout: fixed` splits the
    remainder equally between however many tiers a group has. */
 
-.price tr:last-child td {
+.price tr:last-child td,
+.price tbody tr:last-child th {
   border-bottom: 0;
 }
 
@@ -3916,7 +3945,8 @@ html:not(.js) .nav {
   transition: color 0.3s;
 }
 
-.price tbody tr:hover td {
+.price tbody tr:hover td,
+.price tbody tr:hover th {
   color: var(--gold);
 }
 
@@ -3947,7 +3977,8 @@ html:not(.js) .nav {
   }
 
   .price td,
-  .price th {
+  .price th,
+  .price tbody th {
     border: 0;
     padding: 0;
   }
@@ -3971,7 +4002,8 @@ html:not(.js) .nav {
      a Didone at 1.05rem reversed out of near-black, where the hairline strokes
      of "+" and "(" thinned to almost nothing. Presence comes from size and
      colour instead. */
-  .price td:first-child {
+  .price td:first-child,
+  .price tbody th:first-child {
     font-size: var(--t-body);
     line-height: var(--lh-cap);
     color: var(--fg);
@@ -3992,7 +4024,8 @@ html:not(.js) .nav {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  [data-cols="3"] td:first-child {
+  [data-cols="3"] td:first-child,
+  [data-cols="3"] tbody th {
     grid-column: 1 / -1;
     margin-bottom: 0.15rem;
   }
@@ -4013,7 +4046,7 @@ html:not(.js) .nav {
     border-bottom: 1px solid var(--hair);
   }
 
-  [data-cols="3"] th:first-child {
+  [data-cols="3"] thead th:first-child {
     display: none;
   }
 
@@ -4207,6 +4240,12 @@ html:not(.js) .nav {
      padding here would push it off again. */
   padding-block: clamp(2.6rem, 6vw, 5rem);
   justify-content: center;
+}
+
+/* The quote is signed the way the essays are (.prose__sign), not in field
+   label caps; the column's gap already spaces it. */
+.quote__in .prose__sign {
+  margin-top: 0;
 }
 
 .quote__q {

@@ -200,7 +200,7 @@
 </footer>
 
 
-<div class="lb" data-lb role="dialog" aria-modal="true" aria-label="Prohlížeč obrazů" hidden>
+<div class="lb" data-lb role="dialog" aria-modal="true" aria-label="Prohlížeč obrazů" aria-describedby="lb-title" hidden>
   <div class="lb__bar">
     <span class="num lb__count" data-lb-count></span>
     <button class="lb__x" data-lb-close type="button">{{ ico.close() }}<span>Zavřít</span></button>
@@ -211,7 +211,9 @@
     <button class="lb__nav lb__nav--next" data-lb-next type="button" aria-label="Další">{{ ico.chevron('right') }}</button>
   </div>
   <div class="lb__foot">
-    <span class="lb__title" data-lb-title></span>
+    {# Spoken on every step: arrowing through the works used to change the
+       title and counter in silence, with focus left on "Zavřít". #}
+    <span class="lb__title" data-lb-title id="lb-title" aria-live="polite" aria-atomic="true"></span>
     <span class="label" data-lb-tag></span>
     {# A work shown here is a work someone is considering. The bar had 1250px
        of empty space and the only exit was "Zavřít". #}

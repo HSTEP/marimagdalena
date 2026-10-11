@@ -123,7 +123,8 @@
        data-lb-item data-state="{{ 'sold' if painting.sold else 'sale' }}"
        data-title="{{ painting.title }}"
        data-tag="{% if painting.sold %}Prodáno{% else %}K prodeji{% endif %}">
-      <div class="works__fig">
+      {# The caption below names the link; the picture read the title twice. #}
+      <div class="works__fig" aria-hidden="true">
         {{ img(painting.url, alt=painting.title, sizes='(max-width:620px) 78vw, 26vw') }}
       </div>
       <div class="works__cap">
@@ -212,7 +213,7 @@
       Jako členka Mezinárodního artistického týmu LONDA Professional
       jsem se podílela na&nbsp;vytváření nové kolekce a trendů.
     </blockquote>
-    <p class="label">— {{ site.person }}</p>
+    <p class="prose__sign">— {{ site.person }}</p>
     <a class="qlink" href="galerie.html">Kolekce Color&nbsp;Tune</a>
   </div>
 </section>

@@ -65,7 +65,7 @@
        data-title="{{ painting.title }}" data-tag="K prodeji"
        style="--d:{{ (loop.index0 % 12) * 25 }}ms"
        aria-label="{{ painting.title }}">
-      <div class="works__fig">
+      <div class="works__fig" aria-hidden="true">
         {# The first row is the page's first screen, and lazy it queued behind
            the rest of the wall: on 3G the first painting arrived at 9.4s.
            Eager, but not fetchpriority=high: the paintings sit under the
@@ -115,7 +115,7 @@
        data-title="{{ painting.title }}" data-tag="Prodáno"
        style="--d:{{ (loop.index0 % 12) * 25 }}ms"
        aria-label="{{ painting.title }} — prodáno">
-      <div class="works__fig">
+      <div class="works__fig" aria-hidden="true">
         {{ img(painting.url, alt=painting.title,
                sizes='(max-width:620px) 31vw, (max-width:960px) 31vw, 18vw') }}
       </div>

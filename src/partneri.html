@@ -26,7 +26,8 @@
     {% for p in partners %}
     <a class="person rv" href="{{ p.url }}" target="_blank" rel="noopener noreferrer"
        style="--d:{{ (loop.index0 % 12) * 25 }}ms">
-      <div class="person__art">
+      {# The name below names the card; the portrait's alt repeated it. #}
+      <div class="person__art" aria-hidden="true">
         {{ img(p.photo, alt=p.name, sizes='(max-width:620px) 44vw, (max-width:1180px) 44vw, 30vw', cover=true,
                loading='eager' if loop.index0 < 2 else 'lazy') }}
         {% if p.logo %}

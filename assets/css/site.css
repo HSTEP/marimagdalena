@@ -1219,6 +1219,9 @@ main > section.band:last-of-type {
   border-bottom: 1px solid var(--hair-strong);
   background-image: linear-gradient(var(--gold), var(--gold));
   background-repeat: no-repeat;
+  /* From the border box, so the gold draws over the resting rule, not the
+     device row above it. */
+  background-origin: border-box;
   background-position: 0 100%;
   background-size: 0 1px;
   transition: color 0.4s, background-size 0.55s var(--ease), border-color 0.4s;
@@ -1574,12 +1577,16 @@ html:not(.js) .nav {
   transition: transform 0.45s var(--ease), opacity 0.3s;
 }
 
+/* Centred on the box, not placed in it: 0.85 and 1.45rem were the centre of
+   the 2.4rem box this was, and when the box grew to the 44px target the bars
+   stayed put — 3px above the phone number's figures and the wordmark's
+   centre on every phone, and the close ✕ crossed 3px high with them. */
 .burger span:nth-child(1) {
-  top: 0.85rem;
+  top: calc(50% - 0.3rem - 0.5px);
 }
 
 .burger span:nth-child(2) {
-  top: 1.45rem;
+  top: calc(50% + 0.3rem - 0.5px);
 }
 
 .is-menu .burger span:nth-child(1) {
@@ -1766,12 +1773,17 @@ html:not(.js) .nav {
   }
 }
 
-/* Feathers the photo into the ground so it reads as one plate, not a box. */
+/* Feathers the photo into the ground so it reads as one plate, not a box.
+   The first layer is the one that does that at the edge: the 100deg sweep
+   meets the photo's left edge at full ink only at the top, and lower down
+   16-48% of the picture showed through, a step of up to 14 levels (29 in
+   the landscape layout) that drew the photograph's box on the first screen. */
 .hero__art::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
+  background: linear-gradient(to right, var(--ink), rgb(11 10 8 / 0%) 12%),
+    linear-gradient(
       100deg,
       var(--ink) 0%,
       rgb(11 10 8 / 65%) 22%,
@@ -4546,6 +4558,15 @@ html:not(.js) .nav {
   line-height: var(--lh-note);
 }
 
+/* Smaller type opening a column under the same label as its neighbours' links
+   sat 4px high: the first baselines across the footer row differed. Side by
+   side only — stacked, there is no row to share. */
+@media (min-width: 620.02px) {
+  .foot__col > .label + .foot__line {
+    padding-top: 0.25rem;
+  }
+}
+
 /* The address opens the map. Quiet at rest — it is still an address — and
    answering the pointer the way the footer's other links do. */
 .foot__addr {
@@ -4911,12 +4932,13 @@ html:not(.js) .nav {
     row-gap: 0.4rem;
   }
 
+  /* The 44px target is .qlink::after's; a min-height here only centred the
+     words in it and left their rule 22px below the baseline, where every
+     other small link carries it 9-16px down. */
   .lb__ask {
     flex: 1 0 100%;
     margin-left: 0;
-    min-height: 2.75rem;
     display: flex;
-    align-items: center;
   }
 }
 
@@ -5537,12 +5559,13 @@ body.is-lb .nav {
   }
 
   .hero__art::after {
-    background: linear-gradient(
-      100deg,
-      var(--ink) 0%,
-      rgb(11 10 8 / 40%) 18%,
-      rgb(11 10 8 / 0%) 45%
-    );
+    background: linear-gradient(to right, var(--ink), rgb(11 10 8 / 0%) 12%),
+      linear-gradient(
+        100deg,
+        var(--ink) 0%,
+        rgb(11 10 8 / 40%) 18%,
+        rgb(11 10 8 / 0%) 45%
+      );
   }
 
   .hero__body {

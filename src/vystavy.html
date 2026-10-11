@@ -50,7 +50,7 @@
            href="{{ big(v.image) }}" data-lb-item
            data-title="{{ v.title|striptags }}" data-tag="{{ cz_date(v.date) }}">
           {{ img(v.image, alt=v.title|striptags,
-                 sizes='(max-width:620px) 40vw, (max-width:960px) 24vw, (min-width:1680px) 360px, 22vw',
+                 sizes='(max-width:620px) 40vw, (max-width:960px) 24vw, 28vw',
                  cover=not is_doc) }}
         </a>
         {% endif %}

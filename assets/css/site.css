@@ -364,6 +364,24 @@
   color: var(--fg);
 }
 
+/* Past 1920 the page keeps growing. It used to stop at --wide and float in
+   ink: between 1920 and 2560 every plate, title and button was the same
+   pixel size and only the side margins grew, 208px to 528 a side, so on a
+   27-inch monitor the paintings were laptop-sized — 14.7% of the first
+   screen on /galerie was picture. The measure now runs to 86% of the screen
+   (2240 at most), and the display ladder grows from its 1920 values so
+   nothing steps at the seam: each floor is the old ceiling. The Jost text
+   ladder stays put; prose is capped by --prose either way. */
+@media (width > 1920px) {
+  :root {
+    --wide: min(2240px, 86vw);
+    --t-h1: clamp(5rem, 3.6vw, 6.25rem);
+    --t-h2: clamp(3rem, 2.15vw, 3.75rem);
+    --t-h3: clamp(2rem, 1.4vw, 2.5rem);
+    --t-h4: clamp(1.6rem, 1.1vw, 2rem);
+  }
+}
+
 /* ---------------------------------------------------------------- 2. reset */
 *,
 *::before,
@@ -1691,6 +1709,15 @@ html:not(.js) .nav {
   width: clamp(240px, 30vw, 430px);
 }
 
+/* The wordmark is the hero's headline, and past 1920 it grows with the rest
+   of the display ladder (sec. 1): at 430px it sat beside a 1340px photograph
+   at 2560. */
+@media (width > 1920px) {
+  .hero__mark {
+    width: clamp(430px, 20vw, 540px);
+  }
+}
+
 .hero__motto {
   font-size: var(--t-h3);
   font-variation-settings: var(--vf-h3);
@@ -1851,6 +1878,28 @@ html:not(.js) .nav {
    default above stays the default — four record indexes genuinely are the
    same kind of opening — and the two pages that are not indexes break it:
    the photo essay opens on a photograph, the price list opens on prices. */
+
+/* A laptop screen is short: 1280×720, or 1366×657 once the browser has its
+   bars. The default head ran 0-363px and the section under it opened 90px
+   lower again, so /vystavy put its first plates at y 557 and showed 79px of
+   them at 1366×657 — the page about the salon's exhibitions opening on a word
+   and a sentence. On short screens the head tightens to the masthead and
+   hands straight to the content. The ledger and spread heads are already
+   short. */
+@media (width > 960px) and (height <= 820px) {
+  .phead:not(.phead--ledger, .phead--plate) {
+    padding-top: calc(var(--nav-h) + 1.75rem);
+    padding-bottom: 1rem;
+  }
+
+  .phead:not(.phead--ledger, .phead--plate) .phead__meta {
+    margin-bottom: 0.9rem;
+  }
+
+  .phead:not(.phead--ledger, .phead--plate) + section {
+    padding-top: 2.25rem;
+  }
+}
 
 /* A ledger, so it opens on the ledger. The visitor came here to read numbers
    and got 470px of chapter opening first: an 80px word above a three-line

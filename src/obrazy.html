@@ -41,6 +41,9 @@
    work now opens the page at full size and sold work follows as a denser
    record, so the page answers "what can I buy" by its own shape and the reader
    always knows which half they are in. #}
+{# A chapter with nothing in it is not printed: an admin with no work sold,
+   or none left for sale, would otherwise leave a heading over empty ink. #}
+{% if for_sale %}
 <section class="shell bay--top" id="k-prodeji">
   {# Chapter heads, not section heads: no eyebrow and no note, because the two
      titles are the only words on this page that were not already written for
@@ -70,9 +73,11 @@
          work is actually for sale — every tile was anonymous, and the only
          fact the page communicated was which pieces were already gone. The
          status badge also sat on top of the painting. #}
+      {% if painting.title %}
       <div class="works__cap">
         <span class="works__name">{{ painting.title }}</span>
       </div>
+      {% endif %}
     </a>
     {% endfor %}
   </div>
@@ -85,7 +90,9 @@
     </button>
   </div>
 </section>
+{% endif %}
 
+{% if sold %}
 <section class="shell" id="prodano">
   <div class="sec sec--minor rv">
     <h2 class="sec__title">Prodáno</h2>
@@ -93,7 +100,9 @@
 
   {# Smaller frames, more per row. A record of what has gone should read as an
      index, not compete at the same scale with what you can still buy. #}
-  <div class="works works--index" data-gallery data-batch="20">
+  {# Batches of 24, which divide into whole rows at six, four and three
+     across; 20 left a row of two above "Zobrazit další". #}
+  <div class="works works--index" data-gallery data-batch="24">
     {% for painting in sold %}
     <a class="works__item rv" href="{{ big(painting.url) }}"
        data-lb-item data-batch-item data-state="sold"
@@ -104,9 +113,11 @@
         {{ img(painting.url, alt=painting.title,
                sizes='(max-width:620px) 31vw, (max-width:960px) 31vw, 18vw') }}
       </div>
+      {% if painting.title %}
       <div class="works__cap">
         <span class="works__name">{{ painting.title }}</span>
       </div>
+      {% endif %}
     </a>
     {% endfor %}
   </div>
@@ -117,6 +128,7 @@
     </button>
   </div>
 </section>
+{% endif %}
 
 <section class="shell bay--top">
   <div class="endnote rv">

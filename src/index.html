@@ -229,19 +229,31 @@
 
   {# Newest record with an image big enough to run at this size — see
      feature() in build.py for why the resolution floor is there. #}
-  {% set teasers = feature(vystavy) + feature(projekty) %}
+  {# Each teaser knows what it is. These were one list read by position —
+     the first was "Výstavy" and linked to /vystavy, whatever it was — so in a
+     month with no exhibition photograph large enough to feature, a project
+     went out captioned as an exhibition and linked to the wrong page, with
+     the right half of the row empty. One per archive, labelled by the
+     archive it came from, and the pair shares the row only when both exist. #}
+  {% set teasers = [] %}
+  {% for rec in feature(vystavy) %}{% set _ = teasers.append((rec, 'vystavy.html', 'Výstavy')) %}{% endfor %}
+  {% for rec in feature(projekty) %}{% set _ = teasers.append((rec, 'projekty.html', 'Projekty')) %}{% endfor %}
   {# One shared 4:3 plate. Run at their own proportions the two records were
-     different heights on desktop and two full-screen cards on a phone. #}
+     different heights on desktop and two full-screen cards on a phone. A
+     poster is hung whole on that ground rather than cropped: filled, the
+     newest record arriving as a PNG poster kept 53% of its height and lost
+     its own headline. #}
   <div class="grid">
-    {% for rec in teasers %}
-    <a class="rv" href="{% if loop.first %}vystavy.html{% else %}projekty.html{% endif %}"
-       style="grid-column: {{ '1 / span 6' if loop.first else '7 / span 6' }}; --d:{{ loop.index0 * 120 }}ms">
-      <figure class="plate plate--zoom{{ ' plate--tall' if ratio(rec.image) < 0.9 }}" style="aspect-ratio:4/3">
-        {{ img(rec.image, alt=rec.title|striptags, sizes='(max-width:960px) 100vw, 46vw', cover=true) }}
+    {% for rec, href, label in teasers %}
+    {% set doc = is_document(rec.image) %}
+    <a class="rv" href="{{ href }}"
+       style="grid-column: {{ ('1 / span 6' if loop.first else '7 / span 6') if teasers|length > 1 else '1 / span 8' }}; --d:{{ loop.index0 * 120 }}ms">
+      <figure class="plate{{ ' plate--doc' if doc else ' plate--zoom' }}{{ ' plate--tall' if ratio(rec.image) < 0.9 and not doc }}" style="aspect-ratio:4/3">
+        {{ img(rec.image, alt=rec.title|striptags, sizes='(max-width:960px) 100vw, 46vw', cover=not doc) }}
       </figure>
       <div class="cap">
         <span class="cap__t">{{ rec.title|striptags }}</span>
-        <span class="cap__m label">{{ 'Výstavy' if loop.first else 'Projekty' }}</span>
+        <span class="cap__m label">{{ label }}</span>
       </div>
       <p class="cap__date">{{ cz_date(rec.date) }}</p>
     </a>

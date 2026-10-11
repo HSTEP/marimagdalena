@@ -56,11 +56,12 @@
         {% endif %}
         <div class="xcat__text">
           <h2 class="xcat__title">{{ cz_title(v.title|striptags) }}</h2>
-          <p class="xcat__date">{{ cz_date(v.date) }}</p>
+          {% if v.date %}<p class="xcat__date">{{ cz_date(v.date) }}</p>{% endif %}
           {# Report before recording, one under the other, and the column closes
              on the plate's lower edge — so the last link of every record sits
              on one line across the row, whichever links a record has. #}
           {% set slots = link_slots(v.links) %}
+          {% if v.links %}
           <div class="xcat__links">
             {% for slot in slots %}
             {% for link in slot or [] %}
@@ -69,6 +70,7 @@
             {% endfor %}
             {% endfor %}
           </div>
+          {% endif %}
         </div>
       </article>
       {% endfor %}

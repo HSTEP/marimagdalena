@@ -958,6 +958,15 @@ main > section.band:last-of-type {
   object-position: 50% 22%;
 }
 
+/* A poster on a plate is hung whole from the top-left, like the posters in
+   the archives, and its loading tint is not left showing round it. */
+.plate--doc > img {
+  height: 100%;
+  object-fit: contain;
+  object-position: left top;
+  background-color: transparent !important;
+}
+
 .cap {
   display: flex;
   gap: 1rem;
@@ -2467,6 +2476,16 @@ html:not(.js) .nav {
   }
 }
 
+/* With three works or fewer the strip has nowhere to go (site.js sets this):
+   no hand cursor and no instruction to drag. */
+.reel.is-static {
+  cursor: auto;
+}
+
+.reel__meta.is-static .reel__hint {
+  display: none;
+}
+
 /* ------------------------------------------------------- 12. gallery/works */
 /* Three across, not four. In the mockups the canvas is a third of the room
    at most, and at four across a 267px tile left Filip 177px wide and Time
@@ -2583,6 +2602,8 @@ html:not(.js) .nav {
 }
 
 .works__name {
+  overflow-wrap: break-word;
+  hyphens: auto;
   font-family: var(--serif);
   font-style: italic;
   font-size: var(--t-body);
@@ -2670,6 +2691,31 @@ html:not(.js) .nav {
   aspect-ratio: 4 / 5;
 }
 
+/* Closing the sequence at any count. The cycle only ended on a full row when
+   the photographs after the lead came to 0 or 3 mod 5, and the count is the
+   owner's: seven left a last row a third full, thirteen a lone half-width
+   plate with 664px of ink beside it. Two left over become a reading pair;
+   one, or a pair's lone first plate, runs the full measure at 2:1. */
+.tiles--plates > :nth-child(5n + 1):nth-last-child(2),
+.tiles--plates > :nth-child(5n + 1):nth-last-child(2) + * {
+  grid-column: span 3;
+}
+
+.tiles--plates > :nth-child(5n + 1):nth-last-child(2) .tiles__fig,
+.tiles--plates > :nth-child(5n + 1):nth-last-child(2) + * .tiles__fig {
+  aspect-ratio: 4 / 5;
+}
+
+.tiles--plates > :nth-child(5n + 1):last-child,
+.tiles--plates > :nth-child(5n + 4):last-child {
+  grid-column: 1 / -1;
+}
+
+.tiles--plates > :nth-child(5n + 1):last-child .tiles__fig,
+.tiles--plates > :nth-child(5n + 4):last-child .tiles__fig {
+  aspect-ratio: 2 / 1;
+}
+
 /* No tablet breakpoint. There used to be one that flattened all seven frames
    to a uniform 2-up, so the sequence — the whole point of the page — existed
    only above 1181px, and it kept the 4/5 ratio on frames 4 and 5 while their
@@ -2706,6 +2752,31 @@ html:not(.js) .nav {
   }
 
   .tiles--plates > :nth-child(5n) .tiles__fig {
+    aspect-ratio: 4 / 5;
+  }
+
+  /* The phone's cycle closes differently: two across, so a pair is already a
+     row and a lone square is the only leftover. The desktop closers are
+     undone first, then one left over takes the row at 4:5. */
+  .tiles--plates > :nth-child(5n + 1):nth-last-child(2),
+  .tiles--plates > :nth-child(5n + 1):nth-last-child(2) + *,
+  .tiles--plates > :nth-child(5n + 4):last-child {
+    grid-column: span 1;
+  }
+
+  .tiles--plates > :nth-child(5n + 1):nth-last-child(2) .tiles__fig,
+  .tiles--plates > :nth-child(5n + 1):nth-last-child(2) + * .tiles__fig,
+  .tiles--plates > :nth-child(5n + 4):last-child .tiles__fig {
+    aspect-ratio: 1;
+  }
+
+  .tiles--plates > :nth-child(5n + 1):last-child,
+  .tiles--plates > :nth-child(5n + 3):last-child {
+    grid-column: span 2;
+  }
+
+  .tiles--plates > :nth-child(5n + 1):last-child .tiles__fig,
+  .tiles--plates > :nth-child(5n + 3):last-child .tiles__fig {
     aspect-ratio: 4 / 5;
   }
 }
@@ -2809,8 +2880,12 @@ html:not(.js) .nav {
   align-items: stretch;
 }
 
+/* `start`, not the row's stretch: stretched to a label taller than itself,
+   the plate's 4:5 turned the extra height into extra width and grew over its
+   own title — three links on one record was enough. */
 .xcat__plate {
   grid-column: 1 / span 4;
+  align-self: start;
   display: block;
   position: relative;
   aspect-ratio: 4 / 5;
@@ -2860,7 +2935,25 @@ html:not(.js) .nav {
   grid-column: 1 / -1;
 }
 
+/* An exhibition with no picture closes its year as a caption across the row,
+   as an image-less project does on /projekty — a full-height cell of ink
+   with 79px of label at its foot read as a picture that failed to load. */
+.xcat__item--bare {
+  order: 1;
+  grid-column: 1 / -1;
+}
+
+/* A run of records with no year heading (an undated entry) still opens on a
+   rule, so its first plate does not read as a caption to the previous
+   year's last one. */
+.xcat__list + .xcat__list {
+  margin-top: clamp(2.6rem, 5vw, 4.4rem);
+  border-top: 1px solid var(--hair);
+}
+
 .xcat__title {
+  overflow-wrap: break-word;
+  hyphens: auto;
   font-family: var(--serif);
   font-size: var(--t-h5);
   line-height: var(--lh-head);
@@ -3165,6 +3258,8 @@ html:not(.js) .nav {
    order in the source; `order` puts the title on top. */
 .arch__title {
   order: -1;
+  overflow-wrap: break-word;
+  hyphens: auto;
   font-size: var(--t-h5);
   font-variation-settings: var(--vf-h5);
   line-height: var(--lh-head);

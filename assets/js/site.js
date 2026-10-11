@@ -154,6 +154,17 @@
       requestAnimationFrame(updateReel);
     };
 
+    /* A strip that holds no more than it shows has nothing to drag: no hand
+       cursor, no "drag sideways". The owner decides how many works it holds. */
+    const reelMeta = $("[data-reel-meta]");
+    const markStatic = () => {
+      const still = reel.scrollWidth <= reel.clientWidth + 1;
+      reel.classList.toggle("is-static", still);
+      reelMeta?.classList.toggle("is-static", still);
+    };
+    markStatic();
+    addEventListener("resize", markStatic, { passive: true });
+
     reel.addEventListener("scroll", tickReel, { passive: true });
     addEventListener("resize", tickReel, { passive: true });
     updateReel();

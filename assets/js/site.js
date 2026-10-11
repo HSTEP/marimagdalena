@@ -9,6 +9,11 @@
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* iOS paints :active only under an element with a touch listener, so
+     without one the pressed states in site.css never showed on an iPhone,
+     and a tap on a painting got no answer until the lightbox arrived. */
+  document.addEventListener("touchstart", () => {}, { passive: true });
+
   /* An overlay that covers the page has to take the page's tab stops with it.
      Both overlays here are body children, so the rest of the body is the part
      that goes inert — cheaper and less brittle than enumerating focusables,
@@ -76,8 +81,9 @@
      z-index 50, so it was degraded rather than sealed — but a panel with no
      visible exit is not a state worth leaving reachable. Same 960 as the CSS,
      read from the same kind of query rather than restated as a number here —
-     in em, like the masthead's rungs (site.css). */
-  matchMedia("(width > 60em)").addEventListener("change", (e) => {
+     in em, like the masthead's rungs, and in the min/max syntax older iPhones
+     read (site.css). */
+  matchMedia("not all and (max-width: 60em)").addEventListener("change", (e) => {
     if (e.matches) setMenu(false);
   });
 
@@ -698,6 +704,7 @@
     frame.loading = "lazy";
     frame.referrerPolicy = "no-referrer-when-downgrade";
     mapSlot.replaceChildren(frame);
+    mapSlot.classList.add("is-loaded");
     // The button is gone, and focus with it, unless it moves to the map.
     frame.focus();
   });

@@ -1,4 +1,10 @@
-/* The faces, inline. They were an @import of fonts.css, a second
+/* Media queries are written min-width/max-width, not in the range syntax
+   (`width <= 620px`). Range syntax arrived in Safari 16.4, and an iPhone
+   older than that ignored every rung in this file: no burger, the desktop
+   link row running 782px into a 390 screen, the footer wrapping a letter to
+   a line. `(width > X)` is written `(min-width: X + 0.02px)`.
+
+   The faces, inline. They were an @import of fonts.css, a second
    render-blocking stylesheet that could only be discovered once this one had
    arrived, so on a 3G phone every page stayed white for an extra round trip
    and the homepage motto set in a fallback italic for a second before
@@ -411,19 +417,19 @@
    1176, and its 27.2px floor keeps it clear of 22 at every width; --t-h4 runs
    25.6 down to 20 and crosses 22 at 1189. --t-h3 lives entirely inside 24-32
    and --t-h5 entirely inside 17.6-21.6, so neither ever changes step. */
-@media (width <= 1189px) {
+@media (max-width: 1189px) {
   :root {
     --vf-h4: var(--serif-text);
   }
 }
 
-@media (width <= 1176px) {
+@media (max-width: 1176px) {
   :root {
     --vf-h2: var(--serif-sub);
   }
 }
 
-@media (width <= 714px) {
+@media (max-width: 714px) {
   :root {
     --vf-h1: var(--serif-sub);
   }
@@ -449,7 +455,7 @@
    (2240 at most), and the display ladder grows from its 1920 values so
    nothing steps at the seam: each floor is the old ceiling. The Jost text
    ladder stays put; prose is capped by --prose either way. */
-@media (width > 1920px) {
+@media (min-width: 1920.02px) {
   :root {
     --wide: min(2240px, 86vw);
     --t-h1: clamp(5rem, 3.6vw, 6.25rem);
@@ -1597,10 +1603,14 @@ html:not(.js) .nav {
      clamps at 0. On a phone in landscape (740×360) the drawer opened on item 5
      of 8 with two items off the top of the screen and no way to reach them,
      and at 390×700 and 360×640 the first item or two sat behind the opaque
-     masthead. `safe` falls back to flex-start exactly when centring would
-     overflow, which is what the padding above already declares; where the list
-     fits, it still centres. */
-  justify-content: safe center;
+     masthead. The list is centred by auto margins (below), not by
+     `justify-content: safe center`: auto margins fall to zero exactly when
+     the column overflows, in every engine, and `safe` only arrived in Safari
+     17.6. Before it, WebKit centred unsafely — at 375×553 "Salon" sat above
+     the screen and "Hair & Styling" under the wordmark, so a tap on it went
+     home. On the 390×844 the loop measured with, the list fits and nothing
+     showed. */
+  justify-content: flex-start;
   padding: var(--nav-h) var(--gutter) 3rem;
   clip-path: inset(0 0 100% 0);
   /* `visibility` stepped at 0s but held for the length of the wipe, which is
@@ -1620,6 +1630,10 @@ html:not(.js) .nav {
   visibility: visible;
   /* Immediate on the way in — the wipe needs something to wipe. */
   transition: clip-path 0.44s var(--ease), visibility 0s;
+}
+
+.menu > nav {
+  margin-top: auto;
 }
 
 .menu__list {
@@ -1667,6 +1681,7 @@ html:not(.js) .nav {
 
 .menu__foot {
   margin-top: 2.6rem;
+  margin-bottom: auto;
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
@@ -1806,7 +1821,7 @@ html:not(.js) .nav {
 /* The wordmark is the hero's headline, and past 1920 it grows with the rest
    of the display ladder (sec. 1): at 430px it sat beside a 1340px photograph
    at 2560. */
-@media (width > 1920px) {
+@media (min-width: 1920.02px) {
   .hero__mark {
     width: clamp(430px, 20vw, 540px);
   }
@@ -1980,7 +1995,7 @@ html:not(.js) .nav {
    and a sentence. On short screens the head tightens to the masthead and
    hands straight to the content. The ledger and spread heads are already
    short. */
-@media (width > 960px) and (height <= 820px) {
+@media (min-width: 960.02px) and (max-height: 820px) {
   .phead:not(.phead--ledger, .phead--plate) {
     padding-top: calc(var(--nav-h) + 1.75rem);
     padding-bottom: 1rem;
@@ -2005,16 +2020,6 @@ html:not(.js) .nav {
   padding-bottom: 0;
 }
 
-/* On a phone the ledger head stacks like every other head, so its quieter
-   title bought nothing and cost rank: 27px over 24px chapter heads, where the
-   other five pages open at 37. */
-@media (width <= 760px) {
-  .phead--ledger .phead__title {
-    font-size: var(--t-h1);
-    font-variation-settings: var(--vf-h1);
-  }
-}
-
 /* Back to the h2 crossing, because this one really is set at --t-h2 — the
    ledger head is the quieter shape. Policy is a function of rendered size, so
    the page whose title is smaller takes the smaller title's crossing. */
@@ -2022,6 +2027,26 @@ html:not(.js) .nav {
   grid-column: 1 / span 3;
   font-size: var(--t-h2);
   font-variation-settings: var(--vf-h2);
+}
+
+/* On a phone the ledger head stacks like every other head, so its quieter
+   title bought nothing and cost rank. This rung was written in round 3 and
+   never rendered: it stood above the rule it overrides, at the same
+   specificity, so /obrazy and /cenik opened at 27px over 24px chapter heads.
+
+   And every page title gets a phone size of its own. --t-h1 floors at 36.8px
+   below 657, so a phone title was 2.3× the body where the desktop runs 4.7×:
+   the hierarchy survived and the drama did not. 12vw up to 48px — 45 at 375,
+   46.8 at 390, 48 from 400 to 760 — where "Art Connecting", the longest
+   title, is 323px of a 350 measure at 390. Taken to 760, not 620, so there
+   is no 11px step where the tablet rung begins; at 761 it hands back to the
+   ladder 5px down. */
+@media (max-width: 760px) {
+  .phead__title,
+  .phead--ledger .phead__title {
+    font-size: max(var(--t-h1), min(12vw, 3rem));
+    font-variation-settings: var(--vf-h1);
+  }
 }
 
 /* Position only. This carried font-size: var(--t-small) and color: var(--fg-3),
@@ -2093,7 +2118,7 @@ html:not(.js) .nav {
 }
 
 /* Stacked on a phone: the photograph first, the page's name under it. */
-@media (width <= 760px) {
+@media (max-width: 760px) {
   .phead__plate {
     grid-column: 1 / -1;
   }
@@ -2129,7 +2154,7 @@ html:not(.js) .nav {
   object-position: 50% 100%;
 }
 
-@media (width <= 960px) {
+@media (max-width: 960px) {
   .atelier__fig {
     grid-column: 1 / span 12;
     margin-top: 2.5rem;
@@ -2269,7 +2294,7 @@ html:not(.js) .nav {
   max-width: 46ch;
 }
 
-@media (width <= 760px) {
+@media (max-width: 760px) {
   .svc__foot {
     grid-template-columns: 1fr;
     gap: 1.2rem;
@@ -2439,7 +2464,7 @@ html:not(.js) .nav {
    set smaller than the exhaustive list of the same objects. The rung is 960
    rather than a number of its own, so the two step together: at 961 both are
    274.2, at 960 both are 421.4. */
-@media (620px < width <= 960px) {
+@media (min-width: 620.02px) and (max-width: 960px) {
   .reel__item {
     flex: 0 0 calc(var(--rcol) * 6 + var(--gap) * 5);
   }
@@ -2448,7 +2473,7 @@ html:not(.js) .nav {
 /* 26vw bottoms out on the clamp floor below ~885px, so a phone inherited a
    230px tile chosen to protect the desktop strip. One work per screen with a
    peek is the point of a reel. */
-@media (width <= 620px) {
+@media (max-width: 620px) {
   .reel {
     /* Declared once because the dead strip below is the arithmetic complement
        of it. Two literals drift; one token cannot. */
@@ -2533,7 +2558,7 @@ html:not(.js) .nav {
    524–532, which undoes the taper above. 33rem is one step above the wrap so
    the only widths it takes are the ones where the painted rule is already
    under 3px. */
-@media (width <= 33rem) {
+@media (max-width: 33rem) {
   .reel__rule {
     background: none;
   }
@@ -2726,7 +2751,7 @@ html:not(.js) .nav {
   padding-top: clamp(1.5rem, 3vw, 2.4rem);
 }
 
-@media (width <= 620px) {
+@media (max-width: 620px) {
   .works__more {
     flex-direction: column;
     align-items: flex-start;
@@ -2743,7 +2768,7 @@ html:not(.js) .nav {
 
 /* Matches the works grid: the two image grids on the site were running
    different gutters against the same 20px page margin. */
-@media (width <= 620px) {
+@media (max-width: 620px) {
   .tiles {
     gap: 0.75rem;
   }
@@ -2821,7 +2846,7 @@ html:not(.js) .nav {
    a third of the measure is still 217px, so three at index scale against two at
    reading scale reads exactly as it does at 1440. */
 
-@media (width <= 760px) {
+@media (max-width: 760px) {
   /* Two across, with every fifth frame running the full width. That is what
      keeps the last frame from being stranded beside an empty cell: at fifteen
      images the closing plate is a fifth, so the sequence ends on a full-width
@@ -2888,7 +2913,7 @@ html:not(.js) .nav {
   border-top: 1px solid var(--hair);
 }
 
-@media (width <= 620px) {
+@media (max-width: 620px) {
   .tiles--strip {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -3109,7 +3134,7 @@ html:not(.js) .nav {
    title hanging from the plate's top edge (0.2 of the size lifts its cap line
    onto it) and the links standing on its foot. Two records to a row while a
    label still gets 200px, one below that. */
-@media (width <= 960px) {
+@media (max-width: 960px) {
   .xcat__item {
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
@@ -3133,7 +3158,7 @@ html:not(.js) .nav {
   }
 }
 
-@media (width <= 760px) {
+@media (max-width: 760px) {
   .xcat__list {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -3141,7 +3166,7 @@ html:not(.js) .nav {
 
 /* One to a row on a tablet held upright, so the plate can shrink to a
    quarter and the label have the rest. */
-@media (620px < width <= 760px) {
+@media (min-width: 620.02px) and (max-width: 760px) {
   .xcat__plate {
     grid-column: 1 / span 3;
   }
@@ -3157,11 +3182,35 @@ html:not(.js) .nav {
 
 /* On a phone the plate takes five twelfths — 134px at 375, a picture rather
    than an icon — and the label the other seven. */
-@media (width <= 620px) {
+@media (max-width: 620px) {
 
   .xcat__links {
     padding-top: 1rem;
     gap: 0.7rem;
+  }
+
+  /* But eleven such rows made the page about her canvases in churches, cafés
+     and hotels one whose largest picture was a third of the screen: the
+     group at the fashion salon was eight faces 10px high. Every fourth
+     record — so always the newest of its year — hangs across the measure at
+     the catalogue's 4:5 with its label beneath, and the three after it stay
+     rows. A year opens on a picture, and the list never runs more than three
+     rows without one. */
+  .xcat__list > .xcat__item:nth-child(4n + 1):not(.xcat__item--bare) {
+    row-gap: var(--cap-lead, 0.9rem);
+  }
+
+  .xcat__list > .xcat__item:nth-child(4n + 1):not(.xcat__item--bare) .xcat__plate,
+  .xcat__list > .xcat__item:nth-child(4n + 1):not(.xcat__item--bare) .xcat__text {
+    grid-column: 1 / -1;
+  }
+
+  .xcat__list > .xcat__item:nth-child(4n + 1):not(.xcat__item--bare) .xcat__title {
+    margin-top: 0;
+  }
+
+  .xcat__list > .xcat__item:nth-child(4n + 1):not(.xcat__item--bare) .xcat__links {
+    padding-top: 0.9rem;
   }
 }
 
@@ -3462,7 +3511,7 @@ html:not(.js) .nav {
   gap: clamp(2rem, 3vw, 2.8rem) var(--gap);
 }
 
-@media (width <= 680px) {
+@media (max-width: 680px) {
   /* One measure per breakpoint, not one measure. The two-track grid is argued
      on desktop and correct there; it was never re-checked at 390, where it
      survives into a 167px cell and yields a 75.5px track. "Přehrát na
@@ -3705,7 +3754,7 @@ html:not(.js) .nav {
   margin-left: 0;
 }
 
-@media (width > 1100px) {
+@media (min-width: 1100.02px) {
   .endnote--bill {
     width: calc((100% - 11 * var(--gap)) / 12 * 8 + 7 * var(--gap));
   }
@@ -3759,7 +3808,7 @@ html:not(.js) .nav {
   color: var(--fg);
 }
 
-@media (width <= 1100px) {
+@media (max-width: 1100px) {
   .price__layout {
     grid-template-columns: 1fr;
   }
@@ -3956,7 +4005,7 @@ html:not(.js) .nav {
    labels are different widths — left no two prices sharing an x-position.
    Scanning a column of figures is the only job a price list has, so the rows
    become a grid instead and the tiers are declared once per group. */
-@media (width <= 700px) {
+@media (max-width: 700px) {
   .price table,
   .price thead,
   .price tbody,
@@ -4155,7 +4204,7 @@ html:not(.js) .nav {
    margin. Pushed right, the actions sat at x 85 under a flush-left sentence
    when they fitted on one line and at x 20 when they wrapped — so the close
    changed sides with the length of a phone number. */
-@media (width <= 760px) {
+@media (max-width: 760px) {
   .endnote__a {
     margin-left: 0;
   }
@@ -4260,7 +4309,7 @@ html:not(.js) .nav {
    1025px portrait of Marie as the third full-width picture of her in a row,
    and the first painting arrived five screens down. Beside the quote it is
    one picture among the page's others, the way the desktop has it. */
-@media (width <= 620px) {
+@media (max-width: 620px) {
   .quote {
     grid-template-columns: minmax(0, 1fr);
     padding-right: 0;
@@ -4450,7 +4499,9 @@ html:not(.js) .nav {
    ring edges was cut, on every page, at every width. What survived was a 2px
    dark rule down and to the right of the control: a drop shadow, on a system
    whose census returns zero of them. */
-.foot__map:has(iframe) {
+/* A class the script sets, not :has(iframe): Firefox ESR 115 has no :has()
+   and drew the loaded map at the iframe default of 300×150. */
+.foot__map.is-loaded {
   aspect-ratio: 4 / 3;
   overflow: hidden;
 }
@@ -4846,7 +4897,7 @@ html:not(.js) .nav {
    enquiry — the only commercial step in the viewer — became a 131×41 block
    of caps squeezed against the right edge. Given its own row it runs the
    width of the screen at a 44px target, where the thumb already is. */
-@media (width <= 620px) {
+@media (max-width: 620px) {
   .lb__foot {
     flex-wrap: wrap;
     row-gap: 0.4rem;
@@ -4966,7 +5017,7 @@ body.is-lb .nav {
 }
 
 /* ---------------------------------------------------------- 23. responsive */
-@media (width <= 1180px) {
+@media (max-width: 1180px) {
   .works,
   .people {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -5010,7 +5061,7 @@ body.is-lb .nav {
    could hold. At 150% text the number read "+420 607 06" at 1440 and the
    burger sat entirely off a 390 screen. 73.75em, 60em and 22.5em are 1180,
    960 and 360 at the default 16px, so nothing moves for anyone else. */
-@media (width <= 73.75em) {
+@media (max-width: 73.75em) {
   /* The masthead row cannot compress: the wordmark is `flex: none`, every link
      is `nowrap`, and the number is sixteen characters. So it did not — it
      overflowed, breaking the content margin at 1144 and crossing the viewport
@@ -5041,7 +5092,7 @@ body.is-lb .nav {
    rung. Flattened to four equal thirds it put the Instagram handle back in a
    track too narrow for it — the wordmark is the one child here that can give,
    because it is an image sized `min(210px, 100%)` and simply draws smaller. */
-@media (960px < width <= 1180px) {
+@media (min-width: 960.02px) and (max-width: 1180px) {
   .foot__mark {
     grid-column: 1 / span 2;
   }
@@ -5056,7 +5107,7 @@ body.is-lb .nav {
   }
 }
 
-@media (width <= 960px) {
+@media (max-width: 960px) {
   :root {
     --nav-h: 4.25rem;
   }
@@ -5075,7 +5126,7 @@ body.is-lb .nav {
   }
 }
 
-@media (width <= 60em) {
+@media (max-width: 60em) {
   .nav__links {
     display: none;
   }
@@ -5184,7 +5235,7 @@ body.is-lb .nav {
    (118 + 143 + 44 + gaps against 288 at 320), and the number is the one that
    can give: it keeps the icon and its 44px target, and the digits stay in the
    accessible name. */
-@media (width < 22.5em) {
+@media (max-width: 22.499em) {
   .nav__call {
     min-width: 2.75rem;
     justify-content: center;
@@ -5204,7 +5255,7 @@ body.is-lb .nav {
   }
 }
 
-@media (width <= 960px) {
+@media (max-width: 960px) {
 
   .works,
   .people {
@@ -5357,7 +5408,7 @@ body.is-lb .nav {
     gap: 0.62rem var(--gap);
   }
 
-  .foot__map:has(iframe) {
+  .foot__map.is-loaded {
     aspect-ratio: 16 / 9;
   }
 }
@@ -5376,7 +5427,7 @@ body.is-lb .nav {
    either way — but `grid-row: span 2` still opened a fifth row track to do
    nothing in, and a track that exists for no reason is the kind of thing that
    gets read as intent later. */
-@media (620px < width <= 960px) {
+@media (min-width: 620.02px) and (max-width: 960px) {
   .foot__col--contact {
     grid-row: span 2;
     align-self: start;
@@ -5395,7 +5446,7 @@ body.is-lb .nav {
    two actions share a row where they fit. The gold button's lower edge now
    clears the fold at 360×640 and 375×553. Taller phones keep the full
    composition. */
-@media (width <= 620px) and (height <= 760px) {
+@media (max-width: 620px) and (max-height: 760px) {
   .hero__art {
     min-height: max(34svh, 11rem);
   }
@@ -5425,7 +5476,7 @@ body.is-lb .nav {
    comfortable measure. Collapsed, the founder's portrait ran 738×922 under
    her text and the first painting was five screens down against 2.8 on the
    iPad one size up. */
-@media (620px < width <= 960px) {
+@media (min-width: 620.02px) and (max-width: 960px) {
   .home .grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
@@ -5461,7 +5512,7 @@ body.is-lb .nav {
    the screen under the masthead — and the hero goes back to the desktop's
    split, photograph right and type left, because stacked it showed the top
    of her head and no way to book. */
-@media (620px < width <= 960px) and (min-aspect-ratio: 4 / 3) {
+@media (min-width: 620.02px) and (max-width: 960px) and (min-aspect-ratio: 4 / 3) {
 
   .hero {
     display: grid;
@@ -5550,15 +5601,19 @@ body.is-lb .nav {
     padding: 0.7rem 0;
   }
 
+  /* A grid here, where auto margins would centre each block in its own
+     area rather than the pair in the panel. */
+  .menu > nav,
   .menu__foot {
     margin-top: 0;
+    margin-bottom: 0;
   }
 }
 
 /* The smaller type and the shorter masthead are for a screen that really is
    short — a phone on its side. A desktop zoomed to 150% (960×600) takes the
    landscape layout above but keeps its full-size masthead and hero type. */
-@media (620px < width <= 960px) and (height <= 500px) {
+@media (min-width: 620.02px) and (max-width: 960px) and (max-height: 500px) {
   /* A shorter masthead: at 68px it was 17% of every screen. The wordmark
      steps down with it to keep its focus ring inside the bar. */
   :root {
@@ -5585,7 +5640,7 @@ body.is-lb .nav {
    way to see a picture bigger, shrank it to a third of its upright area.
    The chrome moves into a rail on the right and the picture takes the full
    height. */
-@media (orientation: landscape) and (height <= 500px) {
+@media (orientation: landscape) and (max-height: 500px) {
   .lb {
     grid-template-columns: minmax(0, 1fr) 13rem;
     grid-template-rows: auto minmax(0, 1fr) auto;
@@ -5630,7 +5685,7 @@ body.is-lb .nav {
 }
 
 
-@media (width <= 620px) {
+@media (max-width: 620px) {
   :root {
     --t-body: 1rem;
   }
@@ -5653,6 +5708,22 @@ body.is-lb .nav {
   .works--index {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     row-gap: 1.5rem;
+  }
+
+  /* Two across is an index, and the for-sale wall is the page's reason to
+     exist: 24 identical tiles ran four screens with every canvas — hung in
+     its mockup room — 53 to 82px wide, and no painting was ever shown larger
+     than a stamp. Every fifth work takes the row at the wall's own 4:5, so
+     the canvas reaches 110-200px and the eye gets a picture to rest on about
+     once a screen. 2-2-1, the cycle /galerie already runs on a phone; not
+     1-2-2, because a batch of 24 is 4 mod 5 and the screen above "Zobrazit
+     další" then always ends on a full pair. A lone last work takes the row
+     instead of standing beside an empty cell, at any count. The sold index
+     stays three across: the one distinction the page is built on. */
+  .works:not(.works--index) > :nth-child(5n),
+  .works:not(.works--index) > :nth-child(5n + 1):last-child,
+  .works:not(.works--index) > :nth-child(5n + 3):last-child {
+    grid-column: 1 / -1;
   }
 
   /* Baseline-aligned on one row, a two-word title wrapped underneath the

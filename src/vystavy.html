@@ -55,8 +55,10 @@
         <a class="xcat__plate{% if is_doc %} xcat__plate--doc{% endif %}"
            href="{{ big(v.image) }}" data-lb-item
            data-title="{{ v.title|striptags }}" data-tag="{{ cz_date(v.date) }}">
+          {# The first of every four hangs across a phone (site.css, 620px). #}
           {{ img(v.image, alt=v.title|striptags,
-                 sizes='(max-width:620px) 40vw, (max-width:960px) 24vw, 28vw',
+                 sizes=('(max-width:620px) 90vw, (max-width:960px) 24vw, 28vw' if loop.index0 % 4 == 0
+                        else '(max-width:620px) 40vw, (max-width:960px) 24vw, 28vw'),
                  cover=not is_doc,
                  loading='eager' if chapter.first and loop.first else 'lazy') }}
         </a>

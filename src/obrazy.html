@@ -71,8 +71,11 @@
            Eager, but not fetchpriority=high: the paintings sit under the
            ledger head, and high priority let them crowd out the stylesheet,
            putting the page's first paint 0.7s later on 3G. #}
+        {# Every fifth work, and a lone last one, hangs across a phone
+           (site.css, the 620px .works rule), so it asks for the larger file. #}
+        {% set across = loop.index % 5 == 0 or (loop.last and loop.index % 5 in [1, 3]) %}
         {{ img(painting.url, alt=painting.title,
-               sizes='(max-width:620px) 46vw, 31vw',
+               sizes=('(max-width:620px) 90vw, 31vw' if across else '(max-width:620px) 46vw, 31vw'),
                loading='eager' if loop.index0 < 3 else 'lazy') }}
       </div>
       {# The title used to live in a hover overlay, so on a phone — where the

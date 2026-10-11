@@ -98,6 +98,61 @@
 </section>
 
 
+{# The gallery follows the salon directly. Behind the services list and the
+   quote plate it began 4.9 screens down at 1366×768, after three portraits
+   from the same shoot with only a price list between the second and the
+   third. Here the last line of "O salonu" — that the salon is also a
+   gallery — hands straight to the paintings. #}
+<section class="shell bay">
+  {# Major rank, like O SALONU. A hairdresser that hangs a working painter's
+     canvases on its walls is the whole reason this site is not interchangeable
+     with any other salon's, and the emphasis for that comes from the reel
+     under this heading being the widest run on the page — not from a third
+     heading size that appears nowhere else on the site. #}
+  <div class="sec rv">
+    <div class="sec__meta">
+      <span class="label">Galerie</span>
+    </div>
+    <h2 class="sec__title">Obrazy visí přímo<br>v prostorách salonu</h2>
+    <p class="sec__note">Autorská tvorba {{ site.person_gen }}. Vybrané kusy jsou k prodeji.</p>
+  </div>
+
+  <div class="reel rv">
+    {% for painting in paintings[:9] %}
+    <a class="reel__item works__item" href="{{ big(painting.url) }}"
+       data-lb-item data-state="{{ 'sold' if painting.sold else 'sale' }}"
+       data-title="{{ painting.title }}"
+       data-tag="{% if painting.sold %}Prodáno{% else %}K prodeji{% endif %}">
+      <div class="works__fig">
+        {{ img(painting.url, alt=painting.title, sizes='(max-width:620px) 78vw, 26vw') }}
+      </div>
+      <div class="works__cap">
+        <span class="works__name">{{ painting.title }}</span>
+        <span class="works__state{{ ' is-sold' if painting.sold }}">{{ 'Prodáno' if painting.sold else 'K prodeji' }}</span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+  {# The counter used to be the constant string "01 — 09" sitting under a strip
+     you drag: a readout that never read anything. It now tracks the reel, and
+     it is set the way the lightbox counter is set — gold italic figures — so
+     the same readout does not appear in two typographic voices.
+
+     The rule is its own element rather than a ::after on a flexed counter:
+     flexing the counter made " / 09" an anonymous flex item and the row gap
+     opened an 18px hole after the figures, which read as a broken template
+     string. One row rather than three: the strip's own metadata, then the
+     rule carrying the eye to the action, in the direction the strip moves. #}
+  <div class="reel__meta rv" data-reel-meta>
+    <span class="num reel__count"><span data-reel-index>01</span> / {{ '%02d'|format(paintings[:9]|length) }}</span>
+    <span class="label reel__hint">Táhněte do strany</span>
+    <span class="reel__rule" aria-hidden="true"></span>
+    <a class="cta" href="obrazy.html"><span>Všechny obrazy</span>{{ ico.arrow() }}</a>
+  </div>
+</section>
+
+
 <section class="shell bay--sm">
   {# Minor rank. What a salon charges is a utility list, not the reason anyone
      came here — it does not deserve the same size as the gallery. #}
@@ -159,56 +214,6 @@
     </blockquote>
     <p class="label">— {{ site.person }}</p>
     <a class="qlink" href="galerie.html">Kolekce Color&nbsp;Tune</a>
-  </div>
-</section>
-
-
-<section class="shell bay">
-  {# Major rank, like O SALONU. A hairdresser that hangs a working painter's
-     canvases on its walls is the whole reason this site is not interchangeable
-     with any other salon's, and the emphasis for that comes from the reel
-     under this heading being the widest run on the page — not from a third
-     heading size that appears nowhere else on the site. #}
-  <div class="sec rv">
-    <div class="sec__meta">
-      <span class="label">Galerie</span>
-    </div>
-    <h2 class="sec__title">Obrazy visí přímo<br>v prostorách salonu</h2>
-    <p class="sec__note">Autorská tvorba {{ site.person_gen }}. Vybrané kusy jsou k prodeji.</p>
-  </div>
-
-  <div class="reel rv">
-    {% for painting in paintings[:9] %}
-    <a class="reel__item works__item" href="{{ big(painting.url) }}"
-       data-lb-item data-state="{{ 'sold' if painting.sold else 'sale' }}"
-       data-title="{{ painting.title }}"
-       data-tag="{% if painting.sold %}Prodáno{% else %}K prodeji{% endif %}">
-      <div class="works__fig">
-        {{ img(painting.url, alt=painting.title, sizes='(max-width:620px) 78vw, 26vw') }}
-      </div>
-      <div class="works__cap">
-        <span class="works__name">{{ painting.title }}</span>
-        <span class="works__state{{ ' is-sold' if painting.sold }}">{{ 'Prodáno' if painting.sold else 'K prodeji' }}</span>
-      </div>
-    </a>
-    {% endfor %}
-  </div>
-
-  {# The counter used to be the constant string "01 — 09" sitting under a strip
-     you drag: a readout that never read anything. It now tracks the reel, and
-     it is set the way the lightbox counter is set — gold italic figures — so
-     the same readout does not appear in two typographic voices.
-
-     The rule is its own element rather than a ::after on a flexed counter:
-     flexing the counter made " / 09" an anonymous flex item and the row gap
-     opened an 18px hole after the figures, which read as a broken template
-     string. One row rather than three: the strip's own metadata, then the
-     rule carrying the eye to the action, in the direction the strip moves. #}
-  <div class="reel__meta rv" data-reel-meta>
-    <span class="num reel__count"><span data-reel-index>01</span> / {{ '%02d'|format(paintings[:9]|length) }}</span>
-    <span class="label reel__hint">Táhněte do strany</span>
-    <span class="reel__rule" aria-hidden="true"></span>
-    <a class="cta" href="obrazy.html"><span>Všechny obrazy</span>{{ ico.arrow() }}</a>
   </div>
 </section>
 

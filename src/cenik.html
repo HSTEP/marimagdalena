@@ -47,10 +47,13 @@
 {# The page closed on nothing: the last table row, then 185px of empty ink to
    the footer. The booking column is not a close — it is sticky, so below
    1100px it stops being a column at all and ends up buried between two tables.
-   Same two actions the page has always ended on, laid out on the endnote's
-   grid so the close lands where every other page's close lands. #}
-<section class="shell bay--top">
-  <div class="endnote rv">
+   Same two actions the page has always ended on. They close the bill rather
+   than the page: on the tables' eight columns, flush left under the prices,
+   a price group's distance below the last one. Pushed to the right edge they
+   sat under the booking column with 830px of bare hairline beside them, the
+   third phone link in one screen's right third. #}
+<section class="shell price__close">
+  <div class="endnote endnote--bill rv">
     <div class="endnote__a">
       <a class="cta cta--gold" href="tel:{{ site.phone_href }}"><span>Objednat se</span>{{ ico.arrow() }}</a>
       <a class="qlink" href="mailto:{{ site.email }}">{{ site.email }}</a>

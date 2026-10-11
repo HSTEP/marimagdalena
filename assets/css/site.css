@@ -1842,19 +1842,26 @@ html:not(.js) .nav {
   grid-column: 5 / span 6;
 }
 
-/* The one page whose subject is photographs, opening on type. The plate is
-   the collection's own first frame, run at the full measure above the
-   masthead, so the page states what it is before it names it — and it is a
-   real lightbox item, so the sequence below it is still complete rather than
-   quoting itself. */
+/* The one page whose subject is photographs opens as a spread: the
+   collection's first photograph, square and uncropped, on the right half of
+   the measure, and the page's name on the left, standing on the plate's
+   lower edge. It was a 16:7 band across the full measure — a crop that keeps
+   44% of a square source — with the title under it, at y 767 on a 1366×768
+   screen. Side by side, the h1 is on the first screen at every desktop size
+   and the picture is a picture rather than a strip of one. */
 .phead--plate {
   padding-top: calc(var(--nav-h) + clamp(1.4rem, 2.6vw, 2.2rem));
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gap);
+  align-items: end;
 }
 
 .phead__plate {
+  grid-column: 7 / span 6;
+  grid-row: 1;
   display: block;
-  margin-bottom: clamp(1.8rem, 3.6vw, 3rem);
-  aspect-ratio: 16 / 7;
+  aspect-ratio: 1;
   overflow: hidden;
   position: relative;
 }
@@ -1873,11 +1880,37 @@ html:not(.js) .nav {
   transform: scale(1.03);
 }
 
-/* The masthead follows the plate rather than heading it, so the meta rule
-   reads as a caption rule under the picture — the same relation the tiles
-   below keep with their own frames. */
+/* The type is one column standing on the plate's foot: label and rule, title,
+   lede. `.phead__grid` keeps its name and its children their classes, so the
+   ledger and the default heads are untouched. */
+.phead--plate .phead__grid {
+  grid-column: 1 / span 6;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
 .phead--plate .phead__meta {
   margin-bottom: 1.1rem;
+}
+
+.phead--plate .phead__lede {
+  margin-top: 1.4rem;
+  max-width: 34ch;
+}
+
+/* Stacked on a phone: the photograph first, the page's name under it. */
+@media (width <= 760px) {
+  .phead__plate {
+    grid-column: 1 / -1;
+  }
+
+  .phead--plate .phead__grid {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-top: clamp(1.4rem, 5vw, 2rem);
+  }
 }
 
 /* The studio portraits are full-length figures on a black seamless, so an
@@ -2323,8 +2356,9 @@ html:not(.js) .nav {
 
 /* "Drag sideways" is an instruction for a thumb. Printed at 1440, where the
    affordance is a wheel and a cursor, it is a phone's caption left on a
-   desktop. */
-@media (width > 900px) {
+   desktop. It is a question of the pointer, not of the width: an iPad at
+   1024 moves the strip with a thumb and was told nothing. */
+@media (hover: hover) and (pointer: fine) {
   .reel__hint {
     display: none;
   }
@@ -2498,9 +2532,10 @@ html:not(.js) .nav {
    sequence rather than a wall, and cheap enough that it needs no per-image
    data, which this page does not have.
 
-   Five, not seven, because the opening plate now sits in the page header:
-   twenty frames run here, and twenty divides by five exactly, so the last
-   cycle closes on a complete row. The measure of seven ended on a second pair
+   Five, not seven: the collection's photographs run here — the first is the
+   page header's plate and the packshots close the page in a strip of their
+   own — and fifteen divide by five, so the last cycle closes on a complete
+   row. The measure of seven ended on a second pair
    that repeated the first at a different ratio, which was the one part of the
    rhythm a reader could not have predicted and also the one part that said
    nothing — the third size existed to fill out the count. */
@@ -2533,7 +2568,7 @@ html:not(.js) .nav {
 
 @media (width <= 760px) {
   /* Two across, with every fifth frame running the full width. That is what
-     keeps the last frame from being stranded beside an empty cell: at twenty
+     keeps the last frame from being stranded beside an empty cell: at fifteen
      images the closing plate is a fifth, so the sequence ends on a full-width
      frame by rule rather than by a special case for :last-child.
 
@@ -2560,6 +2595,22 @@ html:not(.js) .nav {
 
   .tiles--plates > :nth-child(5n) .tiles__fig {
     aspect-ratio: 4 / 5;
+  }
+}
+
+/* The packshots: one row of five at index scale, after the photographs. A
+   change of register at the foot of a long sequence — the same frames at a
+   fifth of the measure read as a product list, which is what they are. */
+.tiles--strip {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-top: clamp(3rem, 6vw, 5rem);
+  padding-top: clamp(1.6rem, 3vw, 2.4rem);
+  border-top: 1px solid var(--hair);
+}
+
+@media (width <= 620px) {
+  .tiles--strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -2639,7 +2690,7 @@ html:not(.js) .nav {
 /* ----------------------------------------------------------- 14. catalogue */
 /* Exhibitions, as a catalogue rather than a ledger. Each record is a plate and
    its label: on a desktop two records share a row, each on six of the page's
-   twelve columns, plate on the first three and label on the last three — so
+   twelve columns, plate on the first four and label on the last two — so
    every edge in the catalogue is a column line the rest of the site uses. The
    plates are 4:5 and in colour. The ledger they replace greyed its 70px
    thumbnails until a mouse touched them; the canvases were the subject and
@@ -2685,7 +2736,7 @@ html:not(.js) .nav {
 }
 
 .xcat__plate {
-  grid-column: 1 / span 3;
+  grid-column: 1 / span 4;
   display: block;
   position: relative;
   aspect-ratio: 4 / 5;
@@ -2716,13 +2767,17 @@ html:not(.js) .nav {
   transform: none;
 }
 
-/* The label is a column that closes on the plate's lower edge. Title and date
-   hang from the top, the links stand on the bottom, so across a row the two
-   records' last links share one line whatever each record carries. */
+/* A wall label: title, date and links as one block standing on the plate's
+   lower edge, the way a label hangs beside a picture at its foot. Split three
+   and three, the plate was smaller than every tile on /obrazy and the label
+   column beside it held 55px of type over 240-360px of empty ink — a grid of
+   hollow cards. Four and two puts the plate at the gallery wall's own scale
+   (390px at 1366) and the last link still lands on the plate's edge. */
 .xcat__text {
-  grid-column: 4 / span 3;
+  grid-column: 5 / span 2;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   align-items: flex-start;
   min-width: 0;
 }
@@ -2731,15 +2786,11 @@ html:not(.js) .nav {
   grid-column: 1 / -1;
 }
 
-/* The title's cap line sits on the plate's top edge rather than its line box:
-   0.435 of the size is the half-leading plus the ascent above the caps, the
-   same measurement .atelier__fig makes against --t-h4. */
 .xcat__title {
   font-family: var(--serif);
   font-size: var(--t-h4);
   line-height: var(--lh-head);
   font-variation-settings: var(--vf-h4);
-  margin-top: calc(var(--t-h4) * -0.2);
   text-wrap: balance;
   transition: color 0.4s;
 }
@@ -2758,8 +2809,7 @@ html:not(.js) .nav {
 /* One link to a line and every rule the width of the label column, so a
    record with two actions and a record with one draw rules of one length. */
 .xcat__links {
-  margin-top: auto;
-  padding-top: 1.4rem;
+  padding-top: 1.1rem;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -2782,17 +2832,45 @@ html:not(.js) .nav {
   border-bottom-color: transparent;
 }
 
-/* One record to a row once the half-row is narrower than a plate and a label
-   can share: below 960 a three-column label wraps a title like "Módní Salon
-   Michaeli Naušové" to four lines. The record keeps the page's twelve
-   columns — a quarter for the plate, the rest for the label. */
+/* Below 960 a record is a row of a list: plate and label side by side, the
+   title hanging from the plate's top edge (0.2 of the size lifts its cap line
+   onto it) and the links standing on its foot. Two records to a row while a
+   label still gets 200px, one below that. */
 @media (width <= 960px) {
+  .xcat__item {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .xcat__plate {
+    grid-column: 1 / span 5;
+  }
+
+  .xcat__text {
+    grid-column: 6 / span 7;
+    justify-content: flex-start;
+  }
+
+  .xcat__title {
+    margin-top: calc(var(--t-h4) * -0.2);
+  }
+
+  .xcat__links {
+    margin-top: auto;
+    padding-top: 1.4rem;
+  }
+}
+
+@media (width <= 760px) {
   .xcat__list {
     grid-template-columns: minmax(0, 1fr);
   }
+}
 
-  .xcat__item {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
+/* One to a row on a tablet held upright, so the plate can shrink to a
+   quarter and the label have the rest. */
+@media (620px < width <= 760px) {
+  .xcat__plate {
+    grid-column: 1 / span 3;
   }
 
   .xcat__text {
@@ -2807,13 +2885,6 @@ html:not(.js) .nav {
 /* On a phone the plate takes five twelfths — 134px at 375, a picture rather
    than an icon — and the label the other seven. */
 @media (width <= 620px) {
-  .xcat__plate {
-    grid-column: 1 / span 5;
-  }
-
-  .xcat__text {
-    grid-column: 6 / span 7;
-  }
 
   .xcat__links {
     padding-top: 1rem;
@@ -2961,41 +3032,21 @@ html:not(.js) .nav {
   aspect-ratio: 16 / 9;
 }
 
-/* Reserved space, nothing in it. One record here is a Facebook video with no
-   still and no frameable embed; its cell holds the plate so its caption keeps
-   the line its two neighbours are on, and holds nothing else.
+/* A record with nothing to show — a Facebook video with no still, which the
+   host will not let us frame — closes its year as a caption across the row,
+   after the pictures. It used to keep a 4:5 space with nothing in it in the
+   middle of the row, on the argument that a printed catalogue missing a plate
+   leaves the space. On paper an empty space is a decision; on a screen it is
+   indistinguishable from an image that failed to load, and this one sat in
+   the centre of the first row of the archive. `order` moves it without
+   touching the record order the admin keeps. */
+.arch__item--bare {
+  order: 1;
+  grid-column: 1 / -1;
+}
 
-   Two things were tried in this space and both were the same mistake. First
-   the year, set large italic on a raised panel — which invented a third ground
-   for one cell, the shadowless card this system exists to avoid, and the year
-   was already on screen twice within 300px anyway. Then a tracked micro-cap
-   slug, BEZ VYOBRAZENÍ, which was worse
-   for being subtler: 109×16 of grey type with 387px of void beneath it, telling
-   the reader which branch of the template they had landed in. Neither is a
-   caption. Both are the build talking about itself.
-
-   A printed catalogue missing a plate leaves the space and sets the entry, and
-   that is now literally all this does.
-
-   A third thing has been proposed and measured: drop the ratio entirely, let
-   the entry rise to the top of its cell and the slack fall below it, the way
-   .arch__links puts slack in this section. It is the wrong read, and the
-   metric that motivates it says so. The caption tops in this row spread
-   102.8px at 1440 — but 0.0 of that is against the row-mate that is also a
-   4/5 portrait (both fields 513.60, both captions at 2293.4); the whole of it
-   is the third artefact, a square poster, ragging exactly as .arch__field
-   above says artefacts of mixed provenance should. Remove the ratio and the
-   spread goes to 513.6 at 1440, 421.5 at 960: one caption alone near the top
-   of the row with half a metre of void under it and its rules nowhere near
-   the others. The reserve is not left over from the levelled-row era — it is
-   the one field with no picture to take a shape from, and 4/5 is the shape
-   the pictures around it take. */
-.arch__field--none {
-  display: block;
-  /* The one field on the page that still needs a declared shape, because it is
-     the one with no picture to take its shape from. 4/5, the site's portrait
-     plate, so the empty space reads as a plate left empty. */
-  aspect-ratio: 4 / 5;
+.arch__item--bare .arch__meta {
+  max-width: 40rem;
 }
 
 .arch__field--video {
@@ -3343,6 +3394,22 @@ html:not(.js) .nav {
 }
 
 .price__layout > .price { grid-column: 1 / span 8; }
+
+/* The bill's last line: a price group's gap below the last table, on the
+   tables' measure, actions flush left. */
+.price__close {
+  padding-top: clamp(2.6rem, 5vw, 4.2rem);
+}
+
+.endnote--bill .endnote__a {
+  margin-left: 0;
+}
+
+@media (width > 1100px) {
+  .endnote--bill {
+    width: calc((100% - 11 * var(--gap)) / 12 * 8 + 7 * var(--gap));
+  }
+}
 
 /* No rule. A sticky panel that carries a hairline will disagree with the
    hairlines of the static content it floats past at every scroll position but
@@ -3840,7 +3907,11 @@ html:not(.js) .nav {
   text-wrap: pretty;
 }
 
-@media (width <= 900px) {
+/* Split down to the phone. Stacked from 900, a tablet held upright got a
+   1025px portrait of Marie as the third full-width picture of her in a row,
+   and the first painting arrived five screens down. Beside the quote it is
+   one picture among the page's others, the way the desktop has it. */
+@media (width <= 620px) {
   .quote {
     grid-template-columns: minmax(0, 1fr);
     padding-right: 0;
@@ -4697,12 +4768,15 @@ body.is-lb .nav {
     min-height: 100svh;
   }
 
+  /* The photograph takes whatever the type leaves. At a fixed 44svh the
+     hero was 100svh tall with its type block finished well short of that:
+     280px of bare ink under the buttons at 820×1180, 112px at 412×915. */
   .hero__art {
     position: relative;
     inset: auto;
-    height: 44svh;
-    min-height: 265px;
-    flex: none;
+    height: auto;
+    min-height: max(44svh, 265px);
+    flex: 1 0 auto;
   }
 
   .hero__art img {
@@ -4719,9 +4793,14 @@ body.is-lb .nav {
       linear-gradient(to bottom, rgb(11 10 8 / 72%) 0%, rgb(11 10 8 / 0%) 26%);
   }
 
+  /* `stretch`, because the desktop grid's `align-self: center` survived the
+     move into a flex column, where it centres across the width: the block
+     was shrink-wrapped and set at x 209 on an 820 screen whose every other
+     section opens at the 41px margin. */
   .hero__body {
     position: relative;
     z-index: 2;
+    align-self: stretch;
     margin-top: 0;
     padding: 1.9rem var(--gutter) 2.5rem;
     max-width: none;
@@ -4860,8 +4939,7 @@ body.is-lb .nav {
    composition. */
 @media (width <= 620px) and (height <= 760px) {
   .hero__art {
-    height: 34svh;
-    min-height: 11rem;
+    min-height: max(34svh, 11rem);
   }
 
   .hero__body {
@@ -4880,6 +4958,206 @@ body.is-lb .nav {
 
   .hero .actions {
     column-gap: 1.25rem;
+  }
+}
+
+/* A tablet held upright keeps the homepage's two-column compositions. The
+   one-column collapse at 960 exists for a 390px phone, where six columns of
+   prose set at twenty characters a line; at 820 six columns is 355px, a
+   comfortable measure. Collapsed, the founder's portrait ran 738×922 under
+   her text and the first painting was five screens down against 2.8 on the
+   iPad one size up. */
+@media (620px < width <= 960px) {
+  .home .grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .home .grid > .prose {
+    grid-column: 1 / span 6 !important;
+  }
+
+  .home .grid > .atelier__fig {
+    grid-column: 7 / span 6 !important;
+    margin-top: calc(var(--t-body) * (var(--lh-text) + 0.471));
+  }
+
+  .home .grid > a:first-child {
+    grid-column: 1 / span 6 !important;
+  }
+
+  .home .grid > a:last-child {
+    grid-column: 7 / span 6 !important;
+  }
+}
+
+/* A phone on its side: 640–932 wide and 375–430 tall. It fell into the
+   tablet-portrait band above, where every picture is sized from the width,
+   so at 844×390 the founder's portrait was 2.4 screens tall, the quote's
+   2.7, a reel plate and its title never shared a screen, and the homepage
+   ran to twenty screens with the first painting 12.8 down. On this rung the
+   pictures are sized from the height instead — a plate and its caption fit
+   the screen under the masthead — and the hero goes back to the desktop's
+   split, photograph right and type left, because stacked it showed the top
+   of her head and no way to book. */
+@media (620px < width <= 960px) and (height <= 500px) {
+  /* A shorter masthead: at 68px it was 17% of every screen. The wordmark
+     steps down with it to keep its focus ring inside the bar. */
+  :root {
+    --nav-h: 3.5rem;
+    --nav-h-stuck: 3.5rem;
+  }
+
+  .nav__mark,
+  .nav.is-stuck .nav__mark {
+    width: 104px;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: calc(50% - var(--gap) / 2) minmax(0, 1fr);
+  }
+
+  .hero__art {
+    grid-area: 1 / 2 / 2 / 3;
+    min-height: 0;
+  }
+
+  .hero__art img {
+    object-position: 50% 18%;
+  }
+
+  .hero__art::after {
+    background: linear-gradient(
+      100deg,
+      var(--ink) 0%,
+      rgb(11 10 8 / 40%) 18%,
+      rgb(11 10 8 / 0%) 45%
+    );
+  }
+
+  .hero__body {
+    grid-area: 1 / 1 / 2 / 2;
+    align-self: center;
+    padding: calc(var(--nav-h) + 0.4rem) 0 1.2rem var(--gutter);
+    gap: 0.9rem;
+  }
+
+  .hero__mark {
+    width: 170px;
+  }
+
+  .hero__motto {
+    font-size: var(--t-h5);
+    font-variation-settings: var(--vf-h5);
+  }
+
+  /* Height-bound plates: the screen under the masthead, less the caption. */
+  .atelier__fig .plate {
+    width: min(100%, calc((100svh - var(--nav-h) - 5rem) * 0.8));
+  }
+
+  .quote__art {
+    min-height: calc(100svh - var(--nav-h));
+  }
+
+  .reel__item {
+    flex-basis: calc((100svh - var(--nav-h) - 6.5rem) * 0.8);
+  }
+
+  .works {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .works--index {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* The drawer in one screen. Eight links at the display size on 67px rows
+     made it 886px tall in a 390px window, with the gold "Objednat se" at
+     y 652. Two columns of four at the h4 rung beside the contact block, and
+     the bar inks in, because the drawer can open over the transparent
+     homepage masthead and its links would scroll through the wordmark. */
+  .is-menu .nav {
+    background: var(--ink);
+  }
+
+  .menu {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: var(--gap);
+    align-content: center;
+    padding-bottom: 1rem;
+  }
+
+  .menu__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(4, auto);
+    grid-auto-flow: column;
+    column-gap: var(--gap);
+  }
+
+  .menu__item:nth-child(4) {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .menu__link {
+    font-size: var(--t-h4);
+    font-variation-settings: var(--vf-h4);
+    padding: 0.7rem 0;
+  }
+
+  .menu__foot {
+    margin-top: 0;
+  }
+}
+
+/* The viewer on a phone on its side. Two 68px bars took 35% of a 390px
+   screen and the work rendered at 203×237 — turning the phone, the natural
+   way to see a picture bigger, shrank it to a third of its upright area.
+   The chrome moves into a rail on the right and the picture takes the full
+   height. */
+@media (orientation: landscape) and (height <= 500px) {
+  .lb {
+    grid-template-columns: minmax(0, 1fr) 13rem;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  .lb__stage {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    padding: 0.5rem 0 0.5rem 3.2rem;
+  }
+
+  .lb__nav--next {
+    right: -1.4rem;
+  }
+
+  .lb__bar {
+    grid-column: 2;
+    grid-row: 1;
+    border-bottom: 0;
+    padding: 0.85rem var(--gutter) 0 1rem;
+  }
+
+  .lb__count {
+    white-space: nowrap;
+  }
+
+  .lb__foot {
+    grid-column: 2;
+    grid-row: 3;
+    border-top: 0;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0 var(--gutter) 1rem 1rem;
+  }
+
+  .lb__ask {
+    flex: none;
+    margin-left: 0;
   }
 }
 

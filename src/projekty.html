@@ -113,7 +113,7 @@
     <div class="arch__grid">
     {% for p in group %}
       {% set embed = video_embed(p.video_url) %}
-      <article class="arch__item rv{% if embed %} arch__item--wide{% endif %}"
+      <article class="arch__item rv{% if embed %} arch__item--wide{% elif not p.image %} arch__item--bare{% endif %}"
                style="--d:{{ (loop.index0 % 6) * 45 }}ms">
         {% if embed %}
         <div class="arch__field arch__field--video">
@@ -129,21 +129,6 @@
                  sizes='(max-width:620px) 92vw, (max-width:1100px) 46vw, 30vw',
                  cover=false) }}
         </a>
-        {% else %}
-        {# A record with a Facebook video and no still: the host refuses framing
-           so there is no embed, and there is no image to fall back to. Without
-           this branch the cell simply had no field, and its caption dropped to
-           the bottom of a row its neighbours filled from the top.
-
-           Empty, and that is the whole point. This carried a slug — first the
-           year, then BEZ VYOBRAZENÍ — and both were the template explaining its
-           own control flow to the reader: a 109×16 grey string hanging in the
-           top-left corner with 387px of nothing under it, announcing a branch
-           nobody outside this file knows exists. A catalogue with no plate for
-           an entry does not print "no plate"; it leaves the space and sets the
-           entry. The space is what keeps this caption on the same line as the
-           two beside it, so it stays — with nothing in it. #}
-        <span class="arch__field arch__field--none" aria-hidden="true"></span>
         {% endif %}
 
         <div class="arch__meta">

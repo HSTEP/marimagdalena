@@ -733,8 +733,8 @@ h4 {
 
    Safe on this element specifically: `container-type` brings layout
    containment, which would make main the containing block for any fixed
-   descendant, and main has none — the masthead, the drawer, the lightbox, the
-   cursor peek and the scrim are all siblings of it. */
+   descendant, and main has none — the masthead, the drawer, the lightbox and
+   the scrim are all siblings of it. */
 main {
   container-type: inline-size;
 }
@@ -893,8 +893,8 @@ main > section.band:last-of-type {
 }
 
 /* `filter 1.4s` used to ride in this list. Nothing in the sheet changes the
-   filter of a `.plate > img` — the quieting filters live on .idx__thumb and
-   .works__fig, never here — so it had nothing to time. */
+   filter of a `.plate > img` — the quieting filters live on .works__fig and the
+   portraits, never here — so it had nothing to time. */
 .plate > img {
   transition: transform 1.4s var(--ease);
 }
@@ -907,6 +907,15 @@ main > section.band:last-of-type {
    than leaving for the next reader to verify. */
 .plate--zoom:hover > img {
   transform: scale(1.035);
+}
+
+/* A portrait photograph in a landscape plate. Filled from the centre, the
+   homepage's event teaser cut Marie off at the chin beside her own canvas:
+   a 0.67 source in a 4:3 box keeps the middle half and the middle half of a
+   standing figure is a torso. People in a portrait frame are composed in its
+   upper third, so the crop hangs from there. */
+.plate--tall > img {
+  object-position: 50% 22%;
 }
 
 .cap {
@@ -1131,7 +1140,7 @@ main > section.band:last-of-type {
 /* Link labels come from editable content and are occasionally a raw URL;
    let them break rather than push the layout sideways. */
 .actions > *,
-.idx__links > * {
+.xcat__links > * {
   min-width: 0;
   overflow-wrap: anywhere;
 }
@@ -1188,7 +1197,11 @@ html:not(.js) .nav {
   padding-inline: var(--gutter);
   display: flex;
   align-items: center;
-  gap: 2rem;
+  /* The links' own gap. The separator and the number are siblings of the
+     <nav> now rather than children of it, and this is the step they kept
+     from the links when they were. Between the wordmark and the links it
+     changes nothing: .nav__links takes the free space with margin-left: auto. */
+  gap: clamp(1.1rem, 2.1vw, 2.3rem);
 }
 
 /* One transition list, because there can only be one. Section 23 used to
@@ -1872,7 +1885,7 @@ html:not(.js) .nav {
 .atelier__fig {
   grid-column: 8 / span 5;
   align-self: start;
-  /* Keyed to the type it hangs beside, the way .idx__thumb is, not to the
+  /* Keyed to the type it hangs beside, the way .xcat__title is, not to the
      viewport. At 3vw the drop grew from 29.4px at 980 to 50.4px at 1680 while
      --t-body stayed a flat 1.0625rem, so the picture's top floated between the
      prose lines everywhere and landed on one at exactly one width, by
@@ -1922,8 +1935,8 @@ html:not(.js) .nav {
 
    This was `transition: padding-left 0.5s` on the row and `padding-left:
    0.9rem` on hover, which is the obvious way to write it and the one way it
-   cannot be written here. Both this row and .idx__row are set on `repeat(12,
-   minmax(0, 1fr))` — the page's own twelve columns, adopted (see .idx__row)
+   cannot be written here. This row is set on `repeat(12,
+   minmax(0, 1fr))` — the page's own twelve columns, adopted
    precisely so that every division inside the row lands on a page tick.
    Padding narrows the content box, so all twelve tracks narrow with it and
    every one of those divisions walks off its tick by a different amount:
@@ -2318,9 +2331,14 @@ html:not(.js) .nav {
 }
 
 /* ------------------------------------------------------- 12. gallery/works */
+/* Three across, not four. In the mockups the canvas is a third of the room
+   at most, and at four across a 267px tile left Filip 177px wide and Time
+   117 — a page selling interiors with paintings in them. Three across gives
+   every canvas 37% more width at 1280, and three tracks still meet the sold
+   index's six on every other line. */
 .works {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(2rem, 3vw, 2.8rem) var(--gap);
 }
 
@@ -2618,188 +2636,142 @@ html:not(.js) .nav {
   border-color: rgb(227 166 60 / 55%);
 }
 
-/* --------------------------------------------------------------- 14. index */
-/* Exhibitions: a catalogue index. Hovering a row floats its plate under the
-   cursor on pointer devices; on touch the plate is simply part of the row. */
-.idx {
+/* ----------------------------------------------------------- 14. catalogue */
+/* Exhibitions, as a catalogue rather than a ledger. Each record is a plate and
+   its label: on a desktop two records share a row, each on six of the page's
+   twelve columns, plate on the first three and label on the last three — so
+   every edge in the catalogue is a column line the rest of the site uses. The
+   plates are 4:5 and in colour. The ledger they replace greyed its 70px
+   thumbnails until a mouse touched them; the canvases were the subject and
+   the page showed them as 3% of its area, and on a touch screen never in
+   colour at all. */
+.xcat {
   border-top: 1px solid var(--hair-strong);
 }
 
-/* Chapter break. The year carries the numeral the rows gave up. */
-.idx__chapter {
+/* Chapter break. The year, set once, in the archive's own gold figures. */
+.xcat__year {
   display: flex;
   align-items: baseline;
-  gap: 1.1rem;
-  padding: clamp(2.2rem, 4vw, 3.4rem) 0 0.8rem;
+  padding: clamp(2.6rem, 5vw, 4.2rem) 0 0.8rem;
   border-bottom: 1px solid var(--hair);
 }
 
-.idx__chapter:first-child {
+.xcat__year:first-child {
   padding-top: 1.1rem;
 }
 
-.idx__chapter .num {
+.xcat__year .num {
   font-size: var(--t-h3);
   font-variation-settings: var(--vf-h3);
   line-height: var(--lh-head);
 }
 
-.idx__row {
+.xcat__list {
   display: grid;
-  /* Fixed fractions, not `auto` on the last column: an auto track sized by each
-     row's own links would shift the date column and the index would lose its
-     vertical rules. */
-  /* The page's own twelve columns, not a private track list.
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2.6rem, 5vw, 4.4rem) var(--gap);
+  padding-top: clamp(1.6rem, 3vw, 2.4rem);
+}
 
-     This row was `5.5rem minmax(0,1.6fr) 9rem minmax(0,0.9fr)`, which divided
-     its width perfectly sensibly and landed on nothing: outer edge exactly at
-     x=72 and every internal division missing the grid — the date at 843.5
-     against tick 8 at 846.48, the actions at 1019.2 against tick 10 at 1067.76,
-     48.6px out. A rem-and-fraction list is a reasonable local decision made
-     without reference to the system it sits inside, which is precisely the
-     thing a reader registers as "assembled" without being able to name it: the
-     page has verticals, and this row ignores all of them.
+/* Six tracks on the parent's gap: 6c + 5g is exactly the half-row each record
+   is given, so the plate's right edge is the page's third column line and the
+   label opens on its fourth. */
+.xcat__item {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: var(--gap);
+  align-items: stretch;
+}
 
-     The reasoning the old list encoded is preserved, because spans can say it
-     too. The date is a fixed field — never longer than "22. listopadu 2024" —
-     so it takes two columns rather than a fraction of the measure, and the six
-     it releases go to the title, which is what anyone is reading. */
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--gap);
-  /* Baselines, not boxes. Centring a 34px serif title against a 14px date
-     against a 10px micro-cap gave every row of a horizontally-scanned index
-     three separate baselines, 14px apart — there is no width at which that
-     resolves. The thumbnail has no text to sit on, so it centres itself. */
-  align-items: baseline;
-  /* The bottom pad has to clear the action underlines, not just the type: at
-     1.15rem the row rule closed 19px under them, two hairlines of different
-     weight and length inside the 20px this system will not draw within. */
-  padding: clamp(1.15rem, 2.6vw, 1.9rem) 0 clamp(1.9rem, 3vw, 2.4rem);
-  border-bottom: 1px solid var(--hair);
+.xcat__plate {
+  grid-column: 1 / span 3;
+  display: block;
   position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
 }
 
-/* Same gesture, same numbers, same reason as .svc__row — see the note there.
-
-   It failed twice as loudly here. The declaration never reached computed
-   style at all: this row carries `.rv`, and `.js .rv` (0,2,0) sets its own
-   `transition` for the reveal, which silently replaced `.idx__row`'s (0,1,0)
-   one, so the indent snapped rather than eased. And the thumbnail is
-   `width: 100%; aspect-ratio: 1`, which turns a narrower first track into a
-   shorter thumbnail: the row lost 1.33px of height under the cursor and the
-   ten rows below it stepped up to meet it. Moving the children fixes both at
-   once — nothing on the row itself animates now, so there is no declaration
-   left for the reveal to eat. */
-.idx__date,
-.idx__links {
-  transition: translate 0.5s var(--ease);
+.xcat__plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+  transition: transform 1.2s var(--ease);
 }
 
-.idx__row:hover > * {
-  translate: 1rem;
+.xcat__plate:hover img {
+  transform: scale(1.035);
 }
 
-/* 5 columns, not 6, and --t-h4, not --t-h3.
+/* A poster is never cropped and never zoomed: the type on it is part of it.
+   Hung from the top-left, so its edge meets the label's first line. */
+.xcat__plate--doc img {
+  object-fit: contain;
+  object-position: left top;
+  background-color: transparent !important;
+}
 
-   The span, because three columns cannot be halved. .idx__links took 10/span 3
-   and divided itself in two, which put its inner edges at 1202.03 and 1233.70
-   against the page's nearest verticals at 1178.40 and 1257.36 — 23.6px off,
-   under nine of the thirteen underlines. On the next page .arch__links performs
-   exactly the same device inside a FOUR-column cell and lands every edge within
-   0.02px of a tick, and its own comment says why: four tracks separated by
-   three gaps is two cells plus one gap. So the title gives up a column, the
-   date follows it, and the links get an even span. All six edges are now on
-   ticks and both slots measure 189.6px — the same underline length /projekty
-   already draws forty-one of.
+.xcat__plate--doc:hover img {
+  transform: none;
+}
 
-   The size, because the chapter mark above these titles is --t-h3 too. A year
-   set at the same size as the records under it was carrying its rank on gold
-   and italic alone, which is ornament doing structure's job on a site whose
-   whole claim is that structure comes from scale. /projekty sets the same
-   .num over --t-h5 titles; this is the same interval, one step. */
-.idx__title {
-  grid-column: 2 / span 5;
+/* The label is a column that closes on the plate's lower edge. Title and date
+   hang from the top, the links stand on the bottom, so across a row the two
+   records' last links share one line whatever each record carries. */
+.xcat__text {
+  grid-column: 4 / span 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.xcat__item--bare .xcat__text {
+  grid-column: 1 / -1;
+}
+
+/* The title's cap line sits on the plate's top edge rather than its line box:
+   0.435 of the size is the half-leading plus the ascent above the caps, the
+   same measurement .atelier__fig makes against --t-h4. */
+.xcat__title {
   font-family: var(--serif);
   font-size: var(--t-h4);
   line-height: var(--lh-head);
   font-variation-settings: var(--vf-h4);
-  /* See .svc__name: the indent has to be listed here, not in a child blanket. */
-  transition: color 0.4s, translate 0.5s var(--ease);
+  margin-top: calc(var(--t-h4) * -0.2);
+  text-wrap: balance;
+  transition: color 0.4s;
 }
 
-.idx__row:hover .idx__title {
+.xcat__item:hover .xcat__title {
   color: var(--gold);
 }
 
-.idx__date {
-  grid-column: 7 / span 2;
+.xcat__date {
+  margin-top: 0.6rem;
   color: var(--fg-3);
   font-size: var(--t-small);
   line-height: var(--lh-note);
 }
 
-/* Columns 9-12. See .idx__row for why these four spans exist rather than a
-   private track list, and .idx__title for why this one is four wide. */
-.idx__links {
-  grid-column: 9 / span 4;
-}
-
-/* Two fixed slots, not a flex run. Right-aligned, a row carrying one link
-   pushed it flush to the shell edge while a row carrying two started 220px
-   earlier, so the same label sat at two different x-positions down the index.
-   Packed left, the first slot formed a column and the second still floated,
-   landing at 1109 on one row and 1270 on the next under a rule that runs to
-   1368. Given slots, both actions hold their own column and a missing one
-   leaves its gap where the eye already expects it. An index is columns. */
-.idx__links {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem var(--gap);
-  /* Rules on one line even when a label needs two. Between 1044 and 961 the
-     long label's 137.7px of ink stops fitting a 134.8px track and wraps, and
-     with the default stretch its rule dropped 15.9px below its neighbour's —
-     two rules in one cell on two lines, in the one component on the site whose
-     whole argument is that a row closes on one line. */
-  align-items: end;
-}
-
-.idx__slot {
+/* One link to a line and every rule the width of the label column, so a
+   record with two actions and a record with one draw rules of one length. */
+.xcat__links {
+  margin-top: auto;
+  padding-top: 1.4rem;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 0.4rem;
-  min-width: 0;
+  gap: 0.9rem;
+  width: 100%;
 }
 
-/* Placed, not ordered. The template skips a slot with nothing in it rather
-   than printing an empty box, so the surviving slot has to name its own track
-   or a lone recording would pack left into the report column. */
-.idx__slot--1 {
-  grid-column: 1;
+.xcat__links .qlink {
+  display: flex;
 }
 
-.idx__slot--2 {
-  grid-column: 2;
-}
-
-/* The rule belongs to the column, not to the word. Sized to their own text,
-   two stacked underlines in one slot ran 136px and 39px — a system whose whole
-   structure is hairlines cannot afford rules whose length is an accident of
-   what the editor typed. Block-level, both run the slot's width and every row
-   of the index closes on the same two verticals. */
-.idx__slot .qlink {
-  display: block;
-}
-
-/* A person's name is a credit, not an action. Set in the same tracked caps as
-   VIDEO and REPORTÁŽ it read as a third thing to press. */
-/* Changing the face was not enough on its own: the slot rule runs the full
-   column, so once the credit was block-level it carried a 158px --hair-strong
-   underline in the exact slot and at the exact x where this index's own signal
-   for "pressable" lives. Length and position talk louder than an italic. The
-   rule goes; the gold wipe stays, so it is still legibly a link when you reach
-   for it, and at rest it is a line of type in a catalogue. */
-.idx__slot .qlink--credit {
+.xcat__links .qlink--credit {
   text-transform: none;
   letter-spacing: 0.01em;
   font-size: var(--t-small);
@@ -2810,93 +2782,43 @@ html:not(.js) .nav {
   border-bottom-color: transparent;
 }
 
-/* A real thumbnail in the row. The floating hover plate was the page's only
-   imagery, which left the desktop index looking like a bare data table until
-   you happened to hover it. */
-/* The picture's top edge on the title's cap-line — the alignment a catalogue
-   page actually makes, rather than the one the box model hands you.
+/* One record to a row once the half-row is narrower than a plate and a label
+   can share: below 960 a three-column label wraps a title like "Módní Salon
+   Michaeli Naušové" to four lines. The record keeps the page's twelve
+   columns — a quarter for the plate, the rest for the label. */
+@media (width <= 960px) {
+  .xcat__list {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-   It was `align-self: center`, which is what you write when the row has no
-   text to sit on: the thumbnail centred itself against whatever height the row
-   happened to be, so it landed 4.4px above the title's capitals on a one-line
-   row and drifted further on a two-line one. Off by four pixels ten times down
-   a page is not read as four pixels, it is read as nothing lining up.
+  .xcat__item {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
 
-   The offset is arithmetic, not a nudge. Cap-line minus box-top is the half
-   leading plus the gap between the ascender and the cap, and both are
-   fractions of the size: (1.12 - 1) / 2 = 0.06, and this cut of Bodoni sets
-   its capitals 0.375em under the ascent. So 0.435 of --t-h4 — measured across
-   1440 / 1180 / 1024 and constant at every one, which is the point of stating
-   it against the token rather than in px. */
-.idx__thumb {
-  grid-column: 1;
-  display: block;
-  align-self: start;
-  margin-top: calc(var(--t-h4) * 0.435);
-  /* The column's width, not 5.5rem. A fixed thumbnail inside a fractional
-     track is the row's first vertical set by a number nobody else uses. */
-  width: 100%;
-  aspect-ratio: 1 !important;
-  overflow: hidden;
-  background: var(--bg);
-  filter: var(--img-quiet);
-  /* See .svc__name: the indent has to be listed here, not in a child blanket. */
-  transition: filter 0.6s var(--ease), translate 0.5s var(--ease);
+  .xcat__text {
+    grid-column: 4 / span 9;
+  }
+
+  .xcat__links {
+    max-width: 22rem;
+  }
 }
 
-.idx__row:hover .idx__thumb {
-  filter: none;
-}
+/* On a phone the plate takes five twelfths — 134px at 375, a picture rather
+   than an icon — and the label the other seven. */
+@media (width <= 620px) {
+  .xcat__plate {
+    grid-column: 1 / span 5;
+  }
 
-.idx__thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+  .xcat__text {
+    grid-column: 6 / span 7;
+  }
 
-/* Posters are graphic design, not photography. Cropped to a square and
-   desaturated with everything else they read as damaged images, so they keep
-   their own colour and their own edges. */
-.idx__thumb--doc {
-  filter: none;
-}
-
-/* Hung from the corner, exactly as .arch__field img is and for the same reason:
-   `contain` centres whatever it could not fill, so the one portrait poster in
-   this index painted 12.8px right of the ten photographs stacked under it and
-   the column's left edge visibly stepped at that row. The archive's own comment
-   makes this argument already — it just never reached the other page that does
-   the same thing. */
-.idx__thumb--doc img {
-  object-fit: contain;
-  object-position: left center;
-  background-color: transparent !important;
-}
-
-.peek {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: clamp(210px, 20vw, 320px);
-  aspect-ratio: 4 / 3;
-  z-index: 40;
-  pointer-events: none;
-  overflow: hidden;
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0.94);
-  transition: opacity 0.45s var(--ease), transform 0.55s var(--ease);
-  will-change: transform;
-  border: 1px solid var(--line-strong);
-}
-
-.peek.is-on {
-  opacity: 1;
-}
-
-.peek img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  .xcat__links {
+    padding-top: 1rem;
+    gap: 0.7rem;
+  }
 }
 
 /* Printed matter is never cropped; the type on it is part of the artefact.
@@ -3107,7 +3029,7 @@ html:not(.js) .nav {
   gap: 0.55rem;
 }
 
-/* Matches .idx__date on /vystavy — one treatment for one kind of datum. */
+/* Matches .xcat__date on /vystavy — one treatment for one kind of datum. */
 .arch__date {
   color: var(--fg-3);
   font-size: var(--t-small);
@@ -3871,17 +3793,32 @@ html:not(.js) .nav {
   align-items: stretch;
 }
 
+/* A half-length portrait, not a band. The source is a full-length figure at
+   0.71 with her hands raised over her head, and the plate was a 626×404
+   landscape at 1280 filled from the centre: it kept the dress from the
+   shoulders to the knees and cut her head off — the founder, headless, on
+   the homepage. Height now follows the width (42vw is 538px at 1280, 1.16:1
+   against the column), and the crop hangs from the raised hands to the hip.
+   The photograph carries its own pure-black mount, 9% a side; at 100% width
+   those showed as two 57px bars inside the plate. 124% wide and centred puts
+   both mounts outside the box at every width, with no transform to fight
+   .plate's own hover. */
 .quote__art {
   position: relative;
   overflow: hidden;
-  min-height: clamp(20rem, 46vh, 32rem);
+  min-height: clamp(20rem, 42vw, 44rem);
 }
 
-.quote__art img {
+/* img.ph, so the width outranks .ph.is-cover; max-width, so the reset's
+   img cap does not pull it back to 100%. */
+.quote__art > img.ph {
   position: absolute;
-  inset: 0;
-  width: 100%;
+  top: 0;
+  left: -12%;
+  width: 124%;
+  max-width: none;
   height: 100%;
+  object-position: 50% 19%;
 }
 
 .quote__in {
@@ -3919,7 +3856,10 @@ html:not(.js) .nav {
     aspect-ratio: 4 / 5;
   }
 
-  .quote__art img {
+  .quote__art > img.ph {
+    left: -12%;
+    width: 124%;
+    max-width: none;
     object-position: 50% 22%;
   }
 }
@@ -4447,6 +4387,26 @@ html:not(.js) .nav {
   font-variation-settings: var(--serif-text);
 }
 
+/* On a phone the foot is two rows: what the work is, then what to do about
+   it. Three items in one 335px row each wrapped to two lines, and the
+   enquiry — the only commercial step in the viewer — became a 131×41 block
+   of caps squeezed against the right edge. Given its own row it runs the
+   width of the screen at a 44px target, where the thumb already is. */
+@media (width <= 620px) {
+  .lb__foot {
+    flex-wrap: wrap;
+    row-gap: 0.4rem;
+  }
+
+  .lb__ask {
+    flex: 1 0 100%;
+    margin-left: 0;
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+  }
+}
+
 body.is-lb,
 body.is-menu {
   overflow: hidden;
@@ -4623,14 +4583,60 @@ body.is-lb .nav {
     grid-column: 1 / -1 !important;
   }
 
-  /* `.nav__call` is a child of `.nav__links` and is already hidden at 1180. */
   .nav__links {
     display: none;
   }
 
   .burger {
     display: block;
+    margin-left: 0;
   }
+
+  /* The number comes back once the links have gone: wordmark left, number and
+     burger right. 1180 hid it to make room for seven links; below this rung
+     there are none, and the row had 600px of empty bar at 820 with the one
+     action a phone is for missing from it. A 44px band so it is a thumb
+     target, not a line of caps. */
+  .nav__in {
+    gap: 0.75rem;
+  }
+
+  .nav__call {
+    display: inline-flex;
+    margin-left: auto;
+    min-height: 2.75rem;
+  }
+
+  .nav__call::after {
+    bottom: 0.55rem;
+  }
+}
+
+/* Under 360 the wordmark, the number and the burger do not fit in one row
+   (118 + 143 + 44 + gaps against 288 at 320), and the number is the one that
+   can give: it keeps the icon and its 44px target, and the digits stay in the
+   accessible name. */
+@media (width < 360px) {
+  .nav__call {
+    min-width: 2.75rem;
+    justify-content: center;
+  }
+
+  .nav__call-t {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .nav__call::after {
+    display: none;
+  }
+}
+
+@media (width <= 960px) {
 
   /* Below this rung the burger is the whole of the navigation — the rule above
      has just taken `.nav__links` away — and the burger is a button that calls
@@ -4764,58 +4770,6 @@ body.is-lb .nav {
     font-size: var(--t-small);
   }
 
-  .idx__row {
-    grid-template-columns: 4.6rem minmax(0, 1fr);
-    row-gap: 0.3rem;
-    align-items: start;
-  }
-
-  /* Two columns and no cursor: the indent has nothing left to say. */
-  .idx__row:hover > * {
-    translate: none;
-  }
-
-  .idx__chapter {
-    padding-top: clamp(1.6rem, 5vw, 2.4rem);
-  }
-
-  .idx__title {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  /* The thumbnail stays a thumbnail. Spanning the full row at each image's
-     own aspect ratio gave all eleven records ~500px of full-bleed media, so
-     the page ran to eleven screens of one repeated module — and the scanned
-     white posters among them tore holes in the near-black page. */
-  .idx__thumb {
-    grid-column: 1;
-    grid-row: 1 / span 3;
-    width: 100%;
-    aspect-ratio: 1 !important;
-  }
-
-  .idx__date {
-    grid-column: 2;
-  }
-
-  /* Two slots, still halved. `minmax(0,1fr) auto` sized the slots to their
-     labels, which is the ragged-underline failure this whole component exists
-     to avoid, and it was drawn at its worst here: at 768 a 542.5px rule ran
-     under 137.7px of ink while VIDEO beside it got a 41.4px rule exactly as
-     long as the word — three measures on one page where the desktop has one.
-     The stack this override was written to prevent does not happen; swept
-     1440 → 320 in 4px steps, the two rules share one line at every width and
-     the long label simply takes two lines below 414, which .label is built
-     for. */
-  .idx__links {
-    grid-column: 2;
-    gap: 0.35rem var(--gap);
-  }
-
-  .peek {
-    display: none;
-  }
 
   /* The price rides the same baseline as the service it belongs to. Dropped
      to its own full-width line it stayed right-aligned against nothing and
@@ -4891,6 +4845,44 @@ body.is-lb .nav {
     align-self: start;
   }
 }
+
+/* A phone whose screen is short — an iPhone SE, or any phone once the
+   browser's own bars are counted. The stacked hero spent 293px on the
+   photograph at 375×667 and set the motto at the page-title rung, so the
+   gold button began at y 647: a 20px sliver on the first screen at 375×667,
+   5px at 360×640, and 66px below the fold at 375×553 with the motto cut
+   mid-sentence. The first screen of the site's most-visited page had no way
+   to book on the device most of its clients hold.
+   The photograph gives up a third of its height (it still carries her face —
+   the crop hangs from 14%), the wordmark and the motto drop one rung, and the
+   two actions share a row where they fit. The gold button's lower edge now
+   clears the fold at 360×640 and 375×553. Taller phones keep the full
+   composition. */
+@media (width <= 620px) and (height <= 760px) {
+  .hero__art {
+    height: 34svh;
+    min-height: 11rem;
+  }
+
+  .hero__body {
+    padding-top: 1.4rem;
+    gap: 1.15rem;
+  }
+
+  .hero__mark {
+    width: 200px;
+  }
+
+  .hero__motto {
+    font-size: var(--t-h4);
+    font-variation-settings: var(--vf-h4);
+  }
+
+  .hero .actions {
+    column-gap: 1.25rem;
+  }
+}
+
 
 @media (width <= 620px) {
   :root {
@@ -5095,7 +5087,6 @@ body.is-lb .nav {
   .menu,
   .burger,
   .lb,
-  .peek,
   .nav__links,
   .scroll-cue,
   .works__more,
@@ -5173,7 +5164,7 @@ body.is-lb .nav {
   .price__group,
   .svc__row,
   .arch__item,
-  .idx__row {
+  .xcat__item {
     break-inside: avoid;
   }
 

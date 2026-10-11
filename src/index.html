@@ -231,7 +231,7 @@
     {% for rec in teasers %}
     <a class="rv" href="{% if loop.first %}vystavy.html{% else %}projekty.html{% endif %}"
        style="grid-column: {{ '1 / span 6' if loop.first else '7 / span 6' }}; --d:{{ loop.index0 * 120 }}ms">
-      <figure class="plate plate--zoom" style="aspect-ratio:4/3">
+      <figure class="plate plate--zoom{{ ' plate--tall' if ratio(rec.image) < 0.9 }}" style="aspect-ratio:4/3">
         {{ img(rec.image, alt=rec.title|striptags, sizes='(max-width:960px) 100vw, 46vw', cover=true) }}
       </figure>
       <div class="cap">

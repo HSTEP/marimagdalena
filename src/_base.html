@@ -73,9 +73,15 @@
          href="{{ item.href }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}
          {% if item.slug == page %}aria-current="page"{% endif %}>{{ item.label|safe }}{% if item.external %}{{ ico.external() }}{% endif %}</a>
       {% endfor %}
-      <span class="nav__sep" aria-hidden="true"></span>
-      <a class="nav__call" href="tel:{{ site.phone_href }}">{{ ico.phone() }}{{ site.phone_display }}</a>
     </nav>
+
+    {# Outside the <nav>, so it survives the rung that takes the links away.
+       Inside it, the number shared their fate: from 960 down the masthead was a
+       wordmark and a burger, and on a phone — where a tel: link is one tap from
+       a call — the salon's number was 1.8 screens below the price a visitor had
+       just read, or behind the drawer. #}
+    <span class="nav__sep" aria-hidden="true"></span>
+    <a class="nav__call" href="tel:{{ site.phone_href }}">{{ ico.phone() }}<span class="nav__call-t">{{ site.phone_display }}</span></a>
 
     <button class="burger" data-burger type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu">
       <span></span><span></span>
@@ -188,8 +194,6 @@
   </div>
 </footer>
 
-{# Floating plate preview for index rows (pointer devices only) #}
-<div class="peek" data-peek aria-hidden="true"><img alt=""></div>
 
 <div class="lb" data-lb role="dialog" aria-modal="true" aria-label="Prohlížeč obrazů" hidden>
   <div class="lb__bar">

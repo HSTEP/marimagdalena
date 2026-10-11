@@ -418,17 +418,35 @@
       }
     });
 
-    let touchX = null;
-    lb.addEventListener("touchstart", (e) => (touchX = e.changedTouches[0].clientX), {
-      passive: true,
-    });
+    /* A swipe is one finger, mostly sideways, on an unzoomed page. The old
+       handler read any 55px of horizontal travel on any finger, so the one
+       gesture a phone has for looking closer at a painting — pinching out —
+       moved the viewer to the next work, and left the reader zoomed in on a
+       picture they had not chosen. Panning a zoomed page is not a swipe
+       either. */
+    let touch = null;
+    lb.addEventListener(
+      "touchstart",
+      (e) => {
+        touch =
+          e.touches.length === 1
+            ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
+            : null;
+      },
+      { passive: true }
+    );
     lb.addEventListener(
       "touchend",
       (e) => {
-        if (touchX === null) return;
-        const dx = e.changedTouches[0].clientX - touchX;
-        if (Math.abs(dx) > 55) show(cursor + (dx < 0 ? 1 : -1));
-        touchX = null;
+        const start = touch;
+        touch = null;
+        if (!start || e.touches.length) return;
+        if (window.visualViewport && visualViewport.scale > 1.01) return;
+        const dx = e.changedTouches[0].clientX - start.x;
+        const dy = e.changedTouches[0].clientY - start.y;
+        if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+          show(cursor + (dx < 0 ? 1 : -1));
+        }
       },
       { passive: true }
     );
@@ -450,98 +468,4 @@
     frame.referrerPolicy = "no-referrer-when-downgrade";
     mapSlot.replaceChildren(frame);
   });
-
-  /* ------------------------------------------------ hover plate for index */
-  const peek = $("[data-peek]");
-  const scope = $("[data-peek-scope]");
-  const finePointer = matchMedia("(hover: hover) and (pointer: fine)").matches;
-
-  if (peek && scope && finePointer && !reduced) {
-    const peekImg = $("img", peek);
-    const target = { x: 0, y: 0 };
-    const at = { x: 0, y: 0 };
-    let active = false;
-    let raf = null;
-
-    const loop = () => {
-      at.x += (target.x - at.x) * 0.13;
-      at.y += (target.y - at.y) * 0.13;
-      peek.style.transform = `translate(${at.x}px, ${at.y}px) translate(-50%, -50%) scale(${
-        active ? 1 : 0.94
-      })`;
-      raf = active || Math.abs(target.x - at.x) > 0.5 ? requestAnimationFrame(loop) : null;
-    };
-
-    /* The preview is centred on the cursor, and the cursor is free to be one
-       pixel from the edge of the screen. Unclamped it was: at 1440x900 the box
-       ran to -33 at the left end of a row and to 1472 at the right end, 11.3%
-       of it off-screen at either end, and on the second row 23.3% of it below
-       the fold. The reader is pointing at a title and being shown three
-       quarters of the picture, cut on a hard vertical, which is exactly what
-       the plate components spend their rules avoiding.
-
-       Bounds, not repositioning: the box stays centred on the pointer until
-       that would push it off, then it stops. offsetWidth/offsetHeight and not
-       getBoundingClientRect, because the rect is the transformed box and the
-       resting state is scale(0.94) — the clamp would then let in 6% of the box
-       it is supposed to be keeping out. Measured every move rather than once,
-       because the row sets its own aspect-ratio a few lines below and the
-       height changes with it: 430px on row 0 and 410 on row 1 at 1440.
-
-       The top bound is the masthead's, not the window's. The bar is fixed,
-       opaque once stuck and z-index 50 against the preview's 40, so anything
-       clamped to y=0 would be sliding under it — the same defect as the fold,
-       with something drawn on top of it instead of nothing. */
-    const place = (x, y) => {
-      const halfW = peek.offsetWidth / 2;
-      const halfH = peek.offsetHeight / 2;
-      const pad = 12;
-      const nav = $(".nav");
-      const top = (nav ? nav.getBoundingClientRect().bottom : 0) + pad + halfH;
-      const left = pad + halfW;
-      const right = document.documentElement.clientWidth - pad - halfW;
-      const bottom = document.documentElement.clientHeight - pad - halfH;
-      // max() second so a preview too tall for the gap it is in stays put
-      // rather than inverting.
-      target.x = Math.min(Math.max(x, left), Math.max(left, right));
-      target.y = Math.min(Math.max(y, top), Math.max(top, bottom));
-    };
-
-    scope.addEventListener("pointermove", (e) => {
-      const row = e.target.closest("[data-peek-src]");
-
-      if (row) {
-        const src = row.dataset.peekSrc;
-        if (peekImg.dataset.src !== src) {
-          peekImg.dataset.src = src;
-          peekImg.src = src;
-          // Posters and photographs sit side by side in this list, so the
-          // preview takes each item's own proportions rather than cropping.
-          if (row.dataset.peekRatio) peek.style.aspectRatio = row.dataset.peekRatio;
-        }
-      }
-
-      // After the aspect-ratio above, so the clamp measures the box the reader
-      // is about to be shown rather than the previous row's.
-      place(e.clientX, e.clientY);
-
-      if (row) {
-        if (!active) {
-          at.x = target.x;
-          at.y = target.y;
-          active = true;
-          peek.classList.add("is-on");
-        }
-      } else if (active) {
-        active = false;
-        peek.classList.remove("is-on");
-      }
-      if (!raf) raf = requestAnimationFrame(loop);
-    });
-
-    scope.addEventListener("pointerleave", () => {
-      active = false;
-      peek.classList.remove("is-on");
-    });
-  }
 })();

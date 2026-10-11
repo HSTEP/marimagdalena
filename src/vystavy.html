@@ -23,80 +23,56 @@
 
 <section class="shell bay--top">
   {% if vystavy %}
-  {# Chaptered by year, like the project archive next door. The first column
-     used to hold an inverse ordinal — 11, 10, 09 … — which counted down the
-     page and would renumber every existing row the moment a twelfth
-     exhibition was added. The year is the division that actually means
-     something, and it is set once. #}
-  <div class="idx" data-peek-scope>
+  {# A catalogue of exhibitions, chaptered by year. This was a ledger of rows
+     with a 70px grey square at the head of each — the photographs of her
+     canvases hanging in churches, cafés and hotels were 3% of the page and
+     drained of colour until a mouse found them, which on a phone is never.
+     Now every record carries its picture as a plate: two records to a row on
+     a desktop, one plate and its label per row below that.
+     Two chapters, so the year is set once — a tally beside it would only
+     count the plates the reader can already see. #}
+  <div class="xcat">
     {% for year, group in vystavy_years %}
     {% if year %}
-    {# The year alone. A tally of the rows directly beneath it — "3 výstavy"
-       over three visible rows — tells the reader something the rows have
-       already told them, and it is the one thing on a chapter head that has
-       to be recomputed rather than read. /projekty next door sets its year
-       with nothing beside it; these are the two halves of one archive and
-       they now open a chapter the same way. #}
-    <div class="idx__chapter rv">
+    <div class="xcat__year rv">
       <span class="num">{{ year }}</span>
     </div>
     {% endif %}
-    {% for v in group %}
-    <article class="idx__row rv" style="--d:{{ (loop.index0 % 8) * 45 }}ms"
-             {% if v.image %}data-peek-src="{{ big(v.image) }}" data-peek-ratio="{{ ratio(v.image) }}"{% endif %}>
-      {# Thumbnail precedes the title so it lands in its own grid column.
-         Several of these records are scanned A4 posters rather than
-         photographs; cropped square and desaturated they became unreadable
-         grey mush, so anything appreciably portrait is shown whole and in
-         colour — a document treated as a document. #}
-      {% if v.image %}
-      {% set is_doc = is_document(v.image) %}
-      <a class="idx__thumb{% if is_doc %} idx__thumb--doc{% endif %}"
-         href="{{ big(v.image) }}" data-lb-item
-         style="--nat:{{ ratio(v.image) }}"
-         data-title="{{ v.title|striptags }}" data-tag="{{ cz_date(v.date) }}">
-        {{ img(v.image, alt=v.title|striptags, sizes='8rem', cover=not is_doc) }}
-      </a>
-      {% else %}
-      <span aria-hidden="true"></span>
-      {% endif %}
-
-      <h2 class="idx__title">{{ cz_title(v.title|striptags) }}</h2>
-
-      <p class="idx__date">{{ cz_date(v.date) }}</p>
-
-      {# Two fixed slots — report left, recording right — so a label holds one
-         x-position down the whole index and a row that has only one action
-         leaves the other column empty rather than sliding into it.
-
-         link_slots() used to sort on host. Every URL in this file is a
-         facebook.com URL, so every link went right and the report column was
-         empty on all eleven rows: a track reserved by a rule that could never
-         fire. It now reads the path Facebook itself uses and the word the
-         editor typed, both of which are already in the record. #}
-      {# An empty slot is not rendered — it is placed. A slot span with no
-         children still stretched to the row's height, and a grid takes its
-         first baseline from its first item, so on the rows carrying one action
-         the block's baseline was synthesised from the empty box's bottom edge
-         and the underline dropped 15px below where the same underline sat on
-         the rows carrying two. The rules were constant-length and column-locked
-         and still did not sit on a line. Each slot now names its own column, so
-         every row exports a real text baseline from a real link. #}
-      {% set slots = link_slots(v.links) %}
-      <div class="idx__links">
-        {% for slot in slots %}
-        {% if slot %}
-        <span class="idx__slot idx__slot--{{ loop.index }}">
-          {% for link in slot %}
-          <a class="qlink{{ ' qlink--credit' if link.kind == 'profile' }}"
-             href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link_label(link.text, link.url) }}</a>
-          {% endfor %}
-        </span>
+    <div class="xcat__list">
+      {% for v in group %}
+      <article class="xcat__item rv{{ ' xcat__item--bare' if not v.image }}" style="--d:{{ (loop.index0 % 2) * 90 }}ms">
+        {# Several records are scanned A4 posters rather than photographs. A
+           poster is shown whole, hung from the top-left corner of its plate —
+           a document treated as a document; a photograph fills it. #}
+        {% if v.image %}
+        {% set is_doc = is_document(v.image) %}
+        <a class="xcat__plate{% if is_doc %} xcat__plate--doc{% endif %}"
+           href="{{ big(v.image) }}" data-lb-item
+           data-title="{{ v.title|striptags }}" data-tag="{{ cz_date(v.date) }}">
+          {{ img(v.image, alt=v.title|striptags,
+                 sizes='(max-width:620px) 40vw, (max-width:960px) 24vw, (min-width:1680px) 360px, 22vw',
+                 cover=not is_doc) }}
+        </a>
         {% endif %}
-        {% endfor %}
-      </div>
-    </article>
-    {% endfor %}
+        <div class="xcat__text">
+          <h2 class="xcat__title">{{ cz_title(v.title|striptags) }}</h2>
+          <p class="xcat__date">{{ cz_date(v.date) }}</p>
+          {# Report before recording, one under the other, and the column closes
+             on the plate's lower edge — so the last link of every record sits
+             on one line across the row, whichever links a record has. #}
+          {% set slots = link_slots(v.links) %}
+          <div class="xcat__links">
+            {% for slot in slots %}
+            {% for link in slot or [] %}
+            <a class="qlink{{ ' qlink--credit' if link.kind == 'profile' }}"
+               href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link_label(link.text, link.url) }}</a>
+            {% endfor %}
+            {% endfor %}
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
     {% endfor %}
   </div>
   {% else %}

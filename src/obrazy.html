@@ -58,7 +58,12 @@
     <h2 class="sec__title">K&nbsp;prodeji</h2>
   </div>
 
-  <div class="works" data-gallery data-batch="24">
+  {# Batches of 30: whole rows at three across and two, and on a phone a
+     whole number of the 2-2-1 cycle (site.css, 620px). At 24, a second
+     press showed 48 — a lone work beside an empty cell whenever 49 or more
+     were for sale, because the closing rules can only see the last work in
+     the source, not the last one shown. #}
+  <div class="works" data-gallery data-batch="30">
     {% for painting in for_sale %}
     <a class="works__item rv" href="{{ big(painting.url) }}"
        data-lb-item data-batch-item data-state="sale"

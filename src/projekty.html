@@ -113,8 +113,15 @@
     {% endif %}
     {% set hl = 4 if year else 3 %}
     {% set chapter = loop %}
-    <div class="arch__grid">
+    {# Pictures and videos first, an image-less project after them as the
+       year's closing caption — in the source, not by `order` in the
+       stylesheet, so Tab and a screen reader read the year as it is seen. #}
+    {% set ns = namespace(shown=[], bare=[]) %}
     {% for p in group %}
+    {% if p.image or video_embed(p.video_url) %}{% set ns.shown = ns.shown + [p] %}{% else %}{% set ns.bare = ns.bare + [p] %}{% endif %}
+    {% endfor %}
+    <div class="arch__grid">
+    {% for p in ns.shown + ns.bare %}
       {% set embed = video_embed(p.video_url) %}
       {% set rid = 'projekt-' ~ chapter.index ~ '-' ~ loop.index %}
       <article class="arch__item rv{% if embed %} arch__item--wide{% elif not p.image %} arch__item--bare{% endif %}"
@@ -128,7 +135,7 @@
         {% elif p.image %}
         <a class="arch__field"
            href="{{ big(p.image) }}" data-lb-item
-           data-title="{{ p.title|striptags }}" data-tag="{{ cz_date(p.date) }}">
+           data-title="{{ p.title|striptags }}" data-tag="{{ cz_date(p.date) or '' }}">
           {{ img(p.image, alt=p.title|striptags,
                  sizes='(max-width:620px) 44vw, (max-width:1100px) 46vw, 30vw',
                  cover=false) }}

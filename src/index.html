@@ -256,7 +256,7 @@
         <span class="cap__t">{{ rec.title|striptags }}</span>
         <span class="cap__m label">{{ label }}</span>
       </div>
-      <p class="cap__date">{{ cz_date(rec.date) }}</p>
+      {% if rec.date %}<p class="cap__date">{{ cz_date(rec.date) }}</p>{% endif %}
     </a>
     {% endfor %}
   </div>

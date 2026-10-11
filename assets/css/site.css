@@ -3069,10 +3069,18 @@ html:not(.js) .nav {
 
 /* An exhibition with no picture closes its year as a caption across the row,
    as an image-less project does on /projekty — a full-height cell of ink
-   with 79px of label at its foot read as a picture that failed to load. */
+   with 79px of label at its foot read as a picture that failed to load.
+   The template puts it last; this was `order: 1`, which read the year to a
+   keyboard in a different order from the eye. */
 .xcat__item--bare {
-  order: 1;
   grid-column: 1 / -1;
+}
+
+/* Each record its own height. Stretched to a row-mate's 4:5, a record whose
+   plate is a landscape poster stood its label 288px below the poster's
+   foot. With every plate at 4:5 nothing moves. */
+.xcat__list > .xcat__item {
+  align-self: start;
 }
 
 /* A run of records with no year heading (an undated entry) still opens on a
@@ -3360,10 +3368,10 @@ html:not(.js) .nav {
    middle of the row, on the argument that a printed catalogue missing a plate
    leaves the space. On paper an empty space is a decision; on a screen it is
    indistinguishable from an image that failed to load, and this one sat in
-   the centre of the first row of the archive. `order` moves it without
-   touching the record order the admin keeps. */
+   the centre of the first row of the archive. The template renders it after
+   the year's pictures; it used to be moved there by `order: 1`, which left
+   Tab and a screen reader going through the year in another order. */
 .arch__item--bare {
-  order: 1;
   grid-column: 1 / -1;
 }
 

@@ -42,21 +42,36 @@
     </h2>
     {% endif %}
     {% set hl = 3 if year else 2 %}
+    {# Records with a picture first, an image-less one after them as the
+       year's closing caption. This used to be done by `order: 1` in the
+       stylesheet, which kept the admin's order in the source: Tab and a
+       screen reader then went through the year in a different order from
+       the eye, and on a phone the year opened on rows instead of its
+       hung picture. Counting the hang, its larger file and the eager first
+       image over this order keeps all three on records that have a picture. #}
+    {% set records = (group|selectattr('image')|list) + (group|rejectattr('image')|list) %}
     <div class="xcat__list">
-      {% for v in group %}
+      {% for v in records %}
       {% set rid = 'vystava-' ~ chapter.index ~ '-' ~ loop.index %}
+      {% set named = v.title|striptags|trim %}
       <article class="xcat__item rv{{ ' xcat__item--bare' if not v.image }}" style="--d:{{ (loop.index0 % 2) * 90 }}ms"
-               aria-labelledby="{{ rid }}">
+               {% if named %}aria-labelledby="{{ rid }}"{% endif %}>
         {# Several records are scanned A4 posters rather than photographs. A
            poster is shown whole, hung from the top-left corner of its plate —
            a document treated as a document; a photograph fills it. #}
         {% if v.image %}
         {% set is_doc = is_document(v.image) %}
+        {# A poster keeps its own proportions, never taller than the 4:5 of
+           a photograph: a landscape event cover in a 4:5 plate left 58% of
+           it empty and its label 266px below on a phone. #}
         <a class="xcat__plate{% if is_doc %} xcat__plate--doc{% endif %}"
            href="{{ big(v.image) }}" data-lb-item
-           data-title="{{ v.title|striptags }}" data-tag="{{ cz_date(v.date) }}">
-          {# The first of every four hangs across a phone (site.css, 620px). #}
-          {{ img(v.image, alt=v.title|striptags,
+           {% if is_doc %}style="aspect-ratio: {{ [ratio(v.image), 0.8]|max }}"{% endif %}
+           data-title="{{ v.title|striptags }}" data-tag="{{ cz_date(v.date) or '' }}">
+          {# The first of every four hangs across a phone (site.css, 620px).
+             Untitled (a record started from a photo), the picture is named by
+             its date. #}
+          {{ img(v.image, alt=named or cz_date(v.date) or '',
                  sizes=('(max-width:620px) 90vw, (max-width:960px) 24vw, 28vw' if loop.index0 % 4 == 0
                         else '(max-width:620px) 40vw, (max-width:960px) 24vw, 28vw'),
                  cover=not is_doc,
@@ -64,7 +79,7 @@
         </a>
         {% endif %}
         <div class="xcat__text">
-          <h{{ hl }} class="xcat__title" id="{{ rid }}">{{ cz_title(v.title|striptags) }}</h{{ hl }}>
+          {% if named %}<h{{ hl }} class="xcat__title" id="{{ rid }}">{{ cz_title(v.title|striptags) }}</h{{ hl }}>{% endif %}
           {% if v.date %}<p class="xcat__date">{{ cz_date(v.date) }}</p>{% endif %}
           {# Report before recording, one under the other, and the column closes
              on the plate's lower edge — so the last link of every record sits
@@ -78,7 +93,7 @@
                described by the record it belongs to. #}
             <a class="qlink{{ ' qlink--credit' if link.kind == 'profile' }}"
                href="{{ link.url }}" target="_blank" rel="noopener noreferrer"
-               aria-describedby="{{ rid }}">{{ link_label(link.text, link.url) }}</a>
+               {% if named %}aria-describedby="{{ rid }}"{% endif %}>{{ link_label(link.text, link.url) }}</a>
             {% endfor %}
             {% endfor %}
           </div>

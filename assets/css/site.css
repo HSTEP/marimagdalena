@@ -5920,6 +5920,14 @@ body.is-lb .nav {
    own colours instead, and let the dark wordmark in the footer turn light
    when the footer does. */
 @media (forced-colors: active) {
+  /* The bars in button text on the button's own face: ButtonText alone
+     fixed the inner pages and lost the homepage, where the bar is
+     transparent over the dark hero photograph and black bars on it
+     measured a luminance range of 37 of 255. */
+  .burger {
+    background-color: ButtonFace;
+  }
+
   .burger span {
     background: ButtonText;
   }

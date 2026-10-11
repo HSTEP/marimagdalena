@@ -305,9 +305,13 @@
     /* Focus is a reader asking for that control now. Tabbing onto "Objednat
        se" on /cenik used to put the ring on a button still at a fraction of
        its opacity for ~0.4s, and the ring fades with what it surrounds. */
+    /* Every reveal around it, including one already fading: the observer
+       starts a block a tenth of a screen below the fold, so at a reading
+       pace the next Tab lands on it mid-fade (0.36 opacity on /cenik's
+       "Objednat se"). `is-now` drops the transition, so it snaps to full. */
     document.addEventListener("focusin", (e) => {
       for (let el = e.target; el && el !== document.body; el = el.parentElement) {
-        if (el.matches(".rv, .rv-clip") && !el.classList.contains("is-in")) {
+        if (el.matches(".rv, .rv-clip") && !el.classList.contains("is-now")) {
           io.unobserve(el);
           el.classList.add("is-now", "is-in");
         }

@@ -75,7 +75,8 @@ ENV PATH="/opt/venv/bin:$PATH" \
     SITE_ROOT=/app \
     ADMIN_DIST=/opt/admin \
     MARI_HOST=0.0.0.0 \
-    MARI_PORT=8000
+    MARI_PORT=8000 \
+    MARI_FORWARDED_ALLOW_IPS=*
 
 # ssh with no home directory of its own: the key is mounted read-only, and
 # IdentitiesOnly stops ssh offering anything else it happens to find.

@@ -64,6 +64,7 @@ from starlette.middleware.sessions import SessionMiddleware
 # Registers the HEIC opener as a side effect, so an iPhone photograph can be
 # opened here as well as in the build.
 import media as media_module
+from build import date_key
 
 # --------------------------------------------------------------------------- #
 # Configuration
@@ -188,7 +189,13 @@ def load_records(resource: Resource) -> list[dict[str, Any]]:
         # A torn or hand-mangled file must not read as "no paintings", because
         # saving on top of that would publish an empty page.
         raise HTTPException(500, f"Datový soubor {path.name} je poškozený.")
-    return data if isinstance(data, list) else []
+    if not isinstance(data, list):
+        return []
+    # In `order`, not file order. Every mutation renumbers by list position,
+    # and paintings.json still sits in the file the way the old descending
+    # admin wrote it — 86 first — so one upload renumbered the file top-down
+    # and turned the whole page upside down.
+    return sorted(data, key=lambda r: r.get("order", 1 << 30))
 
 
 def save_records(resource: Resource, records: list[dict[str, Any]]) -> None:
@@ -996,7 +1003,12 @@ def publish_status():
 
 @api.get("/{resource}")
 def list_items(resource: Resource):
-    records = sorted(load_records(resource), key=lambda r: r.get("order", 1 << 30))
+    records = load_records(resource)
+    if resource in (Resource.projekty, Resource.vystavy):
+        # The order the website shows them in. The build sorts these two by
+        # their date, so listing them by `order` put a new exhibition at the
+        # bottom of the app and at the top of the page.
+        records.sort(key=date_key, reverse=True)
     for record in records:
         # The app should not have to know that paintings store a bare filename
         # while projects store a path.
@@ -1036,7 +1048,13 @@ async def create_item_with_photo(resource: Resource, image: UploadFile = File(..
     else:
         record["image"] = f"{IMAGE_DIR[resource].relative_to(BASE_DIR)}/{filename}"
 
-    records.append(record)
+    # A new painting is the one she wants seen, so it opens the page rather
+    # than landing behind eighty-six others. Not galerie: its first photograph
+    # is the plate at the top of the page, and an upload should not replace it.
+    if resource == Resource.paintings:
+        records.insert(0, record)
+    else:
+        records.append(record)
     save_records(resource, renumber(records))
     note_pending(named(resource, "added", record))
     return with_image(resource, record)
@@ -1248,4 +1266,10 @@ if __name__ == "__main__":
         app,
         host=os.environ.get("MARI_HOST", "127.0.0.1"),
         port=int(os.environ.get("MARI_PORT", "8000")),
+        # Behind Traefik every request arrives from the proxy's address, so the
+        # login throttle counted the whole internet as one client: a bot's five
+        # guesses a minute locked her out too. The container trusts the
+        # proxy's X-Forwarded-For (see Dockerfile); a bare `python api.py`
+        # keeps uvicorn's default and trusts only localhost.
+        forwarded_allow_ips=os.environ.get("MARI_FORWARDED_ALLOW_IPS", "127.0.0.1"),
     )

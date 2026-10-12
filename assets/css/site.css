@@ -618,12 +618,18 @@ table {
 }
 
 /* Film grain. Keeps large flat areas of ink from reading as flat digital
-   black — the single cheapest thing that makes a dark site feel printed. */
+   black — the single cheapest thing that makes a dark site feel printed.
+
+   49, one under the masthead (50), not 60. iOS 26 Safari paints the status bar
+   in the colour of a fixed element it finds at the top edge, and at 60 the
+   element it found there was this transparent full-screen sheet, not the ink
+   bar: the status bar went see-through and the page scrolled visibly above
+   the masthead. Still over the drawer (45), so the menu keeps its grain. */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: 49;
   pointer-events: none;
   opacity: 0.05;
   mix-blend-mode: overlay;

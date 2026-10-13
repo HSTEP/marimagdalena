@@ -3246,3 +3246,9 @@ body.is-lb .nav {
 .skip:focus-visible {
   transform: none;
 }
+.works .works__fig img,
+.reel .works__fig img {
+  object-fit: contain;
+  object-position: center bottom;
+  background-color: transparent !important;
+}

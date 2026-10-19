@@ -58,7 +58,7 @@ from fastapi import (
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from PIL import Image, ImageOps
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from starlette.middleware.sessions import SessionMiddleware
 
 # Registers the HEIC opener as a side effect, so an iPhone photograph can be
@@ -540,6 +540,9 @@ class PaintingIn(BaseModel):
     model_config = ConfigDict(extra="ignore")
     title: str = ""
     sold: bool = False
+    # The year it was painted. Missing on every painting that predates the
+    # field, and the app flags those so she can go through and fill them in.
+    year: int | None = Field(default=None, ge=1900, le=2100)
 
 
 class GalerieIn(BaseModel):
@@ -572,6 +575,16 @@ BODY_MODEL: dict[Resource, type[BaseModel]] = {
     Resource.projekty: ProjektIn,
     Resource.vystavy: VystavaIn,
 }
+
+
+def parse_body(resource: Resource, body: dict[str, Any]) -> BaseModel:
+    """The body as its model, or a 422 she can read instead of a bare 500."""
+    try:
+        return BODY_MODEL[resource](**body)
+    except ValidationError as error:
+        if any(e["loc"] and e["loc"][0] == "year" for e in error.errors()):
+            raise HTTPException(422, "Rok napište čtyřmi číslicemi, třeba 2023.")
+        raise HTTPException(422, "Některý údaj se nepodařilo uložit.")
 
 # What a change is called in the banner and in the commit message.
 #
@@ -1019,8 +1032,7 @@ def list_items(resource: Resource):
 @api.post("/{resource}", status_code=201)
 def create_item(resource: Resource, body: dict[str, Any]):
     """Create a record without a photograph (projects and exhibitions)."""
-    model = BODY_MODEL[resource]
-    fields = model(**body).model_dump()
+    fields = parse_body(resource, body).model_dump()
     records = load_records(resource)
     record = {"id": next_id(records), **fields}
     records.append(record)
@@ -1133,9 +1145,8 @@ def get_item(resource: Resource, item_id: int):
 
 @api.put("/{resource}/{item_id}")
 def update_item(resource: Resource, item_id: int, body: dict[str, Any]):
-    model = BODY_MODEL[resource]
     # exclude_unset, so a form that sends only `sold` does not blank the title.
-    fields = model(**body).model_dump(exclude_unset=True)
+    fields = parse_body(resource, body).model_dump(exclude_unset=True)
     records = load_records(resource)
     index = find_index(records, item_id)
     records[index].update(fields)

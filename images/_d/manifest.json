@@ -2218,6 +2218,164 @@
 ],
 "w": 299
 },
+"images/obrazy/90.jpg": {
+"alpha": false,
+"color": "#ccc5ac",
+"h": 1600,
+"hash": "bb2de8e0987fe1f312387ef8f710875b",
+"sources": [
+{
+"url": "images/_d/obrazy-90-480.webp",
+"w": 480
+},
+{
+"url": "images/_d/obrazy-90-800.webp",
+"w": 800
+},
+{
+"url": "images/_d/obrazy-90-1195.webp",
+"w": 1195
+}
+],
+"w": 1195
+},
+"images/obrazy/91.jpg": {
+"alpha": false,
+"color": "#bea785",
+"h": 1195,
+"hash": "f127213b1ab65264229c8d80242cb4e9",
+"sources": [
+{
+"url": "images/_d/obrazy-91-480.webp",
+"w": 480
+},
+{
+"url": "images/_d/obrazy-91-800.webp",
+"w": 800
+},
+{
+"url": "images/_d/obrazy-91-1280.webp",
+"w": 1280
+},
+{
+"url": "images/_d/obrazy-91-1600.webp",
+"w": 1600
+}
+],
+"w": 1600
+},
+"images/obrazy/92.jpg": {
+"alpha": false,
+"color": "#a68f81",
+"h": 261,
+"hash": "bdca793fd2cd9f4cbebddc60f8230733",
+"sources": [
+{
+"url": "images/_d/obrazy-92-336.webp",
+"w": 336
+}
+],
+"w": 336
+},
+"images/obrazy/93.jpg": {
+"alpha": false,
+"color": "#886d57",
+"h": 379,
+"hash": "e6af223249797a606dc527bc7d881a63",
+"sources": [
+{
+"url": "images/_d/obrazy-93-480.webp",
+"w": 480
+},
+{
+"url": "images/_d/obrazy-93-508.webp",
+"w": 508
+}
+],
+"w": 508
+},
+"images/obrazy/94.jpg": {
+"alpha": false,
+"color": "#a8856c",
+"h": 509,
+"hash": "94d2a62968d984ace758559a0db5793f",
+"sources": [
+{
+"url": "images/_d/obrazy-94-410.webp",
+"w": 410
+}
+],
+"w": 410
+},
+"images/obrazy/95.jpg": {
+"alpha": false,
+"color": "#5b5852",
+"h": 269,
+"hash": "0f2ae1ceb8155c26d5f8f9e82edf180e",
+"sources": [
+{
+"url": "images/_d/obrazy-95-364.webp",
+"w": 364
+}
+],
+"w": 364
+},
+"images/obrazy/96.jpg": {
+"alpha": false,
+"color": "#7c270f",
+"h": 637,
+"hash": "b3079f424aa03c2b3a4a9440cb05b603",
+"sources": [
+{
+"url": "images/_d/obrazy-96-480.webp",
+"w": 480
+},
+{
+"url": "images/_d/obrazy-96-484.webp",
+"w": 484
+}
+],
+"w": 484
+},
+"images/obrazy/97.jpg": {
+"alpha": false,
+"color": "#cbcbc6",
+"h": 332,
+"hash": "7d49124fd659c9c6b5a41d56d4f874ea",
+"sources": [
+{
+"url": "images/_d/obrazy-97-239.webp",
+"w": 239
+}
+],
+"w": 239
+},
+"images/obrazy/98.jpg": {
+"alpha": false,
+"color": "#c1c7cb",
+"h": 270,
+"hash": "4e048fff71df1a3eccb84898938b9690",
+"sources": [
+{
+"url": "images/_d/obrazy-98-473.webp",
+"w": 473
+}
+],
+"w": 473
+},
+"images/obrazy/99.jpg": {
+"alpha": false,
+"color": "#b6b3aa",
+"h": 332,
+"hash": "c3579aa64b2d9f5745f5bc16f1f5e0b8",
+"sources": [
+{
+"url": "images/_d/obrazy-99-267.webp",
+"w": 267
+}
+],
+"w": 267
+},
 "images/projekty/WhatsApp Image 2025-04-04 at 5.03.47 PM.jpeg": {
 "alpha": false,
 "color": "#615756",

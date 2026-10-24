@@ -1785,6 +1785,133 @@ html:not(.js) .nav {
   }
 }
 
+/* The reel: four frames from the studio session, each held 7s under a slow
+   push-in, crossfading over 1.8s. site.js builds .hero__slides over the
+   photograph only once every frame is decoded and the settle above has run
+   out, and the first slide is the same photograph at the same scale(1), so
+   the hand-over draws nothing.
+
+   A crossfade with both layers moving at once dims the plate halfway — two
+   half-opaque photographs over ink let a quarter of the ink through. So the
+   incoming slide fades in over an outgoing one that stays fully opaque, and
+   the outgoing slide drops out only once it is covered. The last slide
+   cannot fade in over the first, which is underneath it, so it fades *out*
+   instead, over a first slide that turned opaque again while hidden.
+
+   Timings are fractions of the 28s cycle: 6.43% is the 1.8s fade, 25% one
+   7s turn, 31.43% a turn plus its fade, and the 0.1% steps are the snaps,
+   always taken while another slide covers this one. Written for exactly four
+   slides — HERO_REEL in build.py holds the other three. */
+.hero__slides {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__art .hero__slide {
+  opacity: 0;
+  transform: none;
+  transform-origin: var(--origin, 50% 25%);
+  animation: none;
+}
+
+.hero__art.is-playing .hero__slide {
+  animation: heroReel 28s ease-in-out both infinite;
+}
+
+.hero__art.is-playing .hero__slide:nth-child(1) {
+  animation-name: heroReelFirst;
+}
+
+.hero__art.is-playing .hero__slide:nth-child(2) {
+  --origin: 40% 30%;
+  animation-delay: 7s;
+}
+
+.hero__art.is-playing .hero__slide:nth-child(3) {
+  --origin: 60% 20%;
+  animation-delay: 14s;
+}
+
+.hero__art.is-playing .hero__slide:nth-child(4) {
+  --origin: 50% 35%;
+  animation-name: heroReelLast;
+  animation-delay: 21s;
+}
+
+/* Off screen it would only be spending battery. */
+.hero__art.is-paused .hero__slide {
+  animation-play-state: paused;
+}
+
+@keyframes heroReelFirst {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  31.43% {
+    opacity: 1;
+    transform: scale(1.07);
+  }
+
+  31.53% {
+    opacity: 0;
+  }
+
+  90% {
+    opacity: 0;
+    transform: scale(1);
+  }
+
+  90.1%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes heroReel {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+
+  6.43% {
+    opacity: 1;
+  }
+
+  31.43% {
+    opacity: 1;
+    transform: scale(1.07);
+  }
+
+  31.53%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes heroReelLast {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+
+  6.43%,
+  25% {
+    opacity: 1;
+  }
+
+  31.43% {
+    opacity: 0;
+    transform: scale(1.07);
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
 /* Feathers the photo into the ground so it reads as one plate, not a box.
    The first layer is the one that does that at the edge: the 100deg sweep
    meets the photo's left edge at full ink only at the top, and lower down

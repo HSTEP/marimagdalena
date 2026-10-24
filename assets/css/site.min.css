@@ -868,6 +868,94 @@ html:not(.js) .nav {
     transform: scale(1);
   }
 }
+.hero__slides {
+  position: absolute;
+  inset: 0;
+}
+.hero__art .hero__slide {
+  opacity: 0;
+  transform: none;
+  transform-origin: var(--origin, 50% 25%);
+  animation: none;
+}
+.hero__art.is-playing .hero__slide {
+  animation: heroReel 28s ease-in-out both infinite;
+}
+.hero__art.is-playing .hero__slide:nth-child(1) {
+  animation-name: heroReelFirst;
+}
+.hero__art.is-playing .hero__slide:nth-child(2) {
+  --origin: 40% 30%;
+  animation-delay: 7s;
+}
+.hero__art.is-playing .hero__slide:nth-child(3) {
+  --origin: 60% 20%;
+  animation-delay: 14s;
+}
+.hero__art.is-playing .hero__slide:nth-child(4) {
+  --origin: 50% 35%;
+  animation-name: heroReelLast;
+  animation-delay: 21s;
+}
+.hero__art.is-paused .hero__slide {
+  animation-play-state: paused;
+}
+@keyframes heroReelFirst {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  31.43% {
+    opacity: 1;
+    transform: scale(1.07);
+  }
+  31.53% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  90.1%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes heroReel {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  6.43% {
+    opacity: 1;
+  }
+  31.43% {
+    opacity: 1;
+    transform: scale(1.07);
+  }
+  31.53%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes heroReelLast {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  6.43%,
+  25% {
+    opacity: 1;
+  }
+  31.43% {
+    opacity: 0;
+    transform: scale(1.07);
+  }
+  100% {
+    opacity: 0;
+  }
+}
 .hero__art::after {
   content: "";
   position: absolute;

@@ -83,6 +83,16 @@ PLATES = {
     "contact": "images/bg/1C5A1120.jpg",
 }
 
+# The hero's slow reel: the hero plate first, then these, crossfading. Frames
+# from the same shoot not used elsewhere on the homepage, so the reel never
+# repeats a photograph the page shows further down. Exactly three: the
+# keyframes in site.css (sec. 8) are written for four slides.
+HERO_REEL = [
+    "images/bg/1C5A1148.jpg",
+    "images/bg/0I1A0766.jpg",
+    "images/bg/0I1A0763.jpg",
+]
+
 
 # --------------------------------------------------------------------------- #
 # Data loading
@@ -525,6 +535,7 @@ def make_ratio_helper(media: Media):
 
 def collect_image_paths(paintings, projekty, vystavy, galerie_images, partners):
     paths = set(PLATES.values())
+    paths.update(HERO_REEL)
     paths.update(galerie_images)
     paths.update([SITE["logo_gold"], SITE["logo_dark"]])
     for p in paintings:
@@ -788,6 +799,7 @@ if __name__ == "__main__":
         site=SITE,
         nav=NAV,
         plates=PLATES,
+        hero_reel=HERO_REEL,
         partners=PARTNERS,
         pricing=PRICING,
         services=service_rows(SERVICES, PRICING),

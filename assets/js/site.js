@@ -254,6 +254,45 @@
     );
   }
 
+  /* ------------------------------------------------------------ hero reel */
+  /* The homepage photograph slowly crossfades through the studio session.
+     Started after `load`, so none of it competes with first paint; skipped
+     under reduced motion and Save-Data, where the still photograph is the
+     page. Nothing is inserted until every frame has decoded — a slide that
+     arrives late would fade in as a flat placeholder colour — and nothing
+     moves until the photograph's own settle has finished, because the first
+     slide takes over from it at scale(1). A frame that fails to load just
+     leaves the still. */
+  const heroReel = $("template.hero__reel");
+  const saveData =
+    navigator.connection?.saveData || matchMedia("(prefers-reduced-data: reduce)").matches;
+  if (heroReel && !reduced && !saveData) {
+    const art = heroReel.parentElement;
+    const still = $("img", art);
+    const start = () => {
+      const slides = document.createElement("div");
+      slides.className = "hero__slides";
+      slides.setAttribute("aria-hidden", "true");
+      const first = still.cloneNode();
+      first.alt = "";
+      first.removeAttribute("fetchpriority");
+      first.classList.add("hero__slide");
+      slides.append(first, document.importNode(heroReel.content, true));
+      const settled = (still.getAnimations?.() ?? []).map((a) => a.finished);
+      Promise.all([...$$("img", slides).map((im) => im.decode()), ...settled]).then(() => {
+        art.insertBefore(slides, heroReel);
+        requestAnimationFrame(() => art.classList.add("is-playing"));
+        if ("IntersectionObserver" in window) {
+          new IntersectionObserver(([entry]) =>
+            art.classList.toggle("is-paused", !entry.isIntersecting)
+          ).observe(art);
+        }
+      }, () => {});
+    };
+    if (document.readyState === "complete") start();
+    else addEventListener("load", start, { once: true });
+  }
+
   /* -------------------------------------------------------------- reveals */
   /* `observe` is exported to the batching code below: an element that was
      display:none when the observer first ran never reports an intersection,

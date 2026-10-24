@@ -906,19 +906,27 @@ html:not(.js) .nav {
 .hero__art--align .hero__slide {
   --iw: max(100cqw, 100cqh / 1.5);
   --ih: calc(var(--iw) * 1.5);
-  --at-x: calc((100cqw - var(--iw)) * var(--px) + var(--fx, var(--hx)) * var(--iw));
-  --at-y: calc((100cqh - var(--ih)) * var(--py) + var(--fy, var(--hy)) * var(--ih));
+  --ox: calc((100cqw - var(--iw)) * var(--px));
+  --oy: calc((100cqh - var(--ih)) * var(--py));
+  --at-x: calc(var(--ox) + var(--fx, var(--hx)) * var(--iw));
+  --at-y: calc(var(--oy) + var(--fy, var(--hy)) * var(--ih));
+  inset: auto;
+  left: var(--ox);
+  top: var(--oy);
+  width: var(--iw);
+  height: var(--ih);
+  max-width: none;
   --to-x: clamp(
     100cqw - var(--s, 1) * (1 - var(--fx, var(--hx))) * var(--iw),
-    (100cqw - var(--iw)) * var(--px) + var(--hx) * var(--iw),
+    var(--ox) + var(--hx) * var(--iw),
     var(--s, 1) * var(--fx, var(--hx)) * var(--iw)
   );
   --to-y: clamp(
     100cqh - var(--s, 1) * (1 - var(--fy, var(--hy))) * var(--ih),
-    (100cqh - var(--ih)) * var(--py) + var(--hy) * var(--ih),
+    var(--oy) + var(--hy) * var(--ih),
     var(--s, 1) * var(--fy, var(--hy)) * var(--ih)
   );
-  transform-origin: var(--at-x) var(--at-y);
+  transform-origin: calc(var(--fx, var(--hx)) * var(--iw)) calc(var(--fy, var(--hy)) * var(--ih));
   translate: calc(var(--to-x) - var(--at-x)) calc(var(--to-y) - var(--at-y));
   scale: var(--s, 1);
 }

@@ -1864,6 +1864,14 @@ html:not(.js) .nav {
    2:3 — and --ox/--oy where object-position puts it, which is why every
    object-position on .hero__art img below comes with its --px/--py.
 
+   The slide is given that whole rectangle as its box rather than the
+   panel's. object-fit crops to the element's box, so a panel-sized slide
+   had nothing past the panel's edges to move into view: lowering a face
+   pulled the box's top edge down with it, and the panel showed 30-42px of
+   bare ink above her head. Sized to the photograph, the overflow is real
+   image, clipped only by .hero__art. Same rectangle, same pixels — at
+   rest the slide draws exactly what the panel-sized one did.
+
    The target is clamped, not taken as given: the slide is enlarged by --s
    about its face, and an edge of the photograph must never come inside the
    panel, so the face is moved only as far as that leaves every edge
@@ -1873,19 +1881,30 @@ html:not(.js) .nav {
 .hero__art--align .hero__slide {
   --iw: max(100cqw, 100cqh / 1.5);
   --ih: calc(var(--iw) * 1.5);
-  --at-x: calc((100cqw - var(--iw)) * var(--px) + var(--fx, var(--hx)) * var(--iw));
-  --at-y: calc((100cqh - var(--ih)) * var(--py) + var(--fy, var(--hy)) * var(--ih));
+  --ox: calc((100cqw - var(--iw)) * var(--px));
+  --oy: calc((100cqh - var(--ih)) * var(--py));
+  --at-x: calc(var(--ox) + var(--fx, var(--hx)) * var(--iw));
+  --at-y: calc(var(--oy) + var(--fy, var(--hy)) * var(--ih));
+  inset: auto;
+  left: var(--ox);
+  top: var(--oy);
+  width: var(--iw);
+  height: var(--ih);
+  /* The reset caps every img at its container; this one is meant to be
+     wider than the panel whenever the panel is narrower than 2:3. */
+  max-width: none;
   --to-x: clamp(
     100cqw - var(--s, 1) * (1 - var(--fx, var(--hx))) * var(--iw),
-    (100cqw - var(--iw)) * var(--px) + var(--hx) * var(--iw),
+    var(--ox) + var(--hx) * var(--iw),
     var(--s, 1) * var(--fx, var(--hx)) * var(--iw)
   );
   --to-y: clamp(
     100cqh - var(--s, 1) * (1 - var(--fy, var(--hy))) * var(--ih),
-    (100cqh - var(--ih)) * var(--py) + var(--hy) * var(--ih),
+    var(--oy) + var(--hy) * var(--ih),
     var(--s, 1) * var(--fy, var(--hy)) * var(--ih)
   );
-  transform-origin: var(--at-x) var(--at-y);
+  /* In the slide's own box now, which starts at --ox/--oy. */
+  transform-origin: calc(var(--fx, var(--hx)) * var(--iw)) calc(var(--fy, var(--hy)) * var(--ih));
   translate: calc(var(--to-x) - var(--at-x)) calc(var(--to-y) - var(--at-y));
   scale: var(--s, 1);
 }

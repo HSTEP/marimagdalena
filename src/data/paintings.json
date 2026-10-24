@@ -2,9 +2,10 @@
   {
     "id": 89,
     "title": "Filip",
-    "sold": false,
+    "sold": true,
     "order": 0,
-    "filename": "89.jpeg"
+    "filename": "89.jpeg",
+    "year": null
   },
   {
     "id": 99,
@@ -89,9 +90,10 @@
   {
     "id": 88,
     "title": "Cognition",
-    "sold": false,
+    "sold": true,
     "order": 11,
-    "filename": "88.jpeg"
+    "filename": "88.jpeg",
+    "year": null
   },
   {
     "id": 86,
@@ -103,16 +105,18 @@
   {
     "id": 85,
     "title": "Time",
-    "sold": false,
+    "sold": true,
     "order": 13,
-    "filename": "85.jpeg"
+    "filename": "85.jpeg",
+    "year": null
   },
   {
     "id": 84,
     "title": "The Queen of Flowers",
-    "sold": false,
+    "sold": true,
     "order": 14,
-    "filename": "84.jpeg"
+    "filename": "84.jpeg",
+    "year": null
   },
   {
     "id": 87,
@@ -159,533 +163,464 @@
   {
     "id": 77,
     "title": "Požehnané vody Jordánu",
-    "sold": false,
+    "sold": true,
     "order": 21,
-    "filename": "77.jpeg"
-  },
-  {
-    "id": 76,
-    "title": "Fialky pro Rozárku",
-    "sold": false,
-    "order": 22,
-    "filename": "76.jpeg"
+    "filename": "77.jpeg",
+    "year": null
   },
   {
     "id": 75,
     "title": "Pupes de maïs",
     "sold": false,
-    "order": 23,
+    "order": 22,
     "filename": "75.jpeg"
   },
   {
     "id": 74,
     "title": "6378",
     "sold": false,
-    "order": 24,
+    "order": 23,
     "filename": "74.jpeg"
   },
   {
     "id": 73,
     "title": "V hlubinách",
     "sold": false,
-    "order": 25,
+    "order": 24,
     "filename": "73.jpeg"
   },
   {
     "id": 72,
     "title": "Květ který se neptá",
     "sold": false,
-    "order": 26,
+    "order": 25,
     "filename": "72.jpeg"
   },
   {
     "id": 70,
     "title": "Art Connecting",
     "sold": true,
-    "order": 27,
+    "order": 26,
     "filename": "70.jpeg"
   },
   {
     "id": 69,
     "title": "Wave",
     "sold": true,
-    "order": 28,
+    "order": 27,
     "filename": "69.jpeg"
   },
   {
     "id": 68,
     "title": "Mořský Koník",
     "sold": false,
-    "order": 29,
+    "order": 28,
     "filename": "68.jpeg"
   },
   {
     "id": 65,
     "title": "Clarity",
     "sold": true,
-    "order": 30,
+    "order": 29,
     "filename": "65.jpg"
   },
   {
     "id": 67,
     "title": "Vůdce smečky",
     "sold": false,
-    "order": 31,
+    "order": 30,
     "filename": "67.jpeg"
   },
   {
     "id": 66,
     "title": "Deméter",
     "sold": false,
-    "order": 32,
+    "order": 31,
     "filename": "66.jpg"
   },
   {
     "id": 64,
     "title": "Tyrkysový polibek",
     "sold": true,
-    "order": 33,
+    "order": 32,
     "filename": "64.jpg"
   },
   {
     "id": 63,
     "title": "Posel Dobrých Zpráv",
     "sold": true,
-    "order": 34,
+    "order": 33,
     "filename": "63.jpeg"
   },
   {
     "id": 62,
     "title": "Horizont",
     "sold": false,
-    "order": 35,
+    "order": 34,
     "filename": "62.jpeg"
   },
   {
     "id": 61,
     "title": "Zpívající Mitochondrie",
     "sold": false,
-    "order": 36,
+    "order": 35,
     "filename": "61.jpg"
   },
   {
     "id": 60,
     "title": "Pro Anežku",
     "sold": false,
-    "order": 37,
+    "order": 36,
     "filename": "60.jpg"
   },
   {
     "id": 59,
     "title": "Souřadnice Světla",
     "sold": false,
-    "order": 38,
+    "order": 37,
     "filename": "59.jpg"
   },
   {
     "id": 58,
     "title": "Andalusa",
     "sold": true,
-    "order": 39,
+    "order": 38,
     "filename": "58.jpg"
   },
   {
     "id": 57,
     "title": "Libertango",
     "sold": true,
-    "order": 40,
+    "order": 39,
     "filename": "57.jpg"
   },
   {
     "id": 56,
     "title": "Lilie pro Maří Magdalenu",
     "sold": false,
-    "order": 41,
+    "order": 40,
     "filename": "56.jpg"
   },
   {
     "id": 55,
     "title": "Dubový Král",
     "sold": false,
-    "order": 42,
+    "order": 41,
     "filename": "55.jpg"
   },
   {
     "id": 54,
     "title": "Macarát pod Zvučící lípou",
     "sold": false,
-    "order": 43,
+    "order": 42,
     "filename": "54.jpg"
   },
   {
     "id": 53,
     "title": "Zakletá zahrada",
     "sold": true,
-    "order": 44,
+    "order": 43,
     "filename": "53.jpg"
   },
   {
     "id": 52,
     "title": "Le vent du Sahara",
     "sold": false,
-    "order": 45,
+    "order": 44,
     "filename": "52.jpg"
   },
   {
     "id": 51,
     "title": "Kabaret",
     "sold": false,
-    "order": 46,
+    "order": 45,
     "filename": "51.jpg"
   },
   {
     "id": 49,
     "title": " Hnízdo",
     "sold": true,
-    "order": 47,
+    "order": 46,
     "filename": "49.jpg"
   },
   {
     "id": 50,
     "title": "Anhinga",
     "sold": false,
-    "order": 48,
+    "order": 47,
     "filename": "50.jpg"
   },
   {
     "id": 48,
     "title": "Pinocchio",
     "sold": false,
-    "order": 49,
+    "order": 48,
     "filename": "48.jpg"
   },
   {
     "id": 46,
     "title": "Noemova archa",
     "sold": true,
-    "order": 50,
+    "order": 49,
     "filename": "46.jpg"
-  },
-  {
-    "id": 44,
-    "title": "Le Fantasie de la Nuit",
-    "sold": true,
-    "order": 51,
-    "filename": "44.png"
   },
   {
     "id": 43,
     "title": "Lalla Salma",
     "sold": true,
-    "order": 52,
+    "order": 50,
     "filename": "43.jpg"
   },
   {
     "id": 42,
     "title": "La Fermeté",
     "sold": true,
-    "order": 53,
+    "order": 51,
     "filename": "42.jpg"
   },
   {
     "id": 41,
     "title": "Flying Diamonds",
     "sold": true,
-    "order": 54,
+    "order": 52,
     "filename": "41.jpg"
   },
   {
     "id": 40,
     "title": "Esperance",
     "sold": true,
-    "order": 55,
+    "order": 53,
     "filename": "40.jpg"
   },
   {
     "id": 47,
     "title": "Velikonoční Madona",
     "sold": false,
-    "order": 56,
+    "order": 54,
     "filename": "47.jpg"
   },
   {
     "id": 45,
     "title": "Modlitba",
     "sold": false,
-    "order": 57,
+    "order": 55,
     "filename": "45.jpg"
   },
   {
     "id": 38,
     "title": "Souznění",
     "sold": true,
-    "order": 58,
+    "order": 56,
     "filename": "38.jpg"
   },
   {
     "id": 39,
     "title": "Ľ Ode à la Nature",
     "sold": true,
-    "order": 59,
+    "order": 57,
     "filename": "39.jpg"
   },
   {
     "id": 37,
     "title": "La Symphonie Dorreé",
     "sold": true,
-    "order": 60,
+    "order": 58,
     "filename": "37.jpg"
   },
   {
     "id": 36,
     "title": "La Vie",
     "sold": true,
-    "order": 61,
+    "order": 59,
     "filename": "36.jpg"
-  },
-  {
-    "id": 35,
-    "title": "Candide - pocta Voltairovi",
-    "sold": true,
-    "order": 62,
-    "filename": "35.jpg"
   },
   {
     "id": 34,
     "title": "La Voix",
     "sold": true,
-    "order": 63,
+    "order": 60,
     "filename": "34.jpg"
   },
   {
     "id": 33,
     "title": "Pokušení",
     "sold": true,
-    "order": 64,
+    "order": 61,
     "filename": "33.jpg"
   },
   {
     "id": 32,
     "title": "Strážce",
     "sold": false,
-    "order": 65,
+    "order": 62,
     "filename": "32.jpg"
-  },
-  {
-    "id": 31,
-    "title": "Mélomane",
-    "sold": true,
-    "order": 66,
-    "filename": "31.jpg"
   },
   {
     "id": 30,
     "title": "Tokay",
     "sold": true,
-    "order": 67,
+    "order": 63,
     "filename": "30.jpg"
   },
   {
     "id": 29,
     "title": "Doteky",
     "sold": false,
-    "order": 68,
+    "order": 64,
     "filename": "29.jpg"
   },
   {
     "id": 28,
     "title": "Miracle of Dunkirk",
     "sold": false,
-    "order": 69,
+    "order": 65,
     "filename": "28.jpg"
-  },
-  {
-    "id": 27,
-    "title": "Rose in blue notes",
-    "sold": true,
-    "order": 70,
-    "filename": "27.jpg"
   },
   {
     "id": 26,
     "title": "V chrámu noci",
     "sold": true,
-    "order": 71,
+    "order": 66,
     "filename": "26.png"
   },
   {
     "id": 25,
     "title": "Ankar, poslední princ",
     "sold": false,
-    "order": 72,
+    "order": 67,
     "filename": "25.jpg"
   },
   {
     "id": 24,
     "title": "Apollón",
     "sold": true,
-    "order": 73,
+    "order": 68,
     "filename": "24.jpg"
   },
   {
     "id": 23,
     "title": "Signál",
     "sold": true,
-    "order": 74,
+    "order": 69,
     "filename": "23.jpg"
   },
   {
     "id": 22,
     "title": "Little Big Horn",
     "sold": true,
-    "order": 75,
+    "order": 70,
     "filename": "22.jpg"
   },
   {
     "id": 21,
     "title": "Probuzení",
     "sold": false,
-    "order": 76,
+    "order": 71,
     "filename": "21.jpg"
-  },
-  {
-    "id": 20,
-    "title": "Příběh dvou obyčejných lidí",
-    "sold": true,
-    "order": 77,
-    "filename": "20.jpg"
-  },
-  {
-    "id": 19,
-    "title": "Tichý muž",
-    "sold": true,
-    "order": 78,
-    "filename": "19.jpg"
-  },
-  {
-    "id": 18,
-    "title": "Mimikry",
-    "sold": true,
-    "order": 79,
-    "filename": "18.png"
   },
   {
     "id": 17,
     "title": "Sound of Glory",
     "sold": true,
-    "order": 80,
+    "order": 72,
     "filename": "17.jpg"
   },
   {
     "id": 16,
     "title": "Pocta Davidovi Livingstonovi",
     "sold": true,
-    "order": 81,
+    "order": 73,
     "filename": "16.jpg"
   },
   {
     "id": 15,
     "title": "Dialog",
     "sold": false,
-    "order": 82,
+    "order": 74,
     "filename": "15.jpg"
   },
   {
     "id": 14,
     "title": "Ikarus",
     "sold": false,
-    "order": 83,
+    "order": 75,
     "filename": "14.jpg"
   },
   {
     "id": 13,
     "title": "L'Étrange vue",
     "sold": true,
-    "order": 84,
+    "order": 76,
     "filename": "13.jpg"
   },
   {
     "id": 12,
     "title": "La Femme",
     "sold": true,
-    "order": 85,
+    "order": 77,
     "filename": "12.jpg"
   },
   {
     "id": 11,
     "title": "Avanturínové Nebe",
     "sold": false,
-    "order": 86,
+    "order": 78,
     "filename": "11.jpg"
   },
   {
     "id": 10,
     "title": "La Transformation",
     "sold": true,
-    "order": 87,
+    "order": 79,
     "filename": "10.jpg"
-  },
-  {
-    "id": 9,
-    "title": "Le Frisson",
-    "sold": true,
-    "order": 88,
-    "filename": "9.jpg"
   },
   {
     "id": 8,
     "title": "Chloé",
     "sold": false,
-    "order": 89,
+    "order": 80,
     "filename": "8.jpg"
   },
   {
     "id": 7,
     "title": "Éclat",
     "sold": true,
-    "order": 90,
+    "order": 81,
     "filename": "7.jpg"
   },
   {
     "id": 5,
     "title": "Andělská Moudrost",
     "sold": true,
-    "order": 91,
+    "order": 82,
     "filename": "5.jpg"
   },
   {
     "id": 6,
     "title": "La Victoire",
     "sold": false,
-    "order": 92,
+    "order": 83,
     "filename": "6.jpg"
   },
   {
     "id": 4,
     "title": "Coco",
     "sold": true,
-    "order": 93,
+    "order": 84,
     "filename": "4.jpg"
-  },
-  {
-    "id": 3,
-    "title": "Le Papillon",
-    "sold": true,
-    "order": 94,
-    "filename": "3.jpg"
   },
   {
     "id": 2,
     "title": "Na Gauči",
     "sold": true,
-    "order": 95,
+    "order": 85,
     "filename": "2.jpg"
   },
   {
     "id": 1,
     "title": "Návrat ke kořenům",
     "sold": true,
-    "order": 96,
+    "order": 86,
     "filename": "1.jpg"
   }
 ]

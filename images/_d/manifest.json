@@ -1060,36 +1060,6 @@
 ],
 "w": 518
 },
-"images/obrazy/18.png": {
-"alpha": false,
-"color": "#697660",
-"h": 471,
-"hash": "d3f2bc92d77ce4fabca77d7b3ee2cca3",
-"sources": [
-{
-"url": "images/_d/obrazy-18-480.webp",
-"w": 480
-},
-{
-"url": "images/_d/obrazy-18-649.webp",
-"w": 649
-}
-],
-"w": 649
-},
-"images/obrazy/19.jpg": {
-"alpha": false,
-"color": "#918774",
-"h": 293,
-"hash": "2d6a75828262a58972875f90c28271f9",
-"sources": [
-{
-"url": "images/_d/obrazy-19-213.webp",
-"w": 213
-}
-],
-"w": 213
-},
 "images/obrazy/2.jpg": {
 "alpha": false,
 "color": "#84705e",
@@ -1102,19 +1072,6 @@
 }
 ],
 "w": 289
-},
-"images/obrazy/20.jpg": {
-"alpha": false,
-"color": "#695d5a",
-"h": 197,
-"hash": "5f10693ea03dc9f5828192cfb1a03093",
-"sources": [
-{
-"url": "images/_d/obrazy-20-198.webp",
-"w": 198
-}
-],
-"w": 198
 },
 "images/obrazy/21.jpg": {
 "alpha": false,
@@ -1202,19 +1159,6 @@
 ],
 "w": 441
 },
-"images/obrazy/27.jpg": {
-"alpha": false,
-"color": "#49565c",
-"h": 675,
-"hash": "f3767c7c3843fe9567a2d742b5551087",
-"sources": [
-{
-"url": "images/_d/obrazy-27-477.webp",
-"w": 477
-}
-],
-"w": 477
-},
 "images/obrazy/28.jpg": {
 "alpha": false,
 "color": "#6b3e1d",
@@ -1245,19 +1189,6 @@
 ],
 "w": 724
 },
-"images/obrazy/3.jpg": {
-"alpha": false,
-"color": "#89805e",
-"h": 349,
-"hash": "8703123ddee85b24c9ebcc46b90b9768",
-"sources": [
-{
-"url": "images/_d/obrazy-3-251.webp",
-"w": 251
-}
-],
-"w": 251
-},
 "images/obrazy/30.jpg": {
 "alpha": false,
 "color": "#8c887c",
@@ -1270,19 +1201,6 @@
 }
 ],
 "w": 416
-},
-"images/obrazy/31.jpg": {
-"alpha": false,
-"color": "#627172",
-"h": 501,
-"hash": "2e65417142e3f9bfb95db6246f92fa17",
-"sources": [
-{
-"url": "images/_d/obrazy-31-376.webp",
-"w": 376
-}
-],
-"w": 376
 },
 "images/obrazy/32.jpg": {
 "alpha": false,
@@ -1334,23 +1252,6 @@
 }
 ],
 "w": 605
-},
-"images/obrazy/35.jpg": {
-"alpha": false,
-"color": "#915a43",
-"h": 648,
-"hash": "be1888c4e3552604a0fcfb5a95e948c5",
-"sources": [
-{
-"url": "images/_d/obrazy-35-480.webp",
-"w": 480
-},
-{
-"url": "images/_d/obrazy-35-655.webp",
-"w": 655
-}
-],
-"w": 655
 },
 "images/obrazy/36.jpg": {
 "alpha": false,
@@ -1492,23 +1393,6 @@
 }
 ],
 "w": 313
-},
-"images/obrazy/44.png": {
-"alpha": false,
-"color": "#77786b",
-"h": 698,
-"hash": "90e560e4c9a79192ede74ef14d2a7f42",
-"sources": [
-{
-"url": "images/_d/obrazy-44-480.webp",
-"w": 480
-},
-{
-"url": "images/_d/obrazy-44-675.webp",
-"w": 675
-}
-],
-"w": 675
 },
 "images/obrazy/45.jpg": {
 "alpha": false,
@@ -2011,19 +1895,6 @@
 ],
 "w": 307
 },
-"images/obrazy/76.jpeg": {
-"alpha": false,
-"color": "#b9af8c",
-"h": 460,
-"hash": "9a0d2b41e990c66e84b60974b2c45c10",
-"sources": [
-{
-"url": "images/_d/obrazy-76-342.webp",
-"w": 342
-}
-],
-"w": 342
-},
 "images/obrazy/77.jpeg": {
 "alpha": false,
 "color": "#90aaa6",
@@ -2204,19 +2075,6 @@
 }
 ],
 "w": 636
-},
-"images/obrazy/9.jpg": {
-"alpha": false,
-"color": "#8aa18b",
-"h": 399,
-"hash": "a69ed62afe97a4e6358d7ff54e65296d",
-"sources": [
-{
-"url": "images/_d/obrazy-9-299.webp",
-"w": 299
-}
-],
-"w": 299
 },
 "images/obrazy/90.jpg": {
 "alpha": false,

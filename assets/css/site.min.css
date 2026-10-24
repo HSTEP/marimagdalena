@@ -860,6 +860,8 @@ html:not(.js) .nav {
   height: 100%;
   object-fit: cover;
   object-position: 50% 22%;
+  --px: 0.5;
+  --py: 0.22;
   transform: scale(1.06);
   animation: heroSettle 2.6s var(--ease) 0.15s forwards;
 }
@@ -871,6 +873,7 @@ html:not(.js) .nav {
 .hero__slides {
   position: absolute;
   inset: 0;
+  container-type: size;
 }
 .hero__art .hero__slide {
   opacity: 0;
@@ -883,22 +886,41 @@ html:not(.js) .nav {
 }
 .hero__art.is-playing .hero__slide:nth-child(1) {
   animation-name: heroReelFirst;
+  animation-delay: 21s;
 }
 .hero__art.is-playing .hero__slide:nth-child(2) {
   --origin: 40% 30%;
-  animation-delay: 7s;
 }
 .hero__art.is-playing .hero__slide:nth-child(3) {
   --origin: 60% 20%;
-  animation-delay: 14s;
+  animation-delay: 7s;
 }
 .hero__art.is-playing .hero__slide:nth-child(4) {
   --origin: 50% 35%;
   animation-name: heroReelLast;
-  animation-delay: 21s;
+  animation-delay: 14s;
 }
 .hero__art.is-paused .hero__slide {
   animation-play-state: paused;
+}
+.hero__art--align .hero__slide {
+  --iw: max(100cqw, 100cqh / 1.5);
+  --ih: calc(var(--iw) * 1.5);
+  --at-x: calc((100cqw - var(--iw)) * var(--px) + var(--fx, var(--hx)) * var(--iw));
+  --at-y: calc((100cqh - var(--ih)) * var(--py) + var(--fy, var(--hy)) * var(--ih));
+  --to-x: clamp(
+    100cqw - var(--s, 1) * (1 - var(--fx, var(--hx))) * var(--iw),
+    (100cqw - var(--iw)) * var(--px) + var(--hx) * var(--iw),
+    var(--s, 1) * var(--fx, var(--hx)) * var(--iw)
+  );
+  --to-y: clamp(
+    100cqh - var(--s, 1) * (1 - var(--fy, var(--hy))) * var(--ih),
+    (100cqh - var(--ih)) * var(--py) + var(--hy) * var(--ih),
+    var(--s, 1) * var(--fy, var(--hy)) * var(--ih)
+  );
+  transform-origin: var(--at-x) var(--at-y);
+  translate: calc(var(--to-x) - var(--at-x)) calc(var(--to-y) - var(--at-y));
+  scale: var(--s, 1);
 }
 @keyframes heroReelFirst {
   0% {
@@ -2830,6 +2852,8 @@ body.is-lb .nav {
   }
   .hero__art img {
     object-position: 58% 14%;
+    --px: 0.58;
+    --py: 0.14;
   }
   .hero__art::after {
     background: linear-gradient(
@@ -2977,6 +3001,8 @@ body.is-lb .nav {
   }
   .hero__art img {
     object-position: 50% 18%;
+    --px: 0.5;
+    --py: 0.18;
   }
   .hero__art::after {
     background: linear-gradient(to right, var(--ink) 0%, rgb(11 10 8 / 72%) 9%, rgb(11 10 8 / 38%) 19%, rgb(11 10 8 / 14%) 29%, rgb(11 10 8 / 0%) 40%),

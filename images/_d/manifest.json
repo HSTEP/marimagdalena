@@ -891,9 +891,9 @@
 },
 "images/logo_b.png": {
 "alpha": true,
-"color": "#0a0908",
+"color": "#090908",
 "h": 778,
-"hash": "07f793c0f80f287c925b7ff386f5b9ed",
+"hash": "800d43080706052401448a9abb4ab4ef",
 "sources": [
 {
 "url": "images/_d/logo_b-480.webp",
@@ -916,9 +916,9 @@
 },
 "images/logo_w.png": {
 "alpha": true,
-"color": "#2c2615",
+"color": "#292313",
 "h": 766,
-"hash": "93b607bf370421e3ace36efe2513be08",
+"hash": "8286447bd0b6c6ac6d9ae38ec3cc2fbc",
 "sources": [
 {
 "url": "images/_d/logo_w-480.webp",

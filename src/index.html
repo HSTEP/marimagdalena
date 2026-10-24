@@ -17,7 +17,7 @@
        heading exists in the outline and draws nothing: the image stays a
        direct flex child of .hero__body and every rect is unchanged. #}
     <h1 class="hero__title">
-      {{ img(site.logo_gold, alt=site.name ~ ' — ' ~ site.tagline, cls='hero__mark',
+      {{ img(site.logo_gold, alt=site.logo_alt, cls='hero__mark',
              sizes='(max-width:960px) 60vw, 430px', loading='eager', fetchpriority='high') }}
     </h1>
 

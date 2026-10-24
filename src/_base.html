@@ -112,7 +112,7 @@
     <a class="nav__mark" href="index.html" aria-label="{{ site.name }} — úvodní strana">
       {# On the homepage the hero carries the same wordmark larger; asking for
          the hero's size here lets one file serve both instead of two. #}
-      {{ img(site.logo_gold, alt=site.name ~ ' — ' ~ site.tagline,
+      {{ img(site.logo_gold, alt=site.logo_alt,
              sizes=('(max-width:960px) 60vw, 430px' if page == 'salon' else '160px'), loading='eager') }}
     </a>
 

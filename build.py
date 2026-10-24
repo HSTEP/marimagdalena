@@ -60,6 +60,8 @@ SITE = {
     "url": "https://www.marimagdalena.cz",
     "logo_gold": "images/logo_w.png",
     "logo_dark": "images/logo_b.png",
+    # The wordmark reads "ART salon"; the tagline keeps Hair for titles and schema.
+    "logo_alt": "Maří Magdalena — Art Salon",
 }
 
 NAV = [

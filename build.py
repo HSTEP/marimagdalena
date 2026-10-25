@@ -66,15 +66,13 @@ SITE = {
 
 NAV = [
     {"slug": "salon", "href": "index.html", "label": "Salon"},
-    {"slug": "hair", "href": "galerie.html", "label": "Hair&nbsp;&amp;&nbsp;Styling"},
-    {"slug": "obrazy", "href": "obrazy.html", "label": "Obrazy"},
+    {"slug": "obrazy", "href": "obrazy.html", "label": "Galerie"},
     {"slug": "vystavy", "href": "vystavy.html", "label": "Výstavy"},
     {"slug": "projekty", "href": "projekty.html", "label": "Projekty"},
-    # "What does a cut cost" is the first question a salon gets on a phone.
-    # It was reachable only from the footer and one mid-page button.
-    {"slug": "cenik", "href": "cenik.html", "label": "Ceník"},
-    {"slug": "partneri", "href": "partneri.html", "label": "Partneři"},
+    # The price list lives on this page now, at #cenik.
+    {"slug": "hair", "href": "galerie.html", "label": "Hair&nbsp;&amp;&nbsp;Styling"},
     {"slug": "zahrada", "href": SITE["zahrada"], "label": "Zahrada", "external": True},
+    {"slug": "partneri", "href": "partneri.html", "label": "Partneři"},
 ]
 
 # Portraits from the salon's own studio session, used as full-bleed plates.

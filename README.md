@@ -78,6 +78,7 @@ cookie is otherwise `Secure` and the browser will not send it back.
 | `SITE_ROOT` | the checkout to edit and build; defaults to the file's own directory |
 | `ADMIN_DIST` | the admin's compiled bundle; defaults to `mariadmin/dist`. The container builds it in an earlier stage and copies it outside the checkout |
 | `MARI_HOST`, `MARI_PORT` | where to listen; `127.0.0.1:8000` |
+| `MARI_FORWARDED_ALLOW_IPS` | proxies whose `X-Forwarded-For` is believed; `127.0.0.1`, and `*` in the container, which is only reachable through Traefik. The login throttle counts by the address this yields |
 
 ### 2. Start the API/Backend
 ```bash

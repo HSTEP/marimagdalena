@@ -618,12 +618,18 @@ table {
 }
 
 /* Film grain. Keeps large flat areas of ink from reading as flat digital
-   black — the single cheapest thing that makes a dark site feel printed. */
+   black — the single cheapest thing that makes a dark site feel printed.
+
+   49, one under the masthead (50), not 60. iOS 26 Safari paints the status bar
+   in the colour of a fixed element it finds at the top edge, and at 60 the
+   element it found there was this transparent full-screen sheet, not the ink
+   bar: the status bar went see-through and the page scrolled visibly above
+   the masthead. Still over the drawer (45), so the menu keeps its grain. */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: 49;
   pointer-events: none;
   opacity: 0.05;
   mix-blend-mode: overlay;
@@ -2856,9 +2862,8 @@ html:not(.js) .nav {
   position: relative;
 }
 
-/* One frame for the whole wall. The mockups all place the painting centrally,
-   so a 4:5 crop keeps the work and trims the room — and the lightbox still
-   opens the picture uncropped. */
+/* One frame for the whole wall: every tile is 4:5, and the painting inside it
+   is shown whole (the rule at the end of this file). */
 .works .works__fig {
   aspect-ratio: 4 / 5;
 }
@@ -6419,4 +6424,56 @@ body.is-lb .nav {
 
 .skip:focus-visible {
   transform: none;
+}
+
+/* The painting images are the canvas alone, cut out of the room mockups they
+   used to be, so a 4:5 cover crop would cut into the work itself. Each painting
+   shows whole, standing on the caption line like works hung to a common sill. */
+.works .works__fig img,
+.reel .works__fig img {
+  object-fit: contain;
+  object-position: center bottom;
+  /* The inline average colour would fill the empty sides of the frame as
+     coloured bars beside every canvas. */
+  background-color: transparent !important;
+}
+
+/* ------------------------------------------------ /obrazy: the salon hang
+   The for-sale wall stacks paintings at their own proportions into columns
+   with tight, even gaps, like a salon hang. Each tile carries its painting's
+   shape as --r (w / h), so nothing is cropped and nothing is boxed. The sold
+   index keeps its grid. Order runs down each column, then across. */
+.works--salon {
+  display: block;
+  columns: 3;
+  column-gap: clamp(1rem, 1.8vw, 1.8rem);
+}
+
+.works--salon > .works__item {
+  break-inside: avoid;
+  margin-bottom: clamp(1.6rem, 2.4vw, 2.4rem);
+}
+
+/* Na zkoušku: every painting on the wall in the same upright 3:4 frame,
+   landscape canvases cropped to their centre. */
+.works--salon .works__fig {
+  aspect-ratio: 3 / 4;
+}
+
+.works--salon .works__fig img {
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 960px) {
+  .works--salon {
+    columns: 2;
+  }
+}
+
+@media (max-width: 620px) {
+  /* The phone's 2-2-1 wall does not apply to columns. */
+  .works--salon > :nth-child(n) {
+    grid-column: auto;
+  }
 }

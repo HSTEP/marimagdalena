@@ -30,7 +30,7 @@
        heading exists in the outline and draws nothing: the image stays a
        direct flex child of .hero__body and every rect is unchanged. #}
     <h1 class="hero__title">
-      {{ img(site.logo_gold, alt=site.name ~ ' — ' ~ site.tagline, cls='hero__mark',
+      {{ img(site.logo_gold, alt=site.logo_alt, cls='hero__mark',
              sizes='(max-width:960px) 60vw, 430px', loading='eager', fetchpriority='high') }}
     </h1>
 
@@ -61,21 +61,23 @@
        and half in 17px Jost. #}
     <div class="prose rv" style="grid-column: 1 / span 6; --d:80ms">
       <p>
-        Maří Magdalena je kadeřnický salon v Dobřanech, který v roce 2011 otevřela
-        {{ site.person }}. Salon pojala jako ateliér pro sebevyjádření, uspokojení
-        a radost nejen svoji, ale i svých zákaznic. Středobodem je nádherné zrcadlo
-        odrážející krásu a autenticitu každé ženy.
-      </p>
-      <p>
-        V kadeřnickém salonu Maří Magdalena najdete špičkové kadeřnické služby —
-        stříhání vlasů, barvení vlasů, styling nebo proměny spojené s líčením
-        a focením. Zapózovat můžete třeba u klavíru, který je součástí salonu.
-        Při procedurách si můžete vypít kávu a zapovídat se s tvůrčími ženami,
-        které si do ateliéru nacházejí cestu.
+        Art salon Maří Magdalena jsem otevřela v roce 2014 v Dobřanech. Pojala
+        jsem ho jako ateliér pro sebevyjádření, uspokojení a radost nejen svoji,
+        ale i svých zákaznic. Středobodem je nádherné zrcadlo odrážející krásu
+        a autenticitu každé ženy.
       </p>
       <p>
         V salonu se také nachází umělecká galerie, kde si můžete prohlédnout
-        autorská díla.
+        moje obrazy.
+      </p>
+      <p>
+        U šálku kávy se můžete zapovídat s tvůrčími ženami, které sem často
+        nacházejí cestu. Odpočinek vám umožní i přilehlá terasa, ze které
+        je výhled na jezírko a přírodní zahradu.
+      </p>
+      <p>
+        Vítejte na stránkách salonu!<br>
+        <em>{{ site.person }}</em>
       </p>
       <p style="margin-top:2.2rem">
         <a class="qlink" href="galerie.html">Hair&nbsp;&amp;&nbsp;Styling</a>

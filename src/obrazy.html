@@ -55,12 +55,12 @@
      press showed 48 — a lone work beside an empty cell whenever 49 or more
      were for sale, because the closing rules can only see the last work in
      the source, not the last one shown. #}
-  <div class="works" data-gallery data-batch="30">
+  <div class="works works--salon" data-gallery data-batch="30">
     {% for painting in for_sale %}
     <a class="works__item rv" href="{{ big(painting.url) }}"
        data-lb-item data-batch-item data-state="sale"
        data-title="{{ painting.title }}" data-tag="K prodeji"
-       style="--d:{{ (loop.index0 % 12) * 25 }}ms"
+       style="--d:{{ (loop.index0 % 12) * 25 }}ms; --r:{{ ratio(painting.url) }}"
        aria-label="{{ painting.title }}">
       <div class="works__fig" aria-hidden="true">
         {# The first row is the page's first screen, and lazy it queued behind
@@ -130,7 +130,7 @@
     <a class="works__item rv" href="{{ big(painting.url) }}"
        data-lb-item data-batch-item data-state="sold"
        data-title="{{ painting.title }}" data-tag="Prodáno"
-       style="--d:{{ (loop.index0 % 12) * 25 }}ms"
+       style="--d:{{ (loop.index0 % 12) * 25 }}ms; --r:{{ ratio(painting.url) }}"
        aria-label="{{ painting.title }} — prodáno">
       <div class="works__fig" aria-hidden="true">
         {{ img(painting.url, alt=painting.title,

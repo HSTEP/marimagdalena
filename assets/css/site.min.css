@@ -248,7 +248,7 @@ body::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: 49;
   pointer-events: none;
   opacity: 0.05;
   mix-blend-mode: overlay;
@@ -3359,4 +3359,36 @@ body.is-lb .nav {
 }
 .skip:focus-visible {
   transform: none;
+}
+.works .works__fig img,
+.reel .works__fig img {
+  object-fit: contain;
+  object-position: center bottom;
+  background-color: transparent !important;
+}
+.works--salon {
+  display: block;
+  columns: 3;
+  column-gap: clamp(1rem, 1.8vw, 1.8rem);
+}
+.works--salon > .works__item {
+  break-inside: avoid;
+  margin-bottom: clamp(1.6rem, 2.4vw, 2.4rem);
+}
+.works--salon .works__fig {
+  aspect-ratio: 3 / 4;
+}
+.works--salon .works__fig img {
+  object-fit: cover;
+  object-position: center;
+}
+@media (max-width: 960px) {
+  .works--salon {
+    columns: 2;
+  }
+}
+@media (max-width: 620px) {
+  .works--salon > :nth-child(n) {
+    grid-column: auto;
+  }
 }

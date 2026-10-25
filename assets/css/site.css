@@ -1816,46 +1816,10 @@ html:not(.js) .nav {
   container-type: size;
 }
 
-.hero__art .hero__slide {
-  opacity: 0;
-  transform: none;
-  transform-origin: var(--origin, 50% 25%);
-  animation: none;
-}
-
-.hero__art.is-playing .hero__slide {
-  animation: heroReel 28s ease-in-out both infinite;
-}
-
-.hero__art.is-playing .hero__slide:nth-child(1) {
-  animation-name: heroReelFirst;
-  animation-delay: 21s;
-}
-
-.hero__art.is-playing .hero__slide:nth-child(2) {
-  --origin: 40% 30%;
-}
-
-.hero__art.is-playing .hero__slide:nth-child(3) {
-  --origin: 60% 20%;
-  animation-delay: 7s;
-}
-
-.hero__art.is-playing .hero__slide:nth-child(4) {
-  --origin: 50% 35%;
-  animation-name: heroReelLast;
-  animation-delay: 14s;
-}
-
-/* Off screen it would only be spending battery. */
-.hero__art.is-paused .hero__slide {
-  animation-play-state: paused;
-}
-
-/* The aligned variant: every slide is moved and enlarged so her face lands
-   where it is in the hero photograph, and each push-in closes on her face.
-   Without it the face jumps from a third of the way down the plate to a
-   sixth, and the crossfade between them shows two faces.
+/* Every slide is moved and enlarged so her face lands where it is in the
+   hero photograph, and each push-in closes on her face. Left where the
+   photographs put it, the face jumps from a third of the way down the plate
+   to a sixth, and the crossfade between them shows two faces.
 
    All in the panel's own units (.hero__slides is the container), from the
    face's position in the photograph (--fx, --fy, set per slide from
@@ -1878,21 +1842,13 @@ html:not(.js) .nav {
    outside. The clamp's bounds always contain the face's own place, because
    at --s: 1 that place is exactly a cover fit. The first slide has no --fx
    and falls back to the hero's own face — a move of zero. */
-.hero__art--align .hero__slide {
+.hero__art .hero__slide {
   --iw: max(100cqw, 100cqh / 1.5);
   --ih: calc(var(--iw) * 1.5);
   --ox: calc((100cqw - var(--iw)) * var(--px));
   --oy: calc((100cqh - var(--ih)) * var(--py));
   --at-x: calc(var(--ox) + var(--fx, var(--hx)) * var(--iw));
   --at-y: calc(var(--oy) + var(--fy, var(--hy)) * var(--ih));
-  inset: auto;
-  left: var(--ox);
-  top: var(--oy);
-  width: var(--iw);
-  height: var(--ih);
-  /* The reset caps every img at its container; this one is meant to be
-     wider than the panel whenever the panel is narrower than 2:3. */
-  max-width: none;
   --to-x: clamp(
     100cqw - var(--s, 1) * (1 - var(--fx, var(--hx))) * var(--iw),
     var(--ox) + var(--hx) * var(--iw),
@@ -1903,10 +1859,44 @@ html:not(.js) .nav {
     var(--oy) + var(--hy) * var(--ih),
     var(--s, 1) * var(--fy, var(--hy)) * var(--ih)
   );
-  /* In the slide's own box now, which starts at --ox/--oy. */
+  inset: auto;
+  left: var(--ox);
+  top: var(--oy);
+  width: var(--iw);
+  height: var(--ih);
+  /* The reset caps every img at its container; this one is meant to be
+     wider than the panel whenever the panel is narrower than 2:3. */
+  max-width: none;
+  opacity: 0;
+  transform: none;
+  /* In the slide's own box, which starts at --ox/--oy. */
   transform-origin: calc(var(--fx, var(--hx)) * var(--iw)) calc(var(--fy, var(--hy)) * var(--ih));
   translate: calc(var(--to-x) - var(--at-x)) calc(var(--to-y) - var(--at-y));
   scale: var(--s, 1);
+  animation: none;
+}
+
+.hero__art.is-playing .hero__slide {
+  animation: heroReel 28s ease-in-out both infinite;
+}
+
+.hero__art.is-playing .hero__slide:nth-child(1) {
+  animation-name: heroReelFirst;
+  animation-delay: 21s;
+}
+
+.hero__art.is-playing .hero__slide:nth-child(3) {
+  animation-delay: 7s;
+}
+
+.hero__art.is-playing .hero__slide:nth-child(4) {
+  animation-name: heroReelLast;
+  animation-delay: 14s;
+}
+
+/* Off screen it would only be spending battery. */
+.hero__art.is-paused .hero__slide {
+  animation-play-state: paused;
 }
 
 @keyframes heroReelFirst {

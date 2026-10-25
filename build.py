@@ -90,10 +90,10 @@ PLATES = {
 #
 # `face` is the centre of her face as a fraction of the photograph's width and
 # height, measured by eye; `zoom` is how far a slide may be enlarged to bring
-# that face onto the hero's. Both are read only by the aligned variant
-# (.hero__art--align): 1.25 keeps a 1920px derivative sharp in the 704px
-# panel at 2x, and is not enough to fully lower a face shot near the top of
-# the frame — the variant moves it as far as the zoom allows and no further.
+# that face onto the hero's (site.css sec. 8). 1.25 keeps a 1920px derivative
+# sharp in the 704px panel at 2x, and is not enough to fully lower a face shot
+# near the top of the frame — the slide moves as far as the zoom allows and
+# no further.
 HERO_FACE = (0.525, 0.34)
 HERO_REEL = [
     {"src": "images/bg/1C5A1148.jpg", "face": (0.62, 0.25), "zoom": 1.2},

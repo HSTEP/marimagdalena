@@ -3375,10 +3375,12 @@ body.is-lb .nav {
   break-inside: avoid;
   margin-bottom: clamp(1.6rem, 2.4vw, 2.4rem);
 }
-.works--salon .works__fig {
+.works--salon .works__fig,
+.works--index .works__fig {
   aspect-ratio: 3 / 4;
 }
-.works--salon .works__fig img {
+.works--salon .works__fig img,
+.works--index .works__fig img {
   object-fit: cover;
   object-position: center;
 }

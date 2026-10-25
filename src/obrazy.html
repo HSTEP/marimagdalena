@@ -5,7 +5,7 @@
 {% set for_sale = paintings|rejectattr('sold')|list %}
 {% set sold = paintings|selectattr('sold')|list %}
 
-{% block title %}Obrazy — {{ site.person }} | {{ site.name }}{% endblock %}
+{% block title %}Galerie — {{ site.person }} | {{ site.name }}{% endblock %}
 {% block canonical %}obrazy.html{% endblock %}
 {% block description %}V prostorách salonu si můžete prohlédnout autorské obrazy Marie Baštařové.{% endblock %}
 
@@ -16,7 +16,7 @@
    y 626 of an 800px screen — the page about the work opened on 18% work. #}
 <section class="shell phead phead--ledger">
   <div class="phead__grid">
-    <h1 class="phead__title">Obrazy</h1>
+    <h1 class="phead__title">Galerie</h1>
     <p class="phead__lede lede">
       V prostorách salonu si můžete prohlédnout autorské obrazy
       {{ site.person_gen }}.

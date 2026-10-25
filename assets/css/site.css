@@ -6455,12 +6455,15 @@ body.is-lb .nav {
 }
 
 /* Na zkoušku: every painting on the wall in the same upright 3:4 frame,
-   landscape canvases cropped to their centre. */
-.works--salon .works__fig {
+   landscape canvases cropped to their centre. The sold index takes the same
+   frame. */
+.works--salon .works__fig,
+.works--index .works__fig {
   aspect-ratio: 3 / 4;
 }
 
-.works--salon .works__fig img {
+.works--salon .works__fig img,
+.works--index .works__fig img {
   object-fit: cover;
   object-position: center;
 }

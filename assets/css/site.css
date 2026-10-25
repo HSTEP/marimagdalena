@@ -1781,6 +1781,8 @@ html:not(.js) .nav {
   height: 100%;
   object-fit: cover;
   object-position: 50% 22%;
+  --px: 0.5;
+  --py: 0.22;
   transform: scale(1.06);
   animation: heroSettle 2.6s var(--ease) 0.15s forwards;
 }
@@ -1788,6 +1790,187 @@ html:not(.js) .nav {
 @keyframes heroSettle {
   to {
     transform: scale(1);
+  }
+}
+
+/* The reel: four frames from the studio session, each held 7s under a slow
+   push-in, crossfading over 1.8s. site.js builds .hero__slides over the
+   photograph only once every frame is decoded and the settle above has run
+   out, and the first slide is the same photograph at the same scale(1), so
+   the hand-over draws nothing.
+
+   A crossfade with both layers moving at once dims the plate halfway — two
+   half-opaque photographs over ink let a quarter of the ink through. So the
+   incoming slide fades in over an outgoing one that stays fully opaque, and
+   the outgoing slide drops out only once it is covered. The last slide
+   cannot fade in over the first, which is underneath it, so it fades *out*
+   instead, over a first slide that turned opaque again while hidden.
+
+   Timings are fractions of the 28s cycle: 6.43% is the 1.8s fade, 25% one
+   7s turn, 31.43% a turn plus its fade, and the 0.1% steps are the snaps,
+   always taken while another slide covers this one. Written for exactly four
+   slides — HERO_REEL in build.py holds the other three.
+
+   The cycle is entered at the second slide, which fades in the moment the
+   reel starts: the still has already had its turn while site.js waited, and
+   another 7s of it before anything moved was 10s of a page that looked
+   static. The first slide's delay puts its turn last, and until then its
+   fill holds it at its 0% frame — opaque, scale(1), the still exactly. */
+.hero__slides {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+}
+
+/* Every slide is moved and enlarged so her face lands where it is in the
+   hero photograph, and each push-in closes on her face. Left where the
+   photographs put it, the face jumps from a third of the way down the plate
+   to a sixth, and the crossfade between them shows two faces.
+
+   All in the panel's own units (.hero__slides is the container), from the
+   face's position in the photograph (--fx, --fy, set per slide from
+   HERO_REEL) and the hero's (--hx, --hy on .hero__art). --iw/--ih is the
+   photograph as object-fit: cover lays it out — every frame in the reel is
+   2:3 — and --ox/--oy where object-position puts it, which is why every
+   object-position on .hero__art img below comes with its --px/--py.
+
+   The slide is given that whole rectangle as its box rather than the
+   panel's. object-fit crops to the element's box, so a panel-sized slide
+   had nothing past the panel's edges to move into view: lowering a face
+   pulled the box's top edge down with it, and the panel showed 30-42px of
+   bare ink above her head. Sized to the photograph, the overflow is real
+   image, clipped only by .hero__art. Same rectangle, same pixels — at
+   rest the slide draws exactly what the panel-sized one did.
+
+   The target is clamped, not taken as given: the slide is enlarged by --s
+   about its face, and an edge of the photograph must never come inside the
+   panel, so the face is moved only as far as that leaves every edge
+   outside. The clamp's bounds always contain the face's own place, because
+   at --s: 1 that place is exactly a cover fit. The first slide has no --fx
+   and falls back to the hero's own face — a move of zero. */
+.hero__art .hero__slide {
+  --iw: max(100cqw, 100cqh / 1.5);
+  --ih: calc(var(--iw) * 1.5);
+  --ox: calc((100cqw - var(--iw)) * var(--px));
+  --oy: calc((100cqh - var(--ih)) * var(--py));
+  --at-x: calc(var(--ox) + var(--fx, var(--hx)) * var(--iw));
+  --at-y: calc(var(--oy) + var(--fy, var(--hy)) * var(--ih));
+  --to-x: clamp(
+    100cqw - var(--s, 1) * (1 - var(--fx, var(--hx))) * var(--iw),
+    var(--ox) + var(--hx) * var(--iw),
+    var(--s, 1) * var(--fx, var(--hx)) * var(--iw)
+  );
+  --to-y: clamp(
+    100cqh - var(--s, 1) * (1 - var(--fy, var(--hy))) * var(--ih),
+    var(--oy) + var(--hy) * var(--ih),
+    var(--s, 1) * var(--fy, var(--hy)) * var(--ih)
+  );
+  inset: auto;
+  left: var(--ox);
+  top: var(--oy);
+  width: var(--iw);
+  height: var(--ih);
+  /* The reset caps every img at its container; this one is meant to be
+     wider than the panel whenever the panel is narrower than 2:3. */
+  max-width: none;
+  opacity: 0;
+  transform: none;
+  /* In the slide's own box, which starts at --ox/--oy. */
+  transform-origin: calc(var(--fx, var(--hx)) * var(--iw)) calc(var(--fy, var(--hy)) * var(--ih));
+  translate: calc(var(--to-x) - var(--at-x)) calc(var(--to-y) - var(--at-y));
+  scale: var(--s, 1);
+  animation: none;
+}
+
+.hero__art.is-playing .hero__slide {
+  animation: heroReel 28s ease-in-out both infinite;
+}
+
+.hero__art.is-playing .hero__slide:nth-child(1) {
+  animation-name: heroReelFirst;
+  animation-delay: 21s;
+}
+
+.hero__art.is-playing .hero__slide:nth-child(3) {
+  animation-delay: 7s;
+}
+
+.hero__art.is-playing .hero__slide:nth-child(4) {
+  animation-name: heroReelLast;
+  animation-delay: 14s;
+}
+
+/* Off screen it would only be spending battery. */
+.hero__art.is-paused .hero__slide {
+  animation-play-state: paused;
+}
+
+@keyframes heroReelFirst {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  31.43% {
+    opacity: 1;
+    transform: scale(1.07);
+  }
+
+  31.53% {
+    opacity: 0;
+  }
+
+  90% {
+    opacity: 0;
+    transform: scale(1);
+  }
+
+  90.1%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes heroReel {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+
+  6.43% {
+    opacity: 1;
+  }
+
+  31.43% {
+    opacity: 1;
+    transform: scale(1.07);
+  }
+
+  31.53%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes heroReelLast {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+
+  6.43%,
+  25% {
+    opacity: 1;
+  }
+
+  31.43% {
+    opacity: 0;
+    transform: scale(1.07);
+  }
+
+  100% {
+    opacity: 0;
   }
 }
 
@@ -5356,6 +5539,8 @@ body.is-lb .nav {
 
   .hero__art img {
     object-position: 58% 14%;
+    --px: 0.58;
+    --py: 0.14;
   }
 
   .hero__art::after {
@@ -5619,6 +5804,8 @@ body.is-lb .nav {
 
   .hero__art img {
     object-position: 50% 18%;
+    --px: 0.5;
+    --py: 0.18;
   }
 
   .hero__art::after {

@@ -1,4 +1,54 @@
 {
+"images/bg/0I1A0763.jpg": {
+"alpha": false,
+"color": "#4d3c2a",
+"h": 6111,
+"hash": "4066f15b491c8dc0400250d0421cdfba",
+"sources": [
+{
+"url": "images/_d/bg-0i1a0763-480.webp",
+"w": 480
+},
+{
+"url": "images/_d/bg-0i1a0763-800.webp",
+"w": 800
+},
+{
+"url": "images/_d/bg-0i1a0763-1280.webp",
+"w": 1280
+},
+{
+"url": "images/_d/bg-0i1a0763-1920.webp",
+"w": 1920
+}
+],
+"w": 4074
+},
+"images/bg/0I1A0766.jpg": {
+"alpha": false,
+"color": "#4f3d2c",
+"h": 5822,
+"hash": "ba2e2dc85f8cca41d44db549bd17e508",
+"sources": [
+{
+"url": "images/_d/bg-0i1a0766-480.webp",
+"w": 480
+},
+{
+"url": "images/_d/bg-0i1a0766-800.webp",
+"w": 800
+},
+{
+"url": "images/_d/bg-0i1a0766-1280.webp",
+"w": 1280
+},
+{
+"url": "images/_d/bg-0i1a0766-1920.webp",
+"w": 1920
+}
+],
+"w": 3881
+},
 "images/bg/1C5A1096.jpg": {
 "alpha": false,
 "color": "#2e2217",
@@ -44,6 +94,31 @@
 },
 {
 "url": "images/_d/bg-1c5a1120-1920.webp",
+"w": 1920
+}
+],
+"w": 4480
+},
+"images/bg/1C5A1148.jpg": {
+"alpha": false,
+"color": "#70543c",
+"h": 6720,
+"hash": "5cb88db9ca793c2aa9a2e67afed94169",
+"sources": [
+{
+"url": "images/_d/bg-1c5a1148-480.webp",
+"w": 480
+},
+{
+"url": "images/_d/bg-1c5a1148-800.webp",
+"w": 800
+},
+{
+"url": "images/_d/bg-1c5a1148-1280.webp",
+"w": 1280
+},
+{
+"url": "images/_d/bg-1c5a1148-1920.webp",
 "w": 1920
 }
 ],

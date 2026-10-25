@@ -860,12 +860,122 @@ html:not(.js) .nav {
   height: 100%;
   object-fit: cover;
   object-position: 50% 22%;
+  --px: 0.5;
+  --py: 0.22;
   transform: scale(1.06);
   animation: heroSettle 2.6s var(--ease) 0.15s forwards;
 }
 @keyframes heroSettle {
   to {
     transform: scale(1);
+  }
+}
+.hero__slides {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+}
+.hero__art .hero__slide {
+  --iw: max(100cqw, 100cqh / 1.5);
+  --ih: calc(var(--iw) * 1.5);
+  --ox: calc((100cqw - var(--iw)) * var(--px));
+  --oy: calc((100cqh - var(--ih)) * var(--py));
+  --at-x: calc(var(--ox) + var(--fx, var(--hx)) * var(--iw));
+  --at-y: calc(var(--oy) + var(--fy, var(--hy)) * var(--ih));
+  --to-x: clamp(
+    100cqw - var(--s, 1) * (1 - var(--fx, var(--hx))) * var(--iw),
+    var(--ox) + var(--hx) * var(--iw),
+    var(--s, 1) * var(--fx, var(--hx)) * var(--iw)
+  );
+  --to-y: clamp(
+    100cqh - var(--s, 1) * (1 - var(--fy, var(--hy))) * var(--ih),
+    var(--oy) + var(--hy) * var(--ih),
+    var(--s, 1) * var(--fy, var(--hy)) * var(--ih)
+  );
+  inset: auto;
+  left: var(--ox);
+  top: var(--oy);
+  width: var(--iw);
+  height: var(--ih);
+  max-width: none;
+  opacity: 0;
+  transform: none;
+  transform-origin: calc(var(--fx, var(--hx)) * var(--iw)) calc(var(--fy, var(--hy)) * var(--ih));
+  translate: calc(var(--to-x) - var(--at-x)) calc(var(--to-y) - var(--at-y));
+  scale: var(--s, 1);
+  animation: none;
+}
+.hero__art.is-playing .hero__slide {
+  animation: heroReel 28s ease-in-out both infinite;
+}
+.hero__art.is-playing .hero__slide:nth-child(1) {
+  animation-name: heroReelFirst;
+  animation-delay: 21s;
+}
+.hero__art.is-playing .hero__slide:nth-child(3) {
+  animation-delay: 7s;
+}
+.hero__art.is-playing .hero__slide:nth-child(4) {
+  animation-name: heroReelLast;
+  animation-delay: 14s;
+}
+.hero__art.is-paused .hero__slide {
+  animation-play-state: paused;
+}
+@keyframes heroReelFirst {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  31.43% {
+    opacity: 1;
+    transform: scale(1.07);
+  }
+  31.53% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  90.1%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes heroReel {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  6.43% {
+    opacity: 1;
+  }
+  31.43% {
+    opacity: 1;
+    transform: scale(1.07);
+  }
+  31.53%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes heroReelLast {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  6.43%,
+  25% {
+    opacity: 1;
+  }
+  31.43% {
+    opacity: 0;
+    transform: scale(1.07);
+  }
+  100% {
+    opacity: 0;
   }
 }
 .hero__art::after {
@@ -2742,6 +2852,8 @@ body.is-lb .nav {
   }
   .hero__art img {
     object-position: 58% 14%;
+    --px: 0.58;
+    --py: 0.14;
   }
   .hero__art::after {
     background: linear-gradient(
@@ -2889,6 +3001,8 @@ body.is-lb .nav {
   }
   .hero__art img {
     object-position: 50% 18%;
+    --px: 0.5;
+    --py: 0.18;
   }
   .hero__art::after {
     background: linear-gradient(to right, var(--ink) 0%, rgb(11 10 8 / 72%) 9%, rgb(11 10 8 / 38%) 19%, rgb(11 10 8 / 14%) 29%, rgb(11 10 8 / 0%) 40%),

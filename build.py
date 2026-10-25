@@ -83,6 +83,24 @@ PLATES = {
     "contact": "images/bg/1C5A1120.jpg",
 }
 
+# The hero's slow reel: the hero plate first, then these, crossfading. Frames
+# from the same shoot not used elsewhere on the homepage, so the reel never
+# repeats a photograph the page shows further down. Exactly three: the
+# keyframes in site.css (sec. 8) are written for four slides.
+#
+# `face` is the centre of her face as a fraction of the photograph's width and
+# height, measured by eye; `zoom` is how far a slide may be enlarged to bring
+# that face onto the hero's (site.css sec. 8). 1.25 keeps a 1920px derivative
+# sharp in the 704px panel at 2x, and is not enough to fully lower a face shot
+# near the top of the frame — the slide moves as far as the zoom allows and
+# no further.
+HERO_FACE = (0.525, 0.34)
+HERO_REEL = [
+    {"src": "images/bg/1C5A1148.jpg", "face": (0.62, 0.25), "zoom": 1.2},
+    {"src": "images/bg/0I1A0766.jpg", "face": (0.475, 0.167), "zoom": 1.25},
+    {"src": "images/bg/0I1A0763.jpg", "face": (0.525, 0.158), "zoom": 1.25},
+]
+
 
 # --------------------------------------------------------------------------- #
 # Data loading
@@ -445,7 +463,7 @@ def bust(url: str, data: dict) -> str:
 
 def make_img_helper(media: Media):
     def img(path, alt="", sizes="100vw", cls="", loading="lazy", cover=False,
-            width_attr=True, fetchpriority=None):
+            width_attr=True, fetchpriority=None, style=""):
         """Render a responsive <img> for a repo-relative image path."""
         if not path:
             return Markup("")
@@ -470,8 +488,11 @@ def make_img_helper(media: Media):
         ]
         # A flat placeholder colour holds the space while a photo loads; on a
         # transparent asset it would just be a visible box, so skip it there.
-        if not data.get("alpha"):
-            attrs.append(f'style="background-color:{data["color"]}"')
+        styles = [] if data.get("alpha") else [f'background-color:{data["color"]}']
+        if style:
+            styles.append(style)
+        if styles:
+            attrs.append(f'style="{escape(";".join(styles))}"')
         if width_attr:
             attrs.insert(4, f'width="{data["w"]}" height="{data["h"]}"')
         if fetchpriority:
@@ -525,6 +546,7 @@ def make_ratio_helper(media: Media):
 
 def collect_image_paths(paintings, projekty, vystavy, galerie_images, partners):
     paths = set(PLATES.values())
+    paths.update(slide["src"] for slide in HERO_REEL)
     paths.update(galerie_images)
     paths.update([SITE["logo_gold"], SITE["logo_dark"]])
     for p in paintings:
@@ -788,6 +810,8 @@ if __name__ == "__main__":
         site=SITE,
         nav=NAV,
         plates=PLATES,
+        hero_reel=HERO_REEL,
+        hero_face=HERO_FACE,
         partners=PARTNERS,
         pricing=PRICING,
         services=service_rows(SERVICES, PRICING),

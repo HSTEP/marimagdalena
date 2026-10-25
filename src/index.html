@@ -5,9 +5,22 @@
 {% block content %}
 
 <section class="hero">
-  <div class="hero__art">
+  <div class="hero__art" style="--hx:{{ hero_face[0] }};--hy:{{ hero_face[1] }}">
     {{ img(plates.hero, alt=site.person,
            sizes='(max-width:960px) 100vw, 55vw', loading='eager', fetchpriority='high') }}
+    {# The reel waits in a template so none of it is fetched with the page:
+       the photograph above stays the only image racing for first paint, and
+       without script — or with reduced motion or Save-Data — it is all there
+       is. site.js clones the hero in as the first slide once the page has
+       loaded, and only starts the crossfade when every frame is decoded. #}
+    {% if hero_reel %}
+    <template class="hero__reel">
+      {% for slide in hero_reel %}
+      {{ img(slide.src, alt='', sizes='(max-width:960px) 100vw, 55vw', loading='eager', cls='hero__slide',
+             style='--fx:%s;--fy:%s;--s:%s' % (slide.face[0], slide.face[1], slide.zoom)) }}
+      {% endfor %}
+    </template>
+    {% endif %}
   </div>
 
   <div class="hero__body">

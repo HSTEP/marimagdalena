@@ -530,6 +530,17 @@ class ReorderIn(BaseModel):
     ids: list[int]
 
 
+class CertificateIn(BaseModel):
+    """What goes on a certificate. Used once and never stored: see certificate.py."""
+
+    title: str = Field(max_length=120)
+    year: str = Field("", max_length=20)
+    technique: str = Field("", max_length=80)
+    size: str = Field("", max_length=40)
+    buyer: str = Field("", max_length=80)
+    date: str = Field("", max_length=40)
+
+
 class LinkIn(BaseModel):
     model_config = ConfigDict(extra="ignore")
     url: str = ""
@@ -1134,6 +1145,50 @@ async def replace_image(resource: Resource, item_id: int, image: UploadFile = Fi
     save_records(resource, records)
     note_pending(named(resource, "photo" if old_path else "photo_new", record))
     return with_image(resource, record)
+
+
+def certificate_pdf(item_id: int, body: CertificateIn) -> bytes:
+    """Draw one painting's certificate. Reads the record and writes nothing."""
+    # Imported here and not at the top. The checkout is bind-mounted and these
+    # dependencies live in the image, so a pull without a rebuild must cost this
+    # one feature and not the whole admin.
+    import certificate
+
+    if not body.title.strip():
+        raise HTTPException(400, "Napište název obrazu.")
+
+    records = load_records(Resource.paintings)
+    record = records[find_index(records, item_id)]
+    image_path = record_image_path(Resource.paintings, record)
+    if not image_path:
+        raise HTTPException(400, "Obraz nemá fotku.")
+
+    try:
+        return certificate.render_pdf(
+            certificate.Certificate(number=item_id, **body.model_dump()),
+            resolve_under_images(image_path),
+        )
+    except certificate.Unprintable as error:
+        raise HTTPException(400, f"Znak „{error}“ se na certifikát vytisknout nedá.") from error
+
+
+@api.post("/paintings/{item_id}/certificate")
+def certificate_download(item_id: int, body: CertificateIn):
+    return Response(
+        certificate_pdf(item_id, body),
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="certifikat-{item_id}.pdf"'},
+    )
+
+
+@api.post("/paintings/{item_id}/certificate/preview")
+def certificate_preview(item_id: int, body: CertificateIn):
+    import certificate
+
+    return Response(
+        certificate.render_preview(certificate_pdf(item_id, body)),
+        media_type="image/jpeg",
+    )
 
 
 @api.get("/{resource}/{item_id}")

@@ -6,6 +6,8 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.103.2",
+    # Draws the certificates of authenticity. Plain wheels, no system libraries.
+    "fpdf2>=2.8.9",
     # Signs the admin's session cookie. It arrives transitively today, but the
     # import in api.py is direct and must not depend on someone else's choice.
     "itsdangerous>=2.1.0",
@@ -13,6 +15,11 @@ dependencies = [
     "pillow>=10.0.0",
     # iPhone photographs arrive as HEIC, which Pillow cannot open on its own.
     "pillow-heif>=0.16.0",
+    # Turns a certificate into the image shown as its preview, because a phone
+    # cannot be relied on to display a PDF inline.
+    "pypdfium2>=4.30.0",
     "python-multipart>=0.0.8",
+    # Kerning for fpdf2, which draws without it otherwise.
+    "uharfbuzz>=0.40.0",
     "uvicorn>=0.22.0",
 ]

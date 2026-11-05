@@ -145,6 +145,9 @@ the uid/gid that own the checkout, and the path to an SSH deploy key.
 -   `api.py`: Backend server and logic.
 -   `build.py`: Static site generator script.
 -   `media.py`: Responsive image derivation.
+-   `certificate.py`: Draws a painting's certificate of authenticity as a PDF.
+-   `certificate_fonts.py`: Bakes the fonts in `assets/fonts/certificate/` from
+    the site's web fonts. Their output is committed, so this rarely needs running.
 -   `src/data/`: JSON data files (`paintings.json`, `galerie.json`,
     `projekty.json`, `vystavy.json`). One file per admin tab.
 -   `src/*.html`: Jinja2 page templates. Files starting with `_` are partials
@@ -181,6 +184,7 @@ arbitrary directory.
 | `POST /api/{resource}/photo` | create straight from a photograph, title left empty — the camera-roll path |
 | `PUT /api/{resource}/{id}/image` | swap the photograph, keeping the record and the filename |
 | `POST /api/{resource}/reorder` | `{ids: […]}`; ids not mentioned keep their order and go last, so a stale list cannot drop a painting |
+| `POST /api/paintings/{id}/certificate`, `…/certificate/preview` | the painting's certificate as a PDF, or as a JPEG of that same PDF; the text comes in the body and is never stored |
 | `GET /api/thumb?path=…&w=…` | small JPEG for the grid, from `images/_d/` when a derivative already fits, otherwise cached under `.mari/thumbs/` |
 | `GET /api/pending` | how many unpublished changes there are, and a Czech sentence for each |
 | `POST /api/pending/discard` | throw all of them away — `git checkout` plus `git clean` over the same paths |
@@ -191,6 +195,23 @@ Uploads are opened with Pillow and rejected if that fails, so a `.php` named
 anything else — an iPhone's HEIC — is re-encoded to JPEG with the EXIF
 rotation applied, because the browser cannot display the original. Names are
 sanitised and diacritics folded, so `Šárka.jpg` becomes `sarka.jpg`.
+
+### Certificates
+
+**Vytvořit certifikát** on a painting's edit sheet opens a form and a live
+preview, and **Stáhnout PDF** produces an A4 landscape certificate. The title and
+year start from the painting; the evidence number is `MM-` plus its id, and the
+panel takes its tint from the photograph.
+
+None of it is saved. This repository is public, so a buyer's name must never
+reach `src/data/`, and technique and size are retyped because paintings do not
+record them yet. Text the typefaces cannot draw, such as Cyrillic, is refused with
+a message rather than printed as empty boxes.
+
+`certificate.py` is imported inside the route because its dependencies live in
+the image while the code arrives by `git pull`. A pull without a rebuild costs
+this one feature and not the whole admin, and `docker compose up -d --build`
+brings it back.
 
 ### Publishing
 
